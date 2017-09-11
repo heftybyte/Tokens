@@ -1,57 +1,56 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import {
   VictoryLine,
 } from 'victory-chart-native';
 
 import data from '../data';
 
-const Dimensions = require('Dimensions');
-const { width } = Dimensions.get('window');
-
 class BasicLineChart extends Component {
   render() {
     const { ticks } = data;
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <VictoryLine
+          height={200}
           data={ticks}
           x={(d) => d.time}
           y={'price'}
         />
-      <View style={styles.timePeriods}>
-        <View style={styles.timePeriodWrapper}>
-          <Text style={styles.timePeriodLabel}>1D</Text>
-        </View>
-        <View style={[styles.timePeriodWrapper, {borderBottomWidth: 2, borderBottomColor: '#696969'}]}>
-          <Text style={styles.timePeriodLabel}>1W</Text>
-        </View>
-        <View style={styles.timePeriodWrapper}>
-          <Text style={styles.timePeriodLabel}>3M</Text>
-        </View>
-        <View style={styles.timePeriodWrapper}>
-          <Text style={styles.timePeriodLabel}>1Y</Text>
-        </View>
-        <View style={styles.timePeriodWrapper}>
-          <Text style={styles.timePeriodLabel}>ALL</Text>
+        <View style={styles.timePeriods}>
+          <View style={styles.timePeriodWrapper}>
+            <Text style={styles.timePeriodLabel}>1D</Text>
+          </View>
+          <View style={[styles.timePeriodWrapper, {borderBottomWidth: 2, borderBottomColor: '#696969'}]}>
+            <Text style={styles.timePeriodLabel}>1W</Text>
+          </View>
+          <View style={styles.timePeriodWrapper}>
+            <Text style={styles.timePeriodLabel}>3M</Text>
+          </View>
+          <View style={styles.timePeriodWrapper}>
+            <Text style={styles.timePeriodLabel}>1Y</Text>
+          </View>
+          <View style={styles.timePeriodWrapper}>
+            <Text style={styles.timePeriodLabel}>ALL</Text>
+          </View>
         </View>
       </View>
-      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: .1,
     backgroundColor: '#000',
-    width: width
+    height: 205
   },
   timePeriods: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
-    width: width,
+    justifyContent: 'space-between',
+    height: 10,
+    backgroundColor: '#000'
   },
   timePeriodLabel: {
     color: '#fff',
@@ -60,9 +59,11 @@ const styles = StyleSheet.create({
   },
   timePeriodWrapper: {
     width: 50,
+    height: 20,
     marginLeft: 10,
     marginRight: 10,
-    paddingBottom: 5
+    paddingBottom: 2,
+    backgroundColor: '#000'
   }
 });
 

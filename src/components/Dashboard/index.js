@@ -1,11 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, ScrollView, View, Button, TouchableHighlight } from 'react-native';
 import PriceChart from '../PriceChart';
+import TokenList from '../TokenList';
+import Header from './Header';
+import News from './News';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    backgroundColor: '#000'
+  },
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '#000',
   },
   header: {
@@ -44,25 +52,26 @@ const styles = StyleSheet.create({
 });
 
 const Dashboard = () => (
-  <View style={styles.container}>
-    <Text>
-      <Text style={styles.portfolioValueCurrencySymbol}>$</Text>
-      <Text style={styles.portfolioValue}>10,000</Text>
-      <Text style={styles.portfolioValueCents}>.39</Text>
-    </Text>
-    <Text>
-      <Text style={[styles.portfolioDelta, styles.gain]}>+23.32(1.15%)</Text>
-      <Text style={styles.portfolioDeltaPeriod}>TODAY</Text>
-    </Text>
+  <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
+    <Header totalValue={'10,000.39'} />
     <PriceChart />
-    <Text>Hello</Text>
-  </View>
+    <News />
+    <TokenList />
+  </ScrollView>
 );
 
-Dashboard.navigationOptions = {
-  // headerLeft: <Button title="Account" />,
-  // headerRight: <Button title="Search" />,
-  headerStyle: styles.header
-};
+Dashboard.navigationOptions = ({ navigation }) => ({
+  title: `${navigation.state.price}`,
+  headerStyle: styles.header,
+  headerLeft:(
+        <MaterialCommunityIcons 
+          style={{paddingLeft:20}} 
+          name="menu" 
+          size={22} 
+          color="white"
+          onPress={()=>{alert('press');navigation.dispatch({type: 'Account'})}}
+        />),
+  headerRight: <Ionicons onClick={()=>{console.log('hi')}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
+})
 
 export default Dashboard;

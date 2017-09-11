@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 
+import Account from '../components/Account';
 import Dashboard from '../components/Dashboard';
 
 export const AppNavigator = StackNavigator({
+ 	Account: { screen: Account },
   Dashboard: { screen: Dashboard },
 });
 
