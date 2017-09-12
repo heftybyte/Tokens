@@ -1,19 +1,24 @@
+
 import React from 'react';
-import { applyMiddleware, createStore } from 'redux';
+import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import rootReducer from './reducers';
-import Main from './components/main';
+import { createStore } from 'redux';
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const store = createStoreWithMiddleware(rootReducer);
+import AppReducer from './src/reducers';
+import AppWithNavigationState from './src/navigators/AppNavigator';
 
-export default class App extends React.Component {
+class Tokens extends React.Component {
+  store = createStore(AppReducer);
+
   render() {
     return (
-      <Provider store={store}>
-        <Main />
+      <Provider store={this.store}>
+        <AppWithNavigationState />
       </Provider>
-    )
+    );
   }
 }
+
+AppRegistry.registerComponent('Tokens', () => Tokens);
+
+export default Tokens;
