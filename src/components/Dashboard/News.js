@@ -5,14 +5,16 @@ import Swiper from 'react-native-swiper';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000',
+    maxHeight: 250,
   },
   slide: {
-    flex: 1,
     borderTopWidth: 1,
+    maxHeight: 250,
     borderTopColor: '#0c0c0c',
     borderBottomColor: '#0c0c0c',
     borderBottomWidth: 1,
     backgroundColor: '#000',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
 });
 
 const News = () => (
-  <Swiper height={25} style={styles.container}>
+  <Swiper style={styles.container} containerStyle={styles.container}>
     <View style={styles.slide}>
       <Text style={styles.snippet}>
         News

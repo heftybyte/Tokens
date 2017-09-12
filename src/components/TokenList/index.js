@@ -52,7 +52,6 @@ class TokenList extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: .1,
     alignSelf: 'stretch',
     backgroundColor: '#000',
   },
@@ -76,7 +75,6 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   listItem: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

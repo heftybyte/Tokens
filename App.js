@@ -19,6 +19,6 @@ class Tokens extends React.Component {
   }
 }
 
-AppRegistry.registerComponent('Tokens', () => ReduxExampleApp);
+AppRegistry.registerComponent('Tokens', () => Tokens);
 
 export default Tokens;

@@ -4,7 +4,6 @@ import currencyFormatter from 'currency-formatter';
 
 const styles = StyleSheet.create({
   container: {
-    flex: .1,
     backgroundColor: '#000',
     alignItems: 'center',
   },
@@ -40,18 +39,19 @@ const styles = StyleSheet.create({
   }
 });
 
+const currencyFormatOptions =  {
+  code: 'USD',
+  thousandsSeparator: ',',
+  decimalSeparator: '.',
+  symbolOnLeft: true,
+  spaceBetweenAmountAndSymbol: false,
+  decimalDigits: 2
+};
+
 class Header extends Component {
 
   render () {
     const { totalValue } = this.props
-    const currencyFormatOptions =  {
-      code: 'USD',
-      thousandsSeparator: ',',
-      decimalSeparator: '.',
-      symbolOnLeft: true,
-      spaceBetweenAmountAndSymbol: false,
-      decimalDigits: 2
-    };
     const valueParts = currencyFormatter
       .format(totalValue, currencyFormatOptions)
       .split(/\$|\./)
