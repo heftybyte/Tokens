@@ -60,7 +60,8 @@ const Dashboard = () => (
 );
 
 Dashboard.navigationOptions = ({ navigation }) => ({
-  title: `${navigation.state.price}`,
+  // the title  is also used as the label for the back button
+  title: `${navigation.state.price || 'Dashboard'}`,
   headerStyle: styles.header,
   headerLeft:(
         <MaterialCommunityIcons 
@@ -68,9 +69,9 @@ Dashboard.navigationOptions = ({ navigation }) => ({
           name="menu" 
           size={22} 
           color="white"
-          onPress={()=>{alert('press');navigation.dispatch({type: 'Account'})}}
+          onPress={()=>{navigation.dispatch({type: 'Account'})}}
         />),
   headerRight: <Ionicons onClick={()=>{console.log('hi')}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-})
+});
 
 export default Dashboard;
