@@ -69,9 +69,9 @@ Dashboard.navigationOptions = ({ navigation }) => ({
           name="menu" 
           size={22} 
           color="white"
-          onPress={()=>{navigation.dispatch({type: 'Account'})}}
+          onPress={()=>{navigation.dispatch({type: 'Accounts'})}}
         />),
-  headerRight: <Ionicons onClick={()=>{console.log('hi')}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
+  headerRight: <Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
 });
 
 export default Dashboard;

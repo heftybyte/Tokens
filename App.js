@@ -2,17 +2,15 @@
 import React from 'react';
 import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import store from './src/store/index';
 
-import AppReducer from './src/reducers';
 import AppWithNavigationState from './src/navigators/AppNavigator';
 
 class Tokens extends React.Component {
-  store = createStore(AppReducer);
 
   render() {
     return (
-      <Provider store={this.store}>
+      <Provider store={store}>
         <AppWithNavigationState />
       </Provider>
     );

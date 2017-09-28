@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { NavigationActions } from 'react-navigation';
+import AddressReducer from './address';
 
 import { AppNavigator } from '../navigators/AppNavigator';
 
@@ -41,6 +42,7 @@ function auth(state = initialAuthState, action) {
 const AppReducer = combineReducers({
   nav,
   auth,
+  addresses: AddressReducer
 });
 
 export default AppReducer;

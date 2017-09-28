@@ -16,12 +16,20 @@ const styles = StyleSheet.create({
     },
   });
 
-const AccountInput = ({toggleQRScanner, scannerOpen, inputValue, hasCameraPermission, onChangeText}) => {
+const AccountInput = ({
+    toggleQRScanner,
+    scannerOpen,
+    inputValue,
+    hasCameraPermission,
+    onChangeText,
+    saveAddress,
+}) => {
     return (
     <View style={styles.topContainer}>
         <Text style={styles.accountLabel}>Account:</Text>
         <TextInput style={styles.accountInput} value={inputValue} onChangeText={onChangeText}/>
         <Button onPress={toggleQRScanner} title={scannerOpen ? 'Close QR Scanner' :'Scan a QR Code'} disabled={!hasCameraPermission}/>
+        <Button onPress={saveAddress} title={'Save Address'}/>    
     </View>
     );
 };
@@ -31,12 +39,13 @@ AccountInput.PropTypes = {
     scannerOpen: PropTypes.bool,
     inputValue: PropTypes.string.isRequired,
     hasCameraPermission: PropTypes.bool,
-    onChangeText: PropTypes.func.isRequired
+    onChangeText: PropTypes.func.isRequired,
+    saveAddress: PropTypes.func.isRequired,
 }
 
 AccountInput.defaultProps = {
     hasCameraPermission: false,
-    scannerOpen: false
+    scannerOpen: false,
 }
 
 export default AccountInput;
