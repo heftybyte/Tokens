@@ -54,7 +54,10 @@ const deleteAddress = async(dispatch, getState, index) => {
 };
 
 const getAddresses = async(dispatch, getState) => {
-    let addresses = await AsyncStorage.getItem('addresses');
+    const state = getState();
+    let { addresses } = state;
+    addresses = [...addresses.addresses];
+    addresses = addresses.length ? addresses : await AsyncStorage.getItem('addresses');
     addresses = addresses ? JSON.parse(addresses) : [];
     dispatch({
         type: types.GET_ADDRESSES,
