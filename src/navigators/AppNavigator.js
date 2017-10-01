@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 
-import Account from '../components/Account';
+import AccountsNavigator from '../components/Account';
 import Dashboard from '../components/Dashboard';
+import NewAccount from '../components/Account/createAccount';
+import ViewAccounts from '../components/Account/viewAccounts';
 
 export const AppNavigator = StackNavigator({
- 	Account: { screen: Account },
   Dashboard: { screen: Dashboard },
+  Accounts : { screen: ViewAccounts },
+  NewAccount: { screen: NewAccount }
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (

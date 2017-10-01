@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { NavigationActions } from 'react-navigation';
+import AddressReducer from './address';
 
 import { AppNavigator } from '../navigators/AppNavigator';
 
@@ -13,7 +14,11 @@ function nav(state = initialNavState, action) {
   let nextState;
   switch (action.type) {
     default:
-      nextState = AppNavigator.router.getStateForAction(action, state);
+      // for some reason the next state return is still for dashboard
+      // we force getting the correct action by calling 
+      // AppNavigator.router.getActionForPathAndParams with the action type
+      nextRouteAction = AppNavigator.router.getActionForPathAndParams(action.type) || action;
+      nextState = AppNavigator.router.getStateForAction(nextRouteAction, state);
       break;
   }
 
@@ -37,6 +42,7 @@ function auth(state = initialAuthState, action) {
 const AppReducer = combineReducers({
   nav,
   auth,
+  addresses: AddressReducer
 });
 
 export default AppReducer;
