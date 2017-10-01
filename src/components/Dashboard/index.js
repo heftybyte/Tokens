@@ -1,10 +1,12 @@
-import React from 'react';
-import { StyleSheet, Text, ScrollView, View, Button, TouchableHighlight } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, ScrollView, View, Button, TouchableHighlight, AsyncStorage, Alert } from 'react-native';
 import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from './News';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -50,14 +52,30 @@ const styles = StyleSheet.create({
   }
 });
 
-const Dashboard = () => (
-  <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-    <Header totalValue={'10,000.39'} />
-    <PriceChart />
-    <News />
-    <TokenList />
-  </ScrollView>
-);
+
+class Dashboard extends Component {
+  componentWillMount(){
+    this.checkIfHasAddress();
+  }
+
+  checkIfHasAddress = async() => {
+    let addresses = await AsyncStorage.getItem('addresses');
+    addresses = addresses ? JSON.parse(addresses) : [];
+    if(!addresses.length) { 
+      Alert.alert('Please add an ethereum addresss');
+      this.props.goToAddressPage();
+    }
+  }
+
+  render = () => (
+    <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
+      <Header totalValue={'10,000.39'} />
+      <PriceChart />
+      <News />
+      <TokenList />
+    </ScrollView>
+  );
+}
 
 Dashboard.navigationOptions = ({ navigation }) => ({
   // the title  is also used as the label for the back button
@@ -74,4 +92,10 @@ Dashboard.navigationOptions = ({ navigation }) => ({
   headerRight: <Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
 });
 
-export default Dashboard;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Accounts' }))
+  } 
+};
+
+export default connect(null, mapDispatchToProps)(Dashboard);
