@@ -7,6 +7,7 @@ import News from './News';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import mockTokens from '../../../mockTokens';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -61,7 +62,7 @@ class Dashboard extends Component {
   checkIfHasAddress = async() => {
     let addresses = await AsyncStorage.getItem('addresses');
     addresses = addresses ? JSON.parse(addresses) : [];
-    if(!addresses.length) { 
+    if(!addresses.length) {
       Alert.alert('Please add an ethereum addresss');
       this.props.goToAddressPage();
     }
@@ -69,10 +70,10 @@ class Dashboard extends Component {
 
   render = () => (
     <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-      <Header totalValue={'10,000.39'} />
+      <Header totalValue={mockTokens.totalValue} />
       <PriceChart />
       <News />
-      <TokenList />
+      <TokenList tokens={mockTokens} />
     </ScrollView>
   );
 }
@@ -82,10 +83,10 @@ Dashboard.navigationOptions = ({ navigation }) => ({
   title: `${navigation.state.price || 'Dashboard'}`,
   headerStyle: styles.header,
   headerLeft:(
-        <MaterialCommunityIcons 
-          style={{paddingLeft:20}} 
-          name="menu" 
-          size={22} 
+        <MaterialCommunityIcons
+          style={{paddingLeft:20}}
+          name="menu"
+          size={22}
           color="white"
           onPress={()=>{navigation.dispatch({type: 'Accounts'})}}
         />),
@@ -95,7 +96,7 @@ Dashboard.navigationOptions = ({ navigation }) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Accounts' }))
-  } 
+  }
 };
 
 export default connect(null, mapDispatchToProps)(Dashboard);

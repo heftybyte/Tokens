@@ -4,7 +4,17 @@ import {
     Text,
     View,
     SectionList,
+    Image
 } from 'react-native';
+
+const TokenItem = ({item}) => (
+  <View>
+    <Image source={{ uri: item.imageUrl}} style={{width: 150, height: 150}} />
+    <Text style={styles.symbol}>{item.symbol}</Text>
+    <Text style={styles.symbol}>{item.price}</Text>
+    <Text style={styles.symbol}>{item.balance}</Text>
+  </View>
+);
 
 class ListItem extends Component {
     render() {
@@ -23,7 +33,9 @@ class ListItem extends Component {
 }
 
 class TokenList extends Component {
+
   render() {
+    let dataTokens = this.props.tokens
     const holdings = [
       {key:'a', symbol: 'ETH', price: '$290.13', gain: true},
       {key:'b', symbol: 'OMG', price: '$11.37', gain: false},
@@ -36,16 +48,29 @@ class TokenList extends Component {
       {key:'zrx', symbol: 'ZRX', price: '$0.245106', gain: true}
     ]
 
+    dataTokens = dataTokens.tokens.map(tokenObj => (
+      {
+        key: tokenObj.symbol,
+        symbol: tokenObj.symbol,
+        price: tokenObj.price,
+        balance: tokenObj.balance,
+        imageUrl: tokenObj.imageUrl
+      }
+    ))
+
     return (
+      <View>
         <SectionList
           style={styles.container}
           renderItem={({item}) => <ListItem item={item}/>}
           renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-          sections={[ // homogenous rendering between sections
+          sections={[
+            {data: dataTokens, title: 'Tokens', renderItem: ({item}) => <TokenItem item={item}/>},
             {data: holdings, title: 'Holdings'},
             {data: watching, title: 'Watching'},
           ]}
         />
+      </View>
     );
   }
 }
@@ -53,7 +78,7 @@ class TokenList extends Component {
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   symbol: {
     color: '#fff'
