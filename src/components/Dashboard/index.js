@@ -73,7 +73,7 @@ class Dashboard extends Component {
       <Header totalValue={mockTokens.totalValue} />
       <PriceChart />
       <News />
-      <TokenList tokens={mockTokens} />
+      <TokenList tokens={mockTokens.tokens} />
     </ScrollView>
   );
 }
