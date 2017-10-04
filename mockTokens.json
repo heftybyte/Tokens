@@ -1,0 +1,37 @@
+{
+	"totalValue": 14099.52,
+	"tokens": [
+		{
+			"symbol": "OMG",
+			"price": 10.63,
+			"balance": 300,
+      "imageUrl": "https://raw.githubusercontent.com/heftybyte/tokens-api/master/public/img/tokens/omg.png?token=AGzTH5xjTl1FwGOt-IbV6PymgXzl1YFtks5Z28KEwA%3D%3D",
+      "change": "5%",
+      "period": "24h"
+		},
+		{
+			"symbol": "TNT",
+			"price": 0.09388,
+			"balance": 100000,
+      "imageUrl": "https://raw.githubusercontent.com/heftybyte/tokens-api/master/public/img/tokens/tnt.png?token=AGzTHyKT7tUgTI7kXUB5GROWuy9Z4IlMks5Z28SQwA%3D%3D",
+      "change": "-4%",
+      "period": "24h"
+		},
+		{
+			"symbol": "OPT",
+			"price": 0.02338,
+			"balance": 54000,
+      "imageUrl": "https://raw.githubusercontent.com/heftybyte/tokens-api/master/public/img/tokens/opt.png?token=AGzTHzvMI2DKljIJUrlHMCeVNdg48_j_ks5Z28SowA%3D%3D",
+      "change": "-8%",
+      "period": "24h"
+		},
+		{
+			"symbol": "GNT",
+			"price": 0.26,
+			"balance": 1000,
+      "imageUrl": "https://raw.githubusercontent.com/heftybyte/tokens-api/master/public/img/tokens/gnt.png?token=AGzTH-E_54yJIhYyrdsFwekTUK27bWdkks5Z28S9wA%3D%3D",
+      "change": "10%",
+      "period": "24h"
+		}
+	]
+}
