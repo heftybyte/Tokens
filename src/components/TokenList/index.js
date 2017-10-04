@@ -17,7 +17,7 @@ const TokenItem = ({item}) => (
       <Text style={styles.symbol}>{item.symbol}</Text>
     </View>
     <View style={[styles.priceContainer, parseInt(item.change) > -1 ? styles.gain : {}]}>
-      <Text>${item.balance + item.price}</Text>
+      <Text>${item.balance * item.price}</Text>
     </View>
   </View>
 );
