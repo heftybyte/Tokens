@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Expo from 'expo';
 
-const baseUrl =  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3020';
+const baseUrl =  process.env.NODE_ENV === 'production' ? 'https://erc-20.io' : 'http://localhost:3020';
 const deviceId = Expo.Constants.deviceId;
 
 let instance = axios.create({

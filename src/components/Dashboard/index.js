@@ -8,7 +8,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import mockTokens from '../../../mockTokens';
-import * as api from '../../helpers/api';
+import { registerUser } from '../../helpers/api';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -65,8 +65,12 @@ class Dashboard extends Component {
     const deviceRegistered = await AsyncStorage.getItem('deviceRegistered');
 
     if (!deviceRegistered) {
-      api.registerUser();
-      AsyncStorage.setItem('deviceRegistered', 'true')
+      try {
+        await registerUser();
+        AsyncStorage.setItem('deviceRegistered', 'true');
+      } catch(ex) {
+        Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
+      }
     }
   }
 
