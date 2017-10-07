@@ -66,7 +66,8 @@ class Dashboard extends Component {
 
     if (!deviceRegistered) {
       try {
-        await registerUser();
+        let userPayload = await registerUser();
+        userPayload.accessToken ? AsyncStorage.setItem('accessToken', userPayload.accessToken) : null;
         AsyncStorage.setItem('deviceRegistered', 'true');
       } catch(ex) {
         Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
