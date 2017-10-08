@@ -1,16 +1,41 @@
 import axios from 'axios';
 import Expo from 'expo';
 
-const baseUrl =  process.env.NODE_ENV === 'production' ? 'https://erc-20.io' : 'http://localhost:3020';
-const deviceId = Expo.Constants.deviceId;
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-let instance = axios.create({
-  baseUrl,
-  headers: { 'Authorization': `token ${deviceId}` }
+export const baseURL = process.env.NODE_ENV === 'production' ?
+  'https://erc-20.io' :
+  'http://192.168.86.22:3000/api'
+
+const instance = axios.create({
+  baseURL
 });
 
-export const registerUser = async () => {
-  let response = await instance.post(`${baseUrl}/account/register`, {deviceId});
+export const setAuthHeader = (token) => {
+  instance.defaults.headers.common['Authorization'] = token
+}
 
-  return response.data;
-};
+export const registerAccount = async () => {
+  let res = await instance.post(`/accounts/register`)
+  return res.data
+}
+
+export const loginAccount = async (id) => {
+  let res = await instance.post(`/accounts/login`, { id })
+  return res.data
+}
+
+export const addAccountAddress = async (id, address) => {
+  let res = await instance.post(`/accounts/${id}/address`, { address })
+  return res.data
+}
+
+export const getAccount = async (id) => {
+  let res = await instance.get(`/accounts/${id}`)
+  return res.data
+}
+
+export const getAccountPortfolio = async (id) => {
+  let res = await instance.get(`/accounts/${id}/portfolio`)
+  return res.data
+}

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { NavigationActions } from 'react-navigation';
 import AddressReducer from './address';
-
+import account from './account'
 import { AppNavigator } from '../navigators/AppNavigator';
 
 // Start with two routes: The Dashboard screen, with the Login screen on top.
@@ -42,7 +42,8 @@ function auth(state = initialAuthState, action) {
 const AppReducer = combineReducers({
   nav,
   auth,
-  addresses: AddressReducer
+  addresses: AddressReducer,
+  account
 });
 
 export default AppReducer;

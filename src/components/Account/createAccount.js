@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
 import AddressActions from '../../actionCreators/addressActions';
+import { addAddress } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -68,7 +69,7 @@ class CreateAddress extends Component {
       Alert.alert('Enter an address to save');
       return;
     }
-    this.props.createAddress(text);
+    this.props.addAddress(text);
   }
 
   render(){
@@ -94,7 +95,8 @@ class CreateAddress extends Component {
 
 const mapActionCreatorsToProps = (dispatch) => {
   return {
-    createAddress: (address) => dispatch(AddressActions.createAddressAction(address))
+    createAddress: (address) => dispatch(AddressActions.createAddressAction(address)),
+    addAddress: (address) => dispatch(addAddress(address))
   }
 }
 

@@ -7,17 +7,21 @@ import {
     Image
 } from 'react-native';
 
+const baseURL = process.env.NODE_ENV === 'production' ?
+  'https://erc-20.io' :
+  'http://192.168.86.22:3000'
+
 const TokenItem = ({item}) => (
   <View style={styles.listItem}>
     <View>
-      <Image source={{ uri: item.imageUrl}} style={{width: 25, height: 25}} />
+      <Image source={{ uri: baseURL + item.imageUrl}} style={{width: 25, height: 25}} />
     </View>
 
     <View style={styles.symbolContainer}>
       <Text style={styles.symbol}>{item.symbol}</Text>
     </View>
     <View style={[styles.priceContainer, parseInt(item.change) > -1 ? styles.gain : {}]}>
-      <Text>${item.balance * item.price}</Text>
+      <Text>${(item.balance * item.price).toPrecision(6)}</Text>
     </View>
   </View>
 );
@@ -25,7 +29,7 @@ const TokenItem = ({item}) => (
 class TokenList extends Component {
 
   render() {
-    let dataTokens = this.props.tokens
+    let dataTokens = this.props.tokens || []
 
     dataTokens = dataTokens.map(tokenObj => (
       {

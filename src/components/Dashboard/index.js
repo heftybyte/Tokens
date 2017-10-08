@@ -8,7 +8,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import mockTokens from '../../../mockTokens';
-import { registerUser } from '../../helpers/api';
+import { register, login, getPortfolio } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -54,44 +54,42 @@ const styles = StyleSheet.create({
   }
 });
 
-
 class Dashboard extends Component {
-  componentWillMount(){
-    this.registerUserDevice();
-    this.checkIfHasAddress();
+  componentWillMount = async() =>{
+    const { login, register, getPortfolio } = this.props
+    console.log('setting up account')
+    await register()
+    await login()
+    console.log('account setup')
   }
 
-  registerUserDevice = async () => {
-    const deviceRegistered = await AsyncStorage.getItem('deviceRegistered');
+  componentWillReceiveProps = async (nextProps) => {
+    const { addresses, loggedIn, getPortfolio} = nextProps
 
-    if (!deviceRegistered) {
-      try {
-        let userPayload = await registerUser();
-        userPayload.accessToken ? AsyncStorage.setItem('accessToken', userPayload.accessToken) : null;
-        AsyncStorage.setItem('deviceRegistered', 'true');
-      } catch(ex) {
-        Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
-      }
+    if (addresses.length) {
+      await getPortfolio()
+      return
     }
-  }
 
-  checkIfHasAddress = async() => {
-    let addresses = await AsyncStorage.getItem('addresses');
-    addresses = addresses ? JSON.parse(addresses) : [];
-    if(!addresses.length) {
-      Alert.alert('Please add an ethereum addresss');
-      this.props.goToAddressPage();
+    if (!loggedIn) {
+      return
     }
+    
+    Alert.alert('Please add an ethereum addresss');
+    this.props.goToAddressPage();
   }
 
-  render = () => (
-    <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-      <Header totalValue={mockTokens.totalValue} />
-      <PriceChart />
-      <News />
-      <TokenList tokens={mockTokens.tokens} />
-    </ScrollView>
-  );
+  render = () => {    
+    const { portfolio } = this.props
+    return (
+      <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
+        <Header totalValue={portfolio.totalValue} />
+        {/*<PriceChart />*/}
+        <News />
+        <TokenList tokens={portfolio.tokens} />
+      </ScrollView>
+    )
+  }
 }
 
 Dashboard.navigationOptions = ({ navigation }) => ({
@@ -109,10 +107,17 @@ Dashboard.navigationOptions = ({ navigation }) => ({
   headerRight: <Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
 });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Accounts' }))
-  }
-};
+const mapStateToProps = (state) => ({
+  portfolio: state.account.portfolio,
+  addresses: state.account.addresses,
+  loggedIn: !!state.account.token
+})
 
-export default connect(null, mapDispatchToProps)(Dashboard);
+const mapDispatchToProps = (dispatch) => ({
+    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Accounts' })),
+    login: () => dispatch(login()),
+    register: () => dispatch(register()),
+    getPortfolio: () => dispatch(getPortfolio())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

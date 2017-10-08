@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^5.2.0",
+    "axios": "^0.16.2",
     "currency-formatter": "^1.2.1",
     "expo": "^20.0.0",
     "prop-types": "^15.5.10",

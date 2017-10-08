@@ -62,10 +62,10 @@ class Header extends Component {
           <Text style={styles.portfolioValue}>{valueParts[1]}</Text>
           <Text style={styles.portfolioValueCents}>.{valueParts[2]||'00'}</Text>
         </Text>
-        <Text>
+        {/*<Text>
           <Text style={[styles.portfolioDelta, styles.gain]}>+23.32(1.15%)</Text>
           <Text style={styles.portfolioDeltaPeriod}>TODAY</Text>
-        </Text>
+        </Text>*/}
       </View>
     );
   }
