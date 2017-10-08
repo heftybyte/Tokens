@@ -84,7 +84,8 @@ class Dashboard extends Component {
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
         <Header totalValue={portfolio.totalValue} />
-        {/*<PriceChart />*/}
+        {/* NOTE: will be implemented in upcomign sprint
+          <PriceChart />*/}
         <News />
         <TokenList tokens={portfolio.tokens} />
       </ScrollView>
