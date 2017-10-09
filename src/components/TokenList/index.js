@@ -28,7 +28,7 @@ const formatPrice = (price) => {
   return formattedPrice
 }
 
-const TokenItem = ({item, index, showTotal, onPress}) => (
+const TokenItem = ({item, index, showChange, onPress}) => (
   <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
     <View>
       <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}} />
@@ -40,9 +40,9 @@ const TokenItem = ({item, index, showTotal, onPress}) => (
     </View>
     <View style={[styles.priceContainer, parseInt(item.change) > -1 ? styles.gain : {}]}>
       <Text style={styles.price} onPress={onPress}>
-        {showTotal ? 
-            '$' + formatPrice(item.balance * item.price) :
-            String(item.change).substr(0,6) + '%'}
+        {showChange ? 
+            String(item.change).substr(0,6) + '%' :
+            '$' + formatPrice(item.balance * item.price)}
       </Text>
     </View>
   </View>
@@ -51,11 +51,11 @@ const TokenItem = ({item, index, showTotal, onPress}) => (
 class TokenList extends Component {
 
   state = {
-    showTotal: true
+    showChange: false
   }
 
   render() {
-    const { showTotal } = this.state
+    const { showChange } = this.state
     let dataTokens = this.props.tokens || []
 
     dataTokens = dataTokens.map(tokenObj => (
@@ -75,10 +75,10 @@ class TokenList extends Component {
               <TokenItem
                 item={item}
                 index={index}
-                showTotal={showTotal}
+                showChange={showChange}
                 onPress={()=>{
                   console.log('toggle!')
-                  this.setState({showTotal: !this.state.showTotal})
+                  this.setState({showChange: !this.state.showChange})
                 }}
               />}
           ]}
