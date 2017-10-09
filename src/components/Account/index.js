@@ -1,6 +1,6 @@
 import {StackNavigator} from 'react-navigation';
-import CreateAccountScreen from './createAccount';
-import ViewAccountsScreen from './viewAccounts';
+import CreateAccountScreen from './CreateAccount';
+import ViewAccountsScreen from './ViewAccounts';
 
 const AccountsNavigator = StackNavigator({
     Accounts: { 

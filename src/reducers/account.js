@@ -80,6 +80,10 @@ export const addAddress = (address) => async (dispatch, getState) => {
     dispatch(updateAction(account))
 }
 
+export const deleteAddress = (address) => async (dispatch, getState) => {
+   return;
+}
+
 export const getPortfolio = () => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
