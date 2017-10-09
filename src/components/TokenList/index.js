@@ -14,20 +14,21 @@ const baseURL = process.env.NODE_ENV === 'production' ?
 const formatPrice = (price) => {
   let [whole, decimal] = String(price).split('.')
   if (whole === '0') {
-    return decimal
+    return '.' + decimal.substr(0,5)
   }
   if (!decimal || Number.isNaN(decimal) || decimal === 'NaN') {
     decimal = '.00'
   } else {
     decimal = '.' + decimal.substr(0,2)
-    if (decimal.length < 3) {
-      decimal += '0'
-    }
   }
-  return Number(whole + decimal).toLocaleString()
+  let formattedPrice = Number(whole + decimal).toLocaleString()
+  if (decimal.length < 3) {
+    formattedPrice += '0'
+  }
+  return formattedPrice
 }
 
-const TokenItem = ({item, index}) => (
+const TokenItem = ({item, index, showTotal, onPress}) => (
   <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
     <View>
       <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}} />
@@ -35,17 +36,26 @@ const TokenItem = ({item, index}) => (
 
     <View style={styles.symbolContainer}>
       <Text style={styles.symbol}>{item.symbol}</Text>
-      <Text style={styles.balance}>{item.balance}</Text>
+      <Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>
     </View>
     <View style={[styles.priceContainer, parseInt(item.change) > -1 ? styles.gain : {}]}>
-      <Text style={styles.price}>${formatPrice(item.balance * item.price)}</Text>
+      <Text style={styles.price} onPress={onPress}>
+        {showTotal ? 
+            '$' + formatPrice(item.balance * item.price) :
+            String(item.change).substr(0,6) + '%'}
+      </Text>
     </View>
   </View>
 );
 
 class TokenList extends Component {
 
+  state = {
+    showTotal: true
+  }
+
   render() {
+    const { showTotal } = this.state
     let dataTokens = this.props.tokens || []
 
     dataTokens = dataTokens.map(tokenObj => (
@@ -61,7 +71,16 @@ class TokenList extends Component {
           style={styles.container}
           renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
           sections={[
-            {data: dataTokens, title: 'Holdings', renderItem: ({item, index}) => <TokenItem item={item} index={index}/>},
+            {data: dataTokens, title: 'Holdings', renderItem: ({item, index}) =>
+              <TokenItem
+                item={item}
+                index={index}
+                showTotal={showTotal}
+                onPress={()=>{
+                  console.log('toggle!')
+                  this.setState({showTotal: !this.state.showTotal})
+                }}
+              />}
           ]}
         />
       </View>
