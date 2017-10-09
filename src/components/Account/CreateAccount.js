@@ -5,7 +5,6 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
-import AddressActions from '../../actionCreators/addressActions';
 import { addAddress } from '../../reducers/account';
 
 const styles = StyleSheet.create({
@@ -93,12 +92,11 @@ class CreateAddress extends Component {
   }
 }
 
-const mapActionCreatorsToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    createAddress: (address) => dispatch(AddressActions.createAddressAction(address)),
     addAddress: (address) => dispatch(addAddress(address))
   }
 }
 
 
-export default connect(null, mapActionCreatorsToProps)(CreateAddress);
+export default connect(null, mapDispatchToProps)(CreateAddress);

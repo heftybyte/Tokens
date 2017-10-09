@@ -4,7 +4,7 @@ import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
-import AddressActions from '../../actionCreators/addressActions';
+import { deleteAddress } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -93,7 +93,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        deleteAddress: (index) => dispatch(AddressActions.deleteAddressAction(index)),
+        deleteAddress: (index) => dispatch(deleteAddress(index)),
         goToRoute: (routeName) => dispatch(NavigationActions.navigate({ routeName }))
     }
 }
