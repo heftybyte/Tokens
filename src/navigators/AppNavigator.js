@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { observer } from 'mobx-react';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
+import { observable, action } from "mobx"
 
 import AccountsNavigator from '../components/Account';
 import Dashboard from '../components/Dashboard';
@@ -14,17 +15,29 @@ export const AppNavigator = StackNavigator({
   NewAccount: { screen: NewAccount }
 });
 
-const AppWithNavigationState = ({ dispatch, nav }) => (
-  <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })} />
+
+class Navigation {
+  @observable headerTitle = "Dashboard"
+  @observable.ref navigationState = {
+    index: 0,
+    routes: [
+      { key: "Dashboard", routeName: "Dashboard" },
+		],
+  }
+
+  @action dispatch = (action, stackNavState = true) => {
+    const previousNavState = stackNavState ? this.navigationState : null;
+    return this.navigationState = AppNavigator
+        .router
+				.getStateForAction(action, previousNavState);
+	}
+}
+
+const store = new Navigation()
+
+const AppWithNavigationState = () => (
+  <AppNavigator navigation={addNavigationHelpers({ dispatch: store.dispatch, state: store.navigationState })} />
 );
 
-AppWithNavigationState.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  nav: PropTypes.object.isRequired,
-};
 
-const mapStateToProps = state => ({
-  nav: state.nav,
-});
-
-export default connect(mapStateToProps)(AppWithNavigationState);
+export default observer(AppWithNavigationState);
