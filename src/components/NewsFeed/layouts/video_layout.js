@@ -4,10 +4,11 @@
 
 import React from 'react'
 import { Text, View} from 'react-native';
+import {styles} from '../style'
 
 
 const Video = () => (
-    <Text>Video</Text>
+    <Text style={styles.snippet}>Video</Text>
 )
 
 export default Video;

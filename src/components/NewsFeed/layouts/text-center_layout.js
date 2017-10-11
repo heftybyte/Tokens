@@ -4,10 +4,11 @@
 
 import React from 'react'
 import { Text, View} from 'react-native';
+import {styles} from '../style'
 
 
 const TextCenter = () => (
-    <Text>Text Center</Text>
+    <Text style={styles.snippet}>Text Center</Text>
 )
 
 export default TextCenter;

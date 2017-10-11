@@ -4,10 +4,12 @@
 
 import React from 'react'
 import { Text, View} from 'react-native';
+import {styles} from '../style'
+
 
 
 const TextDefault = () => (
-    <Text>Text Default</Text>
+    <Text style={styles.snippet}>Text Default</Text>
 )
 
 export default TextDefault;

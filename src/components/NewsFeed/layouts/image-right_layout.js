@@ -4,10 +4,12 @@
 
 import React from 'react'
 import { Text, View} from 'react-native';
+import {styles} from '../style'
+
 
 
 const ImageRight = () => (
-    <Text>Image Right</Text>
+    <Text style={styles.snippet}>Image Right</Text>
 )
 
 export default ImageRight;

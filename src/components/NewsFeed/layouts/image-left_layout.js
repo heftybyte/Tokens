@@ -4,11 +4,11 @@
 
 import React from 'react'
 import { Text, View} from 'react-native';
-
+import {styles} from '../style'
 
 
 const ImageLeft = () => (
-    <Text>Image Left</Text>
+    <Text style={styles.snippet}>Image Left</Text>
 )
 
 export default ImageLeft;
