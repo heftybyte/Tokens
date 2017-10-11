@@ -48,4 +48,4 @@ const News = () => (
   </Swiper>
 );
 
-export default News;
+//export default News;

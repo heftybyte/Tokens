@@ -3,7 +3,7 @@ import { StyleSheet, Text, ScrollView, View, Button, TouchableHighlight, AsyncSt
 import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
-import News from './News';
+import News from '../NewsFeed';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
