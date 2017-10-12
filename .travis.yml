@@ -1,0 +1,7 @@
+language: javascript
+sudo: enabled
+install: true
+deploy:
+  skip_cleanup: true
+script:
+- ./fastlane/travis.sh
