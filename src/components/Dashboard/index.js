@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, Text, ScrollView, View, Button, TouchableHighlight, AsyncStorage, Alert } from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { inject, observer } from 'mobx-react'
+import { NavigationActions } from 'react-navigation';
+
 import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from './News';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { NavigationActions } from 'react-navigation';
-import { connect } from 'react-redux';
 import mockTokens from '../../../mockTokens';
-import { register, login, getPortfolio } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -54,71 +54,65 @@ const styles = StyleSheet.create({
   }
 });
 
-class Dashboard extends Component {
-  componentWillMount = async() =>{
-    const { login, register, getPortfolio } = this.props
-    console.log('setting up account')
-    await register()
-    await login()
-    console.log('account setup')
-  }
+// @inject(
+// 	stores => ({
+// 		MainStore: stores.store.MainStore
+// 	})
+// )
+@observer
+export default class Dashboard extends PureComponent {
+	// static navigationOptions = ({ navigation }) => ({
+	// 	// the title  is also used as the label for the back button
+	// 	title: `${navigation.state.price || 'Dashboard'}`,
+	// 	headerStyle: styles.header,
+	// 	headerLeft:(
+	// 		<MaterialCommunityIcons
+	// 			style={{paddingLeft:20}}
+	// 			name="menu"
+	// 			size={22}
+	// 			color="white"
+	// 			onPress={()=>{navigation.dispatch({type: 'Accounts'})}}
+	// 		/>),
+	// 	headerRight: <Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
+	// });
 
-  componentWillReceiveProps = async (nextProps) => {
-    const { addresses, loggedIn, getPortfolio} = nextProps
 
-    if (addresses.length) {
-      await getPortfolio()
-      return
-    }
+  // componentWillMount = async() =>{
+  //   const { MainStore } = this.props
+  //   console.log('setting up account')
+  //   await MainStore.register()
+  //   await MainStore.login()
+  //   console.log('account setup')
+  // }
 
-    if (!loggedIn) {
-      return
-    }
+  // componentWillReceiveProps = async (nextProps) => {
+  //   const { MainStore, navigation: { navigate }} = nextProps
+
+  //   if (addresses.length) {
+  //     await MainStore.getPortfolio()
+  //     return
+  //   }
+
+  //   if (!!MainStore.token) {
+  //     return
+  //   }
     
-    Alert.alert('Please add an ethereum addresss');
-    this.props.goToAddressPage();
-  }
+  //   Alert.alert('Please add an ethereum addresss');
+  //   navigate('Accounts')
+  // }
 
   render = () => {    
-    const { portfolio } = this.props
+    const { MainStore } = this.props
     return (
+			false &&
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <Header totalValue={portfolio.totalValue} />
+        <Header totalValue={MainStore.portfolio.totalValue} />
         {/* NOTE: will be implemented in upcomign sprint
           <PriceChart />*/}
         <News />
-        <TokenList tokens={portfolio.tokens} />
+        <TokenList tokens={MainStore.portfolio.tokens} />
       </ScrollView>
     )
   }
 }
 
-Dashboard.navigationOptions = ({ navigation }) => ({
-  // the title  is also used as the label for the back button
-  title: `${navigation.state.price || 'Dashboard'}`,
-  headerStyle: styles.header,
-  headerLeft:(
-        <MaterialCommunityIcons
-          style={{paddingLeft:20}}
-          name="menu"
-          size={22}
-          color="white"
-          onPress={()=>{navigation.dispatch({type: 'Accounts'})}}
-        />),
-  headerRight: <Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-});
-
-const mapStateToProps = (state) => ({
-  portfolio: state.account.portfolio,
-  addresses: state.account.addresses,
-  loggedIn: !!state.account.token
-})
-
-const mapDispatchToProps = (dispatch) => ({
-    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Accounts' })),
-    login: () => dispatch(login()),
-    register: () => dispatch(register()),
-    getPortfolio: () => dispatch(getPortfolio())
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

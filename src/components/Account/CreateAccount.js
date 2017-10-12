@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
 import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { connect } from 'react-redux';
 import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
-import { addAddress } from '../../reducers/account';
+import { observer, inject } from 'mobx-react';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -30,6 +29,10 @@ const styles = StyleSheet.create({
   }
 });
 
+const addressStore = stores => ({ AddressStore: stores.store.AddressStore })
+
+@inject(addressStore)
+@observer
 class CreateAddress extends Component {
 
   state = {
@@ -63,12 +66,14 @@ class CreateAddress extends Component {
   }
 
   saveAddress = async() => {
-    const text = this.state.inputValue;
+		const text = this.state.inputValue;
+		const { AddressStore } = this.props
     if(!text || !text.length) {
       Alert.alert('Enter an address to save');
       return;
-    }
-    this.props.addAddress(text);
+		}
+		
+    AddressStore.addAddress(text);
   }
 
   render(){
@@ -92,11 +97,4 @@ class CreateAddress extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addAddress: (address) => dispatch(addAddress(address))
-  }
-}
-
-
-export default connect(null, mapDispatchToProps)(CreateAddress);
+export default CreateAddress;

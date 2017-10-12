@@ -4,7 +4,7 @@ import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
-import { deleteAddress } from '../../reducers/account';
+import { observer, inject } from 'mobx-react';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -41,6 +41,10 @@ const AddressView = ({name, index, deleteAddress}) => {
     );
 }
 
+const addressStore = stores => ({ AddressStore: stores.store.AddressStore })
+
+@inject(addressStore)
+@observer
 class ViewAddresses extends Component {
   addresses = [];
 
@@ -54,29 +58,29 @@ class ViewAddresses extends Component {
     headerRight: <Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
   });
 
-  deleteAddress = async(index) => {
-    if(index === undefined) return;
-    this.props.deleteAddress(index);
+  deleteAddress = (address) => {
+		const { AddressStore } = this.props
+    AddressStore.remove(address);
   }
 
   render(){
-    const { addresses, goToRoute } = this.props
+    const { AddressStore, navigation: { navigate } } = this.props
 
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
           <Text>Your Accounts</Text>
           <Button
-              onPress={() => goToRoute('NewAccount')}
+              onPress={() => navigate('NewAccount')}
               title={'Add Address'}
           />
           <View>
-              {addresses.map(
+              {AddressStore.addresses.map(
                   (address, index) => 
                   <AddressView 
                       key={index}
                       name={address}
                       index={index}
-                      deleteAddress={()=>this.deleteAddress(index)}
+                      deleteAddress={()=>this.deleteAddress(address)}
                   />
               )}
           </View>
@@ -85,17 +89,4 @@ class ViewAddresses extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        addresses: state.account.addresses
-    }
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        deleteAddress: (index) => dispatch(deleteAddress(index)),
-        goToRoute: (routeName) => dispatch(NavigationActions.navigate({ routeName }))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ViewAddresses);
+export default ViewAddresses;

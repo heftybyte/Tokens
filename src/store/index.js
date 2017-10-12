@@ -1,6 +1,7 @@
-import { createStore, applyMiddleware } from 'redux';
-import ReduxThunk from 'redux-thunk';
-import rootReducer from '../reducers/index';
-const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+import { store as MainStore } from './main'
+import { store as AddressStore } from '../components/Account/store'
 
-export default store;
+export default {
+	MainStore,
+	AddressStore
+}

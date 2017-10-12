@@ -8,6 +8,7 @@ import AccountsNavigator from '../components/Account';
 import Dashboard from '../components/Dashboard';
 import NewAccount from '../components/Account/CreateAccount';
 import ViewAccounts from '../components/Account/ViewAccounts';
+import { store } from "./store"
 
 export const AppNavigator = StackNavigator({
   Dashboard: { screen: Dashboard },
@@ -15,25 +16,7 @@ export const AppNavigator = StackNavigator({
   NewAccount: { screen: NewAccount }
 });
 
-
-class Navigation {
-  @observable headerTitle = "Dashboard"
-  @observable.ref navigationState = {
-    index: 0,
-    routes: [
-      { key: "Dashboard", routeName: "Dashboard" },
-		],
-  }
-
-  @action dispatch = (action, stackNavState = true) => {
-    const previousNavState = stackNavState ? this.navigationState : null;
-    return this.navigationState = AppNavigator
-        .router
-				.getStateForAction(action, previousNavState);
-	}
-}
-
-const store = new Navigation()
+store.setNavigator(AppNavigator)
 
 const AppWithNavigationState = () => (
   <AppNavigator navigation={addNavigationHelpers({ dispatch: store.dispatch, state: store.navigationState })} />
