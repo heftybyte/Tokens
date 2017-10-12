@@ -1,10 +1,10 @@
 import React from 'react'
 import { Text, View} from 'react-native'
 import Swiper from 'react-native-swiper'
-import {styles} from './style'
+import {styles} from './Style'
 
-import Format from './format'
-import mockData from './mock_data'
+import Format from './Format'
+import mockData from './MockData'
 
 
 
@@ -12,8 +12,7 @@ const News = () => {
     let newsList = mockData.map((news,index) => {
             return (
                 <View key={index} style={styles.slide}>
-                    <Text style={styles.snippet}>{news.title}</Text>
-                    <Format format={news.format}/>
+                    <Format format={news.format} news={news} />
                 </View>
             )
         }
