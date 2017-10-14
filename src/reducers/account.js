@@ -5,7 +5,8 @@ import {
     setAuthHeader,
     getAccountPortfolio,
     addAccountAddress,
-    getAccount
+    getAccount,
+    getTokenDetailsForAccount
 } from '../helpers/api'
 import { genericError } from '../helpers/functions'
 
@@ -13,6 +14,7 @@ export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
 export const GET_PORTFOLIO = 'account/GET_PORTFOLIO'
 export const UPDATE = 'account/UPDATE'
+export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
 
 const registerAction = (id) => ({
     type: REGISTER,
@@ -34,9 +36,14 @@ const updateAction = (account) => ({
     data: { account }
 })
 
+const tokenDetailsAction = (tokenDetails) => ({
+  type: GET_TOKEN_DETAILS,
+  data: { tokenDetails }
+})
+
 export const register = () => async (dispatch) => {
     let err = null
-    const account = JSON.parse(await AsyncStorage.getItem('account') || null) || 
+    const account = JSON.parse(await AsyncStorage.getItem('account') || null) ||
         await registerAccount().catch(e=>err=e)
 
     if (err || !account) {
@@ -59,7 +66,7 @@ export const login = () => async (dispatch, getState) => {
         token = res.id
     }
     setAuthHeader(token)
-    
+
     const account = await getAccount(id).catch(e=>err=e)
     if (err) {
         return genericError()
@@ -95,11 +102,24 @@ export const getPortfolio = () => async (dispatch, getState) => {
     dispatch(portfolioAction(portfolio))
 }
 
+export const getTokenDetails = (sym) => async (dispatch, getState) => {
+  let err = null
+  const { id } = getState().account
+  const tokenDetails = await getTokenDetailsForAccount(id, sym).catch(e=>err=e)
+
+  if (err) {
+    return genericError();
+  }
+
+  dispatch(tokenDetailsAction(tokenDetails))
+}
+
 const initialState = {
     addresses : [],
     id: null,
     token: null,
-    portfolio: {}
+    portfolio: {},
+    tokenDetails: {}
 }
 
 export default (state = initialState, action) => {
@@ -107,6 +127,7 @@ export default (state = initialState, action) => {
         case REGISTER:
         case LOGIN:
         case GET_PORTFOLIO:
+        case GET_TOKEN_DETAILS:
         case UPDATE:
             return {
                 ...state,

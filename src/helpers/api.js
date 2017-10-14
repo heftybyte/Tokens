@@ -39,3 +39,8 @@ export const getAccountPortfolio = async (id) => {
   let res = await instance.get(`/accounts/${id}/portfolio`)
   return res.data
 }
+
+export const getTokenDetailsForAccount  = async (id, sym) => {
+  let res = await instance.get(`/accounts/${id}/portfolio/token/${sym}`)
+  return res.data
+}

@@ -4,8 +4,11 @@ import {
     Text,
     View,
     SectionList,
-    Image
+    Image,
+    TouchableHighlight
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
 
 const baseURL = process.env.NODE_ENV === 'production' ?
   'https://erc-20.io' :
@@ -28,24 +31,26 @@ const formatPrice = (price) => {
   return formattedPrice
 }
 
-const TokenItem = ({item, index, showChange, onPress}) => (
-  <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
-    <View>
-      <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}} />
-    </View>
+const TokenItem = ({item, index, showChange, onPress, showTokenInfo}) => (
+  <TouchableHighlight onPress={showTokenInfo}>
+    <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
+      <View>
+        <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
+      </View>
 
-    <View style={styles.symbolContainer}>
-      <Text style={styles.symbol}>{item.symbol}</Text>
-      <Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>
-    </View>
-    <View style={[styles.priceContainer, parseInt(item.change) > -1 ? styles.gain : {}]}>
-      <Text style={styles.price} onPress={onPress}>
-        {showChange ? 
+      <View style={styles.symbolContainer}>
+        <Text style={styles.symbol}>{item.symbol}</Text>
+        <Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>
+      </View>
+      <View style={[styles.priceContainer, parseInt(item.change) > -1 ? styles.gain : {}]}>
+        <Text style={styles.price} onPress={onPress}>
+          {showChange ?
             String(item.change).substr(0,6) + '%' :
             '$' + formatPrice(item.balance * item.price)}
-      </Text>
-    </View>
-  </View>
+          </Text>
+        </View>
+      </View>
+  </TouchableHighlight>
 );
 
 class TokenList extends Component {
@@ -76,6 +81,9 @@ class TokenList extends Component {
                 item={item}
                 index={index}
                 showChange={showChange}
+                showTokenInfo={()=> {
+                  this.props.goToTokenDetailsPage(item);
+                }}
                 onPress={()=>{
                   console.log('toggle!')
                   this.setState({showChange: !this.state.showChange})
@@ -87,6 +95,10 @@ class TokenList extends Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'TokenDetails', params: {token} }))
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -147,4 +159,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TokenList;
+export default connect(()=>({}), mapDispatchToProps)(TokenList);
