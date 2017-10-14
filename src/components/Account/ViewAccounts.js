@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 10,
   },
-  container: {  
+  container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -33,7 +33,7 @@ const AddressView = ({name, index, deleteAddress}) => {
     return (
         <View>
             <Text style={styles.text}>{name}</Text>
-            <Button 
+            <Button
                 title={"-"}
                 onPress={() => deleteAddress(index)}
              />
@@ -71,8 +71,8 @@ class ViewAddresses extends Component {
           />
           <View>
               {addresses.map(
-                  (address, index) => 
-                  <AddressView 
+                  (address, index) =>
+                  <AddressView
                       key={index}
                       name={address}
                       index={index}

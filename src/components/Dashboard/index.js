@@ -74,12 +74,12 @@ class Dashboard extends Component {
     if (!loggedIn) {
       return
     }
-    
+
     Alert.alert('Please add an ethereum addresss');
     this.props.goToAddressPage();
   }
 
-  render = () => {    
+  render = () => {
     const { portfolio } = this.props
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
