@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View} from 'react-native';
+import { View} from 'react-native';
 import ImageLeft from './Layouts/ImageLeftLayout'
 import ImageRight from './Layouts/ImageRightLayout'
 import ImageDefault from './Layouts/ImageLayout'
