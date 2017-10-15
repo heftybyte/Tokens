@@ -22,7 +22,7 @@
     "start": "react-native-scripts start",
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
-    "ios": "react-native-scripts ionps",
+    "ios": "react-native-scripts ios",
     "test": "jest"
   },
   "jest": {
