@@ -12,6 +12,7 @@ import { genericError } from '../helpers/functions'
 
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
+export const LOGOUT = 'account/LOGOUT'
 export const GET_PORTFOLIO = 'account/GET_PORTFOLIO'
 export const UPDATE = 'account/UPDATE'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
@@ -24,6 +25,10 @@ const registerAction = (id) => ({
 const loginAction = (token, account) => ({
     type: LOGIN,
     data: { ...account, token }
+})
+
+const logoutAction = () => ({
+    type: LOGOUT
 })
 
 const portfolioAction = (portfolio) => ({
@@ -74,6 +79,11 @@ export const login = () => async (dispatch, getState) => {
     await AsyncStorage.setItem('account', JSON.stringify(account))
     await AsyncStorage.setItem('token', token)
     dispatch(loginAction(token, account))
+}
+
+export const logout = () => async(dispatch, getState) => {
+    await AsyncStorage.multiRemove(['token', 'id', 'account'])
+    dispatch(logoutAction())
 }
 
 export const addAddress = (address) => async (dispatch, getState) => {
@@ -132,6 +142,10 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data
+            }
+        case LOGOUT:
+            return {
+                ...initialState
             }
         default:
             return {

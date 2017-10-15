@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, ScrollView, View, Button, TouchableHighlight, AsyncStorage, Alert } from 'react-native';
-import { Constants } from 'expo';
+import { StyleSheet, Text, ScrollView, View, TouchableHighlight, AsyncStorage, Alert, StatusBar } from 'react-native';
 import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
@@ -10,12 +9,11 @@ import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import mockTokens from '../../../mockTokens';
 import mockNewsFeed from '../NewsFeed/MockData'
-import { register, login, getPortfolio } from '../../reducers/account';
+import { register, login, logout, getPortfolio } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
     backgroundColor: '#000',
-    paddingTop: Constants.statusBarHeight
   },
   container: {
     alignItems: 'center',
@@ -23,7 +21,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#000'
   },
   header: {
-    backgroundColor: '#000'
+    backgroundColor: '#000',
+  },
+  addBtn: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#6b2fe2',
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: 'row',
+    marginBottom: 20
+  },
+  addBtnText: {
+    textAlign: 'center',
+    color: '#fff'
+  },
+  addBtnIcon: {
+    marginRight: 10
   },
   portfolioValueCurrencySymbol: {
     color: '#fff',
@@ -67,26 +82,36 @@ class Dashboard extends Component {
   }
 
   componentWillReceiveProps = async (nextProps) => {
-    const { addresses, loggedIn, getPortfolio} = nextProps
+    const { addresses, getPortfolio} = nextProps
 
     if (addresses.length) {
       await getPortfolio()
       return
     }
-
-    if (!loggedIn) {
-      return
-    }
-
-    Alert.alert('Please add an ethereum addresss');
-    this.props.goToAddressPage();
   }
 
   render = () => {
-    const { portfolio } = this.props
+    const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
+    console.log({loggedIn})
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <Header totalValue={portfolio.totalValue} />
+       <StatusBar
+         backgroundColor="#000"
+         barStyle="light-content"
+       />
+        { !addresses.length  ? <TouchableHighlight
+          onPress={()=>{goToAddressPage({type: 'Accounts'})}}>
+            <View style={styles.addBtn}>
+                <MaterialCommunityIcons
+                  style={styles.addBtnIcon}
+                  name="plus-circle-outline"
+                  size={22}
+                  color="white"
+                />
+                <Text style={styles.addBtnText}>Add Ethereum Address</Text>
+            </View>
+        </TouchableHighlight> 
+        : <Header totalValue={portfolio.totalValue} />}
         {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
         <News feed={mockNewsFeed} />
@@ -120,6 +145,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Accounts' })),
     login: () => dispatch(login()),
+    logout: () => dispatch(logout()),
     register: () => dispatch(register()),
     getPortfolio: () => dispatch(getPortfolio())
 })
