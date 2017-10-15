@@ -22,17 +22,19 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Helvetica'
   },
+  changeContainer: {
+    paddingBottom: 15
+  },
   portfolioDelta: {
     color: '#fff',
     fontSize: 15
   },
   portfolioDeltaPeriod: {
     fontSize: 15,
-    color: '#c1c0bf',
-    fontWeight: 'bold'
+    color: '#c1c0bf'
   },
   gain: {
-    color: '#1bcca4'
+    color: '#6b2fe2'
   },
   loss: {
     color: '#b63e15'
@@ -51,7 +53,8 @@ const currencyFormatOptions =  {
 class Header extends Component {
 
   render () {
-    const { totalValue } = this.props
+    const { totalValue, totalChange, totalChangePct } = this.props
+    const gain = totalChange >= 0
     const valueParts = currencyFormatter
       .format(totalValue, currencyFormatOptions)
       .split(/\$|\./)
@@ -62,11 +65,13 @@ class Header extends Component {
           <Text style={styles.portfolioValue}>{valueParts[1]}</Text>
           <Text style={styles.portfolioValueCents}>.{valueParts[2]||'00'}</Text>
         </Text>
-        {/* NOTE: will be implemented in the next sprint 
-        <Text>
-          <Text style={[styles.portfolioDelta, styles.gain]}>+23.32(1.15%)</Text>
-          <Text style={styles.portfolioDeltaPeriod}>TODAY</Text>
-        </Text>*/}
+        {
+        <Text style={styles.changeContainer}>
+          <Text style={[styles.portfolioDelta, gain ? styles.gain : styles.loss]}>
+            {gain ? '+' : '-'} {totalChange}({totalChangePct}%)
+          </Text>
+          <Text style={styles.portfolioDeltaPeriod}>24h</Text>
+        </Text>}
       </View>
     );
   }

@@ -9,8 +9,6 @@ import Video from './Layouts/VideoLayout'
 import { Grid } from "react-native-easy-grid";
 
 
-
-
 const Format = (props) => {
     let formatted = null;
     switch(props.format) {

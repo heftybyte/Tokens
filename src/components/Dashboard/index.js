@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, ScrollView, View, Button, TouchableHighlight, AsyncStorage, Alert } from 'react-native';
+import { Constants } from 'expo';
 import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
@@ -8,16 +9,18 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import mockTokens from '../../../mockTokens';
+import mockNewsFeed from '../NewsFeed/MockData'
 import { register, login, getPortfolio } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000'
+    backgroundColor: '#000',
+    paddingTop: Constants.statusBarHeight
   },
   container: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   header: {
     backgroundColor: '#000'
@@ -47,7 +50,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   gain: {
-    color: '#1bcca4'
+    color: '#6b2fe2'
   },
   loss: {
     color: '#b63e15'
@@ -65,7 +68,7 @@ class Dashboard extends Component {
 
   componentWillReceiveProps = async (nextProps) => {
     const { addresses, loggedIn, getPortfolio} = nextProps
-
+    console.log({nextProps})
     if (addresses.length) {
       await getPortfolio()
       return
@@ -86,7 +89,7 @@ class Dashboard extends Component {
         <Header totalValue={portfolio.totalValue} />
         {/* NOTE: will be implemented in upcomign sprint
           <PriceChart />*/}
-        <News />
+        <News feed={mockNewsFeed} />
         <TokenList tokens={portfolio.tokens} />
       </ScrollView>
     )

@@ -76,7 +76,7 @@ class TokenList extends Component {
           style={styles.container}
           renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
           sections={[
-            {data: dataTokens, title: 'Holdings', renderItem: ({item, index}) =>
+            {data: dataTokens, title: 'HOLDINGS', renderItem: ({item, index}) =>
               <TokenItem
                 item={item}
                 index={index}
