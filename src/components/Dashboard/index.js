@@ -9,7 +9,7 @@ import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import mockTokens from '../../../mockTokens';
 import mockNewsFeed from '../NewsFeed/MockData'
-import { register, login, logout, getPortfolio } from '../../reducers/account';
+import { register, login, getPortfolio } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000'
   },
   header: {
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   addBtn: {
     alignSelf: 'center',
@@ -92,7 +92,6 @@ class Dashboard extends Component {
 
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
-    console.log({loggedIn})
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
        <StatusBar
@@ -108,7 +107,7 @@ class Dashboard extends Component {
                   size={22}
                   color="white"
                 />
-                <Text style={styles.addBtnText}>Add Ethereum Address</Text>
+                <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
             </View>
         </TouchableHighlight> 
         : <Header totalValue={portfolio.totalValue} />}
@@ -129,8 +128,9 @@ Dashboard.navigationOptions = ({ navigation }) => ({
         <MaterialCommunityIcons
           style={{paddingLeft:20}}
           name="menu"
-          size={22}
+          size={26}
           color="white"
+          backgroundColor="black"
           onPress={()=>{navigation.dispatch({type: 'Accounts'})}}
         />),
   headerRight: <Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
@@ -145,7 +145,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Accounts' })),
     login: () => dispatch(login()),
-    logout: () => dispatch(logout()),
     register: () => dispatch(register()),
     getPortfolio: () => dispatch(getPortfolio())
 })

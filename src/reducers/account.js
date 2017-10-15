@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import {
     loginAccount,
     registerAccount,
@@ -82,8 +83,11 @@ export const login = () => async (dispatch, getState) => {
 }
 
 export const logout = () => async(dispatch, getState) => {
+    console.log("logout -------> ")
     await AsyncStorage.multiRemove(['token', 'id', 'account'])
     dispatch(logoutAction())
+    console.log('navigate')
+    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
 export const addAddress = (address) => async (dispatch, getState) => {

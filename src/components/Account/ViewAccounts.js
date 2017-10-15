@@ -1,42 +1,84 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, ScrollView, View, Button, AsyncStorage, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableHighlight, ScrollView, View, Button, AsyncStorage, Alert } from 'react-native';
 import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { deleteAddress } from '../../reducers/account';
+import { logout } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
     backgroundColor: '#000',
-    height: '100%',
     padding: 10,
   },
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#000',
     borderWidth: 5,
     borderStyle: 'solid',
-    borderColor: '#f00'
+    borderColor: '#f00',
+    position: 'relative'
   },
   header: {
     backgroundColor: '#000'
   },
+  title: {
+    color: '#fff',
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 20
+  },
   text:{
       color: '#fff',
+  },
+  btn: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#6b2fe2',
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: 'row'
+  },
+  logoutBtn: {
+
+  },
+  logoutBtnText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 16
+  },
+  addressViewContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginBottom: 20
+  },
+  removeAddressBtn: {
+    flex: .1
+  },
+  addressText: {
+    flex: .8,
+    fontSize: 10
   }
 });
 
 const AddressView = ({name, index, deleteAddress}) => {
     return (
-        <View>
-            <Text style={styles.text}>{name}</Text>
-            <Button
-                title={"-"}
-                onPress={() => deleteAddress(index)}
-             />
+        <View style={styles.addressViewContainer}>
+            <Text style={[styles.text, styles.addressText]}>{JSON.parse(name)}</Text>
+            <TouchableHighlight
+              style={styles.removeAddressBtn}
+              onPress={() => deleteAddress(index)}>
+              <MaterialCommunityIcons
+                style={styles.addBtnIcon}
+                name="minus-circle-outline"
+                size={22}
+                color="#b63e15"
+              />
+            </TouchableHighlight>
         </View>
     );
 }
@@ -60,15 +102,11 @@ class ViewAddresses extends Component {
   }
 
   render(){
-    const { addresses, goToRoute } = this.props
-
+    const { id, addresses, goToRoute, logout } = this.props
+    console.log({id})
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-          <Text>Your Accounts</Text>
-          <Button
-              onPress={() => goToRoute('NewAccount')}
-              title={'Add Address'}
-          />
+          <Text style={[styles.text, styles.title]}>Your Accounts</Text>
           <View>
               {addresses.map(
                   (address, index) =>
@@ -80,6 +118,19 @@ class ViewAddresses extends Component {
                   />
               )}
           </View>
+          <TouchableHighlight
+              style={styles.btn}
+              onPress={() => goToRoute('NewAccount')}
+          >
+            <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
+          </TouchableHighlight>
+          {id && 
+            <TouchableHighlight
+                style={[styles.logoutBtn, {marginTop: 100}]}
+                onPress={()=>{console.log('logout!', logout);logout()}}
+            >
+              <Text style={styles.logoutBtnText}>Logout</Text>
+          </TouchableHighlight>}
       </ScrollView>
     );
   }
@@ -87,14 +138,16 @@ class ViewAddresses extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        addresses: state.account.addresses
+        addresses: state.account.addresses,
+        id: state.account.id
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         deleteAddress: (index) => dispatch(deleteAddress(index)),
-        goToRoute: (routeName) => dispatch(NavigationActions.navigate({ routeName }))
+        goToRoute: (routeName) => dispatch(NavigationActions.navigate({ routeName })),
+        logout: () => { dispatch(logout()) }
     }
 }
 
