@@ -1,12 +1,6 @@
-/**
- * Created by ifeoluwaking on 11/10/2017.
- */
-
 import React from 'react'
 import { Text, View, TouchableHighlight} from 'react-native';
 import {styles} from '../Style'
-
-
 
 const TextDefault = (props) => (
     <View>

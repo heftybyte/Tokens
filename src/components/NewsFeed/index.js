@@ -6,8 +6,6 @@ import {styles} from './Style'
 import Format from './Format'
 import mockData from './MockData'
 
-
-
 const News = () => {
     let newsList = mockData.map((news,index) => {
             return (

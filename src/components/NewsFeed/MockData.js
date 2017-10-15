@@ -1,4 +1,3 @@
-
 const newsApi = [
     {title:'Upcoming ICO', type: '', body: 'hello world suckers', link: '', image: '', format: 'TEXT'},
     {title:'Crypto News', type: '', body: 'hello world suckers', link: '', image: '', format: 'TEXT_CENTER'},
