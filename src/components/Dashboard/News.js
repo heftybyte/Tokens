@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, WebView } from 'react-native';
+import { StyleSheet, Text, View, WebView, Image } from 'react-native';
 import Swiper from 'react-native-swiper';
 
 const styles = StyleSheet.create({
@@ -29,20 +29,23 @@ const styles = StyleSheet.create({
 const News = () => (
   <Swiper style={styles.container} containerStyle={styles.container}>
     <View style={styles.slide}>
+      <Text style={styles.snippet}>Upcming ICO</Text>
+    </View>
+    <View style={styles.slide}>
       <Text style={styles.snippet}>
-        News
+        Crypto News
       </Text>
       <Text style={styles.action}>
         Visit Link
       </Text>
     </View>
     <View style={styles.slide}>
-      <Text style={styles.snippet}>Beautiful</Text>
+      <Text style={styles.snippet}>Active ICO</Text>
     </View>
     <View style={styles.slide}>
-      <Text style={styles.snippet}>And simple</Text>
+      <Text style={styles.snippet}>Pre ICO</Text>
     </View>
   </Swiper>
 );
 
-export default News;
+//export default News;

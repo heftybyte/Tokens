@@ -4,7 +4,7 @@ import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
-import AddressActions from '../../actionCreators/addressActions';
+import { deleteAddress } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 10,
   },
-  container: {  
+  container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -33,7 +33,7 @@ const AddressView = ({name, index, deleteAddress}) => {
     return (
         <View>
             <Text style={styles.text}>{name}</Text>
-            <Button 
+            <Button
                 title={"-"}
                 onPress={() => deleteAddress(index)}
              />
@@ -42,14 +42,10 @@ const AddressView = ({name, index, deleteAddress}) => {
 }
 
 class ViewAddresses extends Component {
-    addresses = [];
+  addresses = [];
 
-    static defaultProps = {
-        addresses: []
-    }
-
-  async componentWillMount() {
-    this.props.getAddresses();
+  static defaultProps = {
+      addresses: []
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -64,41 +60,42 @@ class ViewAddresses extends Component {
   }
 
   render(){
+    const { addresses, goToRoute } = this.props
+
     return (
-    <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <Text>Your Accounts</Text>
-        <Button
-            onPress={() => this.props.goToRoute('NewAccount')}
-            title={'Add Address'}
-        />
-        <View>
-            {this.props.addresses.map(
-                (address, index) => 
-                <AddressView 
-                    key={index}
-                    name={address}
-                    index={index}
-                    deleteAddress={this.deleteAddress}
-                />
-            )}
-        </View>
-    </ScrollView>
+      <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
+          <Text>Your Accounts</Text>
+          <Button
+              onPress={() => goToRoute('NewAccount')}
+              title={'Add Address'}
+          />
+          <View>
+              {addresses.map(
+                  (address, index) =>
+                  <AddressView
+                      key={index}
+                      name={address}
+                      index={index}
+                      deleteAddress={()=>this.deleteAddress(index)}
+                  />
+              )}
+          </View>
+      </ScrollView>
     );
   }
 }
 
-const mapStoreToProps = (store) => {
+const mapStateToProps = (state) => {
     return {
-        addresses: store.addresses.addresses
+        addresses: state.account.addresses
     }
 };
 
-const mapActionCreatorsToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        getAddresses: () => dispatch(AddressActions.getAddressesAction()),
-        deleteAddress: (index) => dispatch(AddressActions.deleteAddressAction(index)),
+        deleteAddress: (index) => dispatch(deleteAddress(index)),
         goToRoute: (routeName) => dispatch(NavigationActions.navigate({ routeName }))
     }
 }
 
-export default connect(mapStoreToProps, mapActionCreatorsToProps)(ViewAddresses);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewAddresses);

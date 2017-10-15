@@ -1,4 +1,6 @@
 node_modules/
 .expo/
+.idea/
 npm-debug.*
 .idea/vcs.xml
+.idea

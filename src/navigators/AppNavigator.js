@@ -5,13 +5,15 @@ import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 
 import AccountsNavigator from '../components/Account';
 import Dashboard from '../components/Dashboard';
-import NewAccount from '../components/Account/createAccount';
-import ViewAccounts from '../components/Account/viewAccounts';
+import NewAccount from '../components/Account/CreateAccount';
+import ViewAccounts from '../components/Account/ViewAccounts';
+import TokenDetails from '../components/TokenDetails';
 
 export const AppNavigator = StackNavigator({
   Dashboard: { screen: Dashboard },
   Accounts : { screen: ViewAccounts },
-  NewAccount: { screen: NewAccount }
+  NewAccount: { screen: NewAccount },
+  TokenDetails: { screen: TokenDetails }
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
