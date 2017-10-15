@@ -31,7 +31,7 @@ const formatPrice = (price) => {
   return formattedPrice
 }
 
-const TokenItem = ({item, index, showChange, onPress, showTokenInfo}) => (
+const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => (
   <TouchableHighlight onPress={showTokenInfo}>
     <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
       <View>
@@ -76,7 +76,7 @@ class TokenList extends Component {
           style={styles.container}
           renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
           sections={[
-            {data: dataTokens, title: 'Holdings', renderItem: ({item, index}) =>
+            {data: dataTokens, title: 'HOLDINGS', renderItem: ({item, index}) =>
               <TokenItem
                 item={item}
                 index={index}
@@ -103,7 +103,8 @@ const mapDispatchToProps = (dispatch) => ({
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
-    backgroundColor: '#000'
+    backgroundColor: '#000',
+    paddingBottom: 20
   },
   symbol: {
     color: '#fff',

@@ -1,21 +1,40 @@
 import React from 'react'
-import { Text, View, Image} from 'react-native';
-import { Col, Row, Grid } from "react-native-easy-grid";
+import { Text, View, Image, Dimensions } from 'react-native';
+import { Col, Row } from "react-native-easy-grid";
 
 import {styles} from '../Style'
 
+class ImageDefault extends React.Component {
+    state = {}
 
+    componentDidMount() {
+        const { news: { image } } = this.props
 
-const ImageDefault = (props) => (
-    <View>
-        <Text style={styles.snippet}>{props.news.title}</Text>
-            <Col>
-        <Image
-            style={{width: 50, height: 50}}
-            source={{uri: `${props.news.image}`}}
-        />
-            </Col>
-    </View>
-)
+        Image.getSize(image, (srcWidth, srcHeight) => {
+          const maxHeight = Dimensions.get('window').height;
+          const maxWidth = Dimensions.get('window').width;
+
+          const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+          this.setState({ width: srcWidth * ratio, height: srcHeight * ratio });
+        }, error => {
+          console.log('image size error:', error);
+        });
+    }
+
+    render() {
+        const { news: { title, image } } = this.props
+        const { width, height } = this.state
+
+        return (
+            <View style={[styles.center, {backgroundColor: '#fff'}]}>
+                <Image
+                    style={{ width, height }}
+                    resizeMode="contain"
+                    source={{ uri: image }}
+                />
+            </View>
+        )
+    }
+}
 
 export default ImageDefault;
