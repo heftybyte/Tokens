@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
   },
   loss: {
     color: '#b63e15'
+  },
+  smallHeaderFont: {
+    fontSize: 50
   }
 });
 
@@ -58,11 +61,16 @@ class Header extends Component {
     const valueParts = currencyFormatter
       .format(totalValue, currencyFormatOptions)
       .split(/\$|\./)
+    console.log('valueParts[1].length', valueParts[1].length)
+    const smallerFont = valueParts[1].length >= 11 ?
+      styles.smallHeaderFont :
+      {}
+
     return (
       <View style={styles.container}>
         <Text>
           <Text style={styles.portfolioValueCurrencySymbol}>$</Text>
-          <Text style={styles.portfolioValue}>{valueParts[1]}</Text>
+          <Text style={[styles.portfolioValue, smallerFont]}>{valueParts[1]}</Text>
           <Text style={styles.portfolioValueCents}>.{valueParts[2]||'00'}</Text>
         </Text>
         <Text style={styles.changeContainer}>

@@ -42,7 +42,11 @@ const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => (
         <Text style={styles.symbol}>{item.symbol}</Text>
         <Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>
       </View>
-      <View style={[styles.priceContainer, parseInt(item.change) > -1 ? styles.gain : {}]}>
+      <View style={[
+          styles.priceContainer,
+          parseInt(item.change) > -1 ? styles.gain : {},
+          (`${item.balance * item.price}`).length >= 7 ? styles.longerPriceContainer : {}
+      ]}>
         <Text style={styles.price} onPress={onPress}>
           {showChange ?
             String(item.change).substr(0,6) + '%' :
@@ -120,15 +124,19 @@ const styles = StyleSheet.create({
   priceContainer: {
     flex: .2,
     height: 40,
-    backgroundColor: 'red',
+    backgroundColor: '#b63e15',
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: 'red',
+    borderColor: '#b63e15',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
     paddingLeft: 15,
     paddingRight: 15
+  },
+  longerPriceContainer: {
+    paddingLeft: 40,
+    paddingRight: 40
   },
   price: {
     color: '#000',
@@ -155,8 +163,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   gain: {
-    backgroundColor: '#1bcca4',
-    borderColor: '#1bcca4'
+    backgroundColor: '#6b2fe2',
+    borderColor: '#6b2fe2'
   }
 });
 

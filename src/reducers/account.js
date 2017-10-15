@@ -16,6 +16,7 @@ export const LOGIN = 'account/LOGIN'
 export const LOGOUT = 'account/LOGOUT'
 export const GET_PORTFOLIO = 'account/GET_PORTFOLIO'
 export const UPDATE = 'account/UPDATE'
+export const ADD_ADDRESS = 'account/ADD_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
 
 const registerAction = (id) => ({
@@ -42,6 +43,11 @@ const updateAction = (account) => ({
     data: { account }
 })
 
+const addAddressAction = (addresses=[]) => ({
+    type: ADD_ADDRESS,
+    data: { addresses }
+})
+
 const tokenDetailsAction = (tokenDetails) => ({
   type: GET_TOKEN_DETAILS,
   data: { tokenDetails }
@@ -53,6 +59,7 @@ export const register = () => async (dispatch) => {
         await registerAccount().catch(e=>err=e)
 
     if (err || !account) {
+        console.log(err)
         return genericError()
     }
     await AsyncStorage.setItem('account', JSON.stringify(account))
@@ -67,6 +74,7 @@ export const login = () => async (dispatch, getState) => {
     if (!token) {
         const res = await loginAccount(id).catch(e=>err=e)
         if (err) {
+            console.log(err)
             return genericError()
         }
         token = res.id
@@ -75,6 +83,7 @@ export const login = () => async (dispatch, getState) => {
 
     const account = await getAccount(id).catch(e=>err=e)
     if (err) {
+        console.log(err)
         return genericError()
     }
     await AsyncStorage.setItem('account', JSON.stringify(account))
@@ -83,10 +92,8 @@ export const login = () => async (dispatch, getState) => {
 }
 
 export const logout = () => async(dispatch, getState) => {
-    console.log("logout -------> ")
     await AsyncStorage.multiRemove(['token', 'id', 'account'])
     dispatch(logoutAction())
-    console.log('navigate')
     dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
@@ -95,10 +102,11 @@ export const addAddress = (address) => async (dispatch, getState) => {
     const { id } = getState().account
     const account = await addAccountAddress(id, address).catch(e=>err=e)
     if (err) {
+        console.log(err)
         return genericError()
     }
-
-    dispatch(updateAction(account))
+    console.log('account.addresses', account.addresses)
+    dispatch(addAddressAction(account.addresses))
 }
 
 export const deleteAddress = (address) => async (dispatch, getState) => {
@@ -110,6 +118,7 @@ export const getPortfolio = () => async (dispatch, getState) => {
     const { id } = getState().account
     const portfolio = await getAccountPortfolio(id).catch(e=>err=e)
     if (err) {
+        console.log(err)
         return genericError()
     }
 
@@ -122,6 +131,7 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
   const tokenDetails = await getTokenDetailsForAccount(id, sym).catch(e=>err=e)
 
   if (err) {
+    console.log(err)
     return genericError();
   }
 
@@ -150,6 +160,11 @@ export default (state = initialState, action) => {
         case LOGOUT:
             return {
                 ...initialState
+            }
+        case ADD_ADDRESS:
+            return {
+                ...state,
+                addresses: [...action.data.addresses]
             }
         default:
             return {

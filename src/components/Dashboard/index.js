@@ -143,7 +143,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Accounts' })),
+    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'NewAccount' })),
     login: () => dispatch(login()),
     register: () => dispatch(register()),
     getPortfolio: () => dispatch(getPortfolio())

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
 import { Permissions } from 'expo';
+import { NavigationActions } from 'react-navigation';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import QRScanner from './QRScanner';
@@ -94,7 +95,10 @@ class CreateAddress extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAddress: (address) => dispatch(addAddress(address))
+    addAddress: (address) => {
+      dispatch(addAddress(address))
+      dispatch(NavigationActions.back())
+    }
   }
 }
 
