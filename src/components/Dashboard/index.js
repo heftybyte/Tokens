@@ -68,7 +68,7 @@ class Dashboard extends Component {
 
   componentWillReceiveProps = async (nextProps) => {
     const { addresses, loggedIn, getPortfolio} = nextProps
-    console.log({nextProps})
+
     if (addresses.length) {
       await getPortfolio()
       return
@@ -87,7 +87,7 @@ class Dashboard extends Component {
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
         <Header totalValue={portfolio.totalValue} />
-        {/* NOTE: will be implemented in upcomign sprint
+        {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
         <News feed={mockNewsFeed} />
         <TokenList tokens={portfolio.tokens} />

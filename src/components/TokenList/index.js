@@ -31,7 +31,7 @@ const formatPrice = (price) => {
   return formattedPrice
 }
 
-const TokenItem = ({item, index, showChange, onPress, showTokenInfo}) => (
+const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => (
   <TouchableHighlight onPress={showTokenInfo}>
     <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
       <View>
@@ -103,7 +103,8 @@ const mapDispatchToProps = (dispatch) => ({
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
-    backgroundColor: '#000'
+    backgroundColor: '#000',
+    paddingBottom: 20
   },
   symbol: {
     color: '#fff',

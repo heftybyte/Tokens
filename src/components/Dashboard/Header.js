@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica'
   },
   changeContainer: {
-    paddingBottom: 15
+    paddingBottom: 10
   },
   portfolioDelta: {
     color: '#fff',
@@ -65,13 +65,14 @@ class Header extends Component {
           <Text style={styles.portfolioValue}>{valueParts[1]}</Text>
           <Text style={styles.portfolioValueCents}>.{valueParts[2]||'00'}</Text>
         </Text>
-        {
         <Text style={styles.changeContainer}>
+        {/* NOTE: will be implemented in the next sprint
           <Text style={[styles.portfolioDelta, gain ? styles.gain : styles.loss]}>
             {gain ? '+' : '-'} {totalChange}({totalChangePct}%)
           </Text>
           <Text style={styles.portfolioDeltaPeriod}>24h</Text>
-        </Text>}
+        */}
+        </Text>
       </View>
     );
   }

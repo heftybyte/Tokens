@@ -1,17 +1,17 @@
 export const styles = {
     container: {
         backgroundColor: '#0f0f0f',
-        height: 180,
-        marginBottom: 20
+        height: 205
     },
     slide: {
         height: 180,
+        maxHeight: 180,
         backgroundColor: '#000',
         borderWidth: 10,
         borderRadius: 10,
         flex: 1,
         padding: 10,
-        margin: 7
+        margin: 7,
     },
     body: {
         color: '#fff'
