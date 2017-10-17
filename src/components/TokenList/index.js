@@ -31,31 +31,36 @@ const formatPrice = (price) => {
   return formattedPrice
 }
 
-const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => (
-  <TouchableHighlight onPress={showTokenInfo}>
-    <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
-      <View>
-        <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
-      </View>
+const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
+  const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
+  const isLongPrice = (`${item.balance * item.price}`).length >= 11
 
-      <View style={styles.symbolContainer}>
-        <Text style={styles.symbol}>{item.symbol}</Text>
-        <Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>
-      </View>
-      <View style={[
-          styles.priceContainer,
-          parseInt(item.change) > -1 ? styles.gain : {},
-          (`${item.balance * item.price}`).length >= 7 ? styles.longerPriceContainer : {}
-      ]}>
-        <Text style={styles.price} onPress={onPress}>
-          {showChange ?
-            String(item.change).substr(0,6) + '%' :
-            '$' + formatPrice(item.balance * item.price)}
-          </Text>
+  return (
+    <TouchableHighlight onPress={showTokenInfo}>
+      <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
+        <View>
+          <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
         </View>
-      </View>
-  </TouchableHighlight>
-);
+
+        <View style={styles.symbolContainer}>
+          <Text style={styles.symbol}>{item.symbol}</Text>
+          <Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>
+        </View>
+        <View style={[
+            styles.priceContainer,
+            changeStyle,
+            // isLongPrice ? styles.longerPriceContainer : {}
+        ]}>
+          <Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]} onPress={onPress}>
+            {showChange ?
+              String(item.change).substr(0,6) + '%' :
+              '$' + formatPrice(item.balance * item.price)}
+            </Text>
+          </View>
+        </View>
+    </TouchableHighlight>
+  )
+};
 
 class TokenList extends Component {
 
@@ -135,8 +140,11 @@ const styles = StyleSheet.create({
     paddingRight: 15
   },
   longerPriceContainer: {
-    paddingLeft: 40,
-    paddingRight: 40
+    paddingLeft: 30,
+    paddingRight: 30
+  },
+  longPrice: {
+    width: 105
   },
   price: {
     color: '#000',
