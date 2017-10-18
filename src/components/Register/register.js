@@ -6,21 +6,31 @@ import { observer } from "mobx-react"
 
 import { store } from "./store"
 
+const radioStyles = {
+	outer: (size, outerColor) => ({
+		borderRadius: size / 2,
+		height: size,
+		width: size,
+		borderWidth: 3,
+		borderColor: outerColor,
+		backgroundColor: 'transparent',
+		justifyContent: 'center',
+		alignItems: 'center'
+	}),
+	inner: (size,  innerColor) => ({
+		height: size - 12,
+		width: size - 12,
+		borderRadius: (size - 12) / 2,
+		backgroundColor: innerColor
+	})
+}
+
 const RadioButton = observer(
 	({ selected, size, innerColor, outerColor }) => (
 		<View
-			style={{
-				borderRadius: size / 2,
-				height: size,
-				width: size,
-				borderWidth: 3,
-				borderColor: outerColor,
-				backgroundColor: 'transparent',
-				justifyContent: 'center',
-				alignItems: 'center'
-			}}
+			style={radioStyles.outer(size,  outerColor)}
 		>
-			{selected && <View style={{ height: size - 12,  width: size - 12, borderRadius: (size - 12) / 2, backgroundColor: innerColor }} />}
+			{selected && <View style={radioStyles.inner(size, innerColor)} />}
 		</View>
 	)
 )
@@ -45,7 +55,7 @@ const Register = observer(
 				</View>
 				<View style={styles.itemWrapper}>
 					<TouchableOpacity
-						onPress={() => requestAnimationFrame(store.changeType("normal"))}
+						onPress={() => store.changeType("normal")}
 					>
 						<View style={styles.item}>
 							<RadioButton
@@ -61,7 +71,7 @@ const Register = observer(
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity
-						onPress={() => requestAnimationFrame(store.changeType("anon"))}
+						onPress={() => store.changeType("anon")}
 					>
 						<View style={styles.item}>
 							<RadioButton

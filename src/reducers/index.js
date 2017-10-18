@@ -5,7 +5,7 @@ import account from './account'
 import { AppNavigator } from '../navigators/AppNavigator';
 
 // Start with two routes: The Dashboard screen, with the Login screen on top.
-const firstAction = AppNavigator.router.getActionForPathAndParams('Register');
+const firstAction = AppNavigator.router.getActionForPathAndParams('AnonymousRegisteration');
 const initialNavState = AppNavigator.router.getStateForAction(
   firstAction,
 );
@@ -15,7 +15,7 @@ function nav(state = initialNavState, action) {
   switch (action.type) {
     default:
       // for some reason the next state return is still for dashboard
-      // we force getting the correct action by calling 
+      // we force getting the correct action by calling
       // AppNavigator.router.getActionForPathAndParams with the action type
       nextRouteAction = AppNavigator.router.getActionForPathAndParams(action.type) || action;
       nextState = AppNavigator.router.getStateForAction(nextRouteAction, state);

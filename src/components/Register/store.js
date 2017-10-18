@@ -10,7 +10,7 @@ class Register {
 		this.type = type
 	}
 
-	navigate = (navigation, ...args) => {
+	navigate = (navigation) => {
 		navigation.navigate(this.type === "anon" ? "AnonymousRegisteration" : "NormalRegisteration")
 	}
 }
