@@ -5,7 +5,7 @@ import account from './account'
 import { AppNavigator } from '../navigators/AppNavigator';
 
 // Start with two routes: The Dashboard screen, with the Login screen on top.
-const firstAction = AppNavigator.router.getActionForPathAndParams('Dashboard');
+const firstAction = AppNavigator.router.getActionForPathAndParams('Register');
 const initialNavState = AppNavigator.router.getStateForAction(
   firstAction,
 );

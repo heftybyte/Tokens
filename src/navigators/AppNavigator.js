@@ -8,11 +8,15 @@ import Dashboard from '../components/Dashboard';
 import NewAccount from '../components/Account/CreateAccount';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
+import Register, { NormalRegisteration, AnonymousRegisteration } from '../components/Register';
 
 export const AppNavigator = StackNavigator({
+	AnonymousRegisteration: { screen: AnonymousRegisteration },
+	NormalRegisteration: { screen: NormalRegisteration },
   Dashboard: { screen: Dashboard },
   Accounts : { screen: ViewAccounts },
   NewAccount: { screen: NewAccount },
+	Register: { screen: Register },
   TokenDetails: { screen: TokenDetails }
 });
 
