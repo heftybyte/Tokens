@@ -90,7 +90,7 @@ class Dashboard extends Component {
         {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
         <News feed={mockNewsFeed} />
-        <TokenList tokens={portfolio.tokens} />
+        <TokenList tokens={portfolio.tokens} title="Watch List" />
       </ScrollView>
     )
   }
