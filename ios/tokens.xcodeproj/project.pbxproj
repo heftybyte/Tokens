@@ -24,7 +24,7 @@
 		2C1548D9E4CB1AEFA5CCAE6D /* Pods-tokens.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tokens.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tokens/Pods-tokens.debug.xcconfig"; sourceTree = "<group>"; };
 		A47FE4D7F70906B7DC8CE39B /* Pods-tokens.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tokens.release.xcconfig"; path = "Pods/Target Support Files/Pods-tokens/Pods-tokens.release.xcconfig"; sourceTree = "<group>"; };
 		B501732A1DC01252003445D9 /* EXShell.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EXShell.plist; sourceTree = "<group>"; };
-		B56386411DB9693800A0598C /* tokens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tokens.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B56386411DB9693800A0598C /* tokens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tokens.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B56386471DB9693800A0598C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B56386481DB9693800A0598C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B56386501DB9693800A0598C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 				B56386501DB9693800A0598C /* Assets.xcassets */,
 				B563865B1DB96A5E00A0598C /* Supporting */,
 			);
-			path = "tokens";
+			path = tokens;
 			sourceTree = "<group>";
 		};
 		B563865B1DB96A5E00A0598C /* Supporting */ = {
@@ -132,8 +132,8 @@
 			);
 			dependencies = (
 			);
-			name = "tokens";
-			productName = "tokens";
+			name = tokens;
+			productName = tokens;
 			productReference = B56386411DB9693800A0598C /* tokens.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -143,12 +143,12 @@
 		B56386391DB9693800A0598C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "650 Industries, Inc.";
 				TargetAttributes = {
 					B56386401DB9693800A0598C = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = C8D8QTF339;
+						DevelopmentTeam = S67U4422JF;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -196,13 +196,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tokens-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8D34C7FE3D99F20E5EA1B18A /* [CP] Embed Pods Frameworks */ = {
@@ -226,9 +229,24 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-tokens/Pods-tokens-resources.sh",
+				"${PODS_ROOT}/Amplitude-iOS/Amplitude/api.amplitude.com.der",
+				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoCaLimitedRsaCertificationAuthority.der",
+				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaCA.der",
+				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaDomainValidationCA.der",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_amatorka.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_miss_etikate.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_soft_elegance_1.png",
+				"${PODS_ROOT}/GPUImage/framework/Resources/lookup_soft_elegance_2.png",
+				"${PODS_ROOT}/GoogleAuthUtilities/Frameworks/frameworks/GoogleAuthUtilities.framework/Resources/GTMOAuth2ViewTouch.xib",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -273,7 +291,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -281,7 +301,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -321,7 +345,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -329,7 +355,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -359,10 +389,10 @@
 			baseConfigurationReference = 2C1548D9E4CB1AEFA5CCAE6D /* Pods-tokens.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = C8D8QTF339;
+				DEVELOPMENT_TEAM = S67U4422JF;
 				INFOPLIST_FILE = "$(SRCROOT)/tokens/Supporting/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "express.tokens.TokensExpress";
+				PRODUCT_BUNDLE_IDENTIFIER = express.tokens.TokensExpress;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -372,10 +402,10 @@
 			baseConfigurationReference = A47FE4D7F70906B7DC8CE39B /* Pods-tokens.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = C8D8QTF339;
+				DEVELOPMENT_TEAM = S67U4422JF;
 				INFOPLIST_FILE = "$(SRCROOT)/tokens/Supporting/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "express.tokens.TokensExpress";
+				PRODUCT_BUNDLE_IDENTIFIER = express.tokens.TokensExpress;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -390,7 +420,7 @@
 				B56386571DB9693800A0598C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B56386581DB9693800A0598C /* Build configuration list for PBXNativeTarget "tokens" */ = {
 			isa = XCConfigurationList;
@@ -399,7 +429,7 @@
 				B563865A1DB9693800A0598C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

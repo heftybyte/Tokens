@@ -2,7 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>developmentUrl</key>
-	<string>exp33188473e9f440f1aa41d615db2339fe://64-dvm.reddberckley.tokens.exp.direct:80</string>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>B56386401DB9693800A0598C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
 </dict>
 </plist>
