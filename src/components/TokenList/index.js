@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
-import tokens from './data'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
   'https://erc-20.io' :
@@ -62,7 +61,7 @@ class TokenList extends Component {
 
   render() {
     const { showChange } = this.state
-    let dataTokens = this.props.tokens || tokens
+    let dataTokens = this.props.tokens
 
     dataTokens = dataTokens.map(tokenObj => (
       {

@@ -8,7 +8,7 @@ import News from '../NewsFeed';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
-import mockTokens from '../../../mockTokens';
+import mockTokens from '../TokenList/data';
 import mockNewsFeed from '../NewsFeed/MockData'
 import { register, login, getPortfolio } from '../../reducers/account';
 
@@ -90,7 +90,12 @@ class Dashboard extends Component {
         {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
         <News feed={mockNewsFeed} />
-        <TokenList tokens={portfolio.tokens} title="Watch List" />
+          { portfolio.tokens === undefined || portfolio.tokens.length === 0 ?
+              <View/>
+              :
+              <TokenList tokens={portfolio.tokens} title="Holdings" />
+          }
+        <TokenList tokens={mockTokens} title="WatchList" />
       </ScrollView>
     )
   }

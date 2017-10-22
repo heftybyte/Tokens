@@ -1,4 +1,4 @@
-const tokens = [
+const mockTokens = [
     {symbol: 'ETH', balance: 30, price: 98, change: 300},
     {symbol: 'BTC', balance: 10, price: 98, change: 100},
     {symbol: 'USD', balance: 20, price: 88, change: 200},
@@ -11,4 +11,4 @@ const tokens = [
     {symbol: 'CAD', balance: 76, price: 18, change: 105}
 ]
 
-export default tokens;
+export default mockTokens;
