@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "588976453725",
+    "firebase_url": "https://tokens-d1fce.firebaseio.com",
+    "project_id": "tokens-d1fce",
+    "storage_bucket": "tokens-d1fce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588976453725:android:f7516f401f25add8",
+        "android_client_info": {
+          "package_name": "express.tokens.TokensExpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588976453725-f2n9aevq4vkjvpisce5phks3m5l8uu95.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC85yBC0XTB2ToDNvTFRSevdYIJJLQ7I34"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

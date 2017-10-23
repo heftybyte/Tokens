@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, ScrollView, View, Button, TouchableHighlight, AsyncStorage, Alert } from 'react-native';
 import { Constants } from 'expo';
+import firebase from 'react-native-firebase';
 import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
@@ -114,7 +115,7 @@ class Dashboard extends Component {
   render = () => {
     const { portfolio } = this.props
     return (
-      <ScrollView style={styles.scrollContainer} 
+      <ScrollView style={styles.scrollContainer}
         containerStyleContent={styles.container}
         onScrollEndDrag={this.handleScroll}
         >

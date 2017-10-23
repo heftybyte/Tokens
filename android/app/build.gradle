@@ -49,6 +49,9 @@ repositories{
 }
 
 dependencies {
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
   compile fileTree(dir: 'libs', include: ['*.jar'])
   testCompile 'junit:junit:4.12'
   compile 'com.android.support:appcompat-v7:25.3.1'
@@ -71,6 +74,24 @@ dependencies {
   compile('io.nlopez.smartlocation:library:3.2.11') {
     transitive = false
   }
-  
+
+  // Firebase dependencies
+  compile "com.google.android.gms:play-services-base:11.4.2"
+  compile "com.google.android.gms:play-services-base-license:11.4.2"
+  compile "com.google.android.gms:play-services-ads:11.4.2"
+  compile "com.google.android.gms:play-services-ads-lite:11.4.2"
+  compile "com.google.android.gms:play-services-ads-license:11.4.2"
+  compile "com.google.android.gms:play-services-analytics:11.4.2"
+  compile "com.google.android.gms:play-services-analytics-impl:11.4.2"
+  compile "com.google.android.gms:play-services-auth:11.4.2"
+  compile "com.google.android.gms:play-services-auth-base:11.4.2"
+  compile "com.google.android.gms:play-services-fitness:11.4.2"
+  compile "com.google.android.gms:play-services-gcm:11.4.2"
+  compile "com.google.android.gms:play-services-identity:11.4.2"
+  compile "com.google.android.gms:play-services-maps:11.4.2"
+  compile "com.google.android.gms:play-services-wallet:11.4.2"
+  compile "com.google.firebase:firebase-core:11.4.2"
   
 }
+
+apply plugin: 'com.google.gms.google-services'
