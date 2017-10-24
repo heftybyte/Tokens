@@ -38,17 +38,17 @@ const styles = StyleSheet.create({
   portfolioValueCurrencySymbol: {
     color: '#fff',
     fontSize: 30,
-    fontFamily: 'Helvetica'
+    // fontFamily: 'Helvetica'
   },
   portfolioValue: {
     color: '#fff',
     fontSize: 60,
-    fontFamily: 'Helvetica'
+    // fontFamily: 'Helvetica'
   },
   portfolioValueCents: {
     color: '#fff',
     fontSize: 30,
-    fontFamily: 'Helvetica'
+    // fontFamily: 'Helvetica'
   },
   portfolioDelta: {
     color: '#fff',
