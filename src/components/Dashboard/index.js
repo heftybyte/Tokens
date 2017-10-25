@@ -120,6 +120,25 @@ class Dashboard extends Component {
     }
   }
 
+  handleScroll = (event) => {
+    const hiddenHeight = event.nativeEvent.contentOffset.y;
+    const { setParams } = this.props.navigation;
+    const { totalValue } = this.props.portfolio;
+
+    if(hiddenHeight > 60 && totalValue) {
+
+      const valueParts = currencyFormatter
+      .format(totalValue, currencyFormatOptions)
+      .split(/\$|\./);
+
+      const valueString = `\$${valueParts[0]}${valueParts[1]}.${valueParts[2]||'00'}`;
+
+      setParams && setParams({ title: valueString });
+    } else {
+      setParams && setParams({ title: 'Dashboard' });
+    }
+  }
+
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
     return (

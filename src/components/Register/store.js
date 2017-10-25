@@ -1,5 +1,4 @@
 import { observable, action } from "mobx"
-import { NavigationActions } from 'react-navigation';
 
 type RegisterType = "anon" | "normal"
 
@@ -17,9 +16,7 @@ class Register {
 	}
 
 	navigate = (navigation) => {
-		const routeName = this.type === "anon" ? "AnonymousRegisteration" : "NormalRegisteration"
-		console.log({routeName})
-		NavigationActions.navigate({ routeName })
+		navigation.navigate(this.type === "anon" ? "AnonymousRegisteration" : "NormalRegisteration")
 	}
 
 	@action
@@ -29,12 +26,9 @@ class Register {
 
 	@action
 	createAccount = () => {
-		console.log('create account', NavigationActions)
-		NavigationActions.navigate({ routeName: 'Dashboard' })
 		if (this.normal.password !== this.normal.cpassword) {
 			return
-		}
-		NavigationActions.navigate({ routeName: 'Dashboard' })
+    }
 	}
 }
 
