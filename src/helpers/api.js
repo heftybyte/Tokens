@@ -1,32 +1,32 @@
 import { AsyncStorage } from 'react-native';
 import axios from 'axios';
 import Expo from 'expo';
+import store from '../store'
+import { login } from '../reducers/account'
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.get['Accept'] = 'application/json';
 
-export const baseURL = process.env.NODE_ENV === 'production' ?
-  'http://138.197.104.147:3000/api' :
-  'http://138.197.104.147:3000/api'
+export const API_HOST = process.env.NODE_ENV === 'production' ?
+  '138.197.104.147:3000' :
+  '138.197.104.147:3000'
 
 const instance = axios.create({
-  baseURL
+  baseURL: `http://${API_HOST}/api`
 });
 
 instance.interceptors.response.use(res => res, async (err) => {
   if (err.response.status === 401) {
     const account = JSON.parse(await AsyncStorage.getItem('account') || {})
     let err = null
-    const res = await loginAccount(account.id).catch(e=>err=e)
-    if (err) return genericError()
-
-    return setAuthHeader(res.id);
+    await AsyncStorage.removeItem('token')
+    return store.dispatch(login())
   }
   return Promise.reject(err);
 });
 
 export const setAuthHeader = (token) => {
   instance.defaults.headers.common['Authorization'] = token
-  console.log('token', token)
 }
 
 export const registerAccount = async () => {
