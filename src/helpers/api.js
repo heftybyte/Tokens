@@ -1,3 +1,4 @@
+import { AsyncStorage } from 'react-native';
 import axios from 'axios';
 import Expo from 'expo';
 
@@ -9,6 +10,18 @@ export const baseURL = process.env.NODE_ENV === 'production' ?
 
 const instance = axios.create({
   baseURL
+});
+
+instance.interceptors.response.use(res => res, async (err) => {
+  if (err.response.status === 401) {
+    const account = JSON.parse(await AsyncStorage.getItem('account') || {})
+    let err = null
+    const res = await loginAccount(account.id).catch(e=>err=e)
+    if (err) return genericError()
+
+    return setAuthHeader(res.id);
+  }
+  return Promise.reject(err);
 });
 
 export const setAuthHeader = (token) => {
