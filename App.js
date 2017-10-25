@@ -10,7 +10,9 @@ import Sentry from 'sentry-expo';
 
 Sentry.enableInExpoDevelopment = true;
 
-Sentry.config('https://bf77d4d2ce4843ae909cca0b6d7675bb@sentry.io/235327').install();
+const publicDNS = process.env.SENTRY_PUBLIC_DNS || 'https://bf77d4d2ce4843ae909cca0b6d7675bb@sentry.io/235327';
+
+Sentry.config(publicDNS).install();
 
 class Tokens extends React.Component {
 
