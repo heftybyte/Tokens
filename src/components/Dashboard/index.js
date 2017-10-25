@@ -126,7 +126,9 @@ class Dashboard extends Component {
       <ScrollView
         style={styles.scrollContainer}
         containerStyleContent={styles.container}
+        onScroll={this.handleScroll}
         onScrollEndDrag={this.handleScroll}
+        scrollEventThrottle={16}
       >
        <StatusBar
          backgroundColor="#000"
