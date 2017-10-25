@@ -15,9 +15,9 @@ export const formatPrice = (price) => {
   } else {
     decimal = '.' + decimal.substr(0,2)
   }
-  let formattedPrice = Number(whole + decimal).toLocaleString()
   if (decimal.length < 3) {
-    formattedPrice += '0'
+    decimal += '0'
   }
+  let formattedPrice = Number(whole + decimal).toLocaleString()
   return formattedPrice
 }
