@@ -12,8 +12,8 @@ import { connect } from 'react-redux';
 import { formatPrice } from '../../helpers/functions'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
-  'https://erc-20.io' :
-  'http://192.168.86.22:3000'
+  'http://138.197.104.147:3000' :
+  'http://138.197.104.147:3000'
 
 const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}

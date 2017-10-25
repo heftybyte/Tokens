@@ -70,7 +70,6 @@ export const login = () => async (dispatch, getState) => {
     const { id } = getState().account
     let err = null
     let token = await AsyncStorage.getItem('token')
-
     if (!token) {
         const res = await loginAccount(id).catch(e=>err=e)
         if (err) {
