@@ -9,27 +9,11 @@ import {
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import { formatPrice } from '../../helpers/functions'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
   'https://erc-20.io' :
   'http://192.168.86.22:3000'
-
-const formatPrice = (price) => {
-  let [whole, decimal] = String(price).split('.')
-  if (whole === '0') {
-    return '.' + decimal.substr(0,5)
-  }
-  if (!decimal || Number.isNaN(decimal) || decimal === 'NaN') {
-    decimal = '.00'
-  } else {
-    decimal = '.' + decimal.substr(0,2)
-  }
-  let formattedPrice = Number(whole + decimal).toLocaleString()
-  if (decimal.length < 3) {
-    formattedPrice += '0'
-  }
-  return formattedPrice
-}
 
 const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}

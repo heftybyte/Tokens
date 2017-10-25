@@ -13,6 +13,7 @@ const instance = axios.create({
 
 export const setAuthHeader = (token) => {
   instance.defaults.headers.common['Authorization'] = token
+  console.log('token', token)
 }
 
 export const registerAccount = async () => {

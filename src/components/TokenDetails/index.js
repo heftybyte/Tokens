@@ -4,7 +4,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 
 import Header from '../Dashboard/Header';
-
+import { formatPrice } from '../../helpers/functions'
 import { getTokenDetails } from '../../reducers/account';
 
 const styles = StyleSheet.create({
@@ -66,7 +66,7 @@ class TokenDetails extends Component {
         <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>PRICE</Text>
-            <Text style={styles.tokenValue}>{price.toFixed(2)}</Text>
+            <Text style={styles.tokenValue}>{'$'+formatPrice(price)}</Text>
           </View>
 
           <View style={styles.containerChild}>

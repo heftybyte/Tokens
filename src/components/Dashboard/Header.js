@@ -61,7 +61,6 @@ class Header extends Component {
     const valueParts = currencyFormatter
       .format(totalValue, currencyFormatOptions)
       .split(/\$|\./)
-    console.log('valueParts[1].length', valueParts[1].length)
     const smallerFont = valueParts[1].length >= 11 ?
       styles.smallHeaderFont :
       {}
