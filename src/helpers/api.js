@@ -4,8 +4,8 @@ import Expo from 'expo';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const baseURL = process.env.NODE_ENV === 'production' ?
-  'https://erc-20.io/api' :
-  'http://13aa8c3d.ngrok.io/api'//'http://192.168.86.22:3000/api'
+  'http://138.197.104.147:3000/api' :
+  'http://138.197.104.147:3000/api'
 
 const instance = axios.create({
   baseURL

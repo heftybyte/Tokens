@@ -10,6 +10,16 @@ import { connect } from 'react-redux';
 import mockTokens from '../../../mockTokens';
 import mockNewsFeed from '../NewsFeed/MockData'
 import { register, login, getPortfolio } from '../../reducers/account';
+import currencyFormatter from 'currency-formatter';
+
+const currencyFormatOptions =  {
+  code: 'USD',
+  thousandsSeparator: ',',
+  decimalSeparator: '.',
+  symbolOnLeft: true,
+  spaceBetweenAmountAndSymbol: false,
+  decimalDigits: 2
+};
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -43,17 +53,17 @@ const styles = StyleSheet.create({
   portfolioValueCurrencySymbol: {
     color: '#fff',
     fontSize: 30,
-    fontFamily: 'Helvetica'
+    // fontFamily: 'Helvetica'
   },
   portfolioValue: {
     color: '#fff',
     fontSize: 60,
-    fontFamily: 'Helvetica'
+    // fontFamily: 'Helvetica'
   },
   portfolioValueCents: {
     color: '#fff',
     fontSize: 30,
-    fontFamily: 'Helvetica'
+    // fontFamily: 'Helvetica'
   },
   portfolioDelta: {
     color: '#fff',
@@ -90,10 +100,33 @@ class Dashboard extends Component {
     }
   }
 
+  handleScroll = (event) => {
+    const hiddenHeight = event.nativeEvent.contentOffset.y;
+    const { setParams } = this.props.navigation;
+    const { totalValue } = this.props.portfolio;
+
+    if(hiddenHeight > 60 && totalValue) {
+
+      const valueParts = currencyFormatter
+      .format(totalValue, currencyFormatOptions)
+      .split(/\$|\./);
+
+      const valueString = `\$${valueParts[0]}${valueParts[1]}.${valueParts[2]||'00'}`;
+
+      setParams && setParams({ title: valueString });
+    } else {
+      setParams && setParams({ title: 'Dashboard' });
+    }
+  }
+
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
     return (
-      <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
+      <ScrollView
+        style={styles.scrollContainer}
+        containerStyleContent={styles.container}
+        onScrollEndDrag={this.handleScroll}
+      >
        <StatusBar
          backgroundColor="#000"
          barStyle="light-content"
@@ -122,7 +155,11 @@ class Dashboard extends Component {
 
 Dashboard.navigationOptions = ({ navigation }) => ({
   // the title  is also used as the label for the back button
-  title: `${navigation.state.price || 'Dashboard'}`,
+  title: (navigation.state.params && navigation.state.params.title) || 'Dashboard',
+  headerTitleStyle : {
+    color: '#fff',
+    alignSelf: 'center'
+  },
   headerStyle: styles.header,
   headerLeft:(
         <MaterialCommunityIcons
