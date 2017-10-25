@@ -118,6 +118,7 @@ const initialState = {
     addresses : [],
     id: null,
     token: null,
+    tokens: [],
     portfolio: {},
     tokenDetails: {}
 }
