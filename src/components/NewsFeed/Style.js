@@ -1,11 +1,11 @@
 export const styles = {
     container: {
         backgroundColor: '#0f0f0f',
-        height: 205
+        height: 200
     },
     slide: {
-        height: 180,
-        maxHeight: 180,
+        height: 170,
+        maxHeight: 170,
         backgroundColor: '#000',
         borderWidth: 10,
         borderRadius: 10,

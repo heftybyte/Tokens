@@ -1,47 +1,50 @@
 import React from 'react'
-import { View } from 'react-native';
+import { Linking, View, TouchableOpacity } from 'react-native';
 import ImageLeft from './Layouts/ImageLeftLayout'
 import ImageRight from './Layouts/ImageRightLayout'
 import ImageDefault from './Layouts/ImageLayout'
 import TextCenter from './Layouts/TextCenterLayout'
 import TextDefault from './Layouts/TextLayout'
 import Video from './Layouts/VideoLayout'
-import { Grid } from "react-native-easy-grid";
-
 
 const Format = (props) => {
     let Layout
-    const { format, news } = props
+    const { format, news, news: { link } } = props
 
     switch(format) {
-        case "TEXT" :
+        case "TEXT":
             Layout = TextDefault
             break;
-        case "TEXT_CENTER" :
+        case "TEXT_CENTER":
             Layout = TextCenter
             break;
-        case "VIDEO" :
+        case "VIDEO":
             Layout = Video
             break;
-        case "IMAGE" :
+        case "IMAGE":
             Layout = ImageDefault
             break;
-        case "IMAGE_LEFT" :
+        case "IMAGE_LEFT":
             Layout = ImageLeft
             break;
-        case "IMAGE_RIGHT" :
+        case "IMAGE_RIGHT":
             Layout = ImageRight
             break;
         default:
             Layout = View
     }
 
-    return (
-        <Grid>
-            <Layout news={news} />
-        </Grid>
-    )
+    const visitLink = ()=>{
+        console.log('pressed', link, link.uri)
+        link && link.uri && Linking.openURL(link.uri)
+          .catch(err => console.error('An error occurred', err))
+    }
 
+    return (
+        <TouchableOpacity onPress={visitLink} style={{height:130}}>
+            <Layout news={news} />
+        </TouchableOpacity>
+    )
 }
 
 export default Format;
