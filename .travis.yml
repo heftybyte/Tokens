@@ -1,4 +1,4 @@
-language: javascript
+language: android
 sudo: enabled
 install: true
 deploy:

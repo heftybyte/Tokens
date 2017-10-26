@@ -1,5 +1,5 @@
 # Customise this file, documentation can be found here:
-# https://docs.fastlane.tools/actions/
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
 # All available actions: https://docs.fastlane.tools/actions
 # can also be listed using the `fastlane actions` command
 
@@ -11,7 +11,7 @@
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "2.61.0"
+fastlane_version "2.47.0"
 
 default_platform :android
 
@@ -28,7 +28,15 @@ platform :android do
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
     gradle(task: "assembleRelease")
-    crashlytics
+
+    hockey(
+      api_token: "7a6a6850743e4447b183200021cbab24",
+      public_identifier: "5df5ea177c9a4ccbaabb393f54b75d6f"
+    )
+
+    # slack(
+    #   slack_url: "https://hooks.slack.com/services/IDS"
+    # )
 
     # sh "your_script.sh"
     # You can also use other beta testing services here
@@ -36,7 +44,7 @@ platform :android do
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "assembleRelease")
+    gradle(task: "assembleRelease",)
     supply
   end
 
