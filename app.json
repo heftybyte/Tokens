@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Tokens Express",
+    "name": "Tokens",
     "sdkVersion": "21.0.0",
     "icon": "./assets/Tokens_Icon.png",
     "slug": "tokens-express",
