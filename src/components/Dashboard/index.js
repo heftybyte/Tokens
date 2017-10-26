@@ -51,30 +51,6 @@ const styles = StyleSheet.create({
   addBtnIcon: {
     marginRight: 10
   },
-  portfolioValueCurrencySymbol: {
-    color: '#fff',
-    fontSize: 30,
-    fontFamily: 'Raleway'
-  },
-  portfolioValue: {
-    color: '#fff',
-    fontSize: 60,
-    fontFamily: 'Raleway'
-  },
-  portfolioValueCents: {
-    color: '#fff',
-    fontSize: 30,
-    fontFamily: 'Raleway'
-  },
-  portfolioDelta: {
-    color: '#fff',
-    fontSize: 15
-  },
-  portfolioDeltaPeriod: {
-    fontSize: 15,
-    color: '#c1c0bf',
-    fontWeight: 'bold'
-  },
   gain: {
     color: '#6b2fe2'
   },
