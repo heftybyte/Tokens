@@ -55,6 +55,7 @@ class TokenList extends Component {
   render() {
     const { showChange } = this.state
     let dataTokens = this.props.tokens || []
+    const { title } = this.props
 
     dataTokens = dataTokens.map(tokenObj => (
       {
@@ -67,9 +68,9 @@ class TokenList extends Component {
       <View>
         <SectionList
           style={styles.container}
-          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+          renderSectionHeader={({section}) => section.title && <Text style={styles.sectionHeader}>- {section.title} -</Text>}
           sections={[
-            {data: dataTokens, title: this.props.title.toUpperCase(), renderItem: ({item, index}) =>
+            {data: dataTokens, title: title && title.toUpperCase(), renderItem: ({item, index}) =>
               <TokenItem
                 item={item}
                 index={index}
@@ -101,11 +102,13 @@ const styles = StyleSheet.create({
   },
   symbol: {
     color: '#fff',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: 'Nunito-Light'
   },
   balance: {
     color: '#333',
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: 'Nunito'
   },
   symbolContainer: {
     flex: .6,
@@ -133,7 +136,8 @@ const styles = StyleSheet.create({
   price: {
     color: '#000',
     textAlign: 'center',
-    width: 85
+    width: 85,
+    fontFamily: 'Nunito'
   },
   listItem: {
     flexDirection: 'row',
@@ -151,8 +155,10 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     color: "#fff",
-    backgroundColor: '#17191c',
-    padding: 10
+    backgroundColor: '#000',
+    textAlign: 'center',
+    padding: 10,
+    fontFamily: 'Nunito'
   },
   gain: {
     backgroundColor: '#6b2fe2',

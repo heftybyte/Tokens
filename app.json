@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "21.0.0"
+    "name": "Tokens",
+    "sdkVersion": "21.0.0",
+    "icon": "./assets/Tokens_Icon.png",
+    "slug": "tokens-express",
+    "version": "0.0.1",
+    "ios": {
+      "bundleIdentifier": "express.tokens.tokens"
+    },
+    "android": {
+      "package": "express.tokens.tokens"
+    }
   }
 }

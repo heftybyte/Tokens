@@ -10,17 +10,17 @@ const styles = StyleSheet.create({
   portfolioValueCurrencySymbol: {
     color: '#fff',
     fontSize: 30,
-    // fontFamily: 'Helvetica'
+    fontFamily: 'Nunito-ExtraLight'
   },
   portfolioValue: {
     color: '#fff',
     fontSize: 60,
-    // fontFamily: 'Helvetica'
+    fontFamily: 'Nunito-ExtraLight'
   },
   portfolioValueCents: {
     color: '#fff',
     fontSize: 30,
-    // fontFamily: 'Helvetica'
+    fontFamily: 'Nunito-ExtraLight'
   },
   changeContainer: {
     paddingBottom: 10

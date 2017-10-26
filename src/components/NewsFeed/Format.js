@@ -1,41 +1,50 @@
 import React from 'react'
-import { View} from 'react-native';
+import { Linking, View, TouchableOpacity } from 'react-native';
 import ImageLeft from './Layouts/ImageLeftLayout'
 import ImageRight from './Layouts/ImageRightLayout'
 import ImageDefault from './Layouts/ImageLayout'
 import TextCenter from './Layouts/TextCenterLayout'
 import TextDefault from './Layouts/TextLayout'
 import Video from './Layouts/VideoLayout'
-import { Grid } from "react-native-easy-grid";
-
 
 const Format = (props) => {
-    let formatted = null;
-    switch(props.format) {
-        case "TEXT" :
-            formatted = <TextDefault news={props.news} />;
+    let Layout
+    const { format, news, news: { link } } = props
+
+    switch(format) {
+        case "TEXT":
+            Layout = TextDefault
             break;
-        case "TEXT_CENTER" :
-            formatted = <TextCenter news={props.news} />;
+        case "TEXT_CENTER":
+            Layout = TextCenter
             break;
-        case "VIDEO" :
-            formatted = <Video news={props.news} />;
+        case "VIDEO":
+            Layout = Video
             break;
-        case "IMAGE" :
-            formatted = <ImageDefault news={props.news} />;
+        case "IMAGE":
+            Layout = ImageDefault
             break;
-        case "IMAGE_LEFT" :
-            formatted = <ImageLeft news={props.news} />;
+        case "IMAGE_LEFT":
+            Layout = ImageLeft
             break;
-        case "IMAGE_RIGHT" :
-            formatted = <ImageRight news={props.news} />;
+        case "IMAGE_RIGHT":
+            Layout = ImageRight
             break;
         default:
-            formatted = <View />;
+            Layout = View
     }
 
-    return (<Grid>{formatted}</Grid>)
+    const visitLink = ()=>{
+        console.log('pressed', link, link.uri)
+        link && link.uri && Linking.openURL(link.uri)
+          .catch(err => console.error('An error occurred', err))
+    }
 
+    return (
+        <TouchableOpacity onPress={visitLink} style={{height:130}}>
+            <Layout news={news} />
+        </TouchableOpacity>
+    )
 }
 
 export default Format;
