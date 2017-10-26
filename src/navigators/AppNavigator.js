@@ -8,7 +8,8 @@ import Dashboard from '../components/Dashboard';
 import NewAccount from '../components/Account/CreateAccount';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
-import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
+import Search from '../components/Search';
+import Register, { NormalRegisteration, AnonymousRegisteration } from '../components/Register';
 
 export const AppNavigator = StackNavigator({
 	NormalRegistration: { screen: NormalRegistration },
@@ -17,10 +18,9 @@ export const AppNavigator = StackNavigator({
   Dashboard: { screen: Dashboard },
   Accounts : { screen: ViewAccounts },
   NewAccount: { screen: NewAccount },
+  TokenDetails: { screen: TokenDetails },
+  Search: { screen: Search },
 	Register: { screen: Register },
-  TokenDetails: { screen: TokenDetails }
-}, {
-	headerMode: "none"
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (

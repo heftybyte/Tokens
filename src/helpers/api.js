@@ -9,8 +9,8 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Accept'] = 'application/json';
 
 export const API_HOST = process.env.NODE_ENV === 'production' ?
-  '138.197.104.147:3000' :
-  '138.197.104.147:3000'
+  '192.168.100.235:3000' :
+  '192.168.100.235:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
@@ -75,4 +75,9 @@ export const getAccountPortfolio = async (id) => {
 export const getTokenDetailsForAccount  = async (id, sym) => {
   let res = await instance.get(`/accounts/${id}/portfolio/token/${sym}`)
   return res.data
+}
+
+export const getAllTokens = async() => {
+  let res = await instance.get('/Tokens');
+  return res.data;
 }
