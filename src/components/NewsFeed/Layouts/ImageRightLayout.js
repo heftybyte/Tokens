@@ -7,7 +7,7 @@ import { getLinkTextByType } from './helpers'
 
 const ImageRight = ({news: { title, body, image, link, type }}) => (
     <Col>
-        <Col>
+        <Col size={.9}>
             <Row size={.2}>
                 <Text style={styles.title}>{title.toUpperCase()}</Text>
             </Row>

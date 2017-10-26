@@ -101,11 +101,13 @@ const styles = StyleSheet.create({
   },
   symbol: {
     color: '#fff',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: 'Nunito-Light'
   },
   balance: {
     color: '#333',
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: 'Nunito-Light'
   },
   symbolContainer: {
     flex: .6,
@@ -133,7 +135,8 @@ const styles = StyleSheet.create({
   price: {
     color: '#000',
     textAlign: 'center',
-    width: 85
+    width: 85,
+    fontFamily: 'Nunito-Light'
   },
   listItem: {
     flexDirection: 'row',

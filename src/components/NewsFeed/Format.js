@@ -1,5 +1,5 @@
 import React from 'react'
-import { View} from 'react-native';
+import { View } from 'react-native';
 import ImageLeft from './Layouts/ImageLeftLayout'
 import ImageRight from './Layouts/ImageRightLayout'
 import ImageDefault from './Layouts/ImageLayout'
@@ -10,31 +10,37 @@ import { Grid } from "react-native-easy-grid";
 
 
 const Format = (props) => {
-    let formatted = null;
-    switch(props.format) {
+    let Layout
+    const { format, news } = props
+
+    switch(format) {
         case "TEXT" :
-            formatted = <TextDefault news={props.news} />;
+            Layout = TextDefault
             break;
         case "TEXT_CENTER" :
-            formatted = <TextCenter news={props.news} />;
+            Layout = TextCenter
             break;
         case "VIDEO" :
-            formatted = <Video news={props.news} />;
+            Layout = Video
             break;
         case "IMAGE" :
-            formatted = <ImageDefault news={props.news} />;
+            Layout = ImageDefault
             break;
         case "IMAGE_LEFT" :
-            formatted = <ImageLeft news={props.news} />;
+            Layout = ImageLeft
             break;
         case "IMAGE_RIGHT" :
-            formatted = <ImageRight news={props.news} />;
+            Layout = ImageRight
             break;
         default:
-            formatted = <View />;
+            Layout = View
     }
 
-    return (<Grid>{formatted}</Grid>)
+    return (
+        <Grid>
+            <Layout news={news} />
+        </Grid>
+    )
 
 }
 

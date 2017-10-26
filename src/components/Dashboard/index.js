@@ -54,17 +54,17 @@ const styles = StyleSheet.create({
   portfolioValueCurrencySymbol: {
     color: '#fff',
     fontSize: 30,
-    // fontFamily: 'Helvetica'
+    fontFamily: 'Raleway'
   },
   portfolioValue: {
     color: '#fff',
     fontSize: 60,
-    // fontFamily: 'Helvetica'
+    fontFamily: 'Raleway'
   },
   portfolioValueCents: {
     color: '#fff',
     fontSize: 30,
-    // fontFamily: 'Helvetica'
+    fontFamily: 'Raleway'
   },
   portfolioDelta: {
     color: '#fff',
@@ -163,7 +163,8 @@ Dashboard.navigationOptions = ({ navigation }) => ({
   title: (navigation.state.params && navigation.state.params.title) || 'Dashboard',
   headerTitleStyle : {
     color: '#fff',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontFamily: 'Nunito-ExtraLight'
   },
   headerStyle: styles.header,
   headerLeft:(
