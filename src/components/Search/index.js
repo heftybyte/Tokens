@@ -15,15 +15,15 @@ class SearchPage extends Component {
     searchBar = null;
 
     componentWillMount(){
-      console.log('mounting');
       this.props.fetchTokens();
     }
 
     componentWillReceiveProps(nextProps){
-      console.log(nextProps, 'nextProps');
+      nextProps.tokens && this.setState({tokens: nextProps.tokens});
     }
 
     handleSearch = (searchTerm) => {
+      searchTerm = searchTerm.toUpperCase();
       this.setState(() => ({ tokens: this.props.tokens.filter(token => token.symbol.indexOf(searchTerm) > -1)}) );
     }
 
@@ -45,12 +45,8 @@ const mapDispatchToProps = (dispatch) => ({
   fetchTokens: () => dispatch(fetchTokens())
 });
 
-
-const mapStoretoProps = (state) => {
-  console.log(state, 'the state');
-  return {
+const mapStoretoProps = (state) => ({
   tokens: state.search.tokens
-  }
-};
+});
 
 export default connect(mapStoretoProps, mapDispatchToProps)(SearchPage);

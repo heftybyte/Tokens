@@ -35,7 +35,6 @@ const Format = (props) => {
     }
 
     const visitLink = ()=>{
-        console.log('pressed', link, link.uri)
         link && link.uri && Linking.openURL(link.uri)
           .catch(err => console.error('An error occurred', err))
     }

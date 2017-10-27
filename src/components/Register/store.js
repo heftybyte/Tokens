@@ -31,28 +31,9 @@ class Register {
 		this.type = type
 	}
 
-	navigate = async (navigation) => {
-		let routeName
-		let defaultEmail = ''
-		const pseudonym = JSON.parse(await AsyncStorage.getItem('pseudonym') || null)
-		switch(this.type) {
-			case "guest":
-				routeName = "GuestRegistration"
-				break
-			case "normal":
-				routeName = "NormalRegistration"
-				break
-			case "login":
-				if (pseudonym.type === 'email') {
-					defaultEmail = pseudonym.value
-				}
-				routeName = "Login"
-				break
-		}
-		// TODO: refactor hacky way of setting a deafault value
-		this.login.email = defaultEmail
-		reduxStore.dispatch(NavigationActions.navigate({ routeName }))
-		this.login.email = defaultEmail
+	navigate = (navigation) => {
+		const routeName = this.type === "anon" ? "AnonymousRegisteration" : "NormalRegisteration"
+		NavigationActions.navigate({ routeName })
 	}
 
 	@action

@@ -122,7 +122,7 @@ class ViewAddresses extends Component {
           {(token || id) &&
             <TouchableHighlight
                 style={[styles.logoutBtn, {marginTop: 100}]}
-                onPress={()=>{console.log('logout!', logout);logout()}}
+                onPress={()=>logout()}
             >
               <Text style={styles.logoutBtnText}>Logout</Text>
           </TouchableHighlight>}

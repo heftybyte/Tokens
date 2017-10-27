@@ -55,9 +55,10 @@ const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
 
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
-          <Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>
+          { item.price && item.balance ? (<Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>) : null }
         </View>
-        <View style={[
+        {item.price && item.balance ?
+        (<View style={[
             styles.priceContainer,
             changeStyle,
             // isLongPrice ? styles.longerPriceContainer : {}
@@ -67,7 +68,7 @@ const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
               String(item.change).substr(0,6) + '%' :
               '$' + formatPrice(item.balance * item.price)}
             </Text>
-          </View>
+            </View>) : null}
         </View>
     </TouchableHighlight>
   )
@@ -145,11 +146,18 @@ class TokenList extends Component {
           style={styles.container}
           renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>- {section.title} -</Text>}
           sections={[
-            {
-            	data: data[this.props.type],
-	            title: (this.props.title || '').toUpperCase(),
-	            renderItem: render[this.props.type]
-            }
+            {data: dataTokens, title: title && title.toUpperCase(), renderItem: ({item, index}) =>
+              <TokenItem
+                item={item}
+                index={index}
+                showChange={showChange}
+                showTokenInfo={()=> {
+                  this.props.goToTokenDetailsPage(item);
+                }}
+                onPress={()=>{
+                  this.setState({showChange: !this.state.showChange})
+                }}
+              />}
           ]}
         />
       </View>

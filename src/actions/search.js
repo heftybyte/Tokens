@@ -12,8 +12,6 @@ export const createFetchAllTokensAction = (tokens) => ({
 
 export const fetchTokens = () => async(dispatch, getState) => {
 
-    console.log('fetching tokens');
-
     //get from redux store or local storage
     const stateTokens = getState().search.tokens;
 
@@ -33,8 +31,6 @@ export const fetchTokens = () => async(dispatch, getState) => {
 
     let err = null;
     const backendTokens = await getAllTokens().catch(e=>err=e);
-    console.log(err, 'an error occurred');
-    console.log(tokens, backendTokens, 'backend Tokens');
     if(err) return genericError();
 
     const oldHash = await AsyncStorage.getItem('tokensHash');
