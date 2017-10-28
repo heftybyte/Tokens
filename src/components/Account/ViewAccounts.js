@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { deleteAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
+import { withDrawer } from '../../helpers/drawer';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -124,7 +125,7 @@ class ViewAddresses extends Component {
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
-          {id && 
+          {id &&
             <TouchableHighlight
                 style={[styles.logoutBtn, {marginTop: 100}]}
                 onPress={()=>{console.log('logout!', logout);logout()}}
@@ -152,4 +153,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewAddresses);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(ViewAddresses));

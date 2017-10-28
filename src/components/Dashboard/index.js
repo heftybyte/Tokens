@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
+import currencyFormatter from 'currency-formatter';
+import { connect } from 'react-redux';
 import { StyleSheet, Text, ScrollView, View, TouchableHighlight, AsyncStorage, Alert, StatusBar } from 'react-native';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { NavigationActions } from 'react-navigation';
+
 import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { NavigationActions } from 'react-navigation';
-import { connect } from 'react-redux';
 import mockNewsFeed from '../NewsFeed/MockData'
 import { register, login, getPortfolio } from '../../reducers/account';
-import currencyFormatter from 'currency-formatter';
 import mockTokens from '../TokenList/data';
+import { withDrawer } from '../../helpers/drawer';
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -31,7 +33,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#000'
   },
   header: {
-    backgroundColor: '#000'
+    backgroundColor: '#f00',
+    height: 80,
   },
   addBtn: {
     alignSelf: 'center',
@@ -99,61 +102,42 @@ class Dashboard extends Component {
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
     return (
-      <ScrollView
-        style={styles.scrollContainer}
-        containerStyleContent={styles.container}
-        onScroll={this.handleScroll}
-        onScrollEndDrag={this.handleScroll}
-        scrollEventThrottle={16}
-      >
-       <StatusBar
-         backgroundColor="#000"
-         barStyle="light-content"
-       />
-        { !addresses.length  ? <TouchableHighlight
-          onPress={()=>{goToAddressPage({type: 'Accounts'})}}>
-            <View style={styles.addBtn}>
-                <MaterialCommunityIcons
-                  style={styles.addBtnIcon}
-                  name="plus-circle-outline"
-                  size={22}
-                  color="white"
-                />
-                <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
-            </View>
-        </TouchableHighlight> 
-        : <Header totalValue={portfolio.totalValue} />}
-        {/* NOTE: will be implemented in upcoming sprint
+	    <ScrollView
+	      style={styles.scrollContainer}
+	      containerStyleContent={styles.container}
+	      onScroll={this.handleScroll}
+	      onScrollEndDrag={this.handleScroll}
+	      scrollEventThrottle={16}
+	    >
+		    <StatusBar
+		      backgroundColor="#000"
+		      barStyle="light-content"
+		    />
+		    { !addresses.length  ?
+		      <TouchableHighlight
+		        onPress={()=>{goToAddressPage({type: 'Accounts'})}}
+		      >
+			      <View style={styles.addBtn}>
+				      <MaterialCommunityIcons
+				        style={styles.addBtnIcon}
+				        name="plus-circle-outline"
+				        size={22}
+				        color="white"
+				      />
+				      <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
+			      </View>
+		      </TouchableHighlight>
+		    : <Header totalValue={portfolio.totalValue} />}
+		    {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
-        <News feed={mockNewsFeed} />
-        { portfolio && portfolio.tokens && 
-          <TokenList tokens={portfolio.tokens} />}
-        <TokenList tokens={mockTokens} title="Top 10" />
-      </ScrollView>
+		    <News feed={mockNewsFeed} />
+		    { portfolio && portfolio.tokens &&
+		    <TokenList tokens={portfolio.tokens} />}
+		    <TokenList tokens={mockTokens} title="Top 10" />
+	    </ScrollView>
     )
   }
 }
-
-Dashboard.navigationOptions = ({ navigation }) => ({
-  // the title  is also used as the label for the back button
-  title: (navigation.state.params && navigation.state.params.title) || 'Dashboard',
-  headerTitleStyle : {
-    color: '#fff',
-    alignSelf: 'center',
-    fontFamily: 'Nunito-ExtraLight'
-  },
-  headerStyle: styles.header,
-  headerLeft:(
-        <MaterialCommunityIcons
-          style={{paddingLeft:20}}
-          name="menu"
-          size={26}
-          color="white"
-          backgroundColor="black"
-          onPress={()=>{navigation.dispatch({type: 'Accounts'})}}
-        />),
-  headerRight: <Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-});
 
 const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
@@ -168,4 +152,4 @@ const mapDispatchToProps = (dispatch) => ({
     getPortfolio: () => dispatch(getPortfolio())
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));
