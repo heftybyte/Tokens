@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { deleteAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
+import { withDrawer } from '../../helpers/drawer';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -152,4 +153,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewAddresses);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(ViewAddresses));
