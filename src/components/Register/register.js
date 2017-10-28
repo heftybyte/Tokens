@@ -1,6 +1,6 @@
 import { View, Text, Dimensions, Image, TouchableOpacity } from "react-native"
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
-import { Button } from "native-base"
+import { Button, Item, Input } from "native-base"
 import React from "react"
 import { observer } from "mobx-react"
 
@@ -86,6 +86,9 @@ const Register = observer(
 							<Icon name="information-outline" size={25} color="#fff" />
 						</View>
 					</TouchableOpacity>
+					<Item regular>
+						<Input placeholder='Regular Textbox' />
+					</Item>
 				</View>
 			</View>
 			<View style={styles.bottomButton}>
