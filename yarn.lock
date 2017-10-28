@@ -1479,8 +1479,8 @@ camelcase@^4.1.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
 caniuse-lite@^1.0.30000744:
-  version "1.0.30000750"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000750.tgz#38ad19aa4c6d88da38e8900d3666b4e3bbb65c22"
+  version "1.0.30000755"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000755.tgz#9ce5f6e06bd75ec8209abe8853c3beef02248d65"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -2285,10 +2285,6 @@ expect@^21.2.1:
     jest-matcher-utils "^21.2.1"
     jest-message-util "^21.2.1"
     jest-regex-util "^21.2.0"
-
-expo-analytics@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/expo-analytics/-/expo-analytics-1.0.6.tgz#65d6c3de74c0d5d3514eeb3dedd7957f072f9fc5"
 
 expo@^21.0.0:
   version "21.0.3"
@@ -5266,9 +5262,9 @@ react-native-drawer@^2.5.0:
     prop-types "^15.5.8"
     tween-functions "^1.0.1"
 
-"react-native-drawer@https://github.com/GeekyAnts/react-native-drawer":
+"react-native-drawer@git+https://github.com/GeekyAnts/react-native-drawer.git":
   version "2.3.0"
-  resolved "https://github.com/GeekyAnts/react-native-drawer#8d9078516d177c9cb02d2579a6860706d2370d25"
+  resolved "git+https://github.com/GeekyAnts/react-native-drawer.git#8d9078516d177c9cb02d2579a6860706d2370d25"
   dependencies:
     prop-types "^15.5.8"
     tween-functions "^1.0.1"
@@ -5285,9 +5281,9 @@ react-native-gesture-handler@1.0.0-alpha.22:
   dependencies:
     prop-types "^15.5.10"
 
-"react-native-keyboard-aware-scroll-view@https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view":
+"react-native-keyboard-aware-scroll-view@git+https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view.git":
   version "0.2.9"
-  resolved "https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view#f4805f254d6cc8e3329f5fb224944401f66655db"
+  resolved "git+https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view.git#f4805f254d6cc8e3329f5fb224944401f66655db"
   dependencies:
     create-react-class "^15.6.0"
     prop-types "^15.5.10"

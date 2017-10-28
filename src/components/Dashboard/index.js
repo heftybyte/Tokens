@@ -10,9 +10,10 @@ import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
 import mockNewsFeed from '../NewsFeed/MockData'
-import { getPortfolio } from '../../reducers/account';
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
+import { register, login, getPortfolio } from '../../reducers/account';
+import mockTokens from '../TokenList/data';
 import { withDrawer } from '../../helpers/drawer';
 
 const currencyFormatOptions =  {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000'
   },
   header: {
-    backgroundColor: '#000',
+    backgroundColor: '#f00',
     height: 80,
   },
   addBtn: {
@@ -123,10 +124,9 @@ class Dashboard extends Component {
 		    {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
 		    <News feed={mockNewsFeed} />
-        { portfolio && portfolio.tokens && 
-          <TokenList tokens={portfolio.tokens} />}
-        <TokenList type="watchList" watchList={mockWatchlist} title="WatchList" />
-        <TokenList type="watchList" watchList={mockWatchlist} title="Top 10" />
+		    { portfolio && portfolio.tokens &&
+		    <TokenList tokens={portfolio.tokens} />}
+		    <TokenList tokens={mockTokens} title="Top 10" />
 	    </ScrollView>
     )
   }
