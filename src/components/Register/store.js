@@ -1,15 +1,21 @@
 import { observable, action } from "mobx"
+import { Alert } from 'react-native'
 import { NavigationActions } from 'react-navigation';
+import reduxStore from '../../store'
+import { register } from '../../reducers/account'
+const uuidv4 = require('uuid/v4');
 
 type RegisterType = "anon" | "normal"
 
 class Register {
-	@observable type: RegisterType = "anon"
+	@observable type: RegisterType = "normal"
 	@observable normal = {
-		username: '',
+		email: '',
 		password: '',
-		cpassword: ''
+		cpassword: '',
 	}
+	@observable inviteCode = ''
+	@observable accessKey = uuidv4()
 
 	@action
 	changeType = (type: RegisterType) => {
@@ -18,23 +24,31 @@ class Register {
 
 	navigate = (navigation) => {
 		const routeName = this.type === "anon" ? "AnonymousRegisteration" : "NormalRegisteration"
-		console.log({routeName})
-		NavigationActions.navigate({ routeName })
+		reduxStore.dispatch(NavigationActions.navigate({ routeName }))
 	}
 
 	@action
 	changetext = (key, value) => {
 		this.normal[key] = value
 	}
-
+	
 	@action
 	createAccount = () => {
-		console.log('create account', NavigationActions)
-		NavigationActions.navigate({ routeName: 'Dashboard' })
-		if (this.normal.password !== this.normal.cpassword) {
-			return
+		let params
+		if (this.type === 'normal') {
+			if (this.normal.password !== this.normal.cpassword) {
+				Alert.alert('Passwords must match')
+				return
+			}
+			params = {
+				email: this.normal.email,
+				password: this.normal.password
+			}
+		} else {
+			params = { accessKey: this.accessKey }
 		}
-		NavigationActions.navigate({ routeName: 'Dashboard' })
+		params.code = this.inviteCode
+		reduxStore.dispatch(register(this.type, params))
 	}
 }
 

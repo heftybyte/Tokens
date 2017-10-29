@@ -29,8 +29,9 @@ export const setAuthHeader = (token) => {
   instance.defaults.headers.common['Authorization'] = token
 }
 
-export const registerAccount = async () => {
-  let res = await instance.post(`/accounts/register`)
+export const registerAccount = async (type, params) => {
+  console.log(type, params)
+  let res = await instance.post(`/accounts/register`, { type, params })
   return res.data
 }
 

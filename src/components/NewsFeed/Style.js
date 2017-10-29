@@ -25,7 +25,7 @@ export const styles = {
         color: '#fff'
     },
     action: {
-        color: "#00"
+        color: "#000"
     },
     center: {
         alignItems: 'center',

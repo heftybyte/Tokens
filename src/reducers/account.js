@@ -60,10 +60,10 @@ const tokenDetailsAction = (tokenDetails) => ({
   data: { tokenDetails }
 })
 
-export const register = () => async (dispatch) => {
+export const register = (type, params) => async (dispatch) => {
     let err = null
     const account = JSON.parse(await AsyncStorage.getItem('account') || null) ||
-        await registerAccount().catch(e=>err=e)
+        await registerAccount(type, params).catch(e=>err=e)
 
     if (err || !account) {
         console.log(err)
