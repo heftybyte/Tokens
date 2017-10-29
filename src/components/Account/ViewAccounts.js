@@ -138,10 +138,10 @@ class ViewAddresses extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log('view account', state)
     return {
         addresses: state.account.addresses,
-        id: state.account.id
+        id: state.account.id,
+        portfolio: state.account.portfolio
     }
 };
 

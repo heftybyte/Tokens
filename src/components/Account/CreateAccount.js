@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
 import { addAddress } from '../../reducers/account';
+import { withDrawer } from '../../helpers/drawer';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -102,5 +103,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-
-export default connect(null, mapDispatchToProps)(CreateAddress);
+export default connect(null, mapDispatchToProps)(withDrawer(CreateAddress));

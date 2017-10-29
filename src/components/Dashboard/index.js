@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000'
   },
   header: {
-    backgroundColor: '#f00',
+    backgroundColor: '#000',
     height: 80,
   },
   addBtn: {

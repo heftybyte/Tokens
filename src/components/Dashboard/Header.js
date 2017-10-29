@@ -56,17 +56,17 @@ const currencyFormatOptions =  {
 class Header extends Component {
 
   render () {
-    const { totalValue, totalChange, totalChangePct } = this.props
+    const { totalValue, totalChange, totalChangePct, style } = this.props
     const gain = totalChange >= 0
     const valueParts = currencyFormatter
       .format(totalValue, currencyFormatOptions)
       .split(/\$|\./)
-    const smallerFont = valueParts[1].length >= 11 ?
+    const smallerFont = valueParts[1].length >= 7 ?
       styles.smallHeaderFont :
       {}
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, style || {}]}>
         <Text>
           <Text style={styles.portfolioValueCurrencySymbol}>$</Text>
           <Text style={[styles.portfolioValue, smallerFont]}>{valueParts[1]}</Text>

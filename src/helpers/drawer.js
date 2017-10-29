@@ -10,9 +10,9 @@ import Header from "../components/Dashboard/Header"
 
 const Items = [
 	{
-		name: "DashBoard",
+		name: "Dashboard",
 		icon: "apps",
-		route: "DashBoard"
+		route: "Dashboard"
 	},
 	{
 		name: "Account",
@@ -31,18 +31,23 @@ export const withDrawer = (WrappedComponent) => {
 			this.drawer.close()
 		}
 		render() {
-			const { navigation } = this.props
+			const { navigation, portfolio: { totalValue } } = this.props
 			return (
 				<Drawer
 					ref={d => (this.drawer = d)}
 					type="overlay"
 					openDrawerOffset={100}
-					content={<DashBoardMenu navigation={navigation} />}
+					content={<DashboardMenu navigation={navigation} totalValue={totalValue} />}
 					tapToClose
 				>
-					<Content>
+					<Content style={{backgroundColor: '#000'}}>
 						<NBHeader
-						style={{ backgroundColor: "#000" }}
+						style={{
+							backgroundColor: "#000", 
+							borderBottomWidth: 0,
+  							shadowOffset: { height: 0, width: 0 },
+    						shadowOpacity: 0
+    					}}
 						androidStatusBarColor="#000"
 						noShadow
 						>
@@ -61,16 +66,16 @@ export const withDrawer = (WrappedComponent) => {
 								</Button>
 							</Left>
 							<Body>
-							<Text
-								style={{
-									color: '#fff',
-									fontSize: 16,
-									fontWeight: "500",
-									fontFamily: 'Nunito-ExtraLight'
-								}}
-							>
-								{(navigation.state.params && navigation.state.params.title) || 'Dashboard'}
-							</Text>
+								<Text
+									style={{
+										color: '#fff',
+										fontSize: 16,
+										fontWeight: "500",
+										fontFamily: 'Nunito-ExtraLight'
+									}}
+								>
+									{(navigation.state.params && navigation.state.params.title) || 'Dashboard'}
+								</Text>
 							</Body>
 							<Right>
 								<Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
@@ -84,9 +89,9 @@ export const withDrawer = (WrappedComponent) => {
 	}
 }
 
-const DashBoardMenu = ({ navigation }) => (
-	<View style={{flex: 1, backgroundColor: "#00002f"}}>
-		<Header totalValue={23300} />
+const DashboardMenu = ({ navigation, totalValue }) => (
+	<View style={{flex: 1, backgroundColor: "#111"}}>
+		<Header style={{paddingTop: 40}} totalValue={totalValue} />
 		{Items.map(ListItem(navigation))}
 	</View>
 )
