@@ -24,7 +24,7 @@ const Watchlist = ({ item, index }) => (
 
 			<View style={styles.symbolContainer}>
 				<Text style={styles.symbol}>{item.symbol}</Text>
-				<Text style={styles.balance}>MARKET CAP: ${formatPrice(item.marketCap)}</Text>
+				<Text style={styles.balance}>${formatPrice(item.marketCap)}</Text>
 			</View>
 			<View style={[
 				styles.priceContainer,
@@ -138,11 +138,11 @@ class TokenList extends Component {
       <View>
         <SectionList
           style={styles.container}
-          renderSectionHeader={({section}) => section.title && <Text style={styles.sectionHeader}>- {section.title} -</Text>}
+          renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>- {section.title} -</Text>}
           sections={[
             {
             	data: data[this.props.type],
-	            title: this.props.title.toUpperCase(),
+	            title: (this.props.title || '').toUpperCase(),
 	            renderItem: render[this.props.type]
             }
           ]}

@@ -130,7 +130,7 @@ class Dashboard extends Component {
         { portfolio && portfolio.tokens && 
           <TokenList tokens={portfolio.tokens} />}
         <TokenList type="watchList" watchList={mockWatchlist} title="WatchList" />
-        <TokenList tokens={mockTokens} title="Top 10" />
+        <TokenList type="watchList" watchList={mockWatchlist} title="Top 10" />
       </ScrollView>
     )
   }
