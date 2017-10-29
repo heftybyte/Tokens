@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     color: '#c1c0bf'
   },
   gain: {
-    color: '#6b2fe2'
+    color: '#48ba94'
   },
   loss: {
     color: '#b63e15'

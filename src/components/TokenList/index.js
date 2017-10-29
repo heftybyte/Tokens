@@ -15,29 +15,32 @@ const baseURL = process.env.NODE_ENV === 'production' ?
   'http://138.197.104.147:3000' :
   'http://138.197.104.147:3000'
 
-const Watchlist = ({ item, index }) => (
-	<TouchableHighlight>
-		<View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
-			<View>
-				<Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
-			</View>
+const Watchlist = ({ item, index }) => {
+  const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
+  return (
+    <TouchableHighlight>
+      <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
+        <View>
+          <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
+        </View>
 
-			<View style={styles.symbolContainer}>
-				<Text style={styles.symbol}>{item.symbol}</Text>
-				<Text style={styles.balance}>${formatPrice(item.marketCap)}</Text>
-			</View>
-			<View style={[
-				styles.priceContainer,
-				// changeStyle,
-				// isLongPrice ? styles.longerPriceContainer : {}
-			]}>
-				<Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]}>
-					${formatPrice(item.price)}
-				</Text>
-			</View>
-		</View>
-	</TouchableHighlight>
-)
+        <View style={styles.symbolContainer}>
+          <Text style={styles.symbol}>{item.symbol}</Text>
+          <Text style={styles.balance}>${formatPrice(item.marketCap)}</Text>
+        </View>
+        <View style={[
+          styles.priceContainer,
+          changeStyle,
+          // isLongPrice ? styles.longerPriceContainer : {}
+        ]}>
+          <Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]}>
+            ${formatPrice(item.price)}
+          </Text>
+        </View>
+      </View>
+    </TouchableHighlight>
+  )
+}
 
 const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
@@ -223,8 +226,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito'
   },
   gain: {
-    backgroundColor: '#6b2fe2',
-    borderColor: '#6b2fe2'
+    backgroundColor: '#48ba94',
+    borderColor: '#48ba94'
   }
 });
 

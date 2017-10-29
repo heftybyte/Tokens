@@ -1,11 +1,11 @@
 import React, { PureComponent } from "react"
-import { View, TouchableOpacity, Text } from "react-native"
+import { View, TouchableOpacity, Text, Platform } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
 import { observer } from "mobx-react/native"
 import { Button, Header as NBHeader, Left, Body, Right, Content } from "native-base"
-
+import { Constants } from 'expo'
 import Header from "../components/Dashboard/Header"
 
 const Items = [
@@ -47,7 +47,9 @@ export const withDrawer = (WrappedComponent) => {
 							backgroundColor: "#000", 
 							borderBottomWidth: 0,
   							shadowOffset: { height: 0, width: 0 },
-    						shadowOpacity: 0
+    						shadowOpacity: 0,
+    						paddingTop: Platform.OS  === 'ios' ? 0 : Constants.statusBarHeight ,
+    						height: 80
     					}}
 						androidStatusBarColor="#000"
 						noShadow
@@ -71,8 +73,7 @@ export const withDrawer = (WrappedComponent) => {
 									style={{
 										color: '#fff',
 										fontSize: 16,
-										fontWeight: "500",
-										fontFamily: 'Nunito-ExtraLight'
+										fontFamily: 'Nunito-ExtraLight',
 									}}
 								>
 									{(navigation.state && navigation.state.routeName)}

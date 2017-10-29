@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import { withDrawer } from '../../helpers/drawer';
 
 import Header from '../Dashboard/Header';
 import { formatPrice } from '../../helpers/functions'
@@ -100,4 +101,4 @@ const mapStateToProps = (state, props) => ({
   tokenDetails: state.account.tokenDetails
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(TokenDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(TokenDetails));
