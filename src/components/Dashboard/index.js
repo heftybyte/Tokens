@@ -11,6 +11,7 @@ import mockNewsFeed from '../NewsFeed/MockData'
 import { register, login, getPortfolio } from '../../reducers/account';
 import currencyFormatter from 'currency-formatter';
 import mockTokens from '../TokenList/data';
+import mockWatchlist from '../TokenList/watchlist-data';
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -121,14 +122,15 @@ class Dashboard extends Component {
                 />
                 <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
             </View>
-        </TouchableHighlight> 
+        </TouchableHighlight>
         : <Header totalValue={portfolio.totalValue} />}
         {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
         <News feed={mockNewsFeed} />
         { portfolio && portfolio.tokens && 
           <TokenList tokens={portfolio.tokens} />}
-        <TokenList tokens={mockTokens} title="Top 10" />
+        <TokenList type="watchList" watchList={mockWatchlist} title="WatchList" />
+        <TokenList type="watchList" watchList={mockWatchlist} title="Top 10" />
       </ScrollView>
     )
   }
