@@ -124,7 +124,7 @@ class ViewAddresses extends Component {
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
-          {id && 
+          {id &&
             <TouchableHighlight
                 style={[styles.logoutBtn, {marginTop: 100}]}
                 onPress={()=>{console.log('logout!', logout);logout()}}
