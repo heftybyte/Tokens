@@ -75,7 +75,7 @@ class Dashboard extends Component {
   componentWillReceiveProps = async (nextProps) => {
     const { addresses, getPortfolio} = nextProps
 
-    if (addresses.length) {
+    if (addresses.length != this.props.addresses.length) {
       await getPortfolio()
       return
     }

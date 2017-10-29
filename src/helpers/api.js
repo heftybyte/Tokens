@@ -9,7 +9,7 @@ axios.defaults.headers.get['Accept'] = 'application/json';
 
 export const API_HOST = process.env.NODE_ENV === 'production' ?
   '138.197.104.147:3000' :
-  '138.197.104.147:3000'
+  'localhost:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
@@ -45,7 +45,7 @@ export const addAccountAddress = async (id, address) => {
 }
 
 export const deleteAccountAddress = async (id, address) => {
-  let res = await instance.delete(`/accounts/${id}/addresses/${address}`)
+  let res = await instance.delete(`/accounts/${id}/address/${address}`)
   return res.data
 }
 
