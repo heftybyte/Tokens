@@ -9,7 +9,6 @@ import { Font } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 
-import store from './src/store/index';
 import AppWithNavigationState from './src/navigators/AppNavigator';
 
 

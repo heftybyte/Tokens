@@ -94,6 +94,10 @@ class CreateAddress extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  portfolio: state.account.portfolio
+})
+
 const mapDispatchToProps = (dispatch) => {
   return {
     addAddress: (address) => {
@@ -103,4 +107,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(withDrawer(CreateAddress));
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(CreateAddress));
