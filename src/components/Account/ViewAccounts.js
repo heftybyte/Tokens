@@ -91,12 +91,6 @@ class ViewAddresses extends Component {
       addresses: []
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Accounts',
-    headerStyle: styles.header,
-    headerRight: <Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-  });
-
   deleteAddress = async(index) => {
     if(index === undefined) return;
     this.props.deleteAddress(index);

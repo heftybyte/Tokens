@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import currencyFormatter from 'currency-formatter';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, ScrollView, View, TouchableHighlight, AsyncStorage, Alert, StatusBar } from 'react-native';
+import { StyleSheet, Text, ScrollView, View, TouchableHighlight, AsyncStorage, Alert, StatusBar, Platform } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
@@ -14,6 +14,7 @@ import { register, login, getPortfolio } from '../../reducers/account';
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
 import { withDrawer } from '../../helpers/drawer';
+import { Constants } from 'expo'
 
 const currencyFormatOptions =  {
   code: 'USD',

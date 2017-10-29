@@ -45,12 +45,6 @@ class CreateAddress extends Component {
     this.setState({hasCameraPermission: status === 'granted'});
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Account',
-    headerStyle: styles.header,
-    headerRight: <Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-  })
-
   toggleQRScanner = () => {
     this.setState({ scannerOpen: !this.state.scannerOpen });
   }
