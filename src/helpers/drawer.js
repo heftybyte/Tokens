@@ -31,7 +31,8 @@ export const withDrawer = (WrappedComponent) => {
 			this.drawer.close()
 		}
 		render() {
-			const { navigation, portfolio: { totalValue } } = this.props
+			const { navigation, portfolio } = this.props
+			const totalValue = portfolio.totalValue || 0
 
 			return (
 				<Drawer
