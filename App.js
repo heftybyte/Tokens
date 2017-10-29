@@ -1,14 +1,14 @@
 
 import React from 'react';
-import { AppRegistry } from 'react-native';
+import { AppRegistry, BackHandler } from 'react-native';
 import { Provider } from 'react-redux';
 import { Analytics, PageHit } from 'expo-analytics';
 
 import store from './src/store/index';
 import { Font } from 'expo';
 import Sentry from 'sentry-expo';
+import { NavigationActions } from "react-navigation";
 
-import store from './src/store/index';
 import AppWithNavigationState from './src/navigators/AppNavigator';
 
 
@@ -41,10 +41,25 @@ class Tokens extends React.Component {
       'Nunito-ExtraLight': require('./assets/fonts/Nunito-ExtraLight.ttf'),
     })
 
+	  BackHandler.addEventListener("onBackPress", this.goBack);
+
     this.setState({
       isReady: true
     })
   }
+  goBack = () => {
+	  const { nav } = store.getState();
+	  if (nav && nav.routes && nav.routes.length > 1) {
+		  store.dispatch(NavigationActions.back());
+		  return true;
+	  }
+	  return false;
+
+  }
+
+	componentWillUnmount() {
+		BackHandler.removeEventListener("onBackPress", this.goBack);
+	}
 
   render() {
     const { isReady } = this.state

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
 import { addAddress } from '../../reducers/account';
+import { withDrawer } from '../../helpers/drawer';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -43,12 +44,6 @@ class CreateAddress extends Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({hasCameraPermission: status === 'granted'});
   }
-
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Account',
-    headerStyle: styles.header,
-    headerRight: <Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-  })
 
   toggleQRScanner = () => {
     this.setState({ scannerOpen: !this.state.scannerOpen });
@@ -93,6 +88,10 @@ class CreateAddress extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  portfolio: state.account.portfolio
+})
+
 const mapDispatchToProps = (dispatch) => {
   return {
     addAddress: (address) => {
@@ -102,5 +101,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-
-export default connect(null, mapDispatchToProps)(CreateAddress);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(CreateAddress));

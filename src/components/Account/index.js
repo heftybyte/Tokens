@@ -4,16 +4,10 @@ import ViewAccountsScreen from './ViewAccounts';
 
 const AccountsNavigator = StackNavigator({
     Accounts: { 
-        screen: ViewAccountsScreen,
-        navigationOptions: {
-            title: 'Accounts'
-        },
+        screen: ViewAccountsScreen
     },
     NewAccount: { 
-        screen: CreateAccountScreen,
-        navigationOptions: {
-            title: 'New Account'
-        },
+        screen: CreateAccountScreen
     },
 });
 

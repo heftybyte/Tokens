@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { deleteAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
+import { withDrawer } from '../../helpers/drawer';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -90,12 +91,6 @@ class ViewAddresses extends Component {
       addresses: []
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Accounts',
-    headerStyle: styles.header,
-    headerRight: <Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-  });
-
   deleteAddress = async(index) => {
     if(index === undefined) return;
     this.props.deleteAddress(index);
@@ -137,10 +132,10 @@ class ViewAddresses extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log('view account', state)
     return {
         addresses: state.account.addresses,
-        id: state.account.id
+        id: state.account.id,
+        portfolio: state.account.portfolio
     }
 };
 
@@ -152,4 +147,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewAddresses);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(ViewAddresses));

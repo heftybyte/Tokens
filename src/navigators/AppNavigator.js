@@ -18,6 +18,8 @@ export const AppNavigator = StackNavigator({
   NewAccount: { screen: NewAccount },
 	Register: { screen: Register },
   TokenDetails: { screen: TokenDetails }
+}, {
+	headerMode: "none"
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
