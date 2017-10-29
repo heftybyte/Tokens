@@ -1,19 +1,26 @@
 import React from 'react'
 import { Text, View} from 'react-native';
-import { Col, Row } from "react-native-easy-grid";
+import { Grid, Row } from "react-native-easy-grid";
 
 import {styles} from '../Style'
 
 
-const TextCenter = ({ news: { title, body } }) => (
-    <Col>
-    	<Row size={.2}>
-            <Text style={styles.title}>{title.toUpperCase()}</Text>
-	    </Row>
-	    <Row size={.6} style={styles.center}>
-	        <Text style={styles.body}>{body}</Text>
-	    </Row>
-    </Col>
-)
+class TextCenter extends React.Component {
+
+    render() {
+        const { news: { title, body } } = this.props
+
+        return (
+            <Grid>
+                <Row size={20}>
+                    <Text style={styles.title}>{title.toUpperCase()}</Text>
+                </Row>
+                <Row size={60} style={styles.center}>
+                    <Text style={styles.body}>{body}</Text>
+                </Row>
+            </Grid>
+        )
+    }
+}
 
 export default TextCenter;

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View, Image, Dimensions } from 'react-native';
-import { Col, Row } from "react-native-easy-grid";
+import { Grid, Row } from "react-native-easy-grid";
 
 import {styles} from '../Style'
 
@@ -26,13 +26,17 @@ class ImageDefault extends React.Component {
         const { width, height } = this.state
 
         return (
-            <View style={[styles.center, {backgroundColor: '#fff'}]}>
-                <Image
-                    style={{ width, height }}
-                    resizeMode="contain"
-                    source={{ uri: image }}
-                />
-            </View>
+            <Grid>
+                <Row>
+                    <View style={[styles.center, {backgroundColor: '#fff'}]}>
+                        <Image
+                            style={{ width, height }}
+                            resizeMode="contain"
+                            source={{ uri: image }}
+                        />
+                    </View>
+                </Row>
+            </Grid>
         )
     }
 }

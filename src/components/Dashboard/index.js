@@ -11,6 +11,7 @@ import mockNewsFeed from '../NewsFeed/MockData'
 import { register, login, getPortfolio } from '../../reducers/account';
 import currencyFormatter from 'currency-formatter';
 import mockTokens from '../TokenList/data';
+import mockWatchlist from '../TokenList/watchlist-data';
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -50,30 +51,6 @@ const styles = StyleSheet.create({
   },
   addBtnIcon: {
     marginRight: 10
-  },
-  portfolioValueCurrencySymbol: {
-    color: '#fff',
-    fontSize: 30,
-    // fontFamily: 'Helvetica'
-  },
-  portfolioValue: {
-    color: '#fff',
-    fontSize: 60,
-    // fontFamily: 'Helvetica'
-  },
-  portfolioValueCents: {
-    color: '#fff',
-    fontSize: 30,
-    // fontFamily: 'Helvetica'
-  },
-  portfolioDelta: {
-    color: '#fff',
-    fontSize: 15
-  },
-  portfolioDeltaPeriod: {
-    fontSize: 15,
-    color: '#c1c0bf',
-    fontWeight: 'bold'
   },
   gain: {
     color: '#6b2fe2'
@@ -126,7 +103,9 @@ class Dashboard extends Component {
       <ScrollView
         style={styles.scrollContainer}
         containerStyleContent={styles.container}
+        onScroll={this.handleScroll}
         onScrollEndDrag={this.handleScroll}
+        scrollEventThrottle={16}
       >
        <StatusBar
          backgroundColor="#000"
@@ -143,14 +122,15 @@ class Dashboard extends Component {
                 />
                 <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
             </View>
-        </TouchableHighlight> 
+        </TouchableHighlight>
         : <Header totalValue={portfolio.totalValue} />}
         {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
         <News feed={mockNewsFeed} />
         { portfolio && portfolio.tokens && 
-          <TokenList tokens={portfolio.tokens} title="Holdings" />}
-        <TokenList tokens={mockTokens} title="Top 10" />
+          <TokenList tokens={portfolio.tokens} />}
+        <TokenList type="watchList" watchList={mockWatchlist} title="WatchList" />
+        <TokenList type="watchList" watchList={mockWatchlist} title="Top 10" />
       </ScrollView>
     )
   }
@@ -161,7 +141,8 @@ Dashboard.navigationOptions = ({ navigation }) => ({
   title: (navigation.state.params && navigation.state.params.title) || 'Dashboard',
   headerTitleStyle : {
     color: '#fff',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontFamily: 'Nunito-ExtraLight'
   },
   headerStyle: styles.header,
   headerLeft:(

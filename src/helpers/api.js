@@ -44,6 +44,11 @@ export const addAccountAddress = async (id, address) => {
   return res.data
 }
 
+export const deleteAccountAddress = async (id, address) => {
+  let res = await instance.delete(`/accounts/${id}/addresses/${address}`)
+  return res.data
+}
+
 export const getAccount = async (id) => {
   let res = await instance.get(`/accounts/${id}`)
   return res.data
