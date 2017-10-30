@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { AppRegistry, BackHandler } from 'react-native';
+import { AppRegistry, BackHandler, AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import { Analytics, PageHit } from 'expo-analytics';
 
 import store from './src/store/index';
+import { login } from './src/reducers/account'
 import { Font } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
@@ -46,7 +47,15 @@ class Tokens extends React.Component {
     this.setState({
       isReady: true
     })
+
+    const token = await AsyncStorage.getItem('token')
+    const id = await AsyncStorage.getItem('id')
+
+    if (token && id) {
+      store.dispatch(login())
+    }
   }
+
   goBack = () => {
 	  const { nav } = store.getState();
 	  if (nav && nav.routes && nav.routes.length > 1) {

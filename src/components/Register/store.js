@@ -1,8 +1,9 @@
 import { observable, action } from "mobx"
-import { Alert } from 'react-native'
+import { Alert, AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation';
 import reduxStore from '../../store'
-import { register } from '../../reducers/account'
+import { createAccount } from '../../reducers/account'
+
 const uuidv4 = require('uuid/v4');
 
 type RegisterType = "anon" | "normal"
@@ -33,7 +34,7 @@ class Register {
 	}
 	
 	@action
-	createAccount = () => {
+	createAccount = async () => {
 		let params
 		if (this.type === 'normal') {
 			if (this.normal.password !== this.normal.cpassword) {
@@ -45,10 +46,11 @@ class Register {
 				password: this.normal.password
 			}
 		} else {
-			params = { accessKey: this.accessKey }
+			// TODO: make sure to use custom endpoint for anon login, plaintext accessKey as username isn't secure enough
+			params = { username: accessKey , accessKey: this.accessKey }
 		}
 		params.code = this.inviteCode
-		reduxStore.dispatch(register(this.type, params))
+		reduxStore.dispatch(createAccount(params))
 	}
 }
 

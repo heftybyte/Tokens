@@ -10,7 +10,7 @@ import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
 import mockNewsFeed from '../NewsFeed/MockData'
-import { register, login, getPortfolio } from '../../reducers/account';
+import { getPortfolio } from '../../reducers/account';
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
 import { withDrawer } from '../../helpers/drawer';
@@ -64,17 +64,8 @@ const styles = StyleSheet.create({
 });
 
 class Dashboard extends Component {
-  componentWillMount = async() =>{
-    const { login, register, getPortfolio } = this.props
-    console.log('setting up account')
-    await register()
-    await login()
-    console.log('account setup')
-  }
-
   componentWillReceiveProps = async (nextProps) => {
     const { addresses, getPortfolio} = nextProps
-
     if (addresses.length != this.props.addresses.length) {
       await getPortfolio()
       return
