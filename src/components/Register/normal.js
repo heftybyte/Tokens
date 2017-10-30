@@ -1,21 +1,24 @@
 import React from "react"
-import { View, Image, TouchableOpacity, Clipboard, Text } from "react-native"
-import { Input, Form, Item, Label, Button } from "native-base"
+import { View, Image, TouchableOpacity, Clipboard, Text, Platform } from "react-native"
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Input, Form, Item, Label, Button, Left } from "native-base"
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
 import { observer } from "mobx-react"
-
+import { NavigationActions } from 'react-navigation';
+import reduxStore from '../../store'
 import { store } from './store'
-
+import Header from './header'
 export const Normal = observer(
 	(navigation) => (
 		<View
 			style={{
 				flex: 1,
-				backgroundColor: '#191f27',
+				backgroundColor: '#000',
 				// justifyContent: 'space-between',
 				// alignItems: 'center'
 			}}
 		>
+			<Header title="Register" />
 			<View
 				style={{
 					flex: 1,
@@ -24,16 +27,20 @@ export const Normal = observer(
 			>
 				<Form>
 					<Item style={styles.inputWrap} floatingLabel regular>
-						<Label style={styles.label}>Username</Label>
-						<Input onChangeText={v => store.changetext('username', v)} style={styles.input} />
+						<Label style={styles.label}>Email</Label>
+						<Input keyboardType='email-address' onChangeText={v => store.changetext('email', v)} style={styles.input} />
 					</Item>
 					<Item style={styles.inputWrap} floatingLabel regular>
 						<Label style={styles.label}>Password</Label>
-						<Input onChangeText={v => store.changetext('password', v)} style={styles.input} />
+						<Input secureTextEntry={true} onChangeText={v => store.changetext('password', v)} style={styles.input} />
 					</Item>
 					<Item style={styles.inputWrap} floatingLabel regular>
 						<Label style={styles.label}>Confirm Password</Label>
-						<Input onChangeText={v => store.changetext('cpassword', v)} style={styles.input} />
+						<Input secureTextEntry={true} onChangeText={v => store.changetext('cpassword', v)} style={styles.input} />
+					</Item>
+					<Item style={styles.inputWrap} floatingLabel regular>
+						<Label style={styles.label}>Invite Code</Label>
+						<Input onChangeText={v => store.inviteCode =  v} style={styles.input} />
 					</Item>
 				</Form>
 			</View>
@@ -57,7 +64,7 @@ const styles = {
 	bottomButton: {
 		flexDirection: 'row',
 		height: 50,
-		backgroundColor: '#e76f22',
+		backgroundColor: '#6b2fe2',
 		alignItems: 'center',
 		justifyContent: 'flex-end'
 	},
@@ -73,7 +80,7 @@ const styles = {
 		borderWidth: 0,
 		borderRadius: 2,
 		height: 80,
-		backgroundColor: "#1e2631",
+		backgroundColor: "#111",
 		justifyContent: "center",
 		alignItems: "center"
 	},

@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, Image, TouchableOpacity } from "react-native"
+import { Alert, View, Text, Dimensions, Image, TouchableOpacity } from "react-native"
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
 import { Button } from "native-base"
 import React from "react"
@@ -40,7 +40,7 @@ const Register = observer(
 		<View
 			style={{
 				flex: 1,
-				backgroundColor: '#191f27'
+				backgroundColor: '#000'
 			}}
 		>
 			<View
@@ -50,9 +50,7 @@ const Register = observer(
 					alignItems: 'center'
 				}}
 			>
-				<View style={{ flex: 1, height: 150, paddingVertical: 30 }}>
-					<Image resizeMode='contain' style={{flex: 1}} source={require("./assets/Tokens_Icon.png")} />
-				</View>
+				<Image resizeMode='contain' style={{height: '40%', width: '40%',flex: 1}} source={require("./assets/Tokens_Icon.png")} />
 				<View style={styles.itemWrapper}>
 					<TouchableOpacity
 						onPress={() => store.changeType("normal")}
@@ -61,13 +59,13 @@ const Register = observer(
 							<RadioButton
 								selected={store.type === "normal"}
 								outerColor={'#fff'}
-								innerColor={'#e76f22'}
+								innerColor={store.type === "normal" ? '#6b2fe2' : '#111'}
 								size={25}
 							/>
 							<View style={{flex: 1, paddingLeft: 10}}>
 								<Text style={styles.text}>CREATE NORMAL ACCOUNT</Text>
 							</View>
-							<Icon name="information-outline" size={25} color="#fff" />
+							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Normal: Requires email and password.')} />
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity
@@ -77,13 +75,13 @@ const Register = observer(
 							<RadioButton
 								selected={store.type === "anon"}
 								outerColor={'#fff'}
-								innerColor={'#e76f22'}
+								innerColor={ store.type === "anon" ? '#6b2fe2' : '#111'}
 								size={25}
 							/>
 							<View style={{flex: 1, paddingLeft: 10}}>
 								<Text style={styles.text}>CREATE ANONYMOUS ACCOUNT</Text>
 							</View>
-							<Icon name="information-outline" size={25} color="#fff" />
+							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Advanced: Requires you to safely store a special access key.')}/>
 						</View>
 					</TouchableOpacity>
 				</View>
@@ -95,7 +93,7 @@ const Register = observer(
 					}}
 				>
 					<Button onPress={() => store.navigate(navigation)} style={styles.button} transparent>
-						<Text style={{ color: '#fff' }}>CONTINUE</Text>
+						<Text style={{ color: '#fff', fontFamily: 'Nunito' }}>CONTINUE</Text>
 					</Button>
 				</View>
 			</View>
@@ -114,7 +112,7 @@ const styles = {
 	bottomButton: {
 		flexDirection: 'row',
 		height: 50,
-		backgroundColor: '#e76f22',
+		backgroundColor: '#6b2fe2',
 		alignItems: 'center',
 		justifyContent: 'flex-end'
 	},
@@ -125,7 +123,7 @@ const styles = {
 		paddingRight: 10,
 		height: 70,
 		width: Dimensions.get('window').width - 20,
-		backgroundColor: '#1e2631',
+		backgroundColor: '#111',
 		alignItems: 'center'
 	},
 	itemWrapper: {
@@ -139,6 +137,7 @@ const styles = {
 		color: '#fff',
 		fontSize: 15,
 		fontWeight: '100',
+		fontFamily: 'Nunito'
 	}
 }
 

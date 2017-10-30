@@ -9,33 +9,33 @@ axios.defaults.headers.get['Accept'] = 'application/json';
 
 export const API_HOST = process.env.NODE_ENV === 'production' ?
   '138.197.104.147:3000' :
-  '138.197.104.147:3000'
+  'localhost:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
 });
 
-instance.interceptors.response.use(res => res, async (err) => {
-  if (err.response.status === 401) {
-    const account = JSON.parse(await AsyncStorage.getItem('account') || {})
-    let err = null
-    await AsyncStorage.removeItem('token')
-    return store.dispatch(login())
-  }
-  return Promise.reject(err);
-});
+// instance.interceptors.response.use(res => res, async (err) => {
+//   if (err.response.status === 401) {
+//     const account = JSON.parse(await AsyncStorage.getItem('account') || {})
+//     let err = null
+//     await AsyncStorage.removeItem('token')
+//     return store.dispatch(login())
+//   }
+//   return Promise.reject(err);
+// });
 
 export const setAuthHeader = (token) => {
   instance.defaults.headers.common['Authorization'] = token
 }
 
-export const registerAccount = async () => {
-  let res = await instance.post(`/accounts/register`)
+export const registerAccount = async (params) => {
+  let res = await instance.post(`/accounts/register`, { ...params })
   return res.data
 }
 
-export const loginAccount = async (id) => {
-  let res = await instance.post(`/accounts/login`, { id })
+export const loginAccount = async (params) => {
+  let res = await instance.post(`/accounts/login?include=user`, { ...params })
   return res.data
 }
 
@@ -45,7 +45,7 @@ export const addAccountAddress = async (id, address) => {
 }
 
 export const deleteAccountAddress = async (id, address) => {
-  let res = await instance.delete(`/accounts/${id}/addresses/${address}`)
+  let res = await instance.delete(`/accounts/${id}/address/${address}`)
   return res.data
 }
 

@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 const AddressView = ({name, index, deleteAddress}) => {
     return (
         <View style={styles.addressViewContainer}>
-            <Text style={[styles.text, styles.addressText]}>{JSON.parse(name)}</Text>
+            <Text style={[styles.text, styles.addressText]}>{name}</Text>
             <TouchableHighlight
               style={styles.removeAddressBtn}
               onPress={() => deleteAddress(index)}>
@@ -97,8 +97,8 @@ class ViewAddresses extends Component {
   }
 
   render(){
-    const { id, addresses, goToRoute, logout } = this.props
-    console.log({id})
+    const { token, id, addresses, goToRoute, logout } = this.props
+
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
           <Text style={[styles.text, styles.title]}>Your Accounts</Text>
@@ -119,7 +119,7 @@ class ViewAddresses extends Component {
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
-          {id &&
+          {(token || id) &&
             <TouchableHighlight
                 style={[styles.logoutBtn, {marginTop: 100}]}
                 onPress={()=>{console.log('logout!', logout);logout()}}
@@ -134,6 +134,7 @@ class ViewAddresses extends Component {
 const mapStateToProps = (state) => {
     return {
         addresses: state.account.addresses,
+        token: state.account.token,
         id: state.account.id,
         portfolio: state.account.portfolio
     }

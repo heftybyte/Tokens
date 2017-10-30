@@ -98,7 +98,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state, props) => ({
   symbol: props.navigation.state.params.token.symbol,
-  tokenDetails: state.account.tokenDetails
+  tokenDetails: state.account.tokenDetails,
+  portfolio: state.account.portfolio
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(TokenDetails));

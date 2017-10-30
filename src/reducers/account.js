@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, Alert } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import {
     loginAccount,
@@ -60,41 +60,46 @@ const tokenDetailsAction = (tokenDetails) => ({
   data: { tokenDetails }
 })
 
-export const register = () => async (dispatch) => {
+export const createAccount = (params) => async (dispatch, getState) => {
     let err = null
-    const account = JSON.parse(await AsyncStorage.getItem('account') || null) ||
-        await registerAccount().catch(e=>err=e)
-
-    if (err || !account) {
-        console.log(err)
-        return genericError()
+    const newAccount = await registerAccount(params).catch(e=>err=e)
+    if (err) {
+        return Alert.alert(err.response.data.error.message)
     }
-    await AsyncStorage.setItem('account', JSON.stringify(account))
-    dispatch(registerAction(account.id))
+    await AsyncStorage.setItem('id', newAccount.id)
+    dispatch(registerAction(newAccount.id))
+    dispatch(login(params))
 }
 
-export const login = () => async (dispatch, getState) => {
-    const { id } = getState().account
+export const login = (params) => async (dispatch, getState) => {
     let err = null
+    let account = null
+    let id = await AsyncStorage.getItem('id')
     let token = await AsyncStorage.getItem('token')
-    if (!token) {
-        const res = await loginAccount(id).catch(e=>err=e)
+    if (token) {
+        setAuthHeader(token)
+    }
+    if (params) {
+        const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
-            console.log(err)
-            return genericError()
+            Alert.alert(err.response.data.error.message)
+            return
         }
         token = res.id
+        account = res.user
+        setAuthHeader(token)
+        await AsyncStorage.setItem('token', token)
+        await AsyncStorage.setItem('id', account.id)
+    } else if (token) {
+        account = await getAccount(id)
+    } else {
+        Alert.alert("login needed")
+        // navigate to login screen
+        return
     }
-    setAuthHeader(token)
-
-    const account = await getAccount(id).catch(e=>err=e)
-    if (err) {
-        console.log(err)
-        return genericError()
-    }
-    await AsyncStorage.setItem('account', JSON.stringify(account))
-    await AsyncStorage.setItem('token', token)
     dispatch(loginAction(token, account))
+    dispatch(getPortfolio())
+    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
 export const logout = () => async(dispatch, getState) => {
@@ -108,17 +113,16 @@ export const addAddress = (address) => async (dispatch, getState) => {
     const { id } = getState().account
     const account = await addAccountAddress(id, address).catch(e=>err=e)
     if (err) {
-        console.log(err)
-        return genericError()
+        Alert.alert(err.response.data.error.message)
+        return
     }
-    console.log('account.addresses', account.addresses)
     dispatch(addAddressAction(account.addresses))
 }
 
 export const deleteAddress = (addressIndex) => async (dispatch, getState) => {
   let err = null
   const { id } = getState().account
-  const address = JSON.parse(getState().account.addresses[addressIndex])
+  const address = getState().account.addresses[addressIndex]
 
   const account = await deleteAccountAddress(id, address).catch(e=>err=e)
   if (err) {
