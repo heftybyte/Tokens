@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import currencyFormatter from 'currency-formatter';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, ScrollView, View, TouchableHighlight, AsyncStorage, Alert, StatusBar } from 'react-native';
+import { StyleSheet, Text, ScrollView, View, TouchableHighlight, AsyncStorage, Alert, StatusBar, Button } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
@@ -15,7 +15,8 @@ import mockWatchlist from '../TokenList/watchlist-data';
 import {
 	register,
 	login,
-	getPortfolio
+	getPortfolio,
+  refreshPortfolio
 } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 
@@ -95,6 +96,13 @@ class Dashboard extends Component {
     }
   }
 
+  updateBalance = async () => {
+    const { refreshPortfolio } = this.props
+    await refreshPortfolio()
+
+    return;
+  }
+
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
     return (
@@ -126,6 +134,7 @@ class Dashboard extends Component {
 		    : <Header totalValue={portfolio.totalValue} />}
 		    {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
+        <Button title="Refresh Portfolio" onPress={this.updateBalance} />
 		    <News feed={mockNewsFeed} />
 		    { portfolio && portfolio.tokens &&
 		    <TokenList tokens={portfolio.tokens} />}
@@ -146,7 +155,8 @@ const mapDispatchToProps = (dispatch) => ({
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'NewAccount' })),
     login: () => dispatch(login()),
     register: () => dispatch(register()),
-    getPortfolio: () => dispatch(getPortfolio())
+    getPortfolio: () => dispatch(getPortfolio()),
+    refreshPortfolio: () => dispatch(refreshPortfolio())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

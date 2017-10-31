@@ -3,13 +3,13 @@ import { Platform, Text } from "react-native"
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Header, Left, Button, Body, Right } from "native-base"
 import { NavigationActions } from 'react-navigation'
-import reduxStore from '../../store'
 import { Constants } from 'expo'
+import reduxStore from '../../store'
 
 export default (props) => (
 	<Header
 		style={{
-			backgroundColor: "#000", 
+			backgroundColor: "#000",
 			borderBottomWidth: 0,
 			shadowOffset: { height: 0, width: 0 },
 			shadowOpacity: 0,
