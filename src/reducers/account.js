@@ -6,6 +6,7 @@ import {
     setAuthHeader,
     getAccountPortfolio,
     addAccountAddress,
+    deleteAccountAddress,
     getAccount,
     getTokenDetailsForAccount
 } from '../helpers/api'
@@ -17,6 +18,7 @@ export const LOGOUT = 'account/LOGOUT'
 export const GET_PORTFOLIO = 'account/GET_PORTFOLIO'
 export const UPDATE = 'account/UPDATE'
 export const ADD_ADDRESS = 'account/ADD_ADDRESS'
+export const DELETE_ADDRESS = 'account/DELETE_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
 
 const registerAction = (id) => ({
@@ -46,6 +48,11 @@ const updateAction = (account) => ({
 const addAddressAction = (addresses=[]) => ({
     type: ADD_ADDRESS,
     data: { addresses }
+})
+
+const deleteAddressAction = (addresses=[]) => ({
+  type: DELETE_ADDRESS,
+  data: { addresses }
 })
 
 const tokenDetailsAction = (tokenDetails) => ({
@@ -108,8 +115,18 @@ export const addAddress = (address) => async (dispatch, getState) => {
     dispatch(addAddressAction(account.addresses))
 }
 
-export const deleteAddress = (address) => async (dispatch, getState) => {
-   return;
+export const deleteAddress = (addressIndex) => async (dispatch, getState) => {
+  let err = null
+  const { id } = getState().account
+  const address = JSON.parse(getState().account.addresses[addressIndex])
+
+  const account = await deleteAccountAddress(id, address).catch(e=>err=e)
+  if (err) {
+      console.log(err)
+      return genericError()
+  }
+
+  dispatch(deleteAddressAction(account.addresses))
 }
 
 export const getPortfolio = () => async (dispatch, getState) => {
@@ -161,6 +178,7 @@ export default (state = initialState, action) => {
                 ...initialState
             }
         case ADD_ADDRESS:
+        case DELETE_ADDRESS:
             return {
                 ...state,
                 addresses: [...action.data.addresses]
