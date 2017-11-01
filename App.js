@@ -55,19 +55,6 @@ class Tokens extends React.Component {
       store.dispatch(login())
     }
   }
-  goBack = () => {
-	  const { nav } = store.getState();
-	  if (nav && nav.routes && nav.routes.length > 1) {
-		  store.dispatch(NavigationActions.back());
-		  return true;
-	  }
-	  return false;
-
-  }
-
-	componentWillUnmount() {
-		BackHandler.removeEventListener("onBackPress", this.goBack);
-	}
 
   goBack = () => {
 	  const { nav } = store.getState();
