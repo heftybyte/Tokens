@@ -8,7 +8,8 @@ import {
     addAccountAddress,
     deleteAccountAddress,
     getAccount,
-    getTokenDetailsForAccount
+    getTokenDetailsForAccount,
+		logoutAccount
 } from '../helpers/api'
 import { genericError } from '../helpers/functions'
 
@@ -103,6 +104,11 @@ export const login = (params) => async (dispatch, getState) => {
 }
 
 export const logout = () => async(dispatch, getState) => {
+		let token = await AsyncStorage.getItem('token')
+		if (token) {
+			setAuthHeader(token)
+			await logoutAccount()
+		}
     await AsyncStorage.multiRemove(['token', 'id', 'account'])
     dispatch(logoutAction())
     dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
