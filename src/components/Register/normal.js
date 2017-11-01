@@ -68,8 +68,8 @@ export const Normal = observer(
 						marginRight: 10
 					}}
 				>
-					<Button onPress={store.type === 'normal' ? store.createAccount: store.login} style={styles.button} transparent>
-						<Text style={{ color: '#fff' }}>CREATE AN ACCOUNT</Text>
+					<Button onPress={store.type === 'normal' ? store.createAccount : store.login} style={styles.button} transparent>
+						<Text style={{ color: '#fff' }}>{store.type === 'normal' ? 'CREATE AN ACCOUNT' : 'LOGIN'}</Text>
 					</Button>
 				</View>
 			</View>

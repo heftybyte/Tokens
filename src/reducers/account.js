@@ -111,7 +111,13 @@ export const login = (params) => async (dispatch, getState) => {
 export const logout = () => async(dispatch, getState) => {
     await AsyncStorage.multiRemove(['token', 'id', 'account'])
     dispatch(logoutAction())
-    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+    const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Register' })
+        ]
+    })
+    dispatch(resetAction)
 }
 
 export const addAddress = (address) => async (dispatch, getState) => {

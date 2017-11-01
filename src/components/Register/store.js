@@ -9,7 +9,7 @@ const uuidv4 = require('uuid/v4');
 type RegisterType = "guest" | "normal" | "login"
 
 class Register {
-	@observable type: RegisterType = "normal"
+	@observable type: RegisterType = "login"
 	@observable normal = {
 		email: '',
 		password: '',
@@ -49,7 +49,8 @@ class Register {
 
 	@action
 	changetext = (key, value) => {
-		this[this.type][key] = value
+		let sanitized = value && value.trim && value.trim()
+		this[this.type][key] = sanitized || value
 	}
 	
 	@action
