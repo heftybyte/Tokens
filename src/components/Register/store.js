@@ -31,8 +31,10 @@ class Register {
 		this.type = type
 	}
 
-	navigate = (navigation) => {
+	navigate = async (navigation) => {
 		let routeName
+		let defaultEmail = ''
+		const pseudonym = JSON.parse(await AsyncStorage.getItem('pseudonym') || null)
 		switch(this.type) {
 			case "guest":
 				routeName = "GuestRegistration"
@@ -41,16 +43,27 @@ class Register {
 				routeName = "NormalRegistration"
 				break
 			case "login":
+				if (pseudonym.type === 'email') {
+					defaultEmail = pseudonym.value
+				}
 				routeName = "Login"
 				break
 		}
+		// TODO: refactor hacky way of setting a deafault value
+		this.login.email = defaultEmail
 		reduxStore.dispatch(NavigationActions.navigate({ routeName }))
+		this.login.email = defaultEmail
 	}
 
 	@action
 	changetext = (key, value) => {
 		let sanitized = value && value.trim && value.trim()
 		this[this.type][key] = sanitized || value
+	}
+
+	@action
+	getField = (key) => {
+		return this[this.type][key]
 	}
 	
 	@action
@@ -80,8 +93,7 @@ class Register {
 	login = async () => {
 		let params = {
 			email: this.login.email,
-			password: this.login.password,
-			code: this.login.code
+			password: this.login.password
 		}
 		reduxStore.dispatch(login(params))
 	}

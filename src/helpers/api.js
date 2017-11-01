@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native';
+import { NavigationActions } from 'react-navigation'
 import axios from 'axios';
 import Expo from 'expo';
 import store from '../store'
@@ -9,21 +10,27 @@ axios.defaults.headers.get['Accept'] = 'application/json';
 
 export const API_HOST = process.env.NODE_ENV === 'production' ?
   '138.197.104.147:3000' :
-  '138.197.104.147:3000'
+  'localhost:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
 });
 
-// instance.interceptors.response.use(res => res, async (err) => {
-//   if (err.response.status === 401) {
-//     const account = JSON.parse(await AsyncStorage.getItem('account') || {})
-//     let err = null
-//     await AsyncStorage.removeItem('token')
-//     return store.dispatch(login())
-//   }
-//   return Promise.reject(err);
-// });
+instance.interceptors.response.use(res => res, async (err) => {
+  if (err.response.status === 401) {
+    // Back up guest account details for chance at recovery
+    const pseudonym = await AsyncStorage.getItem('pseudonym')
+    if (pseudonym.type === 'username') {
+      const guestAccounts = JSON.parse(await AsyncStorage.getItem('guestAccounts') || null) || []
+      guestAccounts.push(pseudonym)
+      await AsyncStorage.setItem('guestAccounts', JSON.stringify(guestAccounts))
+    }
+    // Remove invalid token
+    await AsyncStorage.removeItem('token')
+    store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
+  }
+  return Promise.reject(err);
+});
 
 export const setAuthHeader = (token) => {
   instance.defaults.headers.common['Authorization'] = token
