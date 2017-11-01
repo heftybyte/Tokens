@@ -68,7 +68,6 @@ export const createAccount = (params) => async (dispatch, getState) => {
         console.log('createAccount', err)
         return Alert.alert(err.response && err.response.data.error.message || err.message)
     }
-    console.log('create account', params, newAccount)
     await AsyncStorage.setItem('id', newAccount.id)
     const pseudonymType = params.email ? 'email' : 'username'
     await AsyncStorage.setItem('pseudonym', JSON.stringify({ type: pseudonymType, value: params[pseudonymType] }))
@@ -81,7 +80,6 @@ export const login = (params) => async (dispatch, getState) => {
     let account = null
     let id = await AsyncStorage.getItem('id')
     let token = await AsyncStorage.getItem('token')
-
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
