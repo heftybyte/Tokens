@@ -19,12 +19,12 @@ const instance = axios.create({
 instance.interceptors.response.use(res => res, async (err) => {
   if (err.response.status === 401) {
     // Back up guest account details for chance at recovery
-    const guestAccounts = JSON.parse(await AsyncStorage.getItem('guestAccounts') || null) || []
     const pseudonym = await AsyncStorage.getItem('pseudonym')
     if (pseudonym.type === 'username') {
+      const guestAccounts = JSON.parse(await AsyncStorage.getItem('guestAccounts') || null) || []
       guestAccounts.push(pseudonym)
+      await AsyncStorage.setItem('guestAccounts', JSON.stringify(guestAccounts))
     }
-    await AsyncStorage.setItem('guestAccounts', JSON.stringify(guestAccounts))
     // Remove invalid token
     await AsyncStorage.removeItem('token')
     store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
