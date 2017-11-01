@@ -9,7 +9,7 @@ axios.defaults.headers.get['Accept'] = 'application/json';
 
 export const API_HOST = process.env.NODE_ENV === 'production' ?
   '138.197.104.147:3000' :
-  'localhost:3000'
+  '138.197.104.147:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`

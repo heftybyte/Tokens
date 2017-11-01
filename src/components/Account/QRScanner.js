@@ -1,18 +1,21 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { BarCodeScanner } from 'expo';
 
+const { width } = Dimensions.get("window")
+
 const styles = StyleSheet.create({
-    container: {  
-      width: '100%',
-      height: '100%'
+    container: {
+      width,
+      height: 300,
+      flex: 1,
     },
   });
 
 const QRScanner = ({scannerOpen, handleBarCodeRead}) => {
     return (
-            scannerOpen ? 
+            scannerOpen ?
             <BarCodeScanner
             style={styles.container}
             onBarCodeRead={handleBarCodeRead}

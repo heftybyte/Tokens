@@ -64,9 +64,13 @@ export const createAccount = (params) => async (dispatch, getState) => {
     let err = null
     const newAccount = await registerAccount(params).catch(e=>err=e)
     if (err) {
-        return Alert.alert(err.response.data.error.message)
+        console.log('createAccount', err)
+        return Alert.alert(err.response && err.response.data.error.message || err.message)
     }
+    console.log('create account', params, newAccount)
     await AsyncStorage.setItem('id', newAccount.id)
+    const pseudonymType = params.email ? 'email' : 'username'
+    await AsyncStorage.setItem('pseudonym', JSON.stringify({ type: pseudonymType, value: params[pseudonymType] }))
     dispatch(registerAction(newAccount.id))
     dispatch(login(params))
 }
@@ -76,9 +80,7 @@ export const login = (params) => async (dispatch, getState) => {
     let account = null
     let id = await AsyncStorage.getItem('id')
     let token = await AsyncStorage.getItem('token')
-    if (token) {
-        setAuthHeader(token)
-    }
+
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
@@ -90,11 +92,15 @@ export const login = (params) => async (dispatch, getState) => {
         setAuthHeader(token)
         await AsyncStorage.setItem('token', token)
         await AsyncStorage.setItem('id', account.id)
-    } else if (token) {
-        account = await getAccount(id)
+    } else if (token && id) {
+        setAuthHeader(token)
+        account = await getAccount(id).catch(e=>err=e)
+        if (err) {
+            Alert.alert(err.response.data.error.message)
+            return
+        }
     } else {
-        Alert.alert("login needed")
-        // navigate to login screen
+        dispatch(NavigationActions.navigate({ routeName: 'Login' }))
         return
     }
     dispatch(loginAction(token, account))
@@ -105,7 +111,13 @@ export const login = (params) => async (dispatch, getState) => {
 export const logout = () => async(dispatch, getState) => {
     await AsyncStorage.multiRemove(['token', 'id', 'account'])
     dispatch(logoutAction())
-    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+    const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Register' })
+        ]
+    })
+    dispatch(resetAction)
 }
 
 export const addAddress = (address) => async (dispatch, getState) => {
@@ -139,7 +151,8 @@ export const getPortfolio = () => async (dispatch, getState) => {
     const portfolio = await getAccountPortfolio(id).catch(e=>err=e)
     if (err) {
         console.log(err)
-        return genericError()
+        Alert.alert(err.response.data.error.message)
+        return
     }
 
     dispatch(portfolioAction(portfolio))
