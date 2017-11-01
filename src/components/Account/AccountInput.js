@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, Button, View } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, View, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
@@ -10,10 +10,21 @@ const styles = StyleSheet.create({
         color: '#fff'
     },
     accountInput: {
-        backgroundColor: '#fff',
-        width: '100%',
-        height: '20%',
+      backgroundColor: '#fff',
+      width: '100%',
+      height: 50,
+      marginBottom: 20,
     },
+    btn: {
+      alignSelf: 'center',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#6b2fe2',
+      padding: 10,
+      borderRadius: 10,
+      flexDirection: 'row',
+      marginTop: 20,
+    }
   });
 
 const AccountInput = ({
@@ -23,13 +34,18 @@ const AccountInput = ({
     hasCameraPermission,
     onChangeText,
     saveAddress,
+    children
 }) => {
     return (
     <View style={styles.topContainer}>
-        <Text style={styles.accountLabel}>Account:</Text>
-        <TextInput style={styles.accountInput} value={inputValue} onChangeText={onChangeText}/>
-        <Button onPress={toggleQRScanner} title={scannerOpen ? 'Close QR Scanner' :'Scan a QR Code'} disabled={!hasCameraPermission}/>
-        <Button onPress={saveAddress} title={'Save Address'}/>    
+        <TextInput style={styles.accountInput} value={inputValue} onChangeText={onChangeText} placeholder={'Ethereum Address'}/>
+        {children}
+        <TouchableHighlight onPress={toggleQRScanner} style={styles.btn} disabled={!hasCameraPermission}>
+          <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan a QR Code'}</Text>
+        </TouchableHighlight>
+        { !scannerOpen ? <TouchableHighlight onPress={saveAddress} style={[styles.btn, { marginBottom: 20 }]}>
+          <Text style={{color: 'white'}}>Save Address</Text>
+        </TouchableHighlight> : null }   
     </View>
     );
 };

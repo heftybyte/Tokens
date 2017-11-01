@@ -27,9 +27,6 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#000'
   },
-  scanner: {
-    height: '50%'
-  }
 });
 
 class CreateAddress extends Component {
@@ -77,12 +74,13 @@ class CreateAddress extends Component {
           hasCameraPermission={this.state.hasCameraPermission}
           onChangeText={this.onChangeText}
           saveAddress={this.saveAddress}
-        />
+        >
         <QRScanner 
           style={styles.scanner}
           scannerOpen={this.state.scannerOpen}
           handleBarCodeRead={this.handleBarCodeRead}
         />
+        </AccountInput>
       </View>
     );
   }
