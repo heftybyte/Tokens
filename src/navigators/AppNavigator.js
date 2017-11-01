@@ -11,8 +11,9 @@ import TokenDetails from '../components/TokenDetails';
 import Register, { NormalRegisteration, AnonymousRegisteration } from '../components/Register';
 
 export const AppNavigator = StackNavigator({
-	AnonymousRegisteration: { screen: AnonymousRegisteration },
 	NormalRegisteration: { screen: NormalRegisteration },
+	
+	AnonymousRegisteration: { screen: AnonymousRegisteration },
   Dashboard: { screen: Dashboard },
   Accounts : { screen: ViewAccounts },
   NewAccount: { screen: NewAccount },

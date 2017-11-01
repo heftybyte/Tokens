@@ -1,10 +1,11 @@
 import React from "react"
-import { View, Image, TouchableOpacity, Clipboard, Text } from "react-native"
-import { Input, Form, Item, Label, Button } from "native-base"
+import { View, Image, TouchableOpacity, Clipboard, Text, KeyboardAvoidingView, ScrollView } from "react-native"
+import { Input, Form, Item, Label, Button, Content } from "native-base"
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
 import { observer } from "mobx-react"
 
 import { store } from './store'
+import { Field } from "../lib/Field"
 
 export const Normal = observer(
 	(navigation) => (
@@ -16,27 +17,43 @@ export const Normal = observer(
 				// alignItems: 'center'
 			}}
 		>
+			<KeyboardAvoidingView
+				style={{
+					flex: 1
+				}}
+				behavior="padding"				
+			>
 			<View
 				style={{
 					flex: 1,
-					paddingHorizontal: 10,
+					paddingHorizontal: 5,
 				}}
 			>
-				<Form>
-					<Item style={styles.inputWrap} floatingLabel regular>
-						<Label style={styles.label}>Username</Label>
-						<Input onChangeText={v => store.changetext('username', v)} style={styles.input} />
-					</Item>
-					<Item style={styles.inputWrap} floatingLabel regular>
-						<Label style={styles.label}>Password</Label>
-						<Input onChangeText={v => store.changetext('password', v)} style={styles.input} />
-					</Item>
-					<Item style={styles.inputWrap} floatingLabel regular>
-						<Label style={styles.label}>Confirm Password</Label>
-						<Input onChangeText={v => store.changetext('cpassword', v)} style={styles.input} />
-					</Item>
-				</Form>
+				<Content>
+					<Field
+						label="Username"
+						returnKeyType="next"
+						onChange={v => store.changetext('username', v)}
+						/* value={this.store.fields.bankAccountName} */
+						placeholder="e.g JohnDoe123"
+					/>
+					<Field
+						label="Password"
+						returnKeyType="next"
+						onChange={v => store.changetext('password', v)}
+						/* value={this.store.fields.bankAccountName} */
+						placeholder="*********"
+					/>
+					<Field
+						label="Confirm Password"
+						returnKeyType="done"
+						onChange={v => store.changetext('cpassword', v)}
+						/* value={this.store.fields.bankAccountName} */
+						placeholder="*********"
+					/>
+					</Content>
 			</View>
+			</KeyboardAvoidingView>
 			<View style={styles.bottomButton}>
 				<View
 					style={{
@@ -70,6 +87,7 @@ const styles = {
 		paddingHorizontal: 5,
 	},
 	inputWrap: {
+		marginVertical: 10,
 		borderWidth: 0,
 		borderRadius: 2,
 		height: 80,
@@ -78,7 +96,7 @@ const styles = {
 		alignItems: "center"
 	},
 	label: {
-		marginTop: 5,
+		marginVertical: 5,
 		marginLeft: 5,
 		color: "#eee"
 	}

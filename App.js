@@ -46,7 +46,8 @@ class Tokens extends React.Component {
     this.setState({
       isReady: true
     })
-  }
+	}
+
   goBack = () => {
 	  const { nav } = store.getState();
 	  if (nav && nav.routes && nav.routes.length > 1) {
