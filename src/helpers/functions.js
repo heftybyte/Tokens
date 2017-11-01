@@ -23,3 +23,6 @@ export const formatPrice = (price) => {
   }
   return formattedPrice
 }
+
+export const getError = (err) =>
+  err.response && err.response.data.error.message || err.message
