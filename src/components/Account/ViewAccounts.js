@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, TouchableHighlight, ScrollView, View, Button, AsyncStorage, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  ScrollView,
+  View,
+  Button,
+  AsyncStorage,
+  Alert
+} from 'react-native';
 import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
@@ -64,7 +74,15 @@ const styles = StyleSheet.create({
   addressText: {
     flex: .8,
     fontSize: 10
-  }
+  },
+    inviteHeader : {
+      marginTop: 30
+    },
+    inviteText : {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 24
+    }
 });
 
 const AddressView = ({name, index, deleteAddress}) => {
@@ -98,7 +116,7 @@ class ViewAddresses extends Component {
   }
 
   render(){
-    const { token, id, addresses, goToRoute, logout } = this.props
+    const { token, id, addresses, goToRoute, logout, invites } = this.props
 
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
@@ -119,14 +137,25 @@ class ViewAddresses extends Component {
               onPress={() => goToRoute('NewAccount')}
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
+
+
           </TouchableHighlight>
+
           {(token || id) &&
-            <TouchableHighlight
-                style={[styles.logoutBtn, {marginTop: 100}]}
-                onPress={()=>{trackTap('Logout');logout()}}
-            >
-              <Text style={styles.logoutBtnText}>Logout</Text>
-          </TouchableHighlight>}
+            <View>
+              <Text style={[styles.text, styles.title]}>Your Invite Code(s)</Text>
+              {
+                  invites.map((code, i)=>{
+                      <Text key={i} style={styles.logoutBtnText}>bgbb</Text>
+                  })
+              }
+              <TouchableHighlight
+                  style={[styles.logoutBtn, {marginTop: 100}]}
+                  onPress={()=>{trackTap('Logout');logout()}}
+              >
+                <Text style={styles.logoutBtnText}>Logout</Text>
+              </TouchableHighlight>
+            </View>}
       </ScrollView>
     );
   }
@@ -138,6 +167,7 @@ const mapStateToProps = (state) => {
         token: state.account.token,
         id: state.account.id,
         portfolio: state.account.portfolio
+        invites: state.account.invites
     }
 };
 
