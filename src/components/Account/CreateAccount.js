@@ -27,9 +27,6 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#000'
   },
-  scanner: {
-    height: '50%'
-  }
 });
 
 class CreateAddress extends Component {
@@ -51,15 +48,22 @@ class CreateAddress extends Component {
 
   handleBarCodeRead = ({type, data}) => {
     this.toggleQRScanner();
-    this.setState({inputValue: data});
+      this.setState({inputValue: data});
+
+      if (data.length !== 42 || data.substr(0,2) !== '0x') {
+        Alert.alert('This Ethereum Address is Invalid')
+        return
+      }
+
+      this.saveAddress(data)
   }
 
   onChangeText = (text) => {
     this.setState({inputValue: text});
   }
 
-  saveAddress = async() => {
-    const text = this.state.inputValue;
+  saveAddress = async(data) => {
+    const text = data || this.state.inputValue;
     if(!text || !text.length) {
       Alert.alert('Enter an address to save');
       return;
@@ -77,12 +81,13 @@ class CreateAddress extends Component {
           hasCameraPermission={this.state.hasCameraPermission}
           onChangeText={this.onChangeText}
           saveAddress={this.saveAddress}
-        />
+        >
         <QRScanner 
           style={styles.scanner}
           scannerOpen={this.state.scannerOpen}
           handleBarCodeRead={this.handleBarCodeRead}
         />
+        </AccountInput>
       </View>
     );
   }
@@ -96,7 +101,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addAddress: (address) => {
       dispatch(addAddress(address))
-      dispatch(NavigationActions.back())
     }
   }
 }

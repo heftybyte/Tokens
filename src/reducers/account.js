@@ -129,6 +129,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
         return
     }
     dispatch(addAddressAction(account.addresses))
+    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
 export const deleteAddress = (addressIndex) => async (dispatch, getState) => {
