@@ -94,7 +94,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addAddress: (address) => {
       dispatch(addAddress(address))
-      dispatch(NavigationActions.back())
     }
   }
 }

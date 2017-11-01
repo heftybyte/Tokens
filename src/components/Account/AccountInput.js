@@ -10,14 +10,22 @@ const styles = StyleSheet.create({
         color: '#fff'
     },
     accountInput: {
-      backgroundColor: '#fff',
+      borderBottomWidth: 0,
+      paddingHorizontal: 5,
+      color: '#fff',
+      borderRadius: 5,
       width: '100%',
-      height: 50,
-      marginBottom: 20,
+      height: 50
+    },
+    inputContainer: {
+      width: '80%',
+      backgroundColor: "#161616",
     },
     btn: {
       alignSelf: 'center',
       justifyContent: 'center',
+      width: '50%',
+      height: 40,
       alignItems: 'center',
       backgroundColor: '#6b2fe2',
       padding: 10,
@@ -38,14 +46,21 @@ const AccountInput = ({
 }) => {
     return (
     <View style={styles.topContainer}>
-        <TextInput style={styles.accountInput} value={inputValue} onChangeText={onChangeText} placeholder={'Ethereum Address'}/>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.accountInput}
+            value={inputValue}
+            onChangeText={onChangeText}
+            placeholder={'Ethereum Address'}
+          />
+        </View>
         {children}
-        <TouchableHighlight onPress={toggleQRScanner} style={styles.btn} disabled={!hasCameraPermission}>
-          <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan a QR Code'}</Text>
-        </TouchableHighlight>
         { !scannerOpen ? <TouchableHighlight onPress={saveAddress} style={[styles.btn, { marginBottom: 20 }]}>
           <Text style={{color: 'white'}}>Save Address</Text>
         </TouchableHighlight> : null }   
+        <TouchableHighlight onPress={toggleQRScanner} style={styles.btn} disabled={!hasCameraPermission}>
+          <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan a QR Code'}</Text>
+        </TouchableHighlight>
     </View>
     );
 };
