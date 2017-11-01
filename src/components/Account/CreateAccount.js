@@ -48,15 +48,22 @@ class CreateAddress extends Component {
 
   handleBarCodeRead = ({type, data}) => {
     this.toggleQRScanner();
-    this.setState({inputValue: data});
+      this.setState({inputValue: data});
+
+      if (data.length !== 42 || data.substr(0,2) !== '0x') {
+        Alert.alert('This Ethereum Address is Invalid')
+        return
+      }
+
+      this.saveAddress(data)
   }
 
   onChangeText = (text) => {
     this.setState({inputValue: text});
   }
 
-  saveAddress = async() => {
-    const text = this.state.inputValue;
+  saveAddress = async(data) => {
+    const text = data || this.state.inputValue;
     if(!text || !text.length) {
       Alert.alert('Enter an address to save');
       return;
