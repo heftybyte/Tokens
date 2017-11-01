@@ -47,7 +47,7 @@ class Register {
 			}
 		} else {
 			// TODO: make sure to use custom endpoint for anon login, plaintext accessKey as username isn't secure enough
-			params = { username: accessKey , accessKey: this.accessKey }
+			params = { username: this.accessKey , accessKey: this.accessKey }
 		}
 		params.code = this.inviteCode
 		reduxStore.dispatch(createAccount(params))

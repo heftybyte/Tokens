@@ -13,7 +13,6 @@ import mockNewsFeed from '../NewsFeed/MockData'
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
 import { register, login, getPortfolio } from '../../reducers/account';
-import mockTokens from '../TokenList/data';
 import { withDrawer } from '../../helpers/drawer';
 
 const currencyFormatOptions =  {

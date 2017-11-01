@@ -7,6 +7,7 @@ import { NavigationActions } from 'react-navigation';
 import reduxStore from '../../store'
 import { store } from './store'
 import { Field } from "../lib/Field"
+import Header from './header'
 
 export const Normal = observer(
 	(navigation) => (
@@ -18,6 +19,7 @@ export const Normal = observer(
 				// alignItems: 'center'
 			}}
 		>
+			<Header title="Register" />
 			<KeyboardAvoidingView
 				style={{
 					flex: 1
@@ -32,24 +34,29 @@ export const Normal = observer(
 			>
 				<Content>
 					<Field
-						label="Username"
+						label="Invite Code"
 						returnKeyType="next"
-						onChange={v => store.changetext('username', v)}
-						/* value={this.store.fields.bankAccountName} */
-						placeholder="e.g JohnDoe123"
+						onChange={v => store.changetext('inviteCode', v)}
+						placeholder="q3frrdsd"
+					/>
+					<Field
+						label="Email"
+						returnKeyType="next"
+						onChange={v => store.changetext('email', v)}
+						placeholder="e.g vitalik@ethereum.org"
 					/>
 					<Field
 						label="Password"
+						type="password"
 						returnKeyType="next"
 						onChange={v => store.changetext('password', v)}
-						/* value={this.store.fields.bankAccountName} */
 						placeholder="*********"
 					/>
 					<Field
 						label="Confirm Password"
+						type="password"
 						returnKeyType="done"
 						onChange={v => store.changetext('cpassword', v)}
-						/* value={this.store.fields.bankAccountName} */
 						placeholder="*********"
 					/>
 					</Content>

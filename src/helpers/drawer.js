@@ -11,14 +11,14 @@ import Header from "../components/Dashboard/Header"
 
 const Items = [
 	{
-		name: "DashBoard",
-		icon: "apps",
-		route: "DashBoard"
-	},
-	{
 		name: "Account",
 		icon: "account-circle",
 		route: "Accounts"
+	},
+	{
+		name: "Dashboard",
+		icon: "apps",
+		route: "Dashboard"
 	}
 ]
 
@@ -35,7 +35,6 @@ export const withDrawer = (WrappedComponent) => {
 			const { navigation, portfolio } = this.props
 			const totalValue = portfolio.totalValue || 0
 
-			const { navigation } = this.props
 			return (
 				<Drawer
 					ref={d => (this.drawer = d)}

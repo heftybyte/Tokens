@@ -51,6 +51,7 @@ export class Field extends Component {
 	render(): React$Element<*> {
 		const {
 			label,
+			type,
 			inverse,
 			defaultValue,
 			onChange,
@@ -77,6 +78,7 @@ export class Field extends Component {
 		const field = (
 			<TextField
 				label={label}
+				secureTextEntry={type==='password'}
 				value={value}
 				ref={ref => {
 					this.inputRef = ref
@@ -103,12 +105,13 @@ export class Field extends Component {
 				inputContainerStyle={{
 					borderBottomWidth: 0,
 					paddingHorizontal: 5,
-					backgroundColor: "#1e2631",
+					backgroundColor: "#161616",
 					borderRadius: 5
 				}}
 				containerStyle={{
 					margin: 0
 				}}
+				placeholderTextColor="#333"
 			/>
 		)
 		if (picker) {

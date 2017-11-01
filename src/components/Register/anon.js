@@ -1,15 +1,22 @@
 import React from "react"
-import { View, Image, TouchableOpacity, Clipboard, Text } from "react-native"
+import { View, Image, TouchableOpacity, Clipboard, Text, KeyboardAvoidingView } from "react-native"
 import { Input, Form, Item, Label, Button } from "native-base"
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
 import { store } from './store'
 import { observer } from "mobx-react"
+import { Field } from "../lib/Field"
 import Header from './header'
 
 export const Anonymous = observer(
 	(navigation)=> (
 		<View style={{flex:1}}>
 			<Header title="Register" />
+			<KeyboardAvoidingView
+				style={{
+					flex: 1
+				}}
+				behavior="padding"				
+			>
 			<View
 				style={{
 					flex: 1,
@@ -57,12 +64,12 @@ export const Anonymous = observer(
 					This is your access key, without it you will not be
 					able to access your account. Save it in a safe place.
 				</Text>
-				<Form>
-					<Item style={styles.inputWrap} floatingLabel regular>
-						<Label style={styles.label}>Invite Code</Label>
-						<Input onChangeText={v => store.inviteCode =  v} style={styles.input} />
-					</Item>
-				</Form>
+				<Field
+					label="Invite Code"
+					returnKeyType="done"
+					onChange={v => store.inviteCode =  v}
+					placeholder="q3frrdsd"
+				/>
 			</View>
 			<View style={styles.bottomButton}>
 				<View
@@ -75,6 +82,7 @@ export const Anonymous = observer(
 					</Button>
 				</View>
 			</View>
+		</KeyboardAvoidingView>
 		</View>
 	)
 )

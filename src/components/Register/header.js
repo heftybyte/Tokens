@@ -4,6 +4,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Header, Left, Button, Body, Right } from "native-base"
 import { NavigationActions } from 'react-navigation'
 import reduxStore from '../../store'
+import { Constants } from 'expo'
 
 export default (props) => (
 	<Header
