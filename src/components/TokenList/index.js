@@ -88,6 +88,7 @@ class TokenList extends Component {
       item={item}
       index={index}
       showTokenInfo={() => {
+        return // TODO: fix token details page
 			  this.props.goToTokenDetailsPage(item);
       }}
     />
@@ -99,6 +100,7 @@ class TokenList extends Component {
       index={index}
       showChange={this.state.showChange}
       showTokenInfo={() => {
+        return // TODO: fix token details page
 			  this.props.goToTokenDetailsPage(item);
       }}
       onPress={()=>{

@@ -7,7 +7,7 @@ import { observer } from "mobx-react"
 import { Field } from "../lib/Field"
 import Header from './header'
 
-export const Anonymous = observer(
+export const Guest = observer(
 	(navigation)=> (
 		<View style={{flex:1}}>
 			<Header title="Register" />
@@ -21,56 +21,20 @@ export const Anonymous = observer(
 				style={{
 					flex: 1,
 					backgroundColor: '#000',
-					justifyContent: 'center',
-					alignContent: 'center',
-					paddingVertical: 50,
 					paddingHorizontal: 20,
 				}}
 			>
-				<View
-					style={{
-						height: 400,
-						flex: 1,
-						backgroundColor: '#000',
-						justifyContent: 'center',
-						alignItems: 'center'
-					}}>
-					<Image resizeMode='contain' style={{ height: 200, width: 200 }} source={require('./assets/qrcode.jpg')} />
-				</View>
-				<View>
-					<Text style={[styles.text, { fontSize: 16, marginBottom: 5 }]}>Access Key</Text>
-					<TouchableOpacity
-						onPress={() => copyToClipboard(store.accessKey)}
-					>
-						<View
-							style={{
-								flexDirection: "row",
-								justifyContent: 'space-between',
-								alignItems: "center",
-								borderWidth: 1.5,
-								paddingHorizontal: 10,
-								height: 50,
-								borderRadius: 6,
-								borderColor: "#f00",
-								marginBottom: 20,
-							}}
-						>
-							<Text numberOfLines={1} ellipsizeMode="tail" style={styles.text}>{store.accessKey}</Text>
-							<Icon name="content-copy" size={25} color="#fff" />
-						</View>
-					</TouchableOpacity>
-				</View>
-				<Text style={[styles.text, { fontSize: 20 }]}>
-					This is your access key, without it you will not be
-					able to access your account. Save it in a safe place.
-				</Text>
 				<Field
 					label="Invite Code"
 					returnKeyType="done"
-					onChange={v => store.inviteCode =  v}
-					placeholder="q3frrdsd"
+					onChange={v => store.changetext('code', v)}
+					placeholder="q3fV8dsd"
 				/>
+				<Text style={[styles.text, { fontSize: 12, padding: 16 }]}>
+					WARNING: with guest mode you risk losing access to your account if this device is reset or lost.
+				</Text>
 			</View>
+			</KeyboardAvoidingView>
 			<View style={styles.bottomButton}>
 				<View
 					style={{
@@ -82,7 +46,6 @@ export const Anonymous = observer(
 					</Button>
 				</View>
 			</View>
-		</KeyboardAvoidingView>
 		</View>
 	)
 )

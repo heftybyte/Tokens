@@ -63,25 +63,40 @@ const Register = observer(
 								size={25}
 							/>
 							<View style={{flex: 1, paddingLeft: 10}}>
-								<Text style={styles.text}>CREATE NORMAL ACCOUNT</Text>
+								<Text style={styles.text}>CREATE ACCOUNT</Text>
 							</View>
-							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Normal: Requires email and password.')} />
+							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Access your account form other devices')} />
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity
-						onPress={() => store.changeType("anon")}
+						onPress={() => store.changeType("guest")}
 					>
 						<View style={styles.item}>
 							<RadioButton
-								selected={store.type === "anon"}
+								selected={store.type === "guest"}
 								outerColor={'#fff'}
-								innerColor={ store.type === "anon" ? '#6b2fe2' : '#111'}
+								innerColor={ store.type === "guest" ? '#6b2fe2' : '#111'}
 								size={25}
 							/>
 							<View style={{flex: 1, paddingLeft: 10}}>
-								<Text style={styles.text}>CREATE ANONYMOUS ACCOUNT</Text>
+								<Text style={styles.text}>GUEST MODE</Text>
 							</View>
-							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Advanced: Requires you to safely store a special access key.')}/>
+							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('You can create your account later')}/>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={() => store.changeType("login")}
+					>
+						<View style={styles.item}>
+							<RadioButton
+								selected={store.type === "login"}
+								outerColor={'#fff'}
+								innerColor={store.type === "login" ? '#6b2fe2' : '#111'}
+								size={25}
+							/>
+							<View style={{flex: 1, paddingLeft: 10}}>
+								<Text style={styles.text}>LOGIN</Text>
+							</View>
 						</View>
 					</TouchableOpacity>
 				</View>

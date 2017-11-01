@@ -14,12 +14,10 @@ export const Normal = observer(
 		<View
 			style={{
 				flex: 1,
-				backgroundColor: '#000',
-				// justifyContent: 'space-between',
-				// alignItems: 'center'
+				backgroundColor: '#000'
 			}}
 		>
-			<Header title="Register" />
+			<Header title={store.type === 'normal' ? "Register" : "Login"} />
 			<KeyboardAvoidingView
 				style={{
 					flex: 1
@@ -33,12 +31,13 @@ export const Normal = observer(
 				}}
 			>
 				<Content>
+				{store.type === 'normal' &&
 					<Field
 						label="Invite Code"
 						returnKeyType="next"
-						onChange={v => store.changetext('inviteCode', v)}
+						onChange={v => store.changetext('code', v)}
 						placeholder="q3frrdsd"
-					/>
+					/>}
 					<Field
 						label="Email"
 						returnKeyType="next"
@@ -52,13 +51,14 @@ export const Normal = observer(
 						onChange={v => store.changetext('password', v)}
 						placeholder="*********"
 					/>
+				{store.type === 'normal' && 
 					<Field
 						label="Confirm Password"
 						type="password"
 						returnKeyType="done"
 						onChange={v => store.changetext('cpassword', v)}
 						placeholder="*********"
-					/>
+					/>}
 					</Content>
 			</View>
 			</KeyboardAvoidingView>
@@ -68,7 +68,7 @@ export const Normal = observer(
 						marginRight: 10
 					}}
 				>
-					<Button onPress={store.createAccount} style={styles.button} transparent>
+					<Button onPress={store.type === 'normal' ? store.createAccount: store.login} style={styles.button} transparent>
 						<Text style={{ color: '#fff' }}>CREATE AN ACCOUNT</Text>
 					</Button>
 				</View>

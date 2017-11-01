@@ -11,14 +11,14 @@ import Header from "../components/Dashboard/Header"
 
 const Items = [
 	{
-		name: "Account",
-		icon: "account-circle",
-		route: "Accounts"
-	},
-	{
 		name: "Dashboard",
 		icon: "apps",
 		route: "Dashboard"
+	},
+	{
+		name: "Account",
+		icon: "account-circle",
+		route: "Accounts"
 	}
 ]
 
