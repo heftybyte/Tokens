@@ -39,6 +39,10 @@ export const loginAccount = async (params) => {
   return res.data
 }
 
+export const logoutAccount = async () => {
+	await instance.post(`/accounts/logout`, {})
+}
+
 export const addAccountAddress = async (id, address) => {
   let res = await instance.post(`/accounts/${id}/address`, { address })
   return res.data
