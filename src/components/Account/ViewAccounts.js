@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
     flex: .8,
     fontSize: 10
   },
-    inviteHeader : {
+    inviteHeader: {
       marginTop: 30
     },
-    inviteText : {
+    inviteText: {
         color: '#fff',
         textAlign: 'center',
         fontSize: 24
@@ -117,7 +117,6 @@ class ViewAddresses extends Component {
 
   render(){
     const { token, id, addresses, goToRoute, logout, invites } = this.props
-
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
           <Text style={[styles.text, styles.title]}>Your Accounts</Text>
@@ -137,16 +136,14 @@ class ViewAddresses extends Component {
               onPress={() => goToRoute('NewAccount')}
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
-
-
           </TouchableHighlight>
 
           {(token || id) &&
             <View>
-              <Text style={[styles.text, styles.title]}>Your Invite Code(s)</Text>
+              <Text style={[styles.text, styles.title, styles.inviteHeader]}>Your Invite Code(s)</Text>
               {
-                  invites.map((code, i)=>{
-                      <Text key={i} style={styles.logoutBtnText}>bgbb</Text>
+                  this.props.invites.map((code, index)=>{
+                      <Text key={index} style={[styles.inviteText]}>{code}</Text>
                   })
               }
               <TouchableHighlight
