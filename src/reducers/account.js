@@ -11,7 +11,7 @@ import {
     getTokenDetailsForAccount,
 		logoutAccount
 } from '../helpers/api'
-import { genericError } from '../helpers/functions'
+import { genericError, getError } from '../helpers/functions'
 
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
@@ -66,7 +66,7 @@ export const createAccount = (params) => async (dispatch, getState) => {
     const newAccount = await registerAccount(params).catch(e=>err=e)
     if (err) {
         console.log('createAccount', err)
-        return Alert.alert(err.response && err.response.data.error.message || err.message)
+        return Alert.alert(getError(err))
     }
     await AsyncStorage.setItem('id', newAccount.id)
     const pseudonymType = params.email ? 'email' : 'username'
@@ -83,7 +83,7 @@ export const login = (params) => async (dispatch, getState) => {
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
-            Alert.alert(err.response.data.error.message)
+            Alert.alert(getError(err))
             return
         }
         token = res.id
@@ -95,7 +95,7 @@ export const login = (params) => async (dispatch, getState) => {
         setAuthHeader(token)
         account = await getAccount(id).catch(e=>err=e)
         if (err) {
-            Alert.alert(err.response.data.error.message)
+            Alert.alert(getError(err))
             return
         }
     } else {
@@ -129,7 +129,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     const { id } = getState().account
     const account = await addAccountAddress(id, address).catch(e=>err=e)
     if (err) {
-        Alert.alert(err.response.data.error.message)
+        Alert.alert(getError(err))
         return
     }
     dispatch(addAddressAction(account.addresses))
@@ -156,7 +156,7 @@ export const getPortfolio = () => async (dispatch, getState) => {
     const portfolio = await getAccountPortfolio(id).catch(e=>err=e)
     if (err) {
         console.log(err)
-        Alert.alert(err.response.data.error.message)
+        Alert.alert(getError(err))
         return
     }
 
