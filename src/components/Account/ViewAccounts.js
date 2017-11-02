@@ -79,9 +79,10 @@ const styles = StyleSheet.create({
       marginTop: 30
     },
     inviteText: {
-        color: '#fff',
+        color: '#6b2fe2',
         textAlign: 'center',
-        fontSize: 24
+        fontSize: 24,
+        marginBottom: 10
     }
 });
 
@@ -137,14 +138,13 @@ class ViewAddresses extends Component {
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
-
           {(token || id) &&
             <View>
               <Text style={[styles.text, styles.title, styles.inviteHeader]}>Your Invite Code(s)</Text>
               {
-                  this.props.invites.map((code, index)=>{
+                  this.props.invites.map((code, index)=>
                       <Text key={index} style={[styles.inviteText]}>{code}</Text>
-                  })
+                  )
               }
               <TouchableHighlight
                   style={[styles.logoutBtn, {marginTop: 100}]}
