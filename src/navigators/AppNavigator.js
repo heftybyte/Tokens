@@ -9,7 +9,7 @@ import NewAccount from '../components/Account/CreateAccount';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import Search from '../components/Search';
-import Register, { NormalRegisteration, AnonymousRegisteration } from '../components/Register';
+import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 
 export const AppNavigator = StackNavigator({
 	NormalRegistration: { screen: NormalRegistration },
