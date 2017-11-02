@@ -14,7 +14,11 @@ class SearchPage extends Component {
 
     componentWillMount(){
       // on reopening of this page, the tokens will already be available in props.
-      this.props.tokens.length ? this.setState({tokens: this.props.tokens}) : this.props.fetchTokens();
+      if(this.props.fetched) {
+        this.setState({tokens: this.props.tokens}) &&  this.props.fetchTokens();
+      } else {
+        this.props.fetchTokens();
+      }
     }
 
     componentWillReceiveProps(nextProps){
@@ -26,8 +30,6 @@ class SearchPage extends Component {
       this.setState(() => ({ tokens: this.props.tokens.filter(token => token.symbol.indexOf(searchTerm) > -1)}) );
     }
 
-    // isFirstRender = () => !this.searchBar.value.length && ;
-
     render(){
         return (
             <View>
@@ -36,7 +38,7 @@ class SearchPage extends Component {
                   onChangeText={this.handleSearch}
                   placeholder={'Find a token ...'}
               />
-              <TokenList tokens={this.state.tokens } />
+              <TokenList tokens={this.state.tokens} />
             </View>
         );
     }
@@ -47,7 +49,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStoretoProps = (state) => ({
-  tokens: state.search.tokens
+  tokens: state.search.tokens,
+  fetched: state.search.fetchedFromStorage
 });
 
 export default connect(mapStoretoProps, mapDispatchToProps)(SearchPage);

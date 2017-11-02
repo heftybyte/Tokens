@@ -9,8 +9,8 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Accept'] = 'application/json';
 
 export const API_HOST = process.env.NODE_ENV === 'production' ?
-  '172.16.0.41:3000' :
-  '172.16.0.41:3000'
+'172.16.0.41:3000' :
+'172.16.0.41:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
@@ -77,7 +77,8 @@ export const getTokenDetailsForAccount  = async (id, sym) => {
   return res.data
 }
 
-export const getAllTokens = async() => {
-  let res = await instance.get('/Tokens');
+// must pass a checksum even if it's wrong
+export const getAllTokens = async(checksum = '000') => {
+  let res = await instance.get(`/tokens?checksum=${checksum}`);
   return res.data;
 }

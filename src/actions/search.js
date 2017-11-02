@@ -5,40 +5,45 @@ import {getAllTokens} from '../helpers/api';
 import {genericError} from '../helpers/functions';
 import Hash from 'object-hash';
 
-export const createFetchAllTokensAction = (tokens) => ({
+export const createFetchAllTokensAction = (tokens, checksum) => ({
     type: TokenTypes.FETCH_ALL_TOKENS,
-    payload: tokens,
+    payload: {tokens, checksum}
 });
 
 export const fetchTokens = () => async(dispatch, getState) => {
-
     //get from redux store or local storage
-    const stateTokens = getState().search.tokens;
+    const reduxState = getState();
+    const stateTokens = reduxState.search.tokens;
+    const fetchedFromStorage = reduxState.search.fetchedFromStorage;
+    let stateChecksum = reduxState.search.checksum;
 
-    let tokens = stateTokens;
-    if(!tokens.length) {
-        try{
-            const tokensString = await AsyncStorage.getItem('tokenData');
-            tokens = tokensString && tokensString.length ? JSON.parse(tokensString) : [];
-        }catch($err){}
+    const storedChecksum = await AsyncStorage.getItem('tokensChecksum');
+
+    // if it's been fetched from AsyncStorage already don't try again.
+    // if there's nothing in the storage fall back to redux store.
+    const tokens = fetchedFromStorage ? stateTokens : await getTokensFromStorage(dispatch) || stateTokens;
+
+    // dispatch early so the user doesn't have to wait for the backend call.
+    if(storedChecksum && storedChecksum !== stateChecksum) {
+        dispatch(createFetchAllTokensAction(tokens, storedChecksum));
+        stateChecksum = storedChecksum;
     }
 
-    // return to redux if changed
-    if(stateTokens.length !== tokens.length){
-        dispatch(createFetchAllTokensAction(tokens));
+    const response = await getAllTokens(stateChecksum).catch(e=> genericError());
+    
+    // only dispatch if there was a change.
+    if (!response.didNotChange) {
+        dispatch(createFetchAllTokensAction(response.tokens, response.checksum));
+        AsyncStorage.setItem('tokens', JSON.stringify(response.tokens));
+        AsyncStorage.setItem('tokensChecksum', response.checksum);
     }
+}
 
+const getTokensFromStorage = async(dispatch) => {
+    const storedTokens = await AsyncStorage.getItem('tokens');
 
-    let err = null;
-    const backendTokens = await getAllTokens().catch(e=>err=e);
-    if(err) return genericError();
-
-    const oldHash = await AsyncStorage.getItem('tokensHash');
-    const newHash = Hash(backendTokens);
-
-    if(!oldHash && backendTokens.length || newHash !== oldHash){
-        AsyncStorage.setItem('tokensHash', newHash);
-        AsyncStorage.setItem('tokenData', JSON.stringify(backendTokens));
-        dispatch(createFetchAllTokensAction(backendTokens));
-    }
+    // tell the store we've fetched from AsyncStorage
+    dispatch({type: TokenTypes.FETCHED_FROM_STORAGE});
+    if(storedTokens) return JSON.parse(storedTokens);
+    return null;
 }
