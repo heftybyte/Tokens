@@ -59,11 +59,11 @@ class CreateAddress extends Component {
   }
 
   onChangeText = (text) => {
-    this.setState({inputValue: text});
+    this.setState({ inputValue: text });
   }
 
-  saveAddress = async(data) => {
-    const text = data || this.state.inputValue;
+  saveAddress = (data) => {
+    const text = (typeof data === 'string') && data || this.state.inputValue;
     if(!text || !text.length) {
       Alert.alert('Enter an address to save');
       return;

@@ -52,6 +52,7 @@ const AccountInput = ({
             value={inputValue}
             onChangeText={onChangeText}
             placeholder={'Ethereum Address'}
+            placeholderTextColor='#333'
           />
         </View>
         {children}

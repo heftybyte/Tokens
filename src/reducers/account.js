@@ -159,7 +159,6 @@ export const getPortfolio = () => async (dispatch, getState) => {
         Alert.alert(getError(err))
         return
     }
-
     dispatch(portfolioAction(portfolio))
 }
 

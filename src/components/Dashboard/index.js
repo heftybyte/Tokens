@@ -125,7 +125,8 @@ class Dashboard extends Component {
 		    <News feed={mockNewsFeed} />
 		    { portfolio && portfolio.tokens &&
 		    <TokenList tokens={portfolio.tokens} />}
-		    <TokenList tokens={mockTokens} title="Top 10" />
+        { portfolio &&
+        <TokenList watchList={portfolio.top} type="watchList" title="Top 10" />}
 	    </ScrollView>
     )
   }
