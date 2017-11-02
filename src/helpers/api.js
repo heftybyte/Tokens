@@ -10,14 +10,22 @@ axios.defaults.headers.get['Accept'] = 'application/json';
 
 export const API_HOST = process.env.NODE_ENV === 'production' ?
   '138.197.104.147:3000' :
-  '138.197.104.147:3000'
+  'localhost:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
 });
 
 instance.interceptors.response.use(res => res, async (err) => {
-  if (err && err.response && err.response.status === 401) {
+  const intercept = (
+    err && err.response && err.response.status === 401 &&
+    (
+      err.response.data && err.response.data.error &&
+      err.response.data.error.code !== 'LOGIN_FAILED'
+    )
+  )
+
+  if (intercept) {
     // Back up guest account details for chance at recovery
     const pseudonym = await AsyncStorage.getItem('pseudonym')
     if (pseudonym.type === 'username') {
@@ -29,9 +37,7 @@ instance.interceptors.response.use(res => res, async (err) => {
     await AsyncStorage.removeItem('token')
     store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
   }
-  if (err) {
-    return Promise.reject(err);
-  }
+  return Promise.reject(err);
 });
 
 export const setAuthHeader = (token) => {
