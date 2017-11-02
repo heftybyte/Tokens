@@ -25,8 +25,8 @@ instance.interceptors.response.use(res => res, async (err) => {
 
   if (intercept) {
     // Back up guest account details for chance at recovery
-    const pseudonym = await AsyncStorage.getItem('pseudonym')
-    if (pseudonym.type === 'username') {
+    const pseudonym = JSON.parse(await AsyncStorage.getItem('pseudonym') || null)
+    if (pseudonym && pseudonym.type === 'username') {
       const guestAccounts = JSON.parse(await AsyncStorage.getItem('guestAccounts') || null) || []
       guestAccounts.push(pseudonym)
       await AsyncStorage.setItem('guestAccounts', JSON.stringify(guestAccounts))
