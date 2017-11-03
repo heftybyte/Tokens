@@ -87,7 +87,7 @@ export const withDrawer = (WrappedComponent) => {
 									transparent
 									onPress={()=>{trackTap('Search');Alert.alert('Search is coming soon')}}
 								>
-									<Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
+									<Ionicons name="ios-search-outline" size={28} color="white" />
 								</Button>
 							</Right>
 						</NBHeader>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, Button, View, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
-import { trackAddress } from '../../helpers/analytics'
+import { trackAddress, trackTap } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
     topContainer:{
