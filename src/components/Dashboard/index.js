@@ -9,10 +9,11 @@ import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
+import { Permissions, Notifications } from 'expo';
 import mockNewsFeed from '../NewsFeed/MockData'
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
-import { register, login, getPortfolio } from '../../reducers/account';
+import { register, login, getPortfolio,  regPushNotification} from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 
 const currencyFormatOptions =  {
@@ -63,7 +64,32 @@ const styles = StyleSheet.create({
   }
 });
 
+async function registerForPushNotificationsAsync() {
+	const { status: existingStatus } = await Permissions.getAsync(
+		Permissions.NOTIFICATIONS
+	);
+	let finalStatus = existingStatus;
+	if (existingStatus !== 'granted') {
+		const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+		finalStatus = status;
+	}
+
+	// Stop here if the user did not grant permissions
+	if (finalStatus !== 'granted') {
+		return;
+	}
+
+	// Get the token that uniquely identifies this device
+	let token = await Notifications.getExpoPushTokenAsync();
+	regPushNotification(token);
+}
+
 class Dashboard extends Component {
+
+	componentDidMount() {
+		registerForPushNotificationsAsync();
+	}
+
   componentWillReceiveProps = async (nextProps) => {
     const { addresses, getPortfolio} = nextProps
     if (addresses.length != this.props.addresses.length) {

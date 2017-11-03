@@ -42,6 +42,10 @@ export const setAuthHeader = (token) => {
   instance.defaults.headers.common['Authorization'] = token
 }
 
+export const registerUserForPushNotifications = async (params) => {
+	await instance.post(`accounts/push-token`, { ...params })
+}
+
 export const registerAccount = async (params) => {
   let res = await instance.post(`/accounts/register`, { ...params })
   return res.data
