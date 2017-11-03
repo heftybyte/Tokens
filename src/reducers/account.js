@@ -9,10 +9,13 @@ import {
     deleteAccountAddress,
     getAccount,
     getTokenDetailsForAccount,
-		logoutAccount,
-		registerUserForPushNotifications
+		logoutAccount
 } from '../helpers/api'
-import { genericError, getError, registerForPushNotificationsAsync } from '../helpers/functions'
+import {
+	genericError,
+	getError,
+	registerForPushNotificationsAsync
+} from '../helpers/functions'
 
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
@@ -104,17 +107,11 @@ export const login = (params) => async (dispatch, getState) => {
         return
     }
     dispatch(loginAction(token, account))
-		await registerForPushNotificationsAsync()
+		registerForPushNotificationsAsync()
     dispatch(getPortfolio())
     dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
-export const regPushNotification  = async (push_token) => {
-	let token = await AsyncStorage.getItem('token')
-	setAuthHeader(token)
-	await registerUserForPushNotifications({token: push_token})
-
-}
 export const logout = () => async(dispatch, getState) => {
 		let token = await AsyncStorage.getItem('token')
 		if (token) {

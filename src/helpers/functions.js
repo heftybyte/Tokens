@@ -1,7 +1,10 @@
-import { Alert } from 'react-native'
+import { Alert, AsyncStorage } from 'react-native'
 import currencyFormatter from 'currency-formatter';
 import { Permissions, Notifications } from 'expo';
-import { regPushNotification } from '../reducers/account';
+import {
+	setAuthHeader,
+	registerUserForPushNotifications
+} from '../helpers/api';
 
 export const genericError = () => {
     Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
@@ -46,5 +49,7 @@ export const registerForPushNotificationsAsync = async () => {
 
 	// Get the token that uniquely identifies this device
 	let token = await Notifications.getExpoPushTokenAsync();
-	regPushNotification(token);
+	let userToken = await AsyncStorage.getItem('token')
+	setAuthHeader(userToken)
+	await registerUserForPushNotifications({token})
 }
