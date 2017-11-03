@@ -11,7 +11,11 @@ import {
     getTokenDetailsForAccount,
 		logoutAccount
 } from '../helpers/api'
-import { genericError, getError } from '../helpers/functions'
+import {
+	genericError,
+	getError,
+	registerForPushNotificationsAsync
+} from '../helpers/functions'
 
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
@@ -103,6 +107,7 @@ export const login = (params) => async (dispatch, getState) => {
         return
     }
     dispatch(loginAction(token, account))
+		registerForPushNotificationsAsync()
     dispatch(getPortfolio())
     dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }

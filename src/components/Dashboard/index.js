@@ -12,7 +12,11 @@ import News from '../NewsFeed';
 import mockNewsFeed from '../NewsFeed/MockData'
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
-import { register, login, getPortfolio } from '../../reducers/account';
+import {
+	register,
+	login,
+	getPortfolio
+} from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 
 const currencyFormatOptions =  {

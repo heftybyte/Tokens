@@ -1,5 +1,10 @@
-import { Alert } from 'react-native'
+import { Alert, AsyncStorage } from 'react-native'
 import currencyFormatter from 'currency-formatter';
+import { Permissions, Notifications } from 'expo';
+import {
+	setAuthHeader,
+	registerUserForPushNotifications
+} from '../helpers/api';
 
 export const genericError = () => {
     Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
@@ -26,3 +31,25 @@ export const formatPrice = (price) => {
 
 export const getError = (err) =>
   err.response && err.response.data.error.message || err.message
+
+export const registerForPushNotificationsAsync = async () => {
+	const { status: existingStatus } = await Permissions.getAsync(
+		Permissions.NOTIFICATIONS
+	);
+	let finalStatus = existingStatus;
+	if (existingStatus !== 'granted') {
+		const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+		finalStatus = status;
+	}
+
+	// Stop here if the user did not grant permissions
+	if (finalStatus !== 'granted') {
+		return;
+	}
+
+	// Get the token that uniquely identifies this device
+	let token = await Notifications.getExpoPushTokenAsync();
+	let userToken = await AsyncStorage.getItem('token')
+	setAuthHeader(userToken)
+	await registerUserForPushNotifications({token})
+}
