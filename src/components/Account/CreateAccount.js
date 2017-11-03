@@ -8,6 +8,7 @@ import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
 import { addAddress } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
+import { trackAddress } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -48,14 +49,14 @@ class CreateAddress extends Component {
 
   handleBarCodeRead = ({type, data}) => {
     this.toggleQRScanner();
-      this.setState({inputValue: data});
+    this.setState({inputValue: data});
+    trackAddress('Save', 'QRScanner')
+    if (data.length !== 42 || data.substr(0,2) !== '0x') {
+      Alert.alert('This Ethereum Address is Invalid')
+      return
+    }
 
-      if (data.length !== 42 || data.substr(0,2) !== '0x') {
-        Alert.alert('This Ethereum Address is Invalid')
-        return
-      }
-
-      this.saveAddress(data)
+    this.saveAddress(data)
   }
 
   onChangeText = (text) => {

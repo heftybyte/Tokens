@@ -8,9 +8,7 @@ import { login } from '../reducers/account'
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Accept'] = 'application/json';
 
-export const API_HOST = __DEV__ ?
-  'localhost:3000' :
-  '138.197.104.147:3000'
+export const API_HOST = '138.197.104.147:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
@@ -27,8 +25,8 @@ instance.interceptors.response.use(res => res, async (err) => {
 
   if (intercept) {
     // Back up guest account details for chance at recovery
-    const pseudonym = await AsyncStorage.getItem('pseudonym')
-    if (pseudonym.type === 'username') {
+    const pseudonym = JSON.parse(await AsyncStorage.getItem('pseudonym') || null)
+    if (pseudonym && pseudonym.type === 'username') {
       const guestAccounts = JSON.parse(await AsyncStorage.getItem('guestAccounts') || null) || []
       guestAccounts.push(pseudonym)
       await AsyncStorage.setItem('guestAccounts', JSON.stringify(guestAccounts))

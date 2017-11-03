@@ -43,7 +43,7 @@ class Register {
 				routeName = "NormalRegistration"
 				break
 			case "login":
-				if (pseudonym.type === 'email') {
+				if (pseudonym && pseudonym.type === 'email') {
 					defaultEmail = pseudonym.value
 				}
 				routeName = "Login"

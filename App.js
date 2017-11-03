@@ -2,23 +2,16 @@
 import React from 'react';
 import { AppRegistry, BackHandler, AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
-import { Analytics, PageHit } from 'expo-analytics';
-
 import store from './src/store/index';
 import { login } from './src/reducers/account'
 import { Font } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
-
 import AppWithNavigationState from './src/navigators/AppNavigator';
-
 
 Sentry.enableInExpoDevelopment = true;
 
 const publicDNS = process.env.SENTRY_PUBLIC_DNS || 'https://bf77d4d2ce4843ae909cca0b6d7675bb@sentry.io/235327';
-const analytics = new Analytics('UA-108735063-1');
-
-analytics.hit(new PageHit('Home'));
 
 Sentry.enableInExpoDevelopment = true;
 Sentry.config(publicDNS).install();
