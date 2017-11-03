@@ -49,14 +49,16 @@ class CreateAddress extends Component {
 
   handleBarCodeRead = ({type, data}) => {
     this.toggleQRScanner();
-    this.setState({inputValue: data});
+    let processedAddress = data.substr(data.search("0x"), 42);
+    this.setState({inputValue: processedAddress});
+   
     trackAddress('Save', 'QRScanner')
-    if (data.length !== 42 || data.substr(0,2) !== '0x') {
+    if (processedAddress.length !== 42 || processedAddress.substr(0,2) !== '0x') {
       Alert.alert('This Ethereum Address is Invalid')
       return
     }
 
-    this.saveAddress(data)
+    this.saveAddress(processedAddress)
   }
 
   onChangeText = (text) => {
