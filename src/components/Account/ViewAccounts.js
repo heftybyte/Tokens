@@ -7,7 +7,7 @@ import { NavigationActions } from 'react-navigation';
 import { deleteAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
-import { trackAddress } from '../../helpers/analytics'
+import { trackAddress, trackTap } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -123,7 +123,7 @@ class ViewAddresses extends Component {
           {(token || id) &&
             <TouchableHighlight
                 style={[styles.logoutBtn, {marginTop: 100}]}
-                onPress={()=>{console.log('logout!', logout);logout()}}
+                onPress={()=>{trackTap('Logout');logout()}}
             >
               <Text style={styles.logoutBtnText}>Logout</Text>
           </TouchableHighlight>}
