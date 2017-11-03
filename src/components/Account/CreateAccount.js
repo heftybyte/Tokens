@@ -56,9 +56,9 @@ class CreateAddress extends Component {
 
   handleBarCodeRead = ({type, data}) => {
     this.toggleQRScanner();
-    let processedAddress = data.substr(data.search("0x"), 42);
-    console.log(processedAddress);
-    this.setState({inputValue: processedAddress});
+      let processedAddress = data.substr(data.search("0x"), 42);
+      console.log(processedAddress);
+      this.setState({inputValue: processedAddress});
   }
 
   onChangeText = (text) => {
