@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react"
-import { View, TouchableOpacity, Text, Platform } from "react-native"
+import { View, TouchableOpacity, Text, Platform, Alert } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
 import { observer } from "mobx-react/native"
 import { Button, Header as NBHeader, Left, Body, Right, Content } from "native-base"
 import { Constants } from 'expo'
-
+import { trackTap } from '../helpers/analytics'
 import Header from "../components/Dashboard/Header"
 
 const Items = [
@@ -60,7 +60,7 @@ export const withDrawer = (WrappedComponent) => {
 								<Button
 								style={{ justifyContent: "center", alignItems: "center", width: 60 }}
 								transparent
-								onPress={this.openDrawer}
+								onPress={()=>{trackTap('Menu'); this.openDrawer()}}
 								>
 									<MaterialCommunityIcons
 									name="menu"
@@ -82,7 +82,13 @@ export const withDrawer = (WrappedComponent) => {
 								</Text>
 							</Body>
 							<Right>
-								<Ionicons onClick={()=>{}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
+								<Button
+									style={{ justifyContent: "center", alignItems: "center", width: 60 }}
+									transparent
+									onPress={()=>{trackTap('Search');Alert.alert('Search is coming soon')}}
+								>
+									<Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
+								</Button>
 							</Right>
 						</NBHeader>
 						<WrappedComponent {...this.props} />

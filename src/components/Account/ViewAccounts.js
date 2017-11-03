@@ -7,6 +7,7 @@ import { NavigationActions } from 'react-navigation';
 import { deleteAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
+import { trackAddress } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -72,7 +73,7 @@ const AddressView = ({name, index, deleteAddress}) => {
             <Text style={[styles.text, styles.addressText]}>{name}</Text>
             <TouchableHighlight
               style={styles.removeAddressBtn}
-              onPress={() => deleteAddress(index)}>
+              onPress={() => {trackAddress('Delete', 'Button');deleteAddress(index)}}>
               <MaterialCommunityIcons
                 style={styles.addBtnIcon}
                 name="minus-circle-outline"

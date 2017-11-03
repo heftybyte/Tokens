@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, Button, View, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
+import { trackAddress } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
     topContainer:{
@@ -56,10 +57,10 @@ const AccountInput = ({
           />
         </View>
         {children}
-        { !scannerOpen ? <TouchableHighlight onPress={saveAddress} style={[styles.btn, { marginBottom: 20 }]}>
+        { !scannerOpen ? <TouchableHighlight onPress={()=>{trackAddress('Save', 'Button');saveAddress()}} style={[styles.btn, { marginBottom: 20 }]}>
           <Text style={{color: 'white'}}>Save Address</Text>
         </TouchableHighlight> : null }   
-        <TouchableHighlight onPress={toggleQRScanner} style={styles.btn} disabled={!hasCameraPermission}>
+        <TouchableHighlight onPress={()=>{trackTap('Toggle QRScanner');toggleQRScanner()}} style={styles.btn} disabled={!hasCameraPermission}>
           <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan a QR Code'}</Text>
         </TouchableHighlight>
     </View>

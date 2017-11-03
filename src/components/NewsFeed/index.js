@@ -3,6 +3,7 @@ import { Text, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 import {styles} from './Style'
 import Format from './Format'
+import { trackNewsFeedSwipe } from '../../helpers/analytics'
 
 const Dot = (color) => (
   <View
@@ -39,6 +40,9 @@ const News = (props) => {
         dot={Dot('#333')}
         activeDot={Dot('#fff')}
         containerStyle={styles.container}
+        onIndexChanged={(index)=>{
+          trackNewsFeedSwipe(props.feed[index])
+        }}
        >
         { feed }
       </Swiper>
