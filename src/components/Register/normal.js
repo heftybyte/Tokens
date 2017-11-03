@@ -1,50 +1,76 @@
 import React from "react"
-import { View, Image, TouchableOpacity, Clipboard, Text } from "react-native"
-import { Input, Form, Item, Label, Button } from "native-base"
+import { View, Image, TouchableOpacity, Clipboard, Text, KeyboardAvoidingView, ScrollView } from "react-native"
+import { Input, Form, Item, Label, Button, Content } from "native-base"
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
 import { observer } from "mobx-react"
-
+import { NavigationActions } from 'react-navigation';
+import reduxStore from '../../store'
 import { store } from './store'
+import { Field } from "../lib/Field"
+import Header from './header'
 
 export const Normal = observer(
 	(navigation) => (
 		<View
 			style={{
 				flex: 1,
-				backgroundColor: '#191f27',
-				// justifyContent: 'space-between',
-				// alignItems: 'center'
+				backgroundColor: '#000'
 			}}
 		>
+			<Header title={store.type === 'normal' ? "Register" : "Login"} />
+			<KeyboardAvoidingView
+				style={{
+					flex: 1
+				}}
+				behavior="padding"				
+			>
 			<View
 				style={{
 					flex: 1,
-					paddingHorizontal: 10,
+					paddingHorizontal: 5,
 				}}
 			>
-				<Form>
-					<Item style={styles.inputWrap} floatingLabel regular>
-						<Label style={styles.label}>Username</Label>
-						<Input onChangeText={v => store.changetext('username', v)} style={styles.input} />
-					</Item>
-					<Item style={styles.inputWrap} floatingLabel regular>
-						<Label style={styles.label}>Password</Label>
-						<Input onChangeText={v => store.changetext('password', v)} style={styles.input} />
-					</Item>
-					<Item style={styles.inputWrap} floatingLabel regular>
-						<Label style={styles.label}>Confirm Password</Label>
-						<Input onChangeText={v => store.changetext('cpassword', v)} style={styles.input} />
-					</Item>
-				</Form>
+				<Content>
+				{store.type === 'normal' &&
+					<Field
+						label="Invite Code"
+						returnKeyType="next"
+						onChange={v => store.changetext('code', v)}
+						placeholder="q3frrdsd"
+					/>}
+					<Field
+						label="Email"
+						returnKeyType="next"
+						value={store.getField('email')}
+						onChange={v => store.changetext('email', v)}
+						placeholder="e.g vitalik@ethereum.org"
+					/>
+					<Field
+						label="Password"
+						type="password"
+						returnKeyType="next"
+						onChange={v => store.changetext('password', v)}
+						placeholder="*********"
+					/>
+				{store.type === 'normal' && 
+					<Field
+						label="Confirm Password"
+						type="password"
+						returnKeyType="done"
+						onChange={v => store.changetext('cpassword', v)}
+						placeholder="*********"
+					/>}
+					</Content>
 			</View>
+			</KeyboardAvoidingView>
 			<View style={styles.bottomButton}>
 				<View
 					style={{
 						marginRight: 10
 					}}
 				>
-					<Button onPress={store.createAccount} style={styles.button} transparent>
-						<Text style={{ color: '#fff' }}>CREATE AN ACCOUNT</Text>
+					<Button onPress={store.type === 'normal' ? store.createAccount : store.login} style={styles.button} transparent>
+						<Text style={{ color: '#fff' }}>{store.type === 'normal' ? 'CREATE AN ACCOUNT' : 'LOGIN'}</Text>
 					</Button>
 				</View>
 			</View>
@@ -57,7 +83,7 @@ const styles = {
 	bottomButton: {
 		flexDirection: 'row',
 		height: 50,
-		backgroundColor: '#e76f22',
+		backgroundColor: '#6b2fe2',
 		alignItems: 'center',
 		justifyContent: 'flex-end'
 	},
@@ -70,15 +96,16 @@ const styles = {
 		paddingHorizontal: 5,
 	},
 	inputWrap: {
+		marginVertical: 10,
 		borderWidth: 0,
 		borderRadius: 2,
 		height: 80,
-		backgroundColor: "#1e2631",
+		backgroundColor: "#111",
 		justifyContent: "center",
 		alignItems: "center"
 	},
 	label: {
-		marginTop: 5,
+		marginVertical: 5,
 		marginLeft: 5,
 		color: "#eee"
 	}

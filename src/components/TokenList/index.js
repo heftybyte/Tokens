@@ -12,8 +12,35 @@ import { connect } from 'react-redux';
 import { formatPrice } from '../../helpers/functions'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
-  'https://erc-20.io' :
-  'http://192.168.86.22:3000'
+  'http://138.197.104.147:3000' :
+  'http://138.197.104.147:3000'
+
+const Watchlist = ({ item, index }) => {
+  const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
+  return (
+    <TouchableHighlight>
+      <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
+        <View>
+          <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
+        </View>
+
+        <View style={styles.symbolContainer}>
+          <Text style={styles.symbol}>{item.symbol}</Text>
+          <Text style={styles.balance}>${formatPrice(item.marketCap)}</Text>
+        </View>
+        <View style={[
+          styles.priceContainer,
+          changeStyle,
+          // isLongPrice ? styles.longerPriceContainer : {}
+        ]}>
+          <Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]}>
+            ${formatPrice(item.price)}
+          </Text>
+        </View>
+      </View>
+    </TouchableHighlight>
+  )
+}
 
 const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
@@ -52,9 +79,42 @@ class TokenList extends Component {
     showChange: false
   }
 
+  static defaultProps = {
+  	type: "tokens"
+  }
+
+  renderWatchlist = ({item, index}) => (
+    <Watchlist
+      item={item}
+      index={index}
+      showTokenInfo={() => {
+        return // TODO: fix token details page
+			  this.props.goToTokenDetailsPage(item);
+      }}
+    />
+  )
+
+  renderTokens = ({item, index}) => (
+    <TokenItem
+      item={item}
+      index={index}
+      showChange={this.state.showChange}
+      showTokenInfo={() => {
+        return // TODO: fix token details page
+			  this.props.goToTokenDetailsPage(item);
+      }}
+      onPress={()=>{
+			  console.log('toggle!')
+			  this.setState({showChange: !this.state.showChange})
+      }}
+    />
+  )
+
   render() {
     const { showChange } = this.state
     let dataTokens = this.props.tokens || []
+    const { title } = this.props
+	  let dataWatchList = this.props.watchList || []
 
     dataTokens = dataTokens.map(tokenObj => (
       {
@@ -62,26 +122,34 @@ class TokenList extends Component {
         key: tokenObj.symbol
       }
     ))
+	  dataWatchList = dataWatchList.map(tokenObj => (
+	  {
+		  ...tokenObj,
+		  key: tokenObj.symbol
+	  }
+	  ))
+
+	  const render = {
+    	tokens: this.renderTokens,
+		  watchList: this.renderWatchlist
+	  }
+
+	  const data = {
+		  tokens: dataTokens,
+		  watchList: dataWatchList
+	  }
 
     return (
       <View>
         <SectionList
           style={styles.container}
-          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+          renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>- {section.title} -</Text>}
           sections={[
-            {data: dataTokens, title: this.props.title.toUpperCase(), renderItem: ({item, index}) =>
-              <TokenItem
-                item={item}
-                index={index}
-                showChange={showChange}
-                showTokenInfo={()=> {
-                  this.props.goToTokenDetailsPage(item);
-                }}
-                onPress={()=>{
-                  console.log('toggle!')
-                  this.setState({showChange: !this.state.showChange})
-                }}
-              />}
+            {
+            	data: data[this.props.type],
+	            title: (this.props.title || '').toUpperCase(),
+	            renderItem: render[this.props.type]
+            }
           ]}
         />
       </View>
@@ -101,11 +169,13 @@ const styles = StyleSheet.create({
   },
   symbol: {
     color: '#fff',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: 'Nunito-Light'
   },
   balance: {
     color: '#333',
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: 'Nunito'
   },
   symbolContainer: {
     flex: .6,
@@ -133,7 +203,8 @@ const styles = StyleSheet.create({
   price: {
     color: '#000',
     textAlign: 'center',
-    width: 85
+    width: 85,
+    fontFamily: 'Nunito'
   },
   listItem: {
     flexDirection: 'row',
@@ -151,12 +222,14 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     color: "#fff",
-    backgroundColor: '#17191c',
-    padding: 10
+    backgroundColor: '#000',
+    textAlign: 'center',
+    padding: 10,
+    fontFamily: 'Nunito'
   },
   gain: {
-    backgroundColor: '#6b2fe2',
-    borderColor: '#6b2fe2'
+    backgroundColor: '#48ba94',
+    borderColor: '#48ba94'
   }
 });
 

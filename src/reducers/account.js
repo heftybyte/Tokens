@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, Alert } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import {
     loginAccount,
@@ -6,10 +6,12 @@ import {
     setAuthHeader,
     getAccountPortfolio,
     addAccountAddress,
+    deleteAccountAddress,
     getAccount,
-    getTokenDetailsForAccount
+    getTokenDetailsForAccount,
+		logoutAccount
 } from '../helpers/api'
-import { genericError } from '../helpers/functions'
+import { genericError, getError } from '../helpers/functions'
 
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
@@ -17,6 +19,7 @@ export const LOGOUT = 'account/LOGOUT'
 export const GET_PORTFOLIO = 'account/GET_PORTFOLIO'
 export const UPDATE = 'account/UPDATE'
 export const ADD_ADDRESS = 'account/ADD_ADDRESS'
+export const DELETE_ADDRESS = 'account/DELETE_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
 
 const registerAction = (id) => ({
@@ -48,53 +51,77 @@ const addAddressAction = (addresses=[]) => ({
     data: { addresses }
 })
 
+const deleteAddressAction = (addresses=[]) => ({
+  type: DELETE_ADDRESS,
+  data: { addresses }
+})
+
 const tokenDetailsAction = (tokenDetails) => ({
   type: GET_TOKEN_DETAILS,
   data: { tokenDetails }
 })
 
-export const register = () => async (dispatch) => {
+export const createAccount = (params) => async (dispatch, getState) => {
     let err = null
-    const account = JSON.parse(await AsyncStorage.getItem('account') || null) ||
-        await registerAccount().catch(e=>err=e)
-
-    if (err || !account) {
-        console.log(err)
-        return genericError()
+    const newAccount = await registerAccount(params).catch(e=>err=e)
+    if (err) {
+        console.log('createAccount', err)
+        return Alert.alert(getError(err))
     }
-    await AsyncStorage.setItem('account', JSON.stringify(account))
-    dispatch(registerAction(account.id))
+    await AsyncStorage.setItem('id', newAccount.id)
+    const pseudonymType = params.email ? 'email' : 'username'
+    await AsyncStorage.setItem('pseudonym', JSON.stringify({ type: pseudonymType, value: params[pseudonymType] }))
+    dispatch(registerAction(newAccount.id))
+    dispatch(login(params))
 }
 
-export const login = () => async (dispatch, getState) => {
-    const { id } = getState().account
+export const login = (params) => async (dispatch, getState) => {
     let err = null
+    let account = null
+    let id = await AsyncStorage.getItem('id')
     let token = await AsyncStorage.getItem('token')
-
-    if (!token) {
-        const res = await loginAccount(id).catch(e=>err=e)
+    if (params) {
+        const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
-            console.log(err)
-            return genericError()
+            Alert.alert(getError(err))
+            return
         }
         token = res.id
+        account = res.user
+        setAuthHeader(token)
+        await AsyncStorage.setItem('token', token)
+        await AsyncStorage.setItem('id', account.id)
+    } else if (token && id) {
+        setAuthHeader(token)
+        account = await getAccount(id).catch(e=>err=e)
+        if (err) {
+            Alert.alert(getError(err))
+            return
+        }
+    } else {
+        dispatch(NavigationActions.navigate({ routeName: 'Login' }))
+        return
     }
-    setAuthHeader(token)
-
-    const account = await getAccount(id).catch(e=>err=e)
-    if (err) {
-        console.log(err)
-        return genericError()
-    }
-    await AsyncStorage.setItem('account', JSON.stringify(account))
-    await AsyncStorage.setItem('token', token)
     dispatch(loginAction(token, account))
+    dispatch(getPortfolio())
+    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
 export const logout = () => async(dispatch, getState) => {
+		let token = await AsyncStorage.getItem('token')
+		if (token) {
+			setAuthHeader(token)
+			await logoutAccount()
+		}
     await AsyncStorage.multiRemove(['token', 'id', 'account'])
     dispatch(logoutAction())
-    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+    const resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [
+            NavigationActions.navigate({ routeName: 'Register' })
+        ]
+    })
+    dispatch(resetAction)
 }
 
 export const addAddress = (address) => async (dispatch, getState) => {
@@ -102,15 +129,25 @@ export const addAddress = (address) => async (dispatch, getState) => {
     const { id } = getState().account
     const account = await addAccountAddress(id, address).catch(e=>err=e)
     if (err) {
-        console.log(err)
-        return genericError()
+        Alert.alert(getError(err))
+        return
     }
-    console.log('account.addresses', account.addresses)
     dispatch(addAddressAction(account.addresses))
+    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
-export const deleteAddress = (address) => async (dispatch, getState) => {
-   return;
+export const deleteAddress = (addressIndex) => async (dispatch, getState) => {
+  let err = null
+  const { id } = getState().account
+  const address = getState().account.addresses[addressIndex]
+
+  const account = await deleteAccountAddress(id, address).catch(e=>err=e)
+  if (err) {
+      console.log(err)
+      return genericError()
+  }
+
+  dispatch(deleteAddressAction(account.addresses))
 }
 
 export const getPortfolio = () => async (dispatch, getState) => {
@@ -119,9 +156,9 @@ export const getPortfolio = () => async (dispatch, getState) => {
     const portfolio = await getAccountPortfolio(id).catch(e=>err=e)
     if (err) {
         console.log(err)
-        return genericError()
+        Alert.alert(getError(err))
+        return
     }
-
     dispatch(portfolioAction(portfolio))
 }
 
@@ -162,6 +199,7 @@ export default (state = initialState, action) => {
                 ...initialState
             }
         case ADD_ADDRESS:
+        case DELETE_ADDRESS:
             return {
                 ...state,
                 addresses: [...action.data.addresses]

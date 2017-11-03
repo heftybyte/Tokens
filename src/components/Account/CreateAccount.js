@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
 import { addAddress } from '../../reducers/account';
+import { withDrawer } from '../../helpers/drawer';
+import { trackAddress } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -26,9 +28,6 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#000'
   },
-  scanner: {
-    height: '50%'
-  }
 });
 
 class CreateAddress extends Component {
@@ -44,29 +43,30 @@ class CreateAddress extends Component {
     this.setState({hasCameraPermission: status === 'granted'});
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Account',
-    headerStyle: styles.header,
-    headerRight: <Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-  })
-
   toggleQRScanner = () => {
     this.setState({ scannerOpen: !this.state.scannerOpen });
   }
 
   handleBarCodeRead = ({type, data}) => {
     this.toggleQRScanner();
-      let processedAddress = data.substr(data.search("0x"), 42);
-      console.log(processedAddress);
-      this.setState({inputValue: processedAddress});
+    let processedAddress = data.substr(data.search("0x"), 42);
+    this.setState({inputValue: processedAddress});
+   
+    trackAddress('Save', 'QRScanner')
+    if (processedAddress.length !== 42 || processedAddress.substr(0,2) !== '0x') {
+      Alert.alert('This Ethereum Address is Invalid')
+      return
+    }
+
+    this.saveAddress(processedAddress)
   }
 
   onChangeText = (text) => {
-    this.setState({inputValue: text});
+    this.setState({ inputValue: text });
   }
 
-  saveAddress = async() => {
-    const text = this.state.inputValue;
+  saveAddress = (data) => {
+    const text = (typeof data === 'string') && data || this.state.inputValue;
     if(!text || !text.length) {
       Alert.alert('Enter an address to save');
       return;
@@ -84,25 +84,28 @@ class CreateAddress extends Component {
           hasCameraPermission={this.state.hasCameraPermission}
           onChangeText={this.onChangeText}
           saveAddress={this.saveAddress}
-        />
+        >
         <QRScanner 
           style={styles.scanner}
           scannerOpen={this.state.scannerOpen}
           handleBarCodeRead={this.handleBarCodeRead}
         />
+        </AccountInput>
       </View>
     );
   }
 }
 
+const mapStateToProps = (state) => ({
+  portfolio: state.account.portfolio
+})
+
 const mapDispatchToProps = (dispatch) => {
   return {
     addAddress: (address) => {
       dispatch(addAddress(address))
-      dispatch(NavigationActions.back())
     }
   }
 }
 
-
-export default connect(null, mapDispatchToProps)(CreateAddress);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(CreateAddress));

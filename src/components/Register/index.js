@@ -1,3 +1,3 @@
 export { default } from './register'
-export { Normal as NormalRegisteration } from './normal'
-export { Anonymous as AnonymousRegisteration } from './anon'
+export { Normal as NormalRegistration } from './normal'
+export { Guest as GuestRegistration } from './guest'

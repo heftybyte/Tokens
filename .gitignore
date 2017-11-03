@@ -4,3 +4,4 @@ node_modules/
 npm-debug.*
 .idea/vcs.xml
 .idea
+.DS_Store

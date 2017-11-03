@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { deleteAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
+import { withDrawer } from '../../helpers/drawer';
+import { trackAddress, trackTap } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -68,10 +70,10 @@ const styles = StyleSheet.create({
 const AddressView = ({name, index, deleteAddress}) => {
     return (
         <View style={styles.addressViewContainer}>
-            <Text style={[styles.text, styles.addressText]}>{JSON.parse(name)}</Text>
+            <Text style={[styles.text, styles.addressText]}>{name}</Text>
             <TouchableHighlight
               style={styles.removeAddressBtn}
-              onPress={() => deleteAddress(index)}>
+              onPress={() => {trackAddress('Delete', 'Button');deleteAddress(index)}}>
               <MaterialCommunityIcons
                 style={styles.addBtnIcon}
                 name="minus-circle-outline"
@@ -90,20 +92,14 @@ class ViewAddresses extends Component {
       addresses: []
   }
 
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Accounts',
-    headerStyle: styles.header,
-    headerRight: <Ionicons style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
-  });
-
   deleteAddress = async(index) => {
     if(index === undefined) return;
     this.props.deleteAddress(index);
   }
 
   render(){
-    const { id, addresses, goToRoute, logout } = this.props
-    console.log({id})
+    const { token, id, addresses, goToRoute, logout } = this.props
+
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
           <Text style={[styles.text, styles.title]}>Your Accounts</Text>
@@ -124,10 +120,10 @@ class ViewAddresses extends Component {
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
-          {id && 
+          {(token || id) &&
             <TouchableHighlight
                 style={[styles.logoutBtn, {marginTop: 100}]}
-                onPress={()=>{console.log('logout!', logout);logout()}}
+                onPress={()=>{trackTap('Logout');logout()}}
             >
               <Text style={styles.logoutBtnText}>Logout</Text>
           </TouchableHighlight>}
@@ -137,10 +133,11 @@ class ViewAddresses extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log('view account', state)
     return {
         addresses: state.account.addresses,
-        id: state.account.id
+        token: state.account.token,
+        id: state.account.id,
+        portfolio: state.account.portfolio
     }
 };
 
@@ -152,4 +149,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewAddresses);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(ViewAddresses));
