@@ -74,7 +74,7 @@ const getPortfolioData = async (source, dispatch, getState) => {
       console.log(err)
       return genericError()
   }
-
+  console.log(portfolio)
   dispatch(portfolioAction(portfolio))
 }
 

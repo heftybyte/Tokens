@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
 import currencyFormatter from 'currency-formatter';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, ScrollView, View, TouchableHighlight, AsyncStorage, Alert, StatusBar, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  View,
+  TouchableHighlight,
+  AsyncStorage,
+  Alert,
+  StatusBar,
+  Button,
+  RefreshControl
+} from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
@@ -13,9 +24,9 @@ import mockNewsFeed from '../NewsFeed/MockData'
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
 import {
-	register,
-	login,
-	getPortfolio,
+  register,
+  login,
+  getPortfolio,
   refreshPortfolio
 } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
@@ -31,7 +42,7 @@ const currencyFormatOptions =  {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   container: {
     alignItems: 'center',
@@ -69,6 +80,10 @@ const styles = StyleSheet.create({
 });
 
 class Dashboard extends Component {
+  state = {
+    refreshing: false
+  }
+
   componentWillReceiveProps = async (nextProps) => {
     const { addresses, getPortfolio} = nextProps
     if (addresses.length != this.props.addresses.length) {
@@ -96,51 +111,55 @@ class Dashboard extends Component {
     }
   }
 
-  updateBalance = async () => {
-    const { refreshPortfolio } = this.props
-    await refreshPortfolio()
-
-    return;
+  _onRefresh = async () => {
+    this.setState({refreshing: true})
+    await this.props.refreshPortfolio()
+    this.setState({refreshing: false})
   }
 
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
     return (
-	    <ScrollView
-	      style={styles.scrollContainer}
-	      containerStyleContent={styles.container}
-	      onScroll={this.handleScroll}
-	      onScrollEndDrag={this.handleScroll}
-	      scrollEventThrottle={16}
-	    >
-		    <StatusBar
-		      backgroundColor="#000"
-		      barStyle="light-content"
-		    />
-		    { !addresses.length  ?
-		      <TouchableHighlight
-		        onPress={()=>{goToAddressPage({type: 'Accounts'})}}
-		      >
-			      <View style={styles.addBtn}>
-				      <MaterialCommunityIcons
-				        style={styles.addBtnIcon}
-				        name="plus-circle-outline"
-				        size={22}
-				        color="white"
-				      />
-				      <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
-			      </View>
-		      </TouchableHighlight>
-		    : <Header totalValue={portfolio.totalValue} />}
-		    {/* NOTE: will be implemented in upcoming sprint
+      <ScrollView
+        style={styles.scrollContainer}
+        containerStyleContent={styles.container}
+        onScroll={this.handleScroll}
+        onScrollEndDrag={this.handleScroll}
+        scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }
+      >
+        <StatusBar
+          backgroundColor="#000"
+          barStyle="light-content"
+        />
+        { !addresses.length  ?
+          <TouchableHighlight
+            onPress={()=>{goToAddressPage({type: 'Accounts'})}}
+          >
+            <View style={styles.addBtn}>
+              <MaterialCommunityIcons
+                style={styles.addBtnIcon}
+                name="plus-circle-outline"
+                size={22}
+                color="white"
+              />
+              <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
+            </View>
+          </TouchableHighlight>
+        : <Header totalValue={portfolio.totalValue} />}
+        {/* NOTE: will be implemented in upcoming sprint
           <PriceChart />*/}
-        <Button title="Refresh Portfolio" onPress={this.updateBalance} />
-		    <News feed={mockNewsFeed} />
-		    { portfolio && portfolio.tokens &&
-		    <TokenList tokens={portfolio.tokens} />}
+        <News feed={mockNewsFeed} />
+        { portfolio && portfolio.tokens &&
+        <TokenList tokens={portfolio.tokens} />}
         { portfolio &&
         <TokenList watchList={portfolio.top} type="watchList" title="Top 10" />}
-	    </ScrollView>
+      </ScrollView>
     )
   }
 }
