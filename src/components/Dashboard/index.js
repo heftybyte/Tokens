@@ -30,6 +30,7 @@ import {
   refreshPortfolio
 } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
+import { trackRefresh } from '../../helpers/analytics'
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -115,6 +116,7 @@ class Dashboard extends Component {
     this.setState({refreshing: true})
     await this.props.refreshPortfolio()
     this.setState({refreshing: false})
+    trackRefresh('Manual')
   }
 
   render = () => {

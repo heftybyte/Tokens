@@ -30,6 +30,10 @@ export const trackAddress = (action, label) => {
 	analytics.hit(new Event('Address', action, label))
 }
 
+export const trackRefresh = (action) => {
+  analytics.hit(new Event('Refresh', action))
+}
+
 const getCurrentRouteName = (navigationState) => {
   if (!navigationState) {
     return null;

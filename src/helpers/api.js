@@ -31,8 +31,6 @@ instance.interceptors.response.use(res => res, async (err) => {
       guestAccounts.push(pseudonym)
       await AsyncStorage.setItem('guestAccounts', JSON.stringify(guestAccounts))
     }
-    // Remove invalid token
-    await AsyncStorage.removeItem('token')
     store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
   }
   return Promise.reject(err);
