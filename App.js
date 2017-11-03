@@ -8,6 +8,7 @@ import { Font } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
+require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
 
