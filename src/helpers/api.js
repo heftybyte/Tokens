@@ -75,8 +75,10 @@ export const getAccount = async (id) => {
   return res.data
 }
 
-export const getAccountPortfolio = async (id) => {
-  let res = await instance.get(`/accounts/${id}/portfolio`)
+export const getAccountPortfolio = async (id, type = 'cache') => {
+  let res = type === 'cache' ?
+    await instance.get(`/accounts/${id}/portfolio`) :
+    await instance.get(`/accounts/${id}/update-balances`)
   return res.data
 }
 

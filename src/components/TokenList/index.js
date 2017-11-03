@@ -45,7 +45,12 @@ const Watchlist = ({ item, index }) => {
 const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
   const isLongPrice = (`${item.balance * item.price}`).length >= 11
-
+  const formattedPrice = item.price ? 
+    `@ $${item.price.toLocaleString().substr(0,5)}` :
+    ''
+  const formattedTotal = item.price ?
+    `$${formatPrice(item.balance * item.price)}` :
+    'N/A'
   return (
     <TouchableHighlight onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
@@ -55,7 +60,9 @@ const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
 
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
-          <Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>
+          <Text style={styles.balance}>
+            {String(item.balance).substr(0,5)} {formattedPrice}
+          </Text>
         </View>
         <View style={[
             styles.priceContainer,
@@ -65,7 +72,7 @@ const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
           <Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]} onPress={onPress}>
             {showChange ?
               String(item.change).substr(0,6) + '%' :
-              '$' + formatPrice(item.balance * item.price)}
+              formattedTotal}
             </Text>
           </View>
         </View>

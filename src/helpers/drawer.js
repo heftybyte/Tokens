@@ -43,7 +43,12 @@ export const withDrawer = (WrappedComponent) => {
 					content={<DashboardMenu navigation={navigation} totalValue={totalValue} />}
 					tapToClose
 				>
-					<Content style={{backgroundColor: '#000'}}>
+					<View
+						style={{
+							flex: 1,
+							backgroundColor: '#000'
+						}}
+					>
 						<NBHeader
 						style={{
 							backgroundColor: "#000", 
@@ -92,7 +97,7 @@ export const withDrawer = (WrappedComponent) => {
 							</Right>
 						</NBHeader>
 						<WrappedComponent {...this.props} />
-					</Content>
+					</View>
 				</Drawer>
 			)
 		}

@@ -65,6 +65,19 @@ const tokenDetailsAction = (tokenDetails) => ({
   data: { tokenDetails }
 })
 
+const getPortfolioData = async (source, dispatch, getState) => {
+  let err = null
+  const { id } = getState().account
+  let portfolio = await getAccountPortfolio(id, source).catch(e=>err=e)
+
+  if (err) {
+      console.log(err)
+      return genericError()
+  }
+  console.log(portfolio)
+  dispatch(portfolioAction(portfolio))
+}
+
 export const createAccount = (params) => async (dispatch, getState) => {
     let err = null
     const newAccount = await registerAccount(params).catch(e=>err=e)
@@ -156,15 +169,11 @@ export const deleteAddress = (addressIndex) => async (dispatch, getState) => {
 }
 
 export const getPortfolio = () => async (dispatch, getState) => {
-    let err = null
-    const { id } = getState().account
-    const portfolio = await getAccountPortfolio(id).catch(e=>err=e)
-    if (err) {
-        console.log(err)
-        Alert.alert(getError(err))
-        return
-    }
-    dispatch(portfolioAction(portfolio))
+    await getPortfolioData('cache', dispatch, getState)
+}
+
+export const refreshPortfolio = () => async (dispatch, getState) => {
+    await getPortfolioData('update', dispatch, getState)
 }
 
 export const getTokenDetails = (sym) => async (dispatch, getState) => {
