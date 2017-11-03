@@ -70,10 +70,6 @@ const getPortfolioData = async (source, dispatch, getState) => {
   const { id } = getState().account
   let portfolio = await getAccountPortfolio(id, source).catch(e=>err=e)
 
-  if (portfolio.tokens.length === 0) {
-    portfolio = await getAccountPortfolio(id, 'update').catch(e=>err=e)
-  }
-
   if (err) {
       console.log(err)
       return genericError()
