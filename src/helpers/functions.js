@@ -4,7 +4,8 @@ import { Permissions, Notifications } from 'expo';
 import {
 	setAuthHeader,
 	registerUserForPushNotifications
-} from '../helpers/api';
+} from './api';
+import { setLoading } from '../reducers/ui'
 
 export const genericError = () => {
     Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
@@ -52,4 +53,27 @@ export const registerForPushNotificationsAsync = async () => {
 	let userToken = await AsyncStorage.getItem('token')
 	setAuthHeader(userToken)
 	await registerUserForPushNotifications({token})
+}
+
+// Prevent progress spinner from getting stuck
+export const safeAlert = (...args) => {
+	const buttons = args[2] || []
+	const options = args[3] || {}
+	const { onDismiss } = options
+
+	options.onDismiss = () => {
+		console.log("alert dismissed")
+		setLoading(false)
+		onDismiss && onDismiss()
+	}
+
+	buttons.forEach((button)=>{
+		const { onPress } = button
+		button.onPress = () => {
+			console.log("alert button pressed")
+			setLoading(false)
+			onPress && onPress()
+		}
+	}) 
+	setTimeout(()=>Alert.alert.apply({}, args), 1)
 }

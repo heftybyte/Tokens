@@ -113,7 +113,7 @@ class Dashboard extends Component {
 
   _onRefresh = async () => {
     this.setState({refreshing: true})
-    await this.props.getPortfolio()
+    await this.props.getPortfolio(false)
     this.setState({refreshing: false})
     trackRefresh('Manual')
   }
@@ -168,14 +168,16 @@ class Dashboard extends Component {
 const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
   addresses: state.account.addresses,
-  loggedIn: !!state.account.token
+  loggedIn: !!state.account.token,
+  isLoading: state.ui.isLoading,
+  loadText: state.ui.loadText
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'NewAccount' })),
+    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Add Address' })),
     login: () => dispatch(login()),
     register: () => dispatch(register()),
-    getPortfolio: () => dispatch(getPortfolio())
+    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

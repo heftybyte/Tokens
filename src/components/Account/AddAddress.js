@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class CreateAddress extends Component {
+class AddAddress extends Component {
 
   state = {
     hasCameraPermission: null,
@@ -97,7 +97,9 @@ class CreateAddress extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  portfolio: state.account.portfolio
+  portfolio: state.account.portfolio,
+  isLoading: state.ui.isLoading,
+  loadText: state.ui.loadText
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -108,4 +110,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(CreateAddress));
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(AddAddress));

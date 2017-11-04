@@ -1,4 +1,4 @@
-import { AsyncStorage, Alert } from 'react-native'
+import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import {
     loginAccount,
@@ -12,11 +12,13 @@ import {
     getTokenDetailsForAccount,
         logoutAccount
 } from '../helpers/api'
+import { safeAlert } from '../helpers/functions'
 import {
     genericError,
     getError,
     registerForPushNotificationsAsync
 } from '../helpers/functions'
+import { setLoading } from './ui'
 
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
@@ -67,24 +69,12 @@ const tokenDetailsAction = (tokenDetails) => ({
   data: { tokenDetails }
 })
 
-const getPortfolioData = async (source, dispatch, getState) => {
-  let err = null
-  const { id } = getState().account
-  let portfolio = await getAccountPortfolio(id, source).catch(e=>err=e)
-
-  if (err) {
-      console.log(err)
-      return genericError()
-  }
-  dispatch(portfolioAction(portfolio))
-}
-
 export const createAccount = (params) => async (dispatch, getState) => {
     let err = null
     const newAccount = await registerAccount(params).catch(e=>err=e)
     if (err) {
         console.log('createAccount', err)
-        return Alert.alert(getError(err))
+        return safeAlert(getError(err))
     }
     await AsyncStorage.setItem('id', newAccount.id)
     const pseudonymType = params.email ? 'email' : 'username'
@@ -101,7 +91,7 @@ export const login = (params) => async (dispatch, getState) => {
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
-            Alert.alert(getError(err))
+            safeAlert(getError(err))
             return
         }
         token = res.id
@@ -113,7 +103,7 @@ export const login = (params) => async (dispatch, getState) => {
         setAuthHeader(token)
         account = await getAccount(id).catch(e=>err=e)
         if (err) {
-            Alert.alert(getError(err))
+            safeAlert(getError(err))
             return
         }
     } else {
@@ -146,9 +136,11 @@ export const logout = () => async(dispatch, getState) => {
 export const addAddress = (address) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
+    dispatch(setLoading(true, 'Saving Address'))
     const account = await addAccountAddress(id, address).catch(e=>err=e)
+    dispatch(setLoading(false))
     if (err) {
-        Alert.alert(getError(err))
+        safeAlert(getError(err))
         return
     }
     dispatch(addAddressAction(account.addresses))
@@ -158,9 +150,11 @@ export const addAddress = (address) => async (dispatch, getState) => {
 export const refreshAddress = (address) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
+    dispatch(setLoading(true, 'Refreshing Token Balances'))
     const account = await refreshAccountAddress(id, address).catch(e=>err=e)
+    dispatch(setLoading(false))
     if (err) {
-        Alert.alert(getError(err))
+        safeAlert(getError(err))
         return
     }
     dispatch(getPortfolio())
@@ -171,20 +165,22 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
     const ok = async () => {
         let err = null
         const { id } = getState().account
+        dispatch(setLoading(true, 'Deleting Address'))
         const account = await deleteAccountAddress(id, address).catch(e=>err=e)
+        dispatch(setLoading(false))
         if (err) {
-            Alert.alert(getError(err))
+            safeAlert(getError(err))
             return
         }
-        Alert.alert('Address Removed')
+        safeAlert('Address Removed')
         dispatch(deleteAddressAction(account.addresses))
     }
 
-    Alert.alert(
+    safeAlert(
       'Are you sure?',
       `Confirm deletion of ${address}`,
       [
-        {text: 'OK', onPress: ok},
+        {text: 'OK', onPress: ok, style: 'destructive'},
         {text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
       ],
       { cancelable: false }
@@ -192,21 +188,38 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
 
 }
 
-export const getPortfolio = () => async (dispatch, getState) => {
-    await getPortfolioData('cache', dispatch, getState)
+export const getPortfolio = (showUILoader=true) => async (dispatch, getState) => {
+    let err = null
+    const { id } = getState().account
+
+    if (showUILoader) {
+        dispatch(setLoading(true, 'Loading Portfolio'))
+    }
+    let portfolio = await getAccountPortfolio(id).catch(e=>err=e)
+    if (showUILoader) {
+        dispatch(setLoading(false))
+    }
+
+    if (err) {
+      console.log(err)
+      return genericError()
+    }
+    dispatch(portfolioAction(portfolio))
 }
 
 export const getTokenDetails = (sym) => async (dispatch, getState) => {
-  let err = null
-  const { id } = getState().account
-  const tokenDetails = await getTokenDetailsForAccount(id, sym).catch(e=>err=e)
+    let err = null
+    const { id } = getState().account
 
-  if (err) {
-    console.log(err)
-    return genericError();
-  }
+    dispatch(setLoading(true, `Loading ${sym} details`))
+    const tokenDetails = await getTokenDetailsForAccount(id, sym).catch(e=>err=e)
+    dispatch(setLoading(false))
+    if (err) {
+        console.log(err)
+        return genericError();
+    }
 
-  dispatch(tokenDetailsAction(tokenDetails))
+    dispatch(tokenDetailsAction(tokenDetails))
 }
 
 const initialState = {

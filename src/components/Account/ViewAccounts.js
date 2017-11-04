@@ -8,7 +8,6 @@ import {
   View,
   Button,
   AsyncStorage,
-  Alert,
   Linking
 } from 'react-native';
 import { Permissions } from 'expo';
@@ -146,7 +145,7 @@ class ViewAddresses extends Component {
           </View>
           <TouchableHighlight
               style={styles.btn}
-              onPress={() => goToRoute('NewAccount')}
+              onPress={() => goToRoute('Add Address')}
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
@@ -186,7 +185,9 @@ const mapStateToProps = (state) => {
         token: state.account.token,
         id: state.account.id,
         portfolio: state.account.portfolio,
-        invites: state.account.invites
+        invites: state.account.invites,
+        isLoading: state.ui.isLoading,
+        loadText: state.ui.loadText
     }
 };
 

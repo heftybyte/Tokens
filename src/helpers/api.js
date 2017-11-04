@@ -8,7 +8,7 @@ import { login } from '../reducers/account'
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Accept'] = 'application/json';
 
-export const API_HOST = '138.197.104.147:3000'
+export const API_HOST = 'localhost:3000'//'138.197.104.147:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
@@ -45,12 +45,12 @@ export const registerUserForPushNotifications = async (params) => {
 }
 
 export const registerAccount = async (params) => {
-  let res = await instance.post(`/accounts/register`, { ...params })
+  const res = await instance.post(`/accounts/register`, { ...params })
   return res.data
 }
 
 export const loginAccount = async (params) => {
-  let res = await instance.post(`/accounts/login?include=user`, { ...params })
+  const res = await instance.post(`/accounts/login?include=user`, { ...params })
   return res.data
 }
 
@@ -59,33 +59,31 @@ export const logoutAccount = async () => {
 }
 
 export const addAccountAddress = async (id, address) => {
-  let res = await instance.post(`/accounts/${id}/address`, { address })
+  const res = await instance.post(`/accounts/${id}/address`, { address })
   return res.data
 }
 
 export const refreshAccountAddress = async (id, address) => {
-  let res = await instance.post(`/accounts/${id}/address/${address}/refresh`)
+  const res = await instance.post(`/accounts/${id}/address/${address}/refresh`)
   return res.data
 }
 
 export const deleteAccountAddress = async (id, address) => {
-  let res = await instance.delete(`/accounts/${id}/address/${address}`)
+  const res = await instance.delete(`/accounts/${id}/address/${address}`)
   return res.data
 }
 
 export const getAccount = async (id) => {
-  let res = await instance.get(`/accounts/${id}`)
+  const res = await instance.get(`/accounts/${id}`)
   return res.data
 }
 
-export const getAccountPortfolio = async (id, type = 'cache') => {
-  let res = type === 'cache' ?
-    await instance.get(`/accounts/${id}/portfolio`) :
-    await instance.get(`/accounts/${id}/update-balances`)
+export const getAccountPortfolio = async (id) => {
+  const res = await instance.get(`/accounts/${id}/portfolio`)
   return res.data
 }
 
 export const getTokenDetailsForAccount  = async (id, sym) => {
-  let res = await instance.get(`/accounts/${id}/portfolio/token/${sym}`)
+  const res = await instance.get(`/accounts/${id}/portfolio/token/${sym}`)
   return res.data
 }

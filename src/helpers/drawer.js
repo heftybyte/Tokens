@@ -6,6 +6,7 @@ import Drawer from "react-native-drawer"
 import { observer } from "mobx-react/native"
 import { Button, Header as NBHeader, Left, Body, Right, Content } from "native-base"
 import { Constants } from 'expo'
+import Spinner from 'react-native-loading-spinner-overlay';
 import { trackTap } from '../helpers/analytics'
 import Header from "../components/Dashboard/Header"
 
@@ -99,6 +100,13 @@ export const withDrawer = (WrappedComponent) => {
 								</Button>
 							</Right>
 						</NBHeader>
+						{this.props.hasOwnProperty('isLoading') &&
+          					<Spinner
+          						visible={this.props.isLoading}
+          						textContent={this.props.loadText||''}
+          						textStyle={{color: '#FFF'}}
+          						overlayColor='rgba(0,0,0,.9)' />
+          				}
 						<WrappedComponent {...this.props} />
 					</View>
 				</Drawer>
