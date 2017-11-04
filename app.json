@@ -3,6 +3,7 @@
     "name": "Tokens",
     "sdkVersion": "21.0.0",
     "icon": "./assets/Tokens_Icon.png",
+    "orientation": "portrait",
     "slug": "tokens",
     "version": "0.0.1",
     "ios": {
