@@ -9,12 +9,12 @@ import {
     deleteAccountAddress,
     getAccount,
     getTokenDetailsForAccount,
-		logoutAccount
+        logoutAccount
 } from '../helpers/api'
 import {
-	genericError,
-	getError,
-	registerForPushNotificationsAsync
+    genericError,
+    getError,
+    registerForPushNotificationsAsync
 } from '../helpers/functions'
 
 export const REGISTER = 'account/REGISTER'
@@ -120,17 +120,17 @@ export const login = (params) => async (dispatch, getState) => {
         return
     }
     dispatch(loginAction(token, account))
-		registerForPushNotificationsAsync()
+    registerForPushNotificationsAsync()
     dispatch(getPortfolio())
     dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
 export const logout = () => async(dispatch, getState) => {
-		let token = await AsyncStorage.getItem('token')
-		if (token) {
-			setAuthHeader(token)
-			await logoutAccount()
-		}
+    let token = await AsyncStorage.getItem('token')
+    if (token) {
+        setAuthHeader(token)
+        await logoutAccount()
+    }
     await AsyncStorage.multiRemove(['token', 'id', 'account'])
     dispatch(logoutAction())
     const resetAction = NavigationActions.reset({
@@ -194,7 +194,8 @@ const initialState = {
     id: null,
     token: null,
     portfolio: {},
-    tokenDetails: {}
+    tokenDetails: {},
+    invites: []
 }
 
 export default (state = initialState, action) => {
@@ -216,7 +217,6 @@ export default (state = initialState, action) => {
         case DELETE_ADDRESS:
             return {
                 ...state,
-                addresses: [...action.data.addresses]
             }
         default:
             return {

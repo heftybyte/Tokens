@@ -1,5 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TextInput, TouchableHighlight, ScrollView, View, Button, AsyncStorage, Alert } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableHighlight,
+  ScrollView,
+  View,
+  Button,
+  AsyncStorage,
+  Alert,
+  Linking
+} from 'react-native';
 import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
@@ -35,6 +46,9 @@ const styles = StyleSheet.create({
   text:{
       color: '#fff',
   },
+  centerText: {
+    textAlign: 'center'
+  },
   btn: {
     alignSelf: 'center',
     justifyContent: 'center',
@@ -64,6 +78,15 @@ const styles = StyleSheet.create({
   addressText: {
     flex: .8,
     fontSize: 10
+  },
+  inviteHeader: {
+    marginTop: 30
+  },
+  inviteText: {
+    color: '#6b2fe2',
+    textAlign: 'center',
+    fontSize: 24,
+    marginBottom: 10
   }
 });
 
@@ -98,8 +121,7 @@ class ViewAddresses extends Component {
   }
 
   render(){
-    const { token, id, addresses, goToRoute, logout } = this.props
-
+    const { token, id, addresses, goToRoute, logout, invites } = this.props
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
           <Text style={[styles.text, styles.title]}>Your Accounts</Text>
@@ -121,12 +143,30 @@ class ViewAddresses extends Component {
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
           {(token || id) &&
-            <TouchableHighlight
-                style={[styles.logoutBtn, {marginTop: 100}]}
-                onPress={()=>{trackTap('Logout');logout()}}
-            >
-              <Text style={styles.logoutBtnText}>Logout</Text>
-          </TouchableHighlight>}
+            <View>
+              <Text style={[styles.text, styles.title, styles.inviteHeader]}>Your Invite Code(s)</Text>
+              {
+                  invites.length ?
+                    invites.map((code, index)=>
+                        <Text key={index} style={[styles.inviteText]}>{code}</Text>
+                    ) :
+                    <TouchableHighlight
+                      onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
+                    >
+                      <Text
+                        style={[styles.text, styles.centerText]}
+                      >
+                        Tweet <Text style={{color: '#6b2fe2'}}>@tokens_express</Text> to get invites
+                      </Text>
+                    </TouchableHighlight>
+              }
+              <TouchableHighlight
+                  style={[styles.logoutBtn, {marginTop: 100}]}
+                  onPress={()=>{trackTap('Logout');logout()}}
+              >
+                <Text style={styles.logoutBtnText}>Logout</Text>
+              </TouchableHighlight>
+            </View>}
       </ScrollView>
     );
   }
@@ -137,7 +177,8 @@ const mapStateToProps = (state) => {
         addresses: state.account.addresses,
         token: state.account.token,
         id: state.account.id,
-        portfolio: state.account.portfolio
+        portfolio: state.account.portfolio,
+        invites: state.account.invites
     }
 };
 
