@@ -205,6 +205,8 @@ export default (state = initialState, action) => {
         case GET_PORTFOLIO:
         case GET_TOKEN_DETAILS:
         case UPDATE:
+        case ADD_ADDRESS:
+        case DELETE_ADDRESS:
             return {
                 ...state,
                 ...action.data
@@ -212,11 +214,6 @@ export default (state = initialState, action) => {
         case LOGOUT:
             return {
                 ...initialState
-            }
-        case ADD_ADDRESS:
-        case DELETE_ADDRESS:
-            return {
-                ...state,
             }
         default:
             return {
