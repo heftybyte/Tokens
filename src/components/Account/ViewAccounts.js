@@ -79,15 +79,15 @@ const styles = StyleSheet.create({
     flex: .8,
     fontSize: 10
   },
-    inviteHeader: {
-      marginTop: 30
-    },
-    inviteText: {
-        color: '#6b2fe2',
-        textAlign: 'center',
-        fontSize: 24,
-        marginBottom: 10
-    }
+  inviteHeader: {
+    marginTop: 30
+  },
+  inviteText: {
+    color: '#6b2fe2',
+    textAlign: 'center',
+    fontSize: 24,
+    marginBottom: 10
+  }
 });
 
 const AddressView = ({name, index, deleteAddress}) => {
