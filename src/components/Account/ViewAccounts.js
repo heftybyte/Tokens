@@ -8,7 +8,8 @@ import {
   View,
   Button,
   AsyncStorage,
-  Alert
+  Alert,
+  Linking
 } from 'react-native';
 import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -44,6 +45,9 @@ const styles = StyleSheet.create({
   },
   text:{
       color: '#fff',
+  },
+  centerText: {
+    textAlign: 'center'
   },
   btn: {
     alignSelf: 'center',
@@ -142,9 +146,19 @@ class ViewAddresses extends Component {
             <View>
               <Text style={[styles.text, styles.title, styles.inviteHeader]}>Your Invite Code(s)</Text>
               {
-                  this.props.invites.map((code, index)=>
-                      <Text key={index} style={[styles.inviteText]}>{code}</Text>
-                  )
+                  invites.length ?
+                    invites.map((code, index)=>
+                        <Text key={index} style={[styles.inviteText]}>{code}</Text>
+                    ) :
+                    <TouchableHighlight
+                      onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
+                    >
+                      <Text
+                        style={[styles.text, styles.centerText]}
+                      >
+                        Tweet <Text style={{color: '#6b2fe2'}}>@tokens_express</Text> to get invites
+                      </Text>
+                    </TouchableHighlight>
               }
               <TouchableHighlight
                   style={[styles.logoutBtn, {marginTop: 100}]}
@@ -163,7 +177,7 @@ const mapStateToProps = (state) => {
         addresses: state.account.addresses,
         token: state.account.token,
         id: state.account.id,
-        portfolio: state.account.portfolio
+        portfolio: state.account.portfolio,
         invites: state.account.invites
     }
 };

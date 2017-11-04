@@ -195,7 +195,7 @@ const initialState = {
     token: null,
     portfolio: {},
     tokenDetails: {},
-    invites: ['4UDBE839', '7CHYSUF3', '2GXGR745', 'U4GXT376']
+    invites: []
 }
 
 export default (state = initialState, action) => {
