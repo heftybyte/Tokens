@@ -151,7 +151,7 @@ class ViewAddresses extends Component {
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
           {(token || id) &&
-            <View>
+            <View style={{marginTop: 40, paddingTop: 10, borderTopWidth: 1, borderColor: '#6b2fe2'}}>
               <Text style={[styles.text, styles.title, styles.inviteHeader]}>Your Invite Code(s)</Text>
               {
                   invites.length ?
