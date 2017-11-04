@@ -6,6 +6,7 @@ import {
     setAuthHeader,
     getAccountPortfolio,
     addAccountAddress,
+    refreshAccountAddress,
     deleteAccountAddress,
     getAccount,
     getTokenDetailsForAccount,
@@ -25,6 +26,7 @@ export const UPDATE = 'account/UPDATE'
 export const ADD_ADDRESS = 'account/ADD_ADDRESS'
 export const DELETE_ADDRESS = 'account/DELETE_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
+export const REFRESH_ADDRESS = 'account/REFRESH_ADDRESS'
 
 const registerAction = (id) => ({
     type: REGISTER,
@@ -74,7 +76,6 @@ const getPortfolioData = async (source, dispatch, getState) => {
       console.log(err)
       return genericError()
   }
-  console.log(portfolio)
   dispatch(portfolioAction(portfolio))
 }
 
@@ -154,26 +155,45 @@ export const addAddress = (address) => async (dispatch, getState) => {
     dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
-export const deleteAddress = (addressIndex) => async (dispatch, getState) => {
-  let err = null
-  const { id } = getState().account
-  const address = getState().account.addresses[addressIndex]
+export const refreshAddress = (address) => async (dispatch, getState) => {
+    let err = null
+    const { id } = getState().account
+    const account = await refreshAccountAddress(id, address).catch(e=>err=e)
+    if (err) {
+        Alert.alert(getError(err))
+        return
+    }
+    dispatch(getPortfolio())
+    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+}
 
-  const account = await deleteAccountAddress(id, address).catch(e=>err=e)
-  if (err) {
-      console.log(err)
-      return genericError()
-  }
+export const deleteAddress = (address) => async (dispatch, getState) => {
+    const ok = async () => {
+        let err = null
+        const { id } = getState().account
+        const account = await deleteAccountAddress(id, address).catch(e=>err=e)
+        if (err) {
+            Alert.alert(getError(err))
+            return
+        }
+        Alert.alert('Address Removed')
+        dispatch(deleteAddressAction(account.addresses))
+    }
 
-  dispatch(deleteAddressAction(account.addresses))
+    Alert.alert(
+      'Are you sure?',
+      `Confirm deletion of ${address}`,
+      [
+        {text: 'OK', onPress: ok},
+        {text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
+      ],
+      { cancelable: false }
+    )
+
 }
 
 export const getPortfolio = () => async (dispatch, getState) => {
     await getPortfolioData('cache', dispatch, getState)
-}
-
-export const refreshPortfolio = () => async (dispatch, getState) => {
-    await getPortfolioData('update', dispatch, getState)
 }
 
 export const getTokenDetails = (sym) => async (dispatch, getState) => {

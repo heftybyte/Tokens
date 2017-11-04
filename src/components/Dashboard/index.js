@@ -26,8 +26,7 @@ import mockWatchlist from '../TokenList/watchlist-data';
 import {
   register,
   login,
-  getPortfolio,
-  refreshPortfolio
+  getPortfolio
 } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
@@ -114,7 +113,7 @@ class Dashboard extends Component {
 
   _onRefresh = async () => {
     this.setState({refreshing: true})
-    await this.props.refreshPortfolio()
+    await this.props.getPortfolio()
     this.setState({refreshing: false})
     trackRefresh('Manual')
   }
@@ -176,8 +175,7 @@ const mapDispatchToProps = (dispatch) => ({
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'NewAccount' })),
     login: () => dispatch(login()),
     register: () => dispatch(register()),
-    getPortfolio: () => dispatch(getPortfolio()),
-    refreshPortfolio: () => dispatch(refreshPortfolio())
+    getPortfolio: () => dispatch(getPortfolio())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

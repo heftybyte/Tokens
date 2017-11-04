@@ -63,6 +63,11 @@ export const addAccountAddress = async (id, address) => {
   return res.data
 }
 
+export const refreshAccountAddress = async (id, address) => {
+  let res = await instance.post(`/accounts/${id}/address/${address}/refresh`)
+  return res.data
+}
+
 export const deleteAccountAddress = async (id, address) => {
   let res = await instance.delete(`/accounts/${id}/address/${address}`)
   return res.data
