@@ -6,7 +6,6 @@ import {
     SectionList,
     Image,
     TouchableHighlight,
-    TouchableOpacity
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -29,7 +28,7 @@ const Watchlist = ({ item, showChange, onPress, index }) => {
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>${formatPrice(item.marketCap)}</Text>
         </View>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableHighlight onPress={onPress}>
           <View style={[
             styles.priceContainer,
             changeStyle,
@@ -41,7 +40,7 @@ const Watchlist = ({ item, showChange, onPress, index }) => {
                   `$${formatPrice(item.price)}`}
                 </Text>
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     </TouchableHighlight>
   )

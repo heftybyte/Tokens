@@ -34,7 +34,10 @@ export const withDrawer = (WrappedComponent) => {
 		render() {
 			const { navigation, portfolio } = this.props
 			const totalValue = portfolio.totalValue || 0
-
+			const { state: navState } = navigation
+			const headerText = navState &&
+				navState.params && navState.params.overrideHeaderText ||
+				navState.routeName
 			return (
 				<Drawer
 					ref={d => (this.drawer = d)}
@@ -83,7 +86,7 @@ export const withDrawer = (WrappedComponent) => {
 										fontFamily: 'Nunito-ExtraLight',
 									}}
 								>
-									{(navigation.state && navigation.state.routeName)}
+									{headerText}
 								</Text>
 							</Body>
 							<Right>

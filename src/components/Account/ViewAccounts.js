@@ -154,7 +154,7 @@ class ViewAddresses extends Component {
                       onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
                     >
                       <Text
-                        style={[styles.text, styles.centerText]}
+                        style={[styles.text, styles.centerText, {fontSize: 12}]}
                       >
                         Tweet <Text style={{color: '#6b2fe2'}}>@tokens_express</Text> to get invites
                       </Text>
