@@ -155,7 +155,7 @@ class TokenList extends Component {
       <View>
         <SectionList
           style={styles.container}
-          renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>- {section.title} -</Text>}
+          renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>{section.title}</Text>}
           sections={[
             {
               data: data[this.props.type],

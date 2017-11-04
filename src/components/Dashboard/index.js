@@ -160,7 +160,7 @@ class Dashboard extends Component {
         { portfolio && portfolio.tokens &&
         <TokenList tokens={portfolio.tokens} />}
         { portfolio &&
-        <TokenList watchList={portfolio.top} type="watchList" title="Top 10" />}
+        <TokenList watchList={portfolio.top} type="watchList" title="Top 10 By Market Cap" />}
       </ScrollView>
     )
   }
