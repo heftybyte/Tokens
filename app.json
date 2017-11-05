@@ -13,8 +13,9 @@
       "package": "express.tokens.tokens"
     },
     "splash": {
-      "image": "./assets/splash.jpeg",
-      "resizeMode": "cover"
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#000"
     }
   }
 }
