@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, Button, View, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { trackAddress, trackTap } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
@@ -54,7 +55,7 @@ const AccountInput = ({
             style={styles.accountInput}
             value={inputValue}
             onChangeText={onChangeText}
-            placeholder={'Ethereum Address'}
+            placeholder={'Enter Ethereum Address'}
             placeholderTextColor='#333'
           />
         </View>
@@ -62,8 +63,19 @@ const AccountInput = ({
         { !scannerOpen ? <TouchableHighlight onPress={()=>{trackAddress('Save', 'Button');saveAddress()}} style={[styles.btn, { marginBottom: 20 }]}>
           <Text style={{color: 'white'}}>Save Address</Text>
         </TouchableHighlight> : null }   
-        <TouchableHighlight onPress={()=>{trackTap('Toggle QRScanner');toggleQRScanner()}} style={styles.btn} disabled={!hasCameraPermission}>
-          <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan a QR Code'}</Text>
+        <TouchableHighlight
+          onPress={()=>{trackTap('Toggle QRScanner');toggleQRScanner()}}
+          disabled={!hasCameraPermission}
+        >
+          <View style={styles.btn}>
+            <MaterialCommunityIcons
+                name="qrcode"
+                size={22}
+                color="white"
+                style={{padding: 0, margin: 0,marginRight: 10}}
+              />
+            <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan QR Code'}</Text>
+          </View>
         </TouchableHighlight>
     </View>
     );

@@ -20,6 +20,7 @@ const Watchlist = ({ item, showChange, onPress, index }) => {
   return (
     <TouchableHighlight>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
+        <Text style={styles.orderText}>{index+1}.</Text>
         <View>
           <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
         </View>
@@ -73,10 +74,15 @@ const TokenItem = ({ item, index, onPress, showTokenInfo}) => {
           style={[
               styles.priceContainer,
               changeStyle,
+              !item.price ? styles.noPrice : {}
               // isLongPrice ? styles.longerPriceContainer : {}
           ]}
         >
-          <Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]}>
+          <Text style={[
+              styles.price,
+              !item.price ? styles.noPriceText : {}
+              /*isLongPrice ? styles.longPrice : {}*/
+          ]}>
             {formattedTotal}
           </Text>
         </TouchableHighlight>
@@ -204,6 +210,13 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15
   },
+  noPrice: {
+    backgroundColor: '#000',
+    borderColor: '#fff'
+  },
+  noPriceText: {
+    color: '#fff'
+  },
   longerPriceContainer: {
     paddingLeft: 30,
     paddingRight: 30
@@ -241,6 +254,10 @@ const styles = StyleSheet.create({
   gain: {
     backgroundColor: '#48ba94',
     borderColor: '#48ba94'
+  },
+  orderText: {
+    color: '#fff',
+    fontSize: 12
   }
 });
 
