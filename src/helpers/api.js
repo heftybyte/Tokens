@@ -8,7 +8,7 @@ import { login } from '../reducers/account'
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Accept'] = 'application/json';
 
-export const API_HOST = 'localhost:3000'//'138.197.104.147:3000'
+export const API_HOST = '138.197.104.147:3000'
 
 const instance = axios.create({
   baseURL: `http://${API_HOST}/api`
