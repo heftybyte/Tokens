@@ -5,7 +5,7 @@ import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 
 import AccountsNavigator from '../components/Account';
 import Dashboard from '../components/Dashboard';
-import NewAccount from '../components/Account/CreateAccount';
+import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
@@ -16,7 +16,7 @@ export const AppNavigator = StackNavigator({
   Login: { screen: NormalRegistration },
   Dashboard: { screen: Dashboard },
   Accounts : { screen: ViewAccounts },
-  NewAccount: { screen: NewAccount },
+  'Add Address': { screen: AddAddress },
 	Register: { screen: Register },
   TokenDetails: { screen: TokenDetails }
 }, {

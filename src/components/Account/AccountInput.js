@@ -16,10 +16,12 @@ const styles = StyleSheet.create({
       color: '#fff',
       borderRadius: 5,
       width: '100%',
-      height: 50
+      height: 40,
+      fontSize: 12,
+      textAlign: 'center'
     },
     inputContainer: {
-      width: '80%',
+      width: '90%',
       backgroundColor: "#161616",
     },
     btn: {

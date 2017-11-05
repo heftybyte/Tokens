@@ -8,14 +8,13 @@ import {
   View,
   Button,
   AsyncStorage,
-  Alert,
   Linking
 } from 'react-native';
 import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
-import { deleteAddress } from '../../reducers/account';
+import { deleteAddress, refreshAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 import { trackAddress, trackTap } from '../../helpers/analytics'
@@ -90,15 +89,23 @@ const styles = StyleSheet.create({
   }
 });
 
-const AddressView = ({name, index, deleteAddress}) => {
+const AddressView = ({name, address, deleteAddress, refreshAddress}) => {
     return (
         <View style={styles.addressViewContainer}>
             <Text style={[styles.text, styles.addressText]}>{name}</Text>
             <TouchableHighlight
               style={styles.removeAddressBtn}
-              onPress={() => {trackAddress('Delete', 'Button');deleteAddress(index)}}>
+              onPress={() => {trackAddress('Refresh', 'Button');refreshAddress(address)}}>
               <MaterialCommunityIcons
-                style={styles.addBtnIcon}
+                name="refresh"
+                size={22}
+                color="#6b2fe2"
+              />
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={styles.removeAddressBtn}
+              onPress={() => {trackAddress('Delete', 'Button');deleteAddress(address)}}>
+              <MaterialCommunityIcons
                 name="minus-circle-outline"
                 size={22}
                 color="#b63e15"
@@ -109,19 +116,18 @@ const AddressView = ({name, index, deleteAddress}) => {
 }
 
 class ViewAddresses extends Component {
-  addresses = [];
-
-  static defaultProps = {
-      addresses: []
-  }
-
-  deleteAddress = async(index) => {
-    if(index === undefined) return;
-    this.props.deleteAddress(index);
-  }
 
   render(){
-    const { token, id, addresses, goToRoute, logout, invites } = this.props
+    const {
+      token,
+      id,
+      addresses,
+      goToRoute,
+      logout,
+      invites,
+      deleteAddress,
+      refreshAddress
+    } = this.props
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
           <Text style={[styles.text, styles.title]}>Your Accounts</Text>
@@ -130,20 +136,21 @@ class ViewAddresses extends Component {
                   (address, index) =>
                   <AddressView
                       key={index}
-                      name={address}
-                      index={index}
-                      deleteAddress={()=>this.deleteAddress(index)}
+                      name={address.id}
+                      address={address.id}
+                      deleteAddress={deleteAddress}
+                      refreshAddress={refreshAddress}
                   />
               )}
           </View>
           <TouchableHighlight
               style={styles.btn}
-              onPress={() => goToRoute('NewAccount')}
+              onPress={() => goToRoute('Add Address')}
           >
             <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
           </TouchableHighlight>
           {(token || id) &&
-            <View>
+            <View style={{marginTop: 40, paddingTop: 10, borderTopWidth: 1, borderColor: '#6b2fe2'}}>
               <Text style={[styles.text, styles.title, styles.inviteHeader]}>Your Invite Code(s)</Text>
               {
                   invites.length ?
@@ -154,7 +161,7 @@ class ViewAddresses extends Component {
                       onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
                     >
                       <Text
-                        style={[styles.text, styles.centerText]}
+                        style={[styles.text, styles.centerText, {fontSize: 12}]}
                       >
                         Tweet <Text style={{color: '#6b2fe2'}}>@tokens_express</Text> to get invites
                       </Text>
@@ -178,13 +185,15 @@ const mapStateToProps = (state) => {
         token: state.account.token,
         id: state.account.id,
         portfolio: state.account.portfolio,
-        invites: state.account.invites
+        invites: state.account.invites,
+        ...state.ui
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        deleteAddress: (index) => dispatch(deleteAddress(index)),
+        deleteAddress: (address) => dispatch(deleteAddress(address)),
+        refreshAddress: (address) => dispatch(refreshAddress(address)),
         goToRoute: (routeName) => dispatch(NavigationActions.navigate({ routeName })),
         logout: () => { dispatch(logout()) }
     }

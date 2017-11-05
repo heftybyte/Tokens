@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class CreateAddress extends Component {
+class AddAddress extends Component {
 
   state = {
     hasCameraPermission: null,
@@ -84,20 +84,20 @@ class CreateAddress extends Component {
           hasCameraPermission={this.state.hasCameraPermission}
           onChangeText={this.onChangeText}
           saveAddress={this.saveAddress}
-        >
+        />
         <QRScanner 
           style={styles.scanner}
           scannerOpen={this.state.scannerOpen}
           handleBarCodeRead={this.handleBarCodeRead}
         />
-        </AccountInput>
       </View>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  portfolio: state.account.portfolio
+  portfolio: state.account.portfolio,
+  ...state.ui
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -108,4 +108,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(CreateAddress));
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(AddAddress));

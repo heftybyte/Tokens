@@ -26,9 +26,9 @@ import mockWatchlist from '../TokenList/watchlist-data';
 import {
   register,
   login,
-  getPortfolio,
-  refreshPortfolio
+  getPortfolio
 } from '../../reducers/account';
+import { showToast } from '../../reducers/ui'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
 
@@ -98,7 +98,7 @@ class Dashboard extends Component {
     const { setParams } = this.props.navigation;
     const { totalValue } = this.props.portfolio;
 
-    if(hiddenHeight > 60 && totalValue) {
+    if (hiddenHeight >= 70 && totalValue) {
 
       const valueParts = currencyFormatter
       .format(totalValue, currencyFormatOptions)
@@ -106,15 +106,15 @@ class Dashboard extends Component {
 
       const valueString = `\$${valueParts[0]}${valueParts[1]}.${valueParts[2]||'00'}`;
 
-      setParams && setParams({ title: valueString });
+      setParams && setParams({ overrideHeaderText: valueString });
     } else {
-      setParams && setParams({ title: 'Dashboard' });
+      setParams && setParams({ overrideHeaderText: null });
     }
   }
 
   _onRefresh = async () => {
     this.setState({refreshing: true})
-    await this.props.refreshPortfolio()
+    await this.props.getPortfolio(false)
     this.setState({refreshing: false})
     trackRefresh('Manual')
   }
@@ -160,7 +160,11 @@ class Dashboard extends Component {
         { portfolio && portfolio.tokens &&
         <TokenList tokens={portfolio.tokens} />}
         { portfolio &&
-        <TokenList watchList={portfolio.top} type="watchList" title="Top 10" />}
+        <TokenList
+          title="Top 10 By Market Cap" 
+          watchList={portfolio.top}
+          type="watchList"
+        />}
       </ScrollView>
     )
   }
@@ -169,15 +173,16 @@ class Dashboard extends Component {
 const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
   addresses: state.account.addresses,
-  loggedIn: !!state.account.token
+  loggedIn: !!state.account.token,
+  ...state.ui
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'NewAccount' })),
+    goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Add Address' })),
     login: () => dispatch(login()),
     register: () => dispatch(register()),
-    getPortfolio: () => dispatch(getPortfolio()),
-    refreshPortfolio: () => dispatch(refreshPortfolio())
+    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
+    showToast: (text) => dispatch(showToast(text))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));
