@@ -22,8 +22,8 @@ class Register {
 		password: ''
 	}
 	@observable guest = {
-		username: uuidv4(),
-		password: uuidv4(),
+		username: '',
+		password: '',
 		code: ''
 	}
 	@observable toast = ''
@@ -42,6 +42,8 @@ class Register {
 		switch(this.type) {
 			case "guest":
 				routeName = "GuestRegistration"
+				this.guest.username = uuidv4()
+				this.guest.password = uuidv4()
 				break
 			case "normal":
 				routeName = "NormalRegistration"

@@ -6,7 +6,7 @@ import ui from './ui'
 import { AppNavigator } from '../navigators/AppNavigator';
 
 // Start with two routes: The Dashboard screen, with the Login screen on top.
-const firstAction = AppNavigator.router.getActionForPathAndParams('Splash');
+const firstAction = AppNavigator.router.getActionForPathAndParams('Entry');
 const initialNavState = AppNavigator.router.getStateForAction(
   firstAction,
 );

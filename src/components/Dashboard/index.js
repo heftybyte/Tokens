@@ -16,7 +16,6 @@ import {
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
-import PriceChart from '../PriceChart';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
@@ -154,8 +153,6 @@ class Dashboard extends Component {
             </View>
           </TouchableHighlight>
         : <Header totalValue={portfolio.totalValue} />}
-        {/* NOTE: will be implemented in upcoming sprint
-          <PriceChart />*/}
         <News feed={mockNewsFeed} />
         { portfolio && portfolio.tokens &&
         <TokenList tokens={portfolio.tokens} />}

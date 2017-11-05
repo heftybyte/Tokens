@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const styles = StyleSheet.create({
   title: {
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
 });
 
 
-class Splash extends Component {
+class Entry extends Component {
 
   render(){
     return (
@@ -36,11 +37,12 @@ class Splash extends Component {
           backgroundColor: '#000'
         }}
       >
-          <Image
-            resizeMode='contain'
-            style={{height: '40%', width: '40%',flex: .3}}
-            source={require("../Register/assets/Tokens_Icon.png")}
-          />
+        <Spinner
+            visible={this.props.isLoading}
+            textContent={this.props.loadText||''}
+            textStyle={{color: '#FFF', fontSize: 16}}
+            overlayColor='rgba(0,0,0,.9)'
+        />
       </View>
     );
   }
@@ -57,4 +59,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Splash);
+export default connect(mapStateToProps, mapDispatchToProps)(Entry);
