@@ -169,8 +169,7 @@ const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
   addresses: state.account.addresses,
   loggedIn: !!state.account.token,
-  isLoading: state.ui.isLoading,
-  loadText: state.ui.loadText
+  ...state.ui
 })
 
 const mapDispatchToProps = (dispatch) => ({

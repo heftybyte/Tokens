@@ -18,7 +18,7 @@ import {
     getError,
     registerForPushNotificationsAsync
 } from '../helpers/functions'
-import { setLoading } from './ui'
+import { setLoading, showToast } from './ui'
 
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
@@ -74,7 +74,8 @@ export const createAccount = (params) => async (dispatch, getState) => {
     const newAccount = await registerAccount(params).catch(e=>err=e)
     if (err) {
         console.log('createAccount', err)
-        return safeAlert(getError(err))
+        dispatch(showToast(getError(err)))
+        return
     }
     await AsyncStorage.setItem('id', newAccount.id)
     const pseudonymType = params.email ? 'email' : 'username'
@@ -91,7 +92,7 @@ export const login = (params) => async (dispatch, getState) => {
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
-            safeAlert(getError(err))
+            dispatch(showToast(getError(err)))
             return
         }
         token = res.id
@@ -103,7 +104,7 @@ export const login = (params) => async (dispatch, getState) => {
         setAuthHeader(token)
         account = await getAccount(id).catch(e=>err=e)
         if (err) {
-            safeAlert(getError(err))
+            dispatch(showToast(getError(err)))
             return
         }
     } else {
@@ -140,7 +141,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     const account = await addAccountAddress(id, address).catch(e=>err=e)
     dispatch(setLoading(false))
     if (err) {
-        safeAlert(getError(err))
+        dispatch(showToast(getError(err)))
         return
     }
     dispatch(addAddressAction(account.addresses))
@@ -154,7 +155,7 @@ export const refreshAddress = (address) => async (dispatch, getState) => {
     const account = await refreshAccountAddress(id, address).catch(e=>err=e)
     dispatch(setLoading(false))
     if (err) {
-        safeAlert(getError(err))
+        dispatch(showToast(getError(err)))
         return
     }
     dispatch(getPortfolio())
@@ -169,10 +170,10 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
         const account = await deleteAccountAddress(id, address).catch(e=>err=e)
         dispatch(setLoading(false))
         if (err) {
-            safeAlert(getError(err))
+            dispatch(showToast(getError(err)))
             return
         }
-        safeAlert('Address Removed')
+        dispatch(showToast('Address Removed'))
         dispatch(deleteAddressAction(account.addresses))
     }
 
@@ -201,8 +202,8 @@ export const getPortfolio = (showUILoader=true) => async (dispatch, getState) =>
     }
 
     if (err) {
-      console.log(err)
-      return genericError()
+      dispatch(showToast(getError(err)))
+      return
     }
     dispatch(portfolioAction(portfolio))
 }
@@ -215,10 +216,9 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
     const tokenDetails = await getTokenDetailsForAccount(id, sym).catch(e=>err=e)
     dispatch(setLoading(false))
     if (err) {
-        console.log(err)
-        return genericError();
+        dispatch(showToast(getError(err)))
+        return
     }
-
     dispatch(tokenDetailsAction(tokenDetails))
 }
 

@@ -30,7 +30,7 @@ export const Guest = observer(
 					onChange={v => store.changetext('code', v)}
 					placeholder="q3fV8dsd"
 				/>
-				<Text style={[styles.text, { fontSize: 12, padding: 16 }]}>
+				<Text style={[styles.text, { fontSize: 12, padding: 16, color: '#ff0000' }]}>
 					WARNING: with guest mode you risk losing access to your account if this device is reset or lost.
 				</Text>
 			</View>

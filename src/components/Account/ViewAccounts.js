@@ -186,8 +186,7 @@ const mapStateToProps = (state) => {
         id: state.account.id,
         portfolio: state.account.portfolio,
         invites: state.account.invites,
-        isLoading: state.ui.isLoading,
-        loadText: state.ui.loadText
+        ...state.ui
     }
 };
 

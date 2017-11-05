@@ -11,6 +11,10 @@ const styles = StyleSheet.create({
     height: 300,
     flex: 1,
   },
+  text: {
+    color: '#fff',
+    textAlign: 'center'
+  }
 });
 
 class QRScanner extends React.Component {
@@ -28,9 +32,9 @@ class QRScanner extends React.Component {
     const { scannerOpen, handleBarCodeRead } = this.props;
 
     if (hasCameraPermission === null) {
-        return <Text>Requesting for camera permission</Text>;
+        return <Text style={styles.text}>Requesting for camera permission</Text>;
     } else if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text style={styles.text}>No access to camera</Text>;
     } else {
       return (
             scannerOpen ?

@@ -44,6 +44,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-21.0.2.tar.gz",
     "react-native-drawer": "^2.5.0",
     "react-native-easy-grid": "^0.1.15",
+    "react-native-easy-toast": "^1.0.8",
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-material-textfield": "^0.10.2",
     "react-native-swiper": "^1.5.11",

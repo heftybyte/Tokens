@@ -84,13 +84,12 @@ class AddAddress extends Component {
           hasCameraPermission={this.state.hasCameraPermission}
           onChangeText={this.onChangeText}
           saveAddress={this.saveAddress}
-        >
+        />
         <QRScanner 
           style={styles.scanner}
           scannerOpen={this.state.scannerOpen}
           handleBarCodeRead={this.handleBarCodeRead}
         />
-        </AccountInput>
       </View>
     );
   }
@@ -98,8 +97,7 @@ class AddAddress extends Component {
 
 const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
-  isLoading: state.ui.isLoading,
-  loadText: state.ui.loadText
+  ...state.ui
 })
 
 const mapDispatchToProps = (dispatch) => {

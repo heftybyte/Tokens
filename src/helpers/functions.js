@@ -57,23 +57,24 @@ export const registerForPushNotificationsAsync = async () => {
 
 // Prevent progress spinner from getting stuck
 export const safeAlert = (...args) => {
-	const buttons = args[2] || []
+	const buttons = args[2] || [{text: 'OKtest'}]
+	args[2] = buttons
+	buttons.forEach((button)=>{
+		const { onPress } = button
+		button.onPress = () => {
+			setLoading(false)
+			onPress && onPress()
+		}
+	})
+
 	const options = args[3] || {}
 	const { onDismiss } = options
 
+	args[3] = options
 	options.onDismiss = () => {
-		console.log("alert dismissed")
 		setLoading(false)
 		onDismiss && onDismiss()
 	}
 
-	buttons.forEach((button)=>{
-		const { onPress } = button
-		button.onPress = () => {
-			console.log("alert button pressed")
-			setLoading(false)
-			onPress && onPress()
-		}
-	}) 
 	setTimeout(()=>Alert.alert.apply({}, args), 1)
 }
