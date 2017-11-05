@@ -4,7 +4,6 @@ import { DURATION } from 'react-native-easy-toast'
 
 const LOADING = 'ui/LOADING'
 const SHOW_TOAST = 'ui/SHOW_TOAST'
-let timeoutId
 
 export const setLoading = (isLoading, loadText) => ({
     type: LOADING,
@@ -16,8 +15,12 @@ export const showToastAction = (toast) => ({
     data: { toast }
 })
 
+let timeoutId
+let currentToast
 export const showToast = (toast) => (dispatch, getState) => {
-    clearInterval(timeoutId)
+    if (currentToast !== toast) {
+        clearInterval(timeoutId)
+    }
     dispatch(showToastAction(toast))
     timeoutId = setInterval(()=>dispatch(showToastAction('')), DURATION.LENGTH_LONG)
 }

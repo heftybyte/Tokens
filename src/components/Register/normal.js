@@ -4,10 +4,10 @@ import { Input, Form, Item, Label, Button, Content } from "native-base"
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
 import { observer } from "mobx-react"
 import { NavigationActions } from 'react-navigation';
-import reduxStore from '../../store'
 import { store } from './store'
 import { Field } from "../lib/Field"
 import Header from './header'
+import Footer from './footer'
 
 export const Normal = observer(
 	(navigation) => (
@@ -74,6 +74,7 @@ export const Normal = observer(
 					</Button>
 				</View>
 			</View>
+			<Footer toast={store.toast} />
 		</View>
 	)
 )

@@ -6,6 +6,7 @@ import { store } from './store'
 import { observer } from "mobx-react"
 import { Field } from "../lib/Field"
 import Header from './header'
+import Footer from './footer'
 
 export const Guest = observer(
 	(navigation)=> (
@@ -31,7 +32,7 @@ export const Guest = observer(
 					placeholder="q3fV8dsd"
 				/>
 				<Text style={[styles.text, { fontSize: 12, padding: 16, color: '#ff0000' }]}>
-					WARNING: with guest mode you risk losing access to your account if this device is reset or lost.
+					WARNING: with guest mode you risk losing access to your account when it expires or if this device is reset or lost.
 				</Text>
 			</View>
 			</KeyboardAvoidingView>
@@ -46,6 +47,7 @@ export const Guest = observer(
 					</Button>
 				</View>
 			</View>
+			<Footer toast={store.toast} />
 		</View>
 	)
 )

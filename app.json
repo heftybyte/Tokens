@@ -11,6 +11,10 @@
     },
     "android": {
       "package": "express.tokens.tokens"
+    },
+    "splash": {
+      "image": "./assets/splash.jpeg",
+      "resizeMode": "cover"
     }
   }
 }

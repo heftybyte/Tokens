@@ -3,6 +3,7 @@ import { Alert, AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation';
 import reduxStore from '../../store'
 import { createAccount, login } from '../../reducers/account'
+import { DURATION } from 'react-native-easy-toast'
 
 const uuidv4 = require('uuid/v4');
 
@@ -25,11 +26,14 @@ class Register {
 		password: uuidv4(),
 		code: ''
 	}
+	@observable toast = ''
 
 	@action
 	changeType = (type: RegisterType) => {
 		this.type = type
 	}
+
+	timeoutId = 0
 
 	navigate = async (navigation) => {
 		let routeName
@@ -51,7 +55,7 @@ class Register {
 		}
 		// TODO: refactor hacky way of setting a deafault value
 		this.login.email = defaultEmail
-		reduxStore.dispatch(NavigationActions.navigate({ routeName }))
+		await reduxStore.dispatch(NavigationActions.navigate({ routeName }))
 		this.login.email = defaultEmail
 	}
 
@@ -86,7 +90,8 @@ class Register {
 				code: this.guest.code
 			}
 		}
-		reduxStore.dispatch(createAccount(params))
+		await reduxStore.dispatch(createAccount(params))
+		this.showToast(reduxStore.getState().ui.toast)
 	}
 
 	@action
@@ -95,7 +100,16 @@ class Register {
 			email: this.login.email,
 			password: this.login.password
 		}
-		reduxStore.dispatch(login(params))
+		await reduxStore.dispatch(login(params))
+		this.showToast(reduxStore.getState().ui.toast)
+	}
+
+	showToast = (toast) => {
+		if (toast !== this.toast) {
+			clearTimeout(this.timeoutId)
+		}
+		this.timeoutId = setTimeout(()=>this.toast = '', DURATION.LENGTH_LONG)
+		this.toast = toast
 	}
 }
 
