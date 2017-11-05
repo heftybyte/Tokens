@@ -9,7 +9,7 @@ import { Constants } from 'expo'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { trackTap } from '../helpers/analytics'
 import Header from "../components/Dashboard/Header"
-import Toast, {DURATION} from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast'
 
 const Items = [
     {
@@ -110,8 +110,9 @@ export const withDrawer = (WrappedComponent) => {
                         <Spinner
                             visible={this.props.isLoading}
                             textContent={this.props.loadText||''}
-                            textStyle={{color: '#FFF'}}
-                            overlayColor='rgba(0,0,0,.9)' />
+                            textStyle={{color: '#FFF', fontSize: 16}}
+                            overlayColor='rgba(0,0,0,.9)'
+                        />
                         <WrappedComponent {...this.props} />
                         <Toast
                             ref="toast"

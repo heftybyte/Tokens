@@ -151,7 +151,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
 export const refreshAddress = (address) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
-    dispatch(setLoading(true, 'Refreshing Token Balances'))
+    dispatch(setLoading(true, `Refreshing Tokens`))
     const account = await refreshAccountAddress(id, address).catch(e=>err=e)
     dispatch(setLoading(false))
     if (err) {

@@ -28,6 +28,7 @@ import {
   login,
   getPortfolio
 } from '../../reducers/account';
+import { showToast } from '../../reducers/ui'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
 
@@ -159,7 +160,11 @@ class Dashboard extends Component {
         { portfolio && portfolio.tokens &&
         <TokenList tokens={portfolio.tokens} />}
         { portfolio &&
-        <TokenList watchList={portfolio.top} type="watchList" title="Top 10 By Market Cap" />}
+        <TokenList
+          title="Top 10 By Market Cap" 
+          watchList={portfolio.top}
+          type="watchList"
+        />}
       </ScrollView>
     )
   }
@@ -176,7 +181,8 @@ const mapDispatchToProps = (dispatch) => ({
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Add Address' })),
     login: () => dispatch(login()),
     register: () => dispatch(register()),
-    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader))
+    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
+    showToast: (text) => dispatch(showToast(text))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));
