@@ -12,7 +12,7 @@ require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
 
-const publicDNS = process.env.SENTRY_PUBLIC_DNS || 'https://bf77d4d2ce4843ae909cca0b6d7675bb@sentry.io/235327';
+const publicDNS = process.env.SENTRY_PUBLIC_DNS || 'https://473f8d321a8b4a4499a9502a2fde6bfc:4b80cf6ab73e434a8356429ba17a613a@sentry.io/240860'
 
 Sentry.enableInExpoDevelopment = true;
 Sentry.config(publicDNS).install();
