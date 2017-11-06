@@ -49,8 +49,6 @@ class Tokens extends React.Component {
     this.setState({
       isReady: true
     })
-
-    store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
   }
 
   goBack = () => {
