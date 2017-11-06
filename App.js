@@ -44,8 +44,10 @@ class Tokens extends React.Component {
 
     if (token && id) {
       await store.dispatch(login())
+    } else {
+        store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
     }
-    
+
     this.setState({
       isReady: true
     })
