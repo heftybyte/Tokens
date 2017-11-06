@@ -16,6 +16,10 @@
       "image": "./assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#000"
-    }
+    },
+    "loading": {
+      "backgroundColor": "#000"
+    },
+    "primaryColor": "#000"
   }
 }

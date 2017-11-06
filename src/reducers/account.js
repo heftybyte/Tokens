@@ -105,6 +105,7 @@ export const login = (params) => async (dispatch, getState) => {
         account = await getAccount(id).catch(e=>err=e)
         if (err) {
             dispatch(showToast(getError(err)))
+            dispatch(NavigationActions.navigate({ routeName: 'Login' }))
             return
         }
     } else {
