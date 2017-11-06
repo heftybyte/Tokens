@@ -3,6 +3,7 @@ import { Alert, AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation';
 import reduxStore from '../../store'
 import { createAccount, login } from '../../reducers/account'
+import { DURATION } from 'react-native-easy-toast'
 
 const uuidv4 = require('uuid/v4');
 
@@ -21,19 +22,43 @@ class Register {
 		password: ''
 	}
 	@observable guest = {
-		username: uuidv4(),
-		password: uuidv4(),
+		username: '',
+		password: '',
 		code: ''
 	}
+	@observable toast = ''
 
 	@action
 	changeType = (type: RegisterType) => {
 		this.type = type
 	}
 
-	navigate = (navigation) => {
-		const routeName = this.type === "anon" ? "AnonymousRegisteration" : "NormalRegisteration"
-		NavigationActions.navigate({ routeName })
+	timeoutId = 0
+
+	navigate = async (navigation) => {
+		let routeName
+		let defaultEmail = ''
+		const pseudonym = JSON.parse(await AsyncStorage.getItem('pseudonym') || null)
+		switch(this.type) {
+			case "guest":
+				routeName = "GuestRegistration"
+				this.guest.username = uuidv4()
+				this.guest.password = uuidv4()
+				break
+			case "normal":
+				routeName = "NormalRegistration"
+				break
+			case "login":
+				if (pseudonym && pseudonym.type === 'email') {
+					defaultEmail = pseudonym.value
+				}
+				routeName = "Login"
+				break
+		}
+		// TODO: refactor hacky way of setting a deafault value
+		this.login.email = defaultEmail
+		await reduxStore.dispatch(NavigationActions.navigate({ routeName }))
+		this.login.email = defaultEmail
 	}
 
 	@action
@@ -67,7 +92,8 @@ class Register {
 				code: this.guest.code
 			}
 		}
-		reduxStore.dispatch(createAccount(params))
+		await reduxStore.dispatch(createAccount(params))
+		this.showToast(reduxStore.getState().ui.toast)
 	}
 
 	@action
@@ -76,7 +102,16 @@ class Register {
 			email: this.login.email,
 			password: this.login.password
 		}
-		reduxStore.dispatch(login(params))
+		await reduxStore.dispatch(login(params))
+		this.showToast(reduxStore.getState().ui.toast)
+	}
+
+	showToast = (toast) => {
+		if (toast !== this.toast) {
+			clearTimeout(this.timeoutId)
+		}
+		this.timeoutId = setTimeout(()=>this.toast = '', DURATION.LENGTH_LONG)
+		this.toast = toast
 	}
 }
 

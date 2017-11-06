@@ -8,6 +8,7 @@ import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
 import { addAddress } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
+import { trackAddress } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class CreateAddress extends Component {
+class AddAddress extends Component {
 
   state = {
     hasCameraPermission: null,
@@ -48,22 +49,24 @@ class CreateAddress extends Component {
 
   handleBarCodeRead = ({type, data}) => {
     this.toggleQRScanner();
-      this.setState({inputValue: data});
+    let processedAddress = data.substr(data.search("0x"), 42);
+    this.setState({inputValue: processedAddress});
+   
+    trackAddress('Save', 'QRScanner')
+    if (processedAddress.length !== 42 || processedAddress.substr(0,2) !== '0x') {
+      Alert.alert('This Ethereum Address is Invalid')
+      return
+    }
 
-      if (data.length !== 42 || data.substr(0,2) !== '0x') {
-        Alert.alert('This Ethereum Address is Invalid')
-        return
-      }
-
-      this.saveAddress(data)
+    this.saveAddress(processedAddress)
   }
 
   onChangeText = (text) => {
-    this.setState({inputValue: text});
+    this.setState({ inputValue: text });
   }
 
-  saveAddress = async(data) => {
-    const text = data || this.state.inputValue;
+  saveAddress = (data) => {
+    const text = (typeof data === 'string') && data || this.state.inputValue;
     if(!text || !text.length) {
       Alert.alert('Enter an address to save');
       return;
@@ -81,20 +84,20 @@ class CreateAddress extends Component {
           hasCameraPermission={this.state.hasCameraPermission}
           onChangeText={this.onChangeText}
           saveAddress={this.saveAddress}
-        >
+        />
         <QRScanner 
           style={styles.scanner}
           scannerOpen={this.state.scannerOpen}
           handleBarCodeRead={this.handleBarCodeRead}
         />
-        </AccountInput>
       </View>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  portfolio: state.account.portfolio
+  portfolio: state.account.portfolio,
+  ...state.ui
 })
 
 const mapDispatchToProps = (dispatch) => {
@@ -105,4 +108,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(CreateAddress));
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(AddAddress));

@@ -112,6 +112,7 @@ export class Field extends Component {
 					margin: 0
 				}}
 				placeholderTextColor="#333"
+				autoCapitalize="none"
 			/>
 		)
 		if (picker) {

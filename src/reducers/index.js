@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
 import { NavigationActions } from 'react-navigation';
-import AddressReducer from './address';
-import AccountReducer from './account';
-import SearchReducer from './search';
+import addresses from './address';
+import account from './account';
+import search from './search';
+import ui from './ui';
 import { AppNavigator } from '../navigators/AppNavigator';
 
 // Start with two routes: The Dashboard screen, with the Login screen on top.
-const firstAction = AppNavigator.router.getActionForPathAndParams('Register');
+const firstAction = AppNavigator.router.getActionForPathAndParams('Entry');
 const initialNavState = AppNavigator.router.getStateForAction(
   firstAction,
 );
@@ -43,9 +44,10 @@ function auth(state = initialAuthState, action) {
 const AppReducer = combineReducers({
   nav,
   auth,
-  addresses: AddressReducer,
-  account: AccountReducer,
-  search: SearchReducer
+  addresses,
+  account,
+  search,
+  ui
 });
 
 export default AppReducer;

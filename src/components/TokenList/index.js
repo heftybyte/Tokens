@@ -5,7 +5,7 @@ import {
     View,
     SectionList,
     Image,
-    TouchableHighlight
+    TouchableHighlight,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -15,11 +15,12 @@ const baseURL = process.env.NODE_ENV === 'production' ?
   'http://138.197.104.147:3000' :
   'http://138.197.104.147:3000'
 
-const Watchlist = ({ item, index }) => {
+const Watchlist = ({ item, showChange, onPress, index }) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
   return (
     <TouchableHighlight>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
+        <Text style={styles.orderText}>{index+1}.</Text>
         <View>
           <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
         </View>
@@ -28,24 +29,33 @@ const Watchlist = ({ item, index }) => {
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>${formatPrice(item.marketCap)}</Text>
         </View>
-        <View style={[
-          styles.priceContainer,
-          changeStyle,
-          // isLongPrice ? styles.longerPriceContainer : {}
-        ]}>
-          <Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]}>
-            ${formatPrice(item.price)}
-          </Text>
-        </View>
+        <TouchableHighlight onPress={onPress}>
+          <View style={[
+            styles.priceContainer,
+            changeStyle,
+            // isLongPrice ? styles.longerPriceContainer : {}
+          ]}>
+              <Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]}>
+                {showChange ?
+                  String(item.change).substr(0,6) + '%' :
+                  `$${formatPrice(item.price)}`}
+                </Text>
+          </View>
+        </TouchableHighlight>
       </View>
     </TouchableHighlight>
   )
 }
 
-const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
+const TokenItem = ({ item, index, onPress, showTokenInfo}) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
   const isLongPrice = (`${item.balance * item.price}`).length >= 11
-
+  const formattedPrice = item.price ? 
+    `@ $${item.price.toLocaleString().substr(0,5)}` :
+    ''
+  const formattedTotal = item.price ?
+    `$${formatPrice(item.balance * item.price)}` :
+    'N/A'
   return (
     <TouchableHighlight onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
@@ -55,21 +65,28 @@ const TokenItem = ({ item, index, showChange, onPress, showTokenInfo}) => {
 
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
-          { item.price && item.balance ? (<Text style={styles.balance}>{String(item.balance).substr(0,5)} @ ${item.price.toLocaleString().substr(0,5)}</Text>) : null }
+          <Text style={styles.balance}>
+            {String(item.balance).substr(0,5)} {formattedPrice}
+          </Text>
         </View>
-        {item.price && item.balance ?
-        (<View style={[
-            styles.priceContainer,
-            changeStyle,
-            // isLongPrice ? styles.longerPriceContainer : {}
-        ]}>
-          <Text style={[styles.price, /*isLongPrice ? styles.longPrice : {}*/]} onPress={onPress}>
-            {showChange ?
-              String(item.change).substr(0,6) + '%' :
-              '$' + formatPrice(item.balance * item.price)}
-            </Text>
-            </View>) : null}
-        </View>
+        <TouchableHighlight
+          onPress={onPress}
+          style={[
+              styles.priceContainer,
+              changeStyle,
+              !item.price ? styles.noPrice : {}
+              // isLongPrice ? styles.longerPriceContainer : {}
+          ]}
+        >
+          <Text style={[
+              styles.price,
+              !item.price ? styles.noPriceText : {}
+              /*isLongPrice ? styles.longPrice : {}*/
+          ]}>
+            {formattedTotal}
+          </Text>
+        </TouchableHighlight>
+      </View>
     </TouchableHighlight>
   )
 };
@@ -81,7 +98,7 @@ class TokenList extends Component {
   }
 
   static defaultProps = {
-  	type: "tokens"
+    type: "tokens"
   }
 
   renderWatchlist = ({item, index}) => (
@@ -90,7 +107,11 @@ class TokenList extends Component {
       index={index}
       showTokenInfo={() => {
         return // TODO: fix token details page
-			  this.props.goToTokenDetailsPage(item);
+        this.props.goToTokenDetailsPage(item);
+      }}
+      showChange={this.state.showChange}
+      onPress={()=>{
+        this.setState({showChange: !this.state.showChange})
       }}
     />
   )
@@ -99,14 +120,9 @@ class TokenList extends Component {
     <TokenItem
       item={item}
       index={index}
-      showChange={this.state.showChange}
       showTokenInfo={() => {
         return // TODO: fix token details page
-			  this.props.goToTokenDetailsPage(item);
-      }}
-      onPress={()=>{
-			  console.log('toggle!')
-			  this.setState({showChange: !this.state.showChange})
+        this.props.goToTokenDetailsPage(item);
       }}
     />
   )
@@ -115,7 +131,7 @@ class TokenList extends Component {
     const { showChange } = this.state
     let dataTokens = this.props.tokens || []
     const { title } = this.props
-	  let dataWatchList = this.props.watchList || []
+    let dataWatchList = this.props.watchList || []
 
     dataTokens = dataTokens.map(tokenObj => (
       {
@@ -123,41 +139,34 @@ class TokenList extends Component {
         key: tokenObj.symbol
       }
     ))
-	  dataWatchList = dataWatchList.map(tokenObj => (
-	  {
-		  ...tokenObj,
-		  key: tokenObj.symbol
-	  }
-	  ))
+    dataWatchList = dataWatchList.map(tokenObj => (
+    {
+      ...tokenObj,
+      key: tokenObj.symbol
+    }
+    ))
 
-	  const render = {
-    	tokens: this.renderTokens,
-		  watchList: this.renderWatchlist
-	  }
+    const render = {
+      tokens: this.renderTokens,
+      watchList: this.renderWatchlist
+    }
 
-	  const data = {
-		  tokens: dataTokens,
-		  watchList: dataWatchList
-	  }
+    const data = {
+      tokens: dataTokens,
+      watchList: dataWatchList
+    }
 
     return (
       <View>
         <SectionList
           style={styles.container}
-          renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>- {section.title} -</Text>}
+          renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>{section.title}</Text>}
           sections={[
-            {data: dataTokens, title: title && title.toUpperCase(), renderItem: ({item, index}) =>
-              <TokenItem
-                item={item}
-                index={index}
-                showChange={showChange}
-                showTokenInfo={()=> {
-                  this.props.goToTokenDetailsPage(item);
-                }}
-                onPress={()=>{
-                  this.setState({showChange: !this.state.showChange})
-                }}
-              />}
+            {
+              data: data[this.props.type],
+              title: (this.props.title || '').toUpperCase(),
+              renderItem: render[this.props.type]
+            }
           ]}
         />
       </View>
@@ -189,7 +198,7 @@ const styles = StyleSheet.create({
     flex: .6,
   },
   priceContainer: {
-    flex: .2,
+    width: 90,
     height: 40,
     backgroundColor: '#b63e15',
     borderRadius: 8,
@@ -200,6 +209,13 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 15,
     paddingRight: 15
+  },
+  noPrice: {
+    backgroundColor: '#000',
+    borderColor: '#fff'
+  },
+  noPriceText: {
+    color: '#fff'
   },
   longerPriceContainer: {
     paddingLeft: 30,
@@ -238,6 +254,10 @@ const styles = StyleSheet.create({
   gain: {
     backgroundColor: '#48ba94',
     borderColor: '#48ba94'
+  },
+  orderText: {
+    color: '#fff',
+    fontSize: 12
   }
 });
 

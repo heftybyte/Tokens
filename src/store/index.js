@@ -1,6 +1,14 @@
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import rootReducer from '../reducers/index';
-const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+import { screenTracking } from '../helpers/analytics';
+
+const store = createStore(
+	rootReducer,
+	applyMiddleware(
+		ReduxThunk,
+		screenTracking
+	)
+);
 
 export default store;

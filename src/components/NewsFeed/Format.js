@@ -6,6 +6,7 @@ import ImageDefault from './Layouts/ImageLayout'
 import TextCenter from './Layouts/TextCenterLayout'
 import TextDefault from './Layouts/TextLayout'
 import Video from './Layouts/VideoLayout'
+import { trackNewsFeedTap } from '../../helpers/analytics'
 
 const Format = (props) => {
     let Layout
@@ -40,7 +41,7 @@ const Format = (props) => {
     }
 
     return (
-        <TouchableOpacity onPress={visitLink} style={{height:130}}>
+        <TouchableOpacity onPress={()=>{trackNewsFeedTap(news);visitLink()}} style={{height:130}}>
             <Layout news={news} />
         </TouchableOpacity>
     )

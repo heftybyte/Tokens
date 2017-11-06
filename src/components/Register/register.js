@@ -3,7 +3,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons"
 import { Button } from "native-base"
 import React from "react"
 import { observer } from "mobx-react"
-
+import Footer from './footer'
 import { store } from "./store"
 
 const radioStyles = {
@@ -65,7 +65,7 @@ const Register = observer(
 							<View style={{flex: 1, paddingLeft: 10}}>
 								<Text style={styles.text}>CREATE ACCOUNT</Text>
 							</View>
-							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Access your account form other devices')} />
+							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Access your account from other devices')} />
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity
@@ -81,7 +81,7 @@ const Register = observer(
 							<View style={{flex: 1, paddingLeft: 10}}>
 								<Text style={styles.text}>GUEST MODE</Text>
 							</View>
-							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('You can create your account later')}/>
+							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Temporary account, can expire at any time')}/>
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity
@@ -112,6 +112,7 @@ const Register = observer(
 					</Button>
 				</View>
 			</View>
+			<Footer toast={store.toast} />
 		</View>
 	)
 )

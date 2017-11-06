@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, Button, View, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { trackAddress, trackTap } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
     topContainer:{
@@ -15,10 +17,12 @@ const styles = StyleSheet.create({
       color: '#fff',
       borderRadius: 5,
       width: '100%',
-      height: 50
+      height: 40,
+      fontSize: 12,
+      textAlign: 'center'
     },
     inputContainer: {
-      width: '80%',
+      width: '90%',
       backgroundColor: "#161616",
     },
     btn: {
@@ -51,15 +55,27 @@ const AccountInput = ({
             style={styles.accountInput}
             value={inputValue}
             onChangeText={onChangeText}
-            placeholder={'Ethereum Address'}
+            placeholder={'Enter Ethereum Address'}
+            placeholderTextColor='#333'
           />
         </View>
         {children}
-        { !scannerOpen ? <TouchableHighlight onPress={saveAddress} style={[styles.btn, { marginBottom: 20 }]}>
+        { !scannerOpen ? <TouchableHighlight onPress={()=>{trackAddress('Save', 'Button');saveAddress()}} style={[styles.btn, { marginBottom: 20 }]}>
           <Text style={{color: 'white'}}>Save Address</Text>
         </TouchableHighlight> : null }   
-        <TouchableHighlight onPress={toggleQRScanner} style={styles.btn} disabled={!hasCameraPermission}>
-          <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan a QR Code'}</Text>
+        <TouchableHighlight
+          onPress={()=>{trackTap('Toggle QRScanner');toggleQRScanner()}}
+          disabled={!hasCameraPermission}
+        >
+          <View style={styles.btn}>
+            <MaterialCommunityIcons
+                name="qrcode"
+                size={22}
+                color="white"
+                style={{padding: 0, margin: 0,marginRight: 10}}
+              />
+            <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan QR Code'}</Text>
+          </View>
         </TouchableHighlight>
     </View>
     );
