@@ -1,5 +1,6 @@
 import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
+import { SecureStore } from 'expo'
 import {
     loginAccount,
     registerAccount,
@@ -77,7 +78,7 @@ export const createAccount = (params) => async (dispatch, getState) => {
         dispatch(showToast(getError(err)))
         return
     }
-    await AsyncStorage.setItem('id', newAccount.id)
+    await SecureStore.setItemAsync('id', newAccount.id)
     const pseudonymType = params.email ? 'email' : 'username'
     await AsyncStorage.setItem('pseudonym', JSON.stringify({ type: pseudonymType, value: params[pseudonymType] }))
     dispatch(registerAction(newAccount.id))
@@ -87,8 +88,8 @@ export const createAccount = (params) => async (dispatch, getState) => {
 export const login = (params) => async (dispatch, getState) => {
     let err = null
     let account = null
-    let id = await AsyncStorage.getItem('id')
-    let token = await AsyncStorage.getItem('token')
+    let id = await SecureStore.getItemAsync('id')
+    let token = await SecureStore.getItemAsync('token')
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
@@ -98,8 +99,8 @@ export const login = (params) => async (dispatch, getState) => {
         token = res.id
         account = res.user
         setAuthHeader(token)
-        await AsyncStorage.setItem('token', token)
-        await AsyncStorage.setItem('id', account.id)
+        await SecureStore.setItemAsync('token', token)
+        await SecureStore.setItemAsync('id', account.id)
     } else if (token && id) {
         setAuthHeader(token)
         account = await getAccount(id).catch(e=>err=e)
@@ -119,12 +120,14 @@ export const login = (params) => async (dispatch, getState) => {
 }
 
 export const logout = () => async(dispatch, getState) => {
-    let token = await AsyncStorage.getItem('token')
+    let token = await SecureStore.getItemAsync('token')
     if (token) {
         setAuthHeader(token)
         await logoutAccount()
     }
-    await AsyncStorage.multiRemove(['token', 'id', 'account'])
+    await SecureStore.deleteItemAsync('token')
+    await SecureStore.deleteItemAsync('id')
+    await AsyncStorage.removeItem('account')
     dispatch(logoutAction())
     const resetAction = NavigationActions.reset({
         index: 0,

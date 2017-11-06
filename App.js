@@ -4,7 +4,7 @@ import { AppRegistry, BackHandler, AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './src/store/index';
 import { login } from './src/reducers/account'
-import { AppLoading, Font } from 'expo';
+import { AppLoading, Font, SecureStore } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
@@ -39,8 +39,8 @@ class Tokens extends React.Component {
 	  BackHandler.addEventListener("onBackPress", this.goBack);
 
 
-    const token = await AsyncStorage.getItem('token')
-    const id = await AsyncStorage.getItem('id')
+    const token = await SecureStore.getItemAsync('token')
+    const id = await SecureStore.getItemAsync('id')
 
     if (token && id) {
       await store.dispatch(login())

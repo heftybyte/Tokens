@@ -1,6 +1,6 @@
 import { Alert, AsyncStorage } from 'react-native'
 import currencyFormatter from 'currency-formatter';
-import { Permissions, Notifications } from 'expo';
+import { Permissions, Notifications, SecureStore } from 'expo';
 import {
 	setAuthHeader,
 	registerUserForPushNotifications
@@ -50,7 +50,7 @@ export const registerForPushNotificationsAsync = async () => {
 
 	// Get the token that uniquely identifies this device
 	let token = await Notifications.getExpoPushTokenAsync();
-	let userToken = await AsyncStorage.getItem('token')
+	let userToken = await SecureStore.getItemAsync('token')
 	setAuthHeader(userToken)
 	await registerUserForPushNotifications({token})
 }
