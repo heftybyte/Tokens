@@ -87,3 +87,7 @@ export const getTokenDetailsForAccount  = async (id, sym) => {
   const res = await instance.get(`/accounts/${id}/portfolio/token/${sym}`)
   return res.data
 }
+
+export const trackFeedActivity = async (feedItemId, accountId, type) => {
+  instance.post(`/feed/${accountId}/action`, {feedItemId, accountId, type});
+}
