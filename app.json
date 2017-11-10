@@ -20,6 +20,18 @@
     "loading": {
       "backgroundColor": "#000"
     },
-    "primaryColor": "#000"
+    "primaryColor": "#000",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "tokens",
+            "project": "tokens-mobile-xb",
+            "authToken": "e51f195cc64911e7a1004201c0a8d032"
+          }
+        }
+      ]
+    }
   }
 }

@@ -11,10 +11,7 @@ import AppWithNavigationState from './src/navigators/AppNavigator';
 require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
-
-const publicDSN = process.env.SENTRY_PUBLIC_DSN || 'https://473f8d321a8b4a4499a9502a2fde6bfc@sentry.io/240860'
-
-Sentry.enableInExpoDevelopment = true;
+const publicDSN = process.env.SENTRY_PUBLIC_DSN || 'https://af6c590a432d4ef49746f9d2fc8a4b8e@sentry.io/242835'
 Sentry.config(publicDSN).install();
 
 
