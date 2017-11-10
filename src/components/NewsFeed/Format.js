@@ -7,12 +7,12 @@ import TextCenter from './Layouts/TextCenterLayout'
 import TextDefault from './Layouts/TextLayout'
 import Video from './Layouts/VideoLayout'
 import { trackNewsFeedTap } from '../../helpers/analytics'
-import {trackFeedItem} from '../../reducers/account';
-import store from '../../store';
+import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
+import { connect } from 'react-redux';
 
 const Format = (props) => {
     let Layout
-    const { format, news, news: { link } } = props
+    const { format, news, news: { link }, trackFeedItem } = props
     const { id } = news;
 
     switch(format) {
@@ -44,10 +44,17 @@ const Format = (props) => {
     }
 
     return (
-        <TouchableOpacity onPress={()=>{trackNewsFeedTap(news); store.dispatch(trackFeedItem(id, 'tap'));visitLink()}} style={{height:130}}>
+        <TouchableOpacity onPress={()=>{trackNewsFeedTap(news);trackFeedItem(id, 'tap');visitLink()}} style={{height:130}}>
             <Layout news={news} />
         </TouchableOpacity>
     )
 }
 
-export default Format;
+const mapStateToProps = (state) => ({
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    trackFeedItem: (id, action) => dispatch(_trackFeedItem(id, action))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Format);
