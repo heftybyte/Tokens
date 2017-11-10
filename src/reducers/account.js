@@ -11,7 +11,8 @@ import {
     deleteAccountAddress,
     getAccount,
     getTokenDetailsForAccount,
-        logoutAccount
+    logoutAccount,
+    trackFeedActivity
 } from '../helpers/api'
 import { safeAlert } from '../helpers/functions'
 import {
@@ -233,6 +234,11 @@ const initialState = {
     portfolio: {},
     tokenDetails: {},
     invites: []
+}
+
+export const trackFeedItem = (feedItemId, type) => async (dispatch, getState) => {
+    const { id } = getState().account;
+    trackFeedActivity(feedItemId, id, type);
 }
 
 export default (state = initialState, action) => {

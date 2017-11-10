@@ -1,6 +1,7 @@
 import { Analytics, ScreenHit, Event } from 'expo-analytics';
 import { NavigationActions } from 'react-navigation';
 
+
 const analytics = new Analytics('UA-104515335-2');
 
 analytics.hit(new ScreenHit('Load'));
@@ -13,8 +14,8 @@ const getFeedItemLabel = (feedItem) =>
 	`${feedItem.title} - ${feedItem.body} - ${feedItem.id}`
 
 export const trackNewsFeedSwipe = (feedItem) => {
-	const label = getFeedItemLabel(feedItem)
-	analytics.hit(new Event('News Feed', 'Swipe', label))
+  const label = getFeedItemLabel(feedItem)
+  analytics.hit(new Event('News Feed', 'Swipe', label))
 }
 
 export const trackNewsFeedTap = (feedItem) => {
