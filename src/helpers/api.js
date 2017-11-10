@@ -88,6 +88,12 @@ export const getTokenDetailsForAccount  = async (id, sym) => {
   return res.data
 }
 
+// must pass a checksum even if it's wrong
+export const getAllTokens = async(checksum = '000') => {
+  let res = await instance.get(`/tokens?checksum=${checksum}`);
+  return res.data;
+}
+
 export const trackFeedActivity = async (feedItemId, accountId, type) => {
   instance.post(`/feed/${accountId}/action`, {feedItemId, accountId, type});
 }

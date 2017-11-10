@@ -58,7 +58,7 @@ const updateAction = (account) => ({
 
 const addAddressAction = (addresses=[]) => ({
     type: ADD_ADDRESS,
-    data: { addresses }
+    payload: { addresses }
 })
 
 const deleteAddressAction = (addresses=[]) => ({

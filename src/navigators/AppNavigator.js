@@ -9,6 +9,7 @@ import Dashboard from '../components/Dashboard';
 import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
+import Search from '../components/Search';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 
 export const AppNavigator = StackNavigator({
@@ -19,6 +20,7 @@ export const AppNavigator = StackNavigator({
   Dashboard: { screen: Dashboard },
   Accounts : { screen: ViewAccounts },
   'Add Address': { screen: AddAddress },
+  Search: { screen: Search },
 	Register: { screen: Register },
   TokenDetails: { screen: TokenDetails }
 }, {

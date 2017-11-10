@@ -167,6 +167,27 @@ class Dashboard extends Component {
   }
 }
 
+Dashboard.navigationOptions = ({ navigation }) => ({
+  // the title  is also used as the label for the back button
+  title: (navigation.state.params && navigation.state.params.title) || 'Dashboard',
+  headerTitleStyle : {
+    color: '#fff',
+    alignSelf: 'center',
+    fontFamily: 'Nunito-ExtraLight'
+  },
+  headerStyle: styles.header,
+  headerLeft:(
+        <MaterialCommunityIcons
+          style={{paddingLeft:20}}
+          name="menu"
+          size={26}
+          color="white"
+          backgroundColor="black"
+          onPress={()=>{navigation.dispatch({type: 'Accounts'})}}
+        />),
+  headerRight: <Ionicons onPress={()=>{navigation.dispatch({type: 'Search'})}} style={{paddingRight:20}} name="ios-search-outline" size={28} color="white" />
+});
+
 const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
   addresses: state.account.addresses,
