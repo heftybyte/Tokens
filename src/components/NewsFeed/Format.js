@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking, View, TouchableOpacity } from 'react-native';
+import { Linking, View, TouchableWithoutFeedback } from 'react-native';
 import ImageLeft from './Layouts/ImageLeftLayout'
 import ImageRight from './Layouts/ImageRightLayout'
 import ImageDefault from './Layouts/ImageLayout'
@@ -44,9 +44,9 @@ const Format = (props) => {
     }
 
     return (
-        <TouchableOpacity onPress={()=>{trackNewsFeedTap(news);trackFeedItem(id, 'tap');visitLink()}} style={{height:130}}>
+        <TouchableWithoutFeedback onPress={()=>{trackNewsFeedTap(news); trackFeedItem(id, 'tap');visitLink()}} style={{height:130}}>
             <Layout news={news} />
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
     )
 }
 
