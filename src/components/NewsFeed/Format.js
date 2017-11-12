@@ -45,7 +45,7 @@ const Format = (props) => {
 
     return (
         <TouchableOpacity onPress={()=>{trackNewsFeedTap(news); store.dispatch(trackFeedItem(id, 'tap'));visitLink()}} style={{height:130}}>
-            <Layout news={news} />
+            <Layout news={news} bookmarked={props.bookmarked} />
         </TouchableOpacity>
     )
 }

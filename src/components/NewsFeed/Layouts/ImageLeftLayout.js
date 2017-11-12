@@ -3,6 +3,7 @@ import { Text, View, Image} from 'react-native';
 import { Grid, Row } from "react-native-easy-grid";
 import {styles} from '../Style'
 import { getLinkTextByType } from './helpers'
+import  SaveButton from '../SaveButton'
 
 
 class ImageLeft extends React.Component {
@@ -36,6 +37,12 @@ class ImageLeft extends React.Component {
                     >
                       { getLinkTextByType(type) }&gt;
                     </Text>
+                    {
+                        !this.props.bookmarked &&
+                        <Col size={.2}>
+                            <SaveButton item={this.props.news}/>
+                        </Col>
+                    }
                 </Row>
             </Grid>
         )

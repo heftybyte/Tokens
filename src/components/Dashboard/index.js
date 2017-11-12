@@ -153,7 +153,7 @@ class Dashboard extends Component {
             </View>
           </TouchableHighlight>
         : <Header totalValue={portfolio.totalValue} />}
-        <News feed={mockNewsFeed} />
+        <News feed={mockNewsFeed} bookmarked={false}/>
         { portfolio && portfolio.tokens &&
         <TokenList tokens={portfolio.tokens} />}
         { portfolio &&
