@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
-import { formatPrice } from '../../helpers/functions'
+import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 
 const baseURL = process.env.NODE_ENV === 'production' ?
   'http://138.197.104.147:3000' :
@@ -48,7 +48,8 @@ const Watchlist = ({ item, showChange, onPress, index }) => {
 }
 
 const TokenItem = ({ item, index, onPress, showTokenInfo}) => {
-  const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
+  const changeStyle = item.change > -1 ? styles.gain : styles.loss
+  const changeTextStyle = !item.change && styles.neutralColor || (parseInt(item.change) > -1 ? styles.gainColor : styles.lossColor)
   const isLongPrice = (`${item.balance * item.price}`).length >= 11
   const formattedPrice = item.price ? 
     `@ $${item.price.toLocaleString().substr(0,5)}` :
@@ -66,9 +67,12 @@ const TokenItem = ({ item, index, onPress, showTokenInfo}) => {
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>
-            {String(item.balance).substr(0,5)} {formattedPrice}
+            {String(item.balance).substr(0,5)} {formattedPrice} 
           </Text>
         </View>
+        <Text style={[changeTextStyle, styles.changeText]}>
+          {parseInt(item.change) ? formatCurrencyChange(Number(item.priceChange.toFixed(2))): ''}
+        </Text>
         <TouchableHighlight
           onPress={onPress}
           style={[
@@ -195,7 +199,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito'
   },
   symbolContainer: {
-    flex: .6,
+    flex: .6
   },
   priceContainer: {
     width: 90,
@@ -254,6 +258,25 @@ const styles = StyleSheet.create({
   gain: {
     backgroundColor: '#48ba94',
     borderColor: '#48ba94'
+  },
+  loss: {
+    backgroundColor: '#b63e15'
+  },
+  arrowText: {
+  },
+  changeText: {
+    fontSize: 12,
+    textAlignVertical: 'top',
+    marginLeft: 10
+  },
+  gainColor: {
+    color: '#48ba94'
+  },
+  lossColor: {
+    color: '#b63e15'
+  },
+  neutralColor: {
+    color: '#fff'
   },
   orderText: {
     color: '#fff',

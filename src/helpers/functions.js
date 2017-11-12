@@ -30,6 +30,16 @@ export const formatPrice = (price) => {
   return formattedPrice
 }
 
+export const formatCurrencyChange = (change) => {
+	if (change > 0) {
+		return '+$' + change
+	} else if (change < 0) {
+		return '-$' + Math.abs(change)
+	} else {
+		return ''
+	}
+}
+
 export const getError = (err) =>
   err.response && err.response.data.error.message || err.message
 
