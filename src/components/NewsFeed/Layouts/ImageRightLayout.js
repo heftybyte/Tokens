@@ -15,7 +15,7 @@ class ImageRight extends React.Component {
                 <Row size={20}>
                     <Text style={styles.title}>{title.toUpperCase()}</Text>
                 </Row>
-                <Row size={70} style={styles.center}>
+                <Row size={60} style={styles.center}>
                     <Col size={65}>
                         <Text style={styles.body}>{body}</Text>
                     </Col>
@@ -26,7 +26,7 @@ class ImageRight extends React.Component {
                         />
                     </Col>
                 </Row>
-                <Row size={10}>
+                <Row size={20} style={{alignItems: 'flex-end'}}>
                     <Row>
                         <Text
                           style={styles.link}

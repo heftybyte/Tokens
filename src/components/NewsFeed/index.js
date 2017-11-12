@@ -4,8 +4,8 @@ import Swiper from 'react-native-swiper'
 import {styles} from './Style'
 import Format from './Format'
 import { trackNewsFeedSwipe } from '../../helpers/analytics'
-import {trackFeedItem} from '../../reducers/account';
-import store from '../../store';
+import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
+import { connect } from 'react-redux';
 
 const Dot = (color) => (
   <View
@@ -23,6 +23,7 @@ const Dot = (color) => (
 )
 
 const News = (props) => {
+  const { trackFeedItem } = props
   const feed = (props.feed || []).map((news, index) => {
     return (
         <View key={index} style={styles.slide}>
@@ -44,7 +45,7 @@ const News = (props) => {
         containerStyle={styles.container}
         onIndexChanged={(index)=>{
           trackNewsFeedSwipe(props.feed[index])
-          store.dispatch(trackFeedItem(props.feed[index].id, 'view'))
+          trackFeedItem(props.feed[index].id, 'view')
         }}
        >
         { feed }
@@ -52,4 +53,11 @@ const News = (props) => {
   )
 }
 
-export default News;
+const mapStateToProps = (state) => ({
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    trackFeedItem: (id, action) => dispatch(_trackFeedItem(id, action))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(News);

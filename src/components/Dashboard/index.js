@@ -120,6 +120,7 @@ class Dashboard extends Component {
 
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
+
     return (
       <ScrollView
         style={styles.scrollContainer}
@@ -152,13 +153,18 @@ class Dashboard extends Component {
               <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
             </View>
           </TouchableHighlight>
-        : <Header totalValue={portfolio.totalValue} />}
+        : <Header
+            totalValue={portfolio.totalValue}
+            totalChange={portfolio.totalPriceChange}
+            totalChangePct={portfolio.totalPriceChangePct}
+          />
+        }
         <News feed={mockNewsFeed} />
         { portfolio && portfolio.tokens &&
         <TokenList tokens={portfolio.tokens} />}
         { portfolio &&
         <TokenList
-          title="Top 100 Tokens By Market Cap" 
+          title="Top 20 Tokens By Market Cap" 
           watchList={portfolio.top}
           type="watchList"
         />}

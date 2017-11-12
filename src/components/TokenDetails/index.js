@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
-
+import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import Header from '../Dashboard/Header';
-import { formatPrice } from '../../helpers/functions'
 import { getTokenDetails } from '../../reducers/account';
+import { baseURL } from '../../config'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -27,11 +27,13 @@ const styles = StyleSheet.create({
     flexBasis: 1
   },
   tokenHeading: {
-    color: '#666'
+    color: '#666',
+    fontFamily: 'Nunito'
   },
   tokenValue: {
     color: '#fff',
-    fontSize: 30
+    fontSize: 20,
+    fontFamily: 'Nunito'
   },
   header: {
     backgroundColor: '#000'
@@ -43,8 +45,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     paddingBottom: 10,
     paddingLeft: 20,
-    marginBottom: 10,
-    marginTop: 10
   }
 });
 
@@ -55,16 +55,19 @@ class TokenDetails extends Component {
   }
 
   render() {
-    const { price, quantity, marketCap, volume24Hr, totalValue } = this.props.tokenDetails;
+    const { price, quantity, marketCap, volume24Hr, totalValue, imageUrl, symbol, change, priceChange } = this.props.tokenDetails;
 
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <Header totalValue={totalValue} />
-        <Text style={styles.heading}>
-          Token Info
-        </Text>
+        <Header totalValue={quantity ? totalValue : price} totalChange={priceChange} totalChangePct={change} />
+        <View style={{paddingLeft: 20, flexDirection: 'row', alignItems: 'flex-start', marginVertical: 20}}>
+          <Image source={{ uri: baseURL + imageUrl }} style={{width: 30, height: 30}}/>
+          <Text style={[styles.heading, {alignSelf: 'flex-start', flex:1}]}>
+            {symbol}
+          </Text>
+        </View>
 
-        <View style={styles.container}>
+        {!!quantity && <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>PRICE</Text>
             <Text style={styles.tokenValue}>{'$'+formatPrice(price)}</Text>
@@ -72,19 +75,19 @@ class TokenDetails extends Component {
 
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>QUANTITY</Text>
-            <Text style={styles.tokenValue}>{quantity}</Text>
+            <Text style={styles.tokenValue}>{quantity.toLocaleString()}</Text>
           </View>
-        </View>
+        </View>}
 
         <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>MARKET CAP</Text>
-            <Text style={styles.tokenValue}>{marketCap}</Text>
+            <Text style={styles.tokenValue}>{'$'+marketCap.toLocaleString()}</Text>
           </View>
 
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>24 HR VOLUME</Text>
-            <Text style={styles.tokenValue}>{volume24Hr}</Text>
+            <Text style={styles.tokenValue}>{`$${volume24Hr.toLocaleString()}`}</Text>
           </View>
         </View>
       </ScrollView>

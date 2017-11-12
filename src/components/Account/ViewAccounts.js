@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   TextInput,
   TouchableHighlight,
   ScrollView,
@@ -10,6 +9,7 @@ import {
   AsyncStorage,
   Linking
 } from 'react-native';
+import { Container, Header, Title, Content, Card, CardItem, Left, Right, Text, Icon, Body } from 'native-base';
 import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
@@ -18,6 +18,7 @@ import { deleteAddress, refreshAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 import { trackAddress, trackTap } from '../../helpers/analytics'
+import { brandColor } from '../../config'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#6b2fe2',
+    backgroundColor: brandColor,
     padding: 10,
     borderRadius: 10,
     flexDirection: 'row'
@@ -82,38 +83,12 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   inviteText: {
-    color: '#6b2fe2',
+    color: brandColor,
     textAlign: 'center',
     fontSize: 24,
     marginBottom: 10
   }
 });
-
-const AddressView = ({name, address, deleteAddress, refreshAddress}) => {
-    return (
-        <View style={styles.addressViewContainer}>
-            <Text style={[styles.text, styles.addressText]}>{name}</Text>
-            <TouchableHighlight
-              style={styles.removeAddressBtn}
-              onPress={() => {trackAddress('Refresh', 'Button');refreshAddress(address)}}>
-              <MaterialCommunityIcons
-                name="refresh"
-                size={22}
-                color="#6b2fe2"
-              />
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={styles.removeAddressBtn}
-              onPress={() => {trackAddress('Delete', 'Button');deleteAddress(address)}}>
-              <MaterialCommunityIcons
-                name="minus-circle-outline"
-                size={22}
-                color="#b63e15"
-              />
-            </TouchableHighlight>
-        </View>
-    );
-}
 
 class ViewAddresses extends Component {
 
@@ -130,43 +105,103 @@ class ViewAddresses extends Component {
     } = this.props
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-          <Text style={[styles.text, styles.title]}>Your Accounts</Text>
-          <View>
-              {addresses.map(
-                  (address, index) =>
-                  <AddressView
-                      key={index}
-                      name={address.id}
-                      address={address.id}
-                      deleteAddress={deleteAddress}
-                      refreshAddress={refreshAddress}
-                  />
-              )}
-          </View>
-          <TouchableHighlight
-              style={styles.btn}
-              onPress={() => goToRoute('Add Address')}
+        <Card>
+          <CardItem
+            header
+            style={{backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1}}
           >
-            <Text style={styles.logoutBtnText}>Add Your Ethereum Address</Text>
-          </TouchableHighlight>
+            <Text style={{color:'#fff'}}>Your Ethereum Addresses</Text>
+          </CardItem>
+          {addresses.map(
+              (address, index) =>
+              <CardItem
+                key={index}
+                style={{
+                  backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1
+                }}
+              >
+                <Text
+                  style={{color: '#fff', fontSize: 12, flex: .8 }}
+                  numberOfLines={1}
+                >
+                  {address.id}
+                </Text>
+                <Right style={{flex:.1}}>
+                  <TouchableHighlight
+                    style={styles.removeAddressBtn}
+                    onPress={() => {trackAddress('Refresh', 'Button');refreshAddress(address.id)}}>
+                    <MaterialCommunityIcons
+                      name="refresh"
+                      size={22}
+                      color={brandColor}
+                    />
+                  </TouchableHighlight>
+                </Right>
+                <Right style={{flex:.1}}>
+                  <TouchableHighlight
+                    style={styles.removeAddressBtn}
+                    onPress={() => {trackAddress('Delete', 'Button');deleteAddress(address.id)}}>
+                    <MaterialCommunityIcons
+                      name="minus-circle-outline"
+                      size={22}
+                      color="#b63e15"
+                    />
+                  </TouchableHighlight>
+                </Right>
+              </CardItem>
+          )}
+            <CardItem
+              footer
+              style={{backgroundColor: '#000', borderColor: '#fff'}}
+            > 
+              <Body />
+              <Right>
+                <TouchableHighlight
+                  onPress={() => goToRoute('Add Address')}
+                >
+                  <Text style={{color:brandColor}}>+ Add Address</Text>
+                </TouchableHighlight>
+              </Right>
+            </CardItem>
+         </Card>
           {(token || id) &&
-            <View style={{marginTop: 40, paddingTop: 10, borderTopWidth: 1, borderColor: '#6b2fe2'}}>
-              <Text style={[styles.text, styles.title, styles.inviteHeader]}>Your Invite Code(s)</Text>
-              {
-                  invites.length ?
-                    invites.map((code, index)=>
-                        <Text key={index} style={[styles.inviteText]}>{code}</Text>
-                    ) :
-                    <TouchableHighlight
-                      onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
+            <View>
+            <Card>
+              <CardItem
+                header
+                style={{backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1}}
+              >
+                <Text style={{color:'#fff'}}>Your Invites</Text>
+              </CardItem>
+              {invites.map(
+                  (code, index) =>
+                  <CardItem
+                    key={index}
+                    style={{
+                      backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1
+                    }}
+                  >
+                    <Text
+                      style={{color: '#fff', fontSize: 12, flex: .8 }}
+                      numberOfLines={1}
                     >
-                      <Text
-                        style={[styles.text, styles.centerText, {fontSize: 12}]}
-                      >
-                        Tweet <Text style={{color: '#6b2fe2'}}>@tokens_express</Text> to get invites
-                      </Text>
-                    </TouchableHighlight>
-              }
+                      {code}
+                    </Text>
+                  </CardItem>
+              )}
+              {!invites.length && 
+                <CardItem footer style={{backgroundColor: '#000'}}>
+                  <TouchableHighlight
+                    onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
+                  >
+                    <Text
+                      style={{color: '#fff', fontSize: 12}}
+                    >
+                      Tweet <Text style={{color: brandColor, fontSize: 12}}>@tokens_express</Text> to get invites
+                    </Text>
+                  </TouchableHighlight>
+                </CardItem>}
+             </Card>
               <TouchableHighlight
                   style={[styles.logoutBtn, {marginTop: 100}]}
                   onPress={()=>{trackTap('Logout');logout()}}

@@ -217,7 +217,7 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
 
-    dispatch(setLoading(true, `Loading ${sym} details`))
+    dispatch(setLoading(true, `Loading ${sym} Details`))
     const tokenDetails = await getTokenDetailsForAccount(id, sym).catch(e=>err=e)
     dispatch(setLoading(false))
     if (err) {
@@ -231,8 +231,20 @@ const initialState = {
     addresses : [],
     id: null,
     token: null,
-    portfolio: {},
-    tokenDetails: {},
+    portfolio: {
+        totalPriceChange: 0,
+        totalPriceChangePct: 0,
+        totalValue: 0
+    },
+    tokenDetails: {
+        "marketCap": 0,
+        "price": 0,
+        "quantity": 0,
+        "totalValue": 0,
+        "volume24Hr": 0,
+        "change": 0,
+        "priceChange": 0,
+    },
     invites: []
 }
 

@@ -5,20 +5,18 @@ import {
     View,
     SectionList,
     Image,
-    TouchableHighlight,
+    TouchableOpacity
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
-import { formatPrice } from '../../helpers/functions'
+import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
+import { baseURL, gainColor, lossColor } from '../../config'
+import { showToast } from '../../reducers/ui'
 
-const baseURL = process.env.NODE_ENV === 'production' ?
-  'http://138.197.104.147:3000' :
-  'http://138.197.104.147:3000'
-
-const Watchlist = ({ item, showChange, onPress, index }) => {
+const Watchlist = ({ item, showChange, onPress, showTokenInfo, index }) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
   return (
-    <TouchableHighlight>
+    <TouchableOpacity onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <Text style={styles.orderText}>{index+1}.</Text>
         <View>
@@ -29,7 +27,7 @@ const Watchlist = ({ item, showChange, onPress, index }) => {
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>${formatPrice(item.marketCap)}</Text>
         </View>
-        <TouchableHighlight onPress={onPress}>
+        <TouchableOpacity onPress={onPress}>
           <View style={[
             styles.priceContainer,
             changeStyle,
@@ -41,23 +39,26 @@ const Watchlist = ({ item, showChange, onPress, index }) => {
                   `$${formatPrice(item.price)}`}
                 </Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   )
 }
 
-const TokenItem = ({ item, index, onPress, showTokenInfo}) => {
-  const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
+const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
+  const changeStyle = item.change > 0 ? styles.gain : styles.loss
+  const changeTextStyle = !item.change && styles.neutralColor || (parseInt(item.change) > -1 ? styles.gainColor : styles.lossColor)
   const isLongPrice = (`${item.balance * item.price}`).length >= 11
   const formattedPrice = item.price ? 
-    `@ $${item.price.toLocaleString().substr(0,5)}` :
+    `@ $${formatPrice(item.price)}` :
     ''
   const formattedTotal = item.price ?
     `$${formatPrice(item.balance * item.price)}` :
     'N/A'
+  const formattedPriceChange = formatCurrencyChange(formatPrice(item.priceChange||0)) || 'N/A'
+
   return (
-    <TouchableHighlight onPress={showTokenInfo}>
+    <TouchableOpacity onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
           <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
@@ -66,10 +67,13 @@ const TokenItem = ({ item, index, onPress, showTokenInfo}) => {
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>
-            {String(item.balance).substr(0,5)} {formattedPrice}
+            {item.balance.toLocaleString()} {formattedPrice} 
           </Text>
         </View>
-        <TouchableHighlight
+        {/*<Text style={[changeTextStyle, styles.changeText]}>
+          {parseInt(item.change) ? formattedTotal : ''}
+        </Text>*/}
+        <TouchableOpacity
           onPress={onPress}
           style={[
               styles.priceContainer,
@@ -83,11 +87,11 @@ const TokenItem = ({ item, index, onPress, showTokenInfo}) => {
               !item.price ? styles.noPriceText : {}
               /*isLongPrice ? styles.longPrice : {}*/
           ]}>
-            {formattedTotal}
+            {showChange ? formattedTotal : formattedPriceChange}
           </Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   )
 };
 
@@ -106,12 +110,16 @@ class TokenList extends Component {
       item={item}
       index={index}
       showTokenInfo={() => {
-        return // TODO: fix token details page
         this.props.goToTokenDetailsPage(item);
       }}
       showChange={this.state.showChange}
       onPress={()=>{
         this.setState({showChange: !this.state.showChange})
+        this.props.showToast(
+          this.state.showChange ? 'Total Change' : 'Total Value',
+          { position: 'center', style: { backgroundColor: '#222' } },
+          200
+        )
       }}
     />
   )
@@ -120,9 +128,17 @@ class TokenList extends Component {
     <TokenItem
       item={item}
       index={index}
+      showChange={this.state.showChange}
       showTokenInfo={() => {
-        return // TODO: fix token details page
         this.props.goToTokenDetailsPage(item);
+      }}
+      onPress={()=>{
+        this.setState({showChange: !this.state.showChange})
+        this.props.showToast(
+          this.state.showChange ? 'Total Change' : 'Total Value',
+          { position: 'center', style: { backgroundColor: '#222' } },
+          200
+        )
       }}
     />
   )
@@ -175,7 +191,8 @@ class TokenList extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'TokenDetails', params: {token} }))
+    goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} })),
+    showToast: (msg, props, duration) => dispatch(showToast(msg, props, duration))
 })
 
 const styles = StyleSheet.create({
@@ -195,7 +212,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito'
   },
   symbolContainer: {
-    flex: .6,
+    flex: .6
   },
   priceContainer: {
     width: 90,
@@ -203,12 +220,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#b63e15',
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: '#b63e15',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
-    paddingLeft: 15,
-    paddingRight: 15
+    padding: 12,
+    paddingLeft: 13,
+    paddingRight: 13
   },
   noPrice: {
     backgroundColor: '#000',
@@ -252,8 +268,26 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito'
   },
   gain: {
-    backgroundColor: '#48ba94',
-    borderColor: '#48ba94'
+    backgroundColor: gainColor,
+  },
+  loss: {
+    backgroundColor: lossColor
+  },
+  arrowText: {
+  },
+  changeText: {
+    fontSize: 12,
+    textAlignVertical: 'top',
+    marginLeft: 10
+  },
+  gainColor: {
+    color: gainColor
+  },
+  lossColor: {
+    color: lossColor
+  },
+  neutralColor: {
+    color: '#fff'
   },
   orderText: {
     color: '#fff',
