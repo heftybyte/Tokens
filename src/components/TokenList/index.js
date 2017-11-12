@@ -67,7 +67,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>
-            {item.balance.toLocaleString()} {formattedPrice} 
+            {Number(item.balance.toFixed(5)).toLocaleString()} {formattedPrice} 
           </Text>
         </View>
         {/*<Text style={[changeTextStyle, styles.changeText]}>

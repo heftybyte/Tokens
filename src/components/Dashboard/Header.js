@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   portfolioDeltaPeriod: {
     fontSize: 10,
-    color: '#c1c0bf',
+    color: '#fff',
     fontFamily: 'Nunito'
   },
   gain: {
