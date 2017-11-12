@@ -10,6 +10,7 @@ import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import Search from '../components/Search';
+import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 
 export const AppNavigator = StackNavigator({
@@ -22,7 +23,8 @@ export const AppNavigator = StackNavigator({
   'Add Address': { screen: AddAddress },
   Search: { screen: Search },
 	Register: { screen: Register },
-  TokenDetails: { screen: TokenDetails }
+  TokenDetails: { screen: TokenDetails },
+  Bookmarks: { screen: BookMarks },
 }, {
 	headerMode: "none",
   cardStyle: {

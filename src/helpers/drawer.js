@@ -21,6 +21,11 @@ const Items = [
         name: "Account",
         icon: "account-circle",
         route: "Accounts"
+    },
+    {
+        name: "Bookmarks",
+        icon: "bookmark",
+        route: "Bookmarks"
     }
 ]
 

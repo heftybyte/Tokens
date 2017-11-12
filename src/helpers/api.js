@@ -97,3 +97,8 @@ export const getAllTokens = async(checksum = '000') => {
 export const trackFeedActivity = async (feedItemId, accountId, type) => {
   instance.post(`/feed/${accountId}/action`, {feedItemId, accountId, type});
 }
+
+export const bookMark = async (id, news) => {
+    let res = await instance.get(`/accounts/${id}/bookmarks/${news.id}`, { news })
+    return res.data
+}

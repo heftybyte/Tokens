@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, View } from 'react-native';
 import { styles } from '../Style'
 import { Video } from 'expo';
+import  SaveButton from '../SaveButton'
 
 class VideoDefault extends React.Component {
 
@@ -21,6 +22,9 @@ class VideoDefault extends React.Component {
                     repeat
                     style={{ height: 250 }}
                 />
+                {!this.props.bookmarked &&
+                    <SaveButton item={this.props.news}/>
+                }
             </View>
         )
     }
