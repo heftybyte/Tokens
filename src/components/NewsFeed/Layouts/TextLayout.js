@@ -15,10 +15,15 @@ class TextDefault extends React.Component {
                 <Row size={20}>
                     <Text style={styles.title}>{title.toUpperCase()}</Text>
                 </Row>
-                <Row size={70}>
-                    <Text style={[styles.center, styles.body, styles.textDefault]}>{body}</Text>
+                <Row size={60} style={{alignItems: 'center'}}>
+                    <Text 
+                        style={[styles.center, styles.body, styles.textDefault]}
+                        numberOfLines={4}
+                    >
+                        {body}
+                    </Text>
                 </Row>
-                <Row size={10}>
+                <Row size={20} style={{alignItems: 'flex-end'}}>
                     <Text
                         style={styles.link}
                         onPress={()=>{

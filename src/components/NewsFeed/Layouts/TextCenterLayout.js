@@ -15,8 +15,8 @@ class TextCenter extends React.Component {
                 <Row size={20}>
                     <Text style={styles.title}>{title.toUpperCase()}</Text>
                 </Row>
-                <Row size={60} style={styles.center}>
-                    <Text style={styles.body}>{body}</Text>
+                <Row size={80}>
+                    <Text style={[styles.body, styles.textDefault]}>{body}</Text>
                 </Row>
             </Grid>
         )
