@@ -150,7 +150,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
         return
     }
     dispatch(addAddressAction(account.addresses))
-    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+    // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
 export const refreshAddress = (address) => async (dispatch, getState) => {
@@ -164,7 +164,7 @@ export const refreshAddress = (address) => async (dispatch, getState) => {
         return
     }
     dispatch(getPortfolio())
-    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+    // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
 export const deleteAddress = (address) => async (dispatch, getState) => {

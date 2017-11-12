@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   priceContainer: {
     width: 90,
     height: 40,
-    backgroundColor: '#b63e15',
+    backgroundColor: lossColor,
     borderRadius: 8,
     borderWidth: 2,
     justifyContent: 'center',
