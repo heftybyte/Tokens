@@ -10,6 +10,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { trackTap } from '../helpers/analytics'
 import Header from "../components/Dashboard/Header"
 import Toast, { DURATION } from 'react-native-easy-toast'
+import store from '../store'
 
 const Items = [
     {
@@ -34,9 +35,9 @@ export const withDrawer = (WrappedComponent) => {
             this.drawer.close()
         }
         componentWillReceiveProps = (nextProps) => {
-            const { toast } = nextProps
+            const { toast, toastDuration } = nextProps
             if (toast && this.refs.toast) {
-                this.refs.toast.show(toast, DURATION.LENGTH_LONG)
+                this.refs.toast.show(toast, toastDuration)
             }
         }
         render() {
@@ -46,6 +47,8 @@ export const withDrawer = (WrappedComponent) => {
             const headerText = navState &&
                 navState.params && navState.params.overrideHeaderText ||
                 navState.routeName
+            const toastProps = store && store.getState().ui.toastProps || {}
+
             return (
                 <Drawer
                     ref={d => (this.drawer = d)}
@@ -101,7 +104,7 @@ export const withDrawer = (WrappedComponent) => {
                                 <Button
                                     style={{ justifyContent: "center", alignItems: "center", width: 60 }}
                                     transparent
-                                    onPress={()=>{trackTap('Search');Alert.alert('Search is coming soon')}}
+                                    onPress={()=>{trackTap('Search');Alert.alert('Search is coming soon.')}}
                                 >
                                     <Ionicons name="ios-search-outline" size={28} color="white" />
                                 </Button>
@@ -117,6 +120,7 @@ export const withDrawer = (WrappedComponent) => {
                         <Toast
                             ref="toast"
                             style={{backgroundColor:'#111'}}
+                            {...toastProps}
                         />
                     </View>
                 </Drawer>

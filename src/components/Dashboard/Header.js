@@ -1,6 +1,8 @@
 import React, { Component }  from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import currencyFormatter from 'currency-formatter';
+import { formatCurrencyChange } from '../../helpers/functions'
+import { gainColor, lossColor } from '../../config'
 
 const styles = StyleSheet.create({
   container: {
@@ -27,17 +29,19 @@ const styles = StyleSheet.create({
   },
   portfolioDelta: {
     color: '#fff',
-    fontSize: 15
+    fontSize: 10,
+    fontFamily: 'Nunito'
   },
   portfolioDeltaPeriod: {
-    fontSize: 15,
-    color: '#c1c0bf'
+    fontSize: 10,
+    color: '#c1c0bf',
+    fontFamily: 'Nunito'
   },
   gain: {
-    color: '#48ba94'
+    color: gainColor
   },
   loss: {
-    color: '#b63e15'
+    color: lossColor
   },
   smallHeaderFont: {
     fontSize: 50
@@ -57,9 +61,9 @@ class Header extends Component {
 
   render () {
     const { totalValue, totalChange, totalChangePct, style } = this.props
-    const gain = totalChange >= 0
+    const gain = (totalChangePct||0) > 0
     const valueParts = currencyFormatter
-      .format(totalValue, currencyFormatOptions)
+      .format((totalValue||0), currencyFormatOptions)
       .split(/\$|\./)
     const smallerFont = valueParts[1].length >= 7 ?
       styles.smallHeaderFont :
@@ -72,14 +76,14 @@ class Header extends Component {
           <Text style={[styles.portfolioValue, smallerFont]}>{valueParts[1]}</Text>
           <Text style={styles.portfolioValueCents}>.{valueParts[2]||'00'}</Text>
         </Text>
-        <Text style={styles.changeContainer}>
-        {/* NOTE: will be implemented in the next sprint
-          <Text style={[styles.portfolioDelta, gain ? styles.gain : styles.loss]}>
-            {gain ? '+' : '-'} {totalChange}({totalChangePct}%)
-          </Text>
-          <Text style={styles.portfolioDeltaPeriod}>24h</Text>
-        */}
-        </Text>
+          {!!totalChange && 
+            <View style={styles.changeContainer}>
+              <Text style={[styles.portfolioDelta, gain ? styles.gain : styles.loss]}>
+                  {formatCurrencyChange((totalChange||0))} ({(totalChangePct||0).toFixed(2)}%)
+                  <Text style={styles.portfolioDeltaPeriod}> in 24h</Text>
+              </Text>
+            </View>
+          }
       </View>
     );
   }

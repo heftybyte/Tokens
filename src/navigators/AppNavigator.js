@@ -22,7 +22,7 @@ export const AppNavigator = StackNavigator({
   'Add Address': { screen: AddAddress },
   Search: { screen: Search },
 	Register: { screen: Register },
-  TokenDetails: { screen: TokenDetails }
+  'Token Details': { screen: TokenDetails }
 }, {
 	headerMode: "none",
   cardStyle: {

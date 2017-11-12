@@ -18,6 +18,7 @@ import { deleteAddress, refreshAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 import { trackAddress, trackTap } from '../../helpers/analytics'
+import { brandColor } from '../../config'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#6b2fe2',
+    backgroundColor: brandColor,
     padding: 10,
     borderRadius: 10,
     flexDirection: 'row'
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   inviteText: {
-    color: '#6b2fe2',
+    color: brandColor,
     textAlign: 'center',
     fontSize: 24,
     marginBottom: 10
@@ -132,7 +133,7 @@ class ViewAddresses extends Component {
                     <MaterialCommunityIcons
                       name="refresh"
                       size={22}
-                      color="#6b2fe2"
+                      color={brandColor}
                     />
                   </TouchableHighlight>
                 </Right>
@@ -158,7 +159,7 @@ class ViewAddresses extends Component {
                 <TouchableHighlight
                   onPress={() => goToRoute('Add Address')}
                 >
-                  <Text style={{color:'#6b2fe2'}}>+ Add Address</Text>
+                  <Text style={{color:brandColor}}>+ Add Address</Text>
                 </TouchableHighlight>
               </Right>
             </CardItem>
@@ -196,7 +197,7 @@ class ViewAddresses extends Component {
                     <Text
                       style={{color: '#fff', fontSize: 12}}
                     >
-                      Tweet <Text style={{color: '#6b2fe2', fontSize: 12}}>@tokens_express</Text> to get invites
+                      Tweet <Text style={{color: brandColor, fontSize: 12}}>@tokens_express</Text> to get invites
                     </Text>
                   </TouchableHighlight>
                 </CardItem>}

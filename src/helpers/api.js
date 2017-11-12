@@ -4,14 +4,12 @@ import axios from 'axios';
 import Expo from 'expo';
 import store from '../store'
 import { login } from '../reducers/account'
-
+import { baseURL } from '../config'
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Accept'] = 'application/json';
 
-export const API_HOST = '138.197.104.147:3000'
-
 const instance = axios.create({
-  baseURL: `http://${API_HOST}/api`
+  baseURL: `${baseURL}/api`
 });
 
 instance.interceptors.response.use(res => res, async (err) => {
