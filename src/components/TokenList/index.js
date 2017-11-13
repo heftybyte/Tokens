@@ -5,7 +5,8 @@ import {
     View,
     SectionList,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -13,7 +14,7 @@ import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import { baseURL, gainColor, lossColor } from '../../config'
 import { showToast } from '../../reducers/ui'
 
-const Watchlist = ({ item, showChange, onPress, showTokenInfo, index }) => {
+const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
   return (
     <TouchableOpacity onPress={showTokenInfo}> 
@@ -67,7 +68,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>
-            {item.balance.toLocaleString()} {formattedPrice} 
+            {Number(item.balance.toFixed(5)).toLocaleString()} {formattedPrice} 
           </Text>
         </View>
         {/*<Text style={[changeTextStyle, styles.changeText]}>
@@ -95,6 +96,35 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
   )
 };
 
+const SearchItem = ({ item, onPress, showTokenInfo, index }) => {
+  return (
+    <TouchableOpacity onPress={showTokenInfo}> 
+      <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
+        <View>
+          <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
+        </View>
+
+        <View style={styles.symbolContainer}>
+          <Text style={styles.symbol}>{item.symbol}</Text>
+        </View>
+        <TouchableOpacity
+          onPress={onPress}
+          style={[
+              styles.priceContainer,
+              styles.noPrice
+          ]}
+        >
+          <Text style={[
+            styles.noPriceText
+          ]}>
+            WATCH
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  )
+}
+
 class TokenList extends Component {
 
   state = {
@@ -105,8 +135,8 @@ class TokenList extends Component {
     type: "tokens"
   }
 
-  renderWatchlist = ({item, index}) => (
-    <Watchlist
+  renderWatchListItem = ({item, index}) => (
+    <WatchListItem
       item={item}
       index={index}
       showTokenInfo={() => {
@@ -116,7 +146,7 @@ class TokenList extends Component {
       onPress={()=>{
         this.setState({showChange: !this.state.showChange})
         this.props.showToast(
-          this.state.showChange ? 'Total Change' : 'Total Value',
+          this.state.showChange ? 'Total Value' : 'Total Change',
           { position: 'center', style: { backgroundColor: '#222' } },
           200
         )
@@ -124,7 +154,7 @@ class TokenList extends Component {
     />
   )
 
-  renderTokens = ({item, index}) => (
+  renderTokenItem = ({item, index}) => (
     <TokenItem
       item={item}
       index={index}
@@ -143,34 +173,28 @@ class TokenList extends Component {
     />
   )
 
+  renderSearchListItem = ({item, index}) => (
+    <SearchItem
+      item={item}
+      index={index}
+      showTokenInfo={() => {
+        this.props.goToTokenDetailsPage(item);
+      }}
+      onPress={()=>{
+        Alert.alert('Watch list coming soon')
+      }}
+    />
+  )
+
   render() {
     const { showChange } = this.state
-    let dataTokens = this.props.tokens || []
     const { title } = this.props
-    let dataWatchList = this.props.watchList || []
-
-    dataTokens = dataTokens.map(tokenObj => (
-      {
-        ...tokenObj,
-        key: tokenObj.symbol
-      }
-    ))
-    dataWatchList = dataWatchList.map(tokenObj => (
-    {
-      ...tokenObj,
-      key: tokenObj.symbol
-    }
-    ))
-
     const render = {
-      tokens: this.renderTokens,
-      watchList: this.renderWatchlist
+      tokens: this.renderTokenItem,
+      watchList: this.renderWatchListItem,
+      search: this.renderSearchListItem
     }
-
-    const data = {
-      tokens: dataTokens,
-      watchList: dataWatchList
-    }
+    const dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
 
     return (
       <View>
@@ -179,7 +203,7 @@ class TokenList extends Component {
           renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>{section.title}</Text>}
           sections={[
             {
-              data: data[this.props.type],
+              data: dataTokens,
               title: (this.props.title || '').toUpperCase(),
               renderItem: render[this.props.type]
             }
@@ -217,7 +241,7 @@ const styles = StyleSheet.create({
   priceContainer: {
     width: 90,
     height: 40,
-    backgroundColor: '#b63e15',
+    backgroundColor: lossColor,
     borderRadius: 8,
     borderWidth: 2,
     justifyContent: 'center',

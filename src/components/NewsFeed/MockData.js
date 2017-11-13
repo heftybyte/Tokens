@@ -1,5 +1,18 @@
 const newsApi = [
   {
+    "id": 12,
+    "title": "Wired",
+    "type": "ARTICLE",
+    "body": "$280M WORTH OF ETHEREUM IS TRAPPED THANKS TO A DUMB BUG",
+    "link": {
+      "type": "external",
+      "uri": "https://www.wired.com/story/280m-worth-of-ethereum-is-trapped-for-a-pretty-dumb-reason/",
+      "params": null
+    },
+    "image": "",
+    "format": "TEXT"
+  },
+  {
     "id": 11,
     "title": "Futurism",
     "type": "ARTICLE",
@@ -7,19 +20,6 @@ const newsApi = [
     "link": {
       "type": "external",
       "uri": "https://futurism.com/ethereums-co-founder-just-unveiled-his-plan-for-the-future-of-cryptocurrency/",
-      "params": null
-    },
-    "image": "",
-    "format": "TEXT"
-  },
-  {
-    "id": 12,
-    "title": "Cryptocoins News",
-    "type": "ARTICLE",
-    "body": "The Slippening: Ethereum Price Falls to 7-Month Low Against Bitcoin",
-    "link": {
-      "type": "external",
-      "uri": "https://www.cryptocoinsnews.com/slippening-ethereum-price-falls-7-month-low-bitcoin/",
       "params": null
     },
     "image": "",
@@ -39,12 +39,12 @@ const newsApi = [
   },
   {
     "id": 2,
-    "title": "Cryptocoin News",
+    "title": "CNBC",
     "type": "ARTICLE",
-    "body": "Ethereum Price Surpasses $340 for the First Time since August",
+    "body": "ICO market ‘very young’ so we are still the best place to raise cash, Nasdaq exec says",
     "link": {
       "type": "external",
-      "uri": "https://www.cryptocoinsnews.com/ethereum-price-surpasses-340-first-time-since-august/",
+      "uri": "https://www.cnbc.com/2017/11/07/initial-coin-offering-ico-market-very-young-nasdaq-exec-says.html",
       "params": null
     },
     "image": "",
@@ -78,14 +78,14 @@ const newsApi = [
   },
   {
     "id": 5,
-    "title": "Aeron ICO",
+    "title": "Ammbr ICO",
     "type": "AD",
-    "body": "Here & now you can contribute to the new aviation safety solution, saving people\"s lives all around the world.",
+    "body": "The Ammbr network will bridge the last-mile gap that is currently poorly handled by traditional Internet Service Providers.",
     "link": {
       "type": "external",
       "uri": "https://tokensale.aeron.aero/register/"
     },
-    "image": "https://icodrops.com/wp-content/uploads/2017/09/photo_2017-09-24_03-09-28-150x150.jpg",
+    "image": "https://tokenmarket.net/blockchain/blockchain/assets/ammbr/logo_big.png",
     "format": "IMAGE_RIGHT"
   },
   {
