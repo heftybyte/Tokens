@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     flex: .2,
     padding: 10,
     textAlign: 'center',
-    fontSize: 15
+    fontSize: 20
   },
   list: {
     flex: .9
@@ -57,6 +57,7 @@ class SearchPage extends Component {
                   onChangeText={this.handleSearch}
                   placeholder={'Enter a token symbol ...'}
                   placeholderTextColor={'#333'}
+                  autoCapitalize={'characters'}
               />
               <TokenList style={styles.list} tokens={this.state.tokens} type="search" />
             </ScrollView>
