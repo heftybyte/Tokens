@@ -10,9 +10,9 @@ export const setLoading = (isLoading, loadText) => ({
     data: { isLoading, loadText }
 })
 
-export const showToastAction = (toast, toastDuration, toastProps={}) => ({
+export const showToastAction = (toast, toastProps={}, toastDuration) => ({
     type: SHOW_TOAST,
-    data: { toast, toastDuration, toastProps }
+    data: { toast, toastProps, toastDuration }
 })
 
 let timeoutId
@@ -21,8 +21,8 @@ export const showToast = (toast, toastProps, toastDuration=DURATION.LENGTH_LONG)
     if (currentToast !== toast) {
         clearInterval(timeoutId)
     }
-    dispatch(showToastAction(toast, toastDuration, toastProps))
-    timeoutId = setInterval(()=>dispatch(showToastAction('', 0, toastProps)), toastDuration)
+    dispatch(showToastAction(toast, toastProps, toastDuration))
+    timeoutId = setInterval(()=>dispatch(showToastAction('', toastProps, 0)), toastDuration)
 }
 
 const initialState = {
