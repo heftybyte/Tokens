@@ -48,7 +48,6 @@ export const withDrawer = (WrappedComponent) => {
                 navState.params && navState.params.overrideHeaderText ||
                 navState.routeName
             const toastProps = store && store.getState().ui.toastProps || {}
-
             return (
                 <Drawer
                     ref={d => (this.drawer = d)}
@@ -104,7 +103,7 @@ export const withDrawer = (WrappedComponent) => {
                                 <Button
                                     style={{ justifyContent: "center", alignItems: "center", width: 60 }}
                                     transparent
-                                    onPress={()=>{trackTap('Search');Alert.alert('Search is coming soon.')}}
+                                    onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
                                 >
                                     <Ionicons name="ios-search-outline" size={28} color="white" />
                                 </Button>
