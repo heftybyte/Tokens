@@ -5,7 +5,8 @@ import {
     View,
     SectionList,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -106,6 +107,19 @@ const SearchItem = ({ item, onPress, showTokenInfo, index }) => {
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
         </View>
+        <TouchableOpacity
+          onPress={onPress}
+          style={[
+              styles.priceContainer,
+              styles.noPrice
+          ]}
+        >
+          <Text style={[
+            styles.noPriceText
+          ]}>
+            WATCH
+          </Text>
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   )
@@ -166,6 +180,9 @@ class TokenList extends Component {
       showTokenInfo={() => {
         this.props.goToTokenDetailsPage(item);
       }}
+      onPress={()=>{
+        Alert.alert('Watch list coming soon')
+      }}
     />
   )
 
@@ -177,7 +194,7 @@ class TokenList extends Component {
       watchList: this.renderWatchListItem,
       search: this.renderSearchListItem
     }
-    const dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: i}))
+    const dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
 
     return (
       <View>
