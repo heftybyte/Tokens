@@ -125,7 +125,7 @@ class Dashboard extends Component {
 
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
-
+    console.log(this.props.newsFeed)
     return (
       <ScrollView
         style={styles.scrollContainer}
@@ -182,7 +182,8 @@ const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
   addresses: state.account.addresses,
   loggedIn: !!state.account.token,
-  ...state.ui
+    newsFeed: state.news,
+  ...state.ui,
 })
 
 const mapDispatchToProps = (dispatch) => ({

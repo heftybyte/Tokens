@@ -78,8 +78,8 @@ export const saveToStorage = async (key, value) => {
         await AsyncStorage.setItem(key, value);
 }
 
-export const getIDFromStorage = async () => {
-        const value = await AsyncStorage.getItem('@lastID:key');
+export const getIDFromStorage = async (key) => {
+        const value = await AsyncStorage.getItem(key);
         return value;
 }
 
@@ -87,11 +87,11 @@ export const checkLastId = (newID) => {
 	if(newID != undefined) {
         console.log(newID, 'here')
 
-        // getIDFromStorage().then(val => {
-        //     console.log(val)
-        //     if(newID != val) {
-        //         saveToStorage('@lastID:key', newID)
-        //     }
-        // })
+        getIDFromStorage('@lastID:key').then(val => {
+            console.log(val)
+            if(newID != val) {
+                saveToStorage('@lastID:key', newID.toString())
+            }
+        })
 	}
 }

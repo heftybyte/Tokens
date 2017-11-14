@@ -98,6 +98,6 @@ export const trackFeedActivity = async (feedItemId, accountId, type) => {
 
 export const getNewsFeed = async () => {
     const res = await instance.get(`/feed/latest/0`)
-    console.log(res.data)
+    //console.log(res.data)
     return res.data;
 }
