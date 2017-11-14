@@ -11,6 +11,7 @@ import { trackTap } from '../helpers/analytics'
 import Header from "../components/Dashboard/Header"
 import Toast, { DURATION } from 'react-native-easy-toast'
 import store from '../store'
+import { NavigationActions } from "react-navigation";
 
 const Items = [
     {
@@ -48,6 +49,7 @@ export const withDrawer = (WrappedComponent) => {
                 navState.params && navState.params.overrideHeaderText ||
                 navState.routeName
             const toastProps = store && store.getState().ui.toastProps || {}
+            const isTokenDetails = navState.routeName === 'Token Details'
             return (
                 <Drawer
                     ref={d => (this.drawer = d)}
@@ -78,14 +80,23 @@ export const withDrawer = (WrappedComponent) => {
                                 <Button
                                 style={{ justifyContent: "center", alignItems: "center", width: 60 }}
                                 transparent
-                                onPress={()=>{trackTap('Menu'); this.openDrawer()}}
-                                >
-                                    <MaterialCommunityIcons
-                                    name="menu"
-                                    size={26}
-                                    color="white"
-                                    backgroundColor="black"
-                                    />
+                                onPress={ isTokenDetails ?
+                                    ()=>{trackTap('Menu Back'); store.dispatch(NavigationActions.back())} :
+                                    ()=>{trackTap('Menu'); this.openDrawer()}
+                                }>
+                                    {isTokenDetails ?
+                                        <Ionicons
+                                            name={Platform.OS === 'ios' ? "ios-arrow-back" : "md-arrow-back"}
+                                            size={26}
+                                            color="white"
+                                            backgroundColor="black"
+                                            /> :
+                                        <MaterialCommunityIcons
+                                            name="menu"
+                                            size={26}
+                                            color="white"
+                                            backgroundColor="black"
+                                            />}
                                 </Button>
                             </Left>
                             <Body>
