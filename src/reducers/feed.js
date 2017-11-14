@@ -4,17 +4,17 @@ import {
     getError,
 } from '../helpers/functions'
 import { AsyncStorage } from 'react-native'
-var moment = require('moment');
 
 
-export const saveLatestTimestamp = (newTimestamp) => {
+export const saveLatestTimestamp = async (newTimestamp) => {
     if(newTimestamp !== undefined) {
 
-         AsyncStorage.getItem('@lastID:key').then(oldTimestamp => {
-            if(moment(newTimestamp).isAfter(oldTimestamp)) {
-                AsyncStorage.setItem('@lastID:key', newTimestamp)
+        let oldTimestamp = await AsyncStorage.getItem('feed:latestTimestamp');
+        const oldDate = +(new Date(oldTimestamp))
+        const newDate = +(new Date(newTimestamp))
+            if(newDate >= oldDate) {
+                AsyncStorage.setItem('feed:latestTimestamp', newTimestamp)
             }
-         })
     }
 }
 
@@ -45,7 +45,9 @@ const initialState = [];
 export default (state = initialState, action) => {
     switch(action.type) {
         case types.GET_NEWS_FEED:
-            return action.payload;
+            return {
+                ...state, ...action.payload
+            }
         default:
             return state
     }

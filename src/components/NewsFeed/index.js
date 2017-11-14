@@ -34,6 +34,8 @@ const News = (props) => {
     )
   })
 
+    let oldIndex = 0;
+
   return (
       <Swiper
         loop={false}
@@ -48,7 +50,8 @@ const News = (props) => {
         onIndexChanged={(index)=>{
           trackNewsFeedSwipe(props.feed[index])
           trackFeedItem(props.feed[index].id, 'view')
-            saveLatestTimestamp(props.feed[index - 1].createdAt)
+            saveLatestTimestamp(props.feed[oldIndex].createdAt)
+            oldIndex = index
         }}
        >
         { feed }

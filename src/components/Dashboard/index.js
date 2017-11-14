@@ -85,7 +85,7 @@ class Dashboard extends Component {
     refreshing: false
   }
 
-  componentWillMount = () => AsyncStorage.getItem('@lastID:key').then(
+  componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
       (timestamp) => fetchFeed(timestamp)
   );
 
