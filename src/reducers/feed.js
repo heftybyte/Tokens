@@ -3,7 +3,20 @@ import {showToast } from './ui'
 import {
     getError,
 } from '../helpers/functions'
+import { AsyncStorage } from 'react-native'
+var moment = require('moment');
 
+
+export const saveLatestTimestamp = (newTimestamp) => {
+    if(newTimestamp !== undefined) {
+
+         AsyncStorage.getItem('@lastID:key').then(oldTimestamp => {
+            if(moment(newTimestamp).isAfter(oldTimestamp)) {
+                AsyncStorage.setItem('@lastID:key', newTimestamp)
+            }
+         })
+    }
+}
 
 export const types = {
     GET_NEWS_FEED: 'GET_NEWS_FEED',
@@ -14,7 +27,7 @@ export const getFeed = (data) => ({
     payload: data
 });
 
-export const fetchNews = () => async (dispatch, getState) => {
+export const fetchFeed = () => async (dispatch, getState) => {
     let err = null;
     const news = await getNewsFeed().catch(e=>err=e)
     if (err) {

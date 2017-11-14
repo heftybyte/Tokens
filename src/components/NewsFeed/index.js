@@ -1,11 +1,11 @@
 import React from 'react'
-import { Text, View, AsyncStorage, AlertIOS } from 'react-native'
+import { View } from 'react-native'
 import Swiper from 'react-native-swiper'
 import {styles} from './Style'
 import Format from './Format'
 import { trackNewsFeedSwipe } from '../../helpers/analytics'
 import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
-import { checkLastId } from '../../helpers/functions'
+import {saveLatestTimestamp} from '../../reducers/feed'
 import { connect } from 'react-redux';
 
 const Dot = (color) => (
@@ -48,7 +48,7 @@ const News = (props) => {
         onIndexChanged={(index)=>{
           trackNewsFeedSwipe(props.feed[index])
           trackFeedItem(props.feed[index].id, 'view')
-            checkLastId(props.feed[index - 1].id)
+            saveLatestTimestamp(props.feed[index - 1].createdAt)
         }}
        >
         { feed }

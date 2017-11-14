@@ -96,8 +96,7 @@ export const trackFeedActivity = async (feedItemId, accountId, type) => {
   instance.post(`/feed/${accountId}/action`, {feedItemId, accountId, type});
 }
 
-export const getNewsFeed = async () => {
-    const res = await instance.get(`/feed/latest/0`)
-    //console.log(res.data)
+export const getNewsFeed = async (timestamp) => {
+    const res = await instance.get(`/feed/latest?timestamp=${timestamp}`)
     return res.data;
 }

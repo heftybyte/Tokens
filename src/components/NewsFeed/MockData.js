@@ -10,7 +10,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+    "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 11,
@@ -23,7 +24,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-10-13T20:06:53.586Z"
   },
   {
     "id": 1,
@@ -35,7 +37,8 @@ const newsApi = [
       "uri": "https://quantstamp.com/"
     },
     "image": "https://cdn.icodrops.com/wp-content/uploads/2017/10/Quantstamp-150x150.jpg",
-    "format": "IMAGE_RIGHT"
+    "format": "IMAGE_RIGHT",
+      "createdAt": "2017-12-13T20:06:53.586Z"
   },
   {
     "id": 2,
@@ -48,7 +51,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-01-13T20:06:53.586Z"
   },
   {
     "id": 3,
@@ -61,7 +65,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-02-13T20:06:53.586Z"
   },
   {
     "id": 4,
@@ -74,7 +79,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-04-13T20:06:53.586Z"
   },
   {
     "id": 5,
@@ -86,7 +92,8 @@ const newsApi = [
       "uri": "https://tokensale.aeron.aero/register/"
     },
     "image": "https://tokenmarket.net/blockchain/blockchain/assets/ammbr/logo_big.png",
-    "format": "IMAGE_RIGHT"
+    "format": "IMAGE_RIGHT",
+      "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 6,
@@ -99,7 +106,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-06-13T20:06:53.586Z"
   },
   {
     "id": 7,
@@ -112,7 +120,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 8,
@@ -125,7 +134,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 9,
@@ -137,7 +147,8 @@ const newsApi = [
       "uri": "https://sale.latoken.com/"
     },
     "image": "https://icodrops.com/wp-content/uploads/2017/09/L2SxNgoN_400x400-150x150.jpg",
-    "format": "IMAGE_RIGHT"
+    "format": "IMAGE_RIGHT",
+      "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 10,
@@ -150,7 +161,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 11,
@@ -163,7 +175,8 @@ const newsApi = [
       "params": null
     },
     "image": "",
-    "format": "TEXT"
+    "format": "TEXT",
+      "createdAt": "2017-11-13T20:06:53.586Z"
   }
 ];
 
