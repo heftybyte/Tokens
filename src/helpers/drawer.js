@@ -49,7 +49,9 @@ export const withDrawer = (WrappedComponent) => {
                 navState.params && navState.params.overrideHeaderText ||
                 navState.routeName
             const toastProps = store && store.getState().ui.toastProps || {}
-            const isTokenDetails = navState.routeName === 'Token Details'
+
+            // Remove after: https://app.asana.com/0/425477633452716/477358357686745
+            const showBackButton = ['Token Details', 'Search', 'Add Address'].indexOf(navState.routeName) > -1
             return (
                 <Drawer
                     ref={d => (this.drawer = d)}
@@ -80,11 +82,11 @@ export const withDrawer = (WrappedComponent) => {
                                 <Button
                                 style={{ justifyContent: "center", alignItems: "center", width: 60 }}
                                 transparent
-                                onPress={ isTokenDetails ?
+                                onPress={ showBackButton ?
                                     ()=>{trackTap('Menu Back'); store.dispatch(NavigationActions.back())} :
                                     ()=>{trackTap('Menu'); this.openDrawer()}
                                 }>
-                                    {isTokenDetails ?
+                                    {showBackButton ?
                                         <Ionicons
                                             name={Platform.OS === 'ios' ? "ios-arrow-back" : "md-arrow-back"}
                                             size={26}
