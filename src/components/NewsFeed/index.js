@@ -1,10 +1,11 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, AsyncStorage, AlertIOS } from 'react-native'
 import Swiper from 'react-native-swiper'
 import {styles} from './Style'
 import Format from './Format'
 import { trackNewsFeedSwipe } from '../../helpers/analytics'
 import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
+import { checkLastId } from '../../helpers/functions'
 import { connect } from 'react-redux';
 
 const Dot = (color) => (
@@ -24,6 +25,7 @@ const Dot = (color) => (
 
 const News = (props) => {
   const { trackFeedItem } = props
+
   const feed = (props.feed || []).map((news, index) => {
     return (
         <View key={index} style={styles.slide}>
@@ -46,6 +48,7 @@ const News = (props) => {
         onIndexChanged={(index)=>{
           trackNewsFeedSwipe(props.feed[index])
           trackFeedItem(props.feed[index].id, 'view')
+            checkLastId(props.feed[index - 1].id)
         }}
        >
         { feed }

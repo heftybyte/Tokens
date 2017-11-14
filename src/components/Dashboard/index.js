@@ -27,7 +27,8 @@ import {
   login,
   getPortfolio
 } from '../../reducers/account';
-import { showToast } from '../../reducers/ui'
+import { showToast } from '../../reducers/ui';
+import {fetchNews} from '../../reducers/news'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
 
@@ -82,6 +83,10 @@ const styles = StyleSheet.create({
 class Dashboard extends Component {
   state = {
     refreshing: false
+  }
+
+  componentWillMount = () => {
+    this.props.fetchNews()
   }
 
   componentWillReceiveProps = async (nextProps) => {
@@ -185,7 +190,8 @@ const mapDispatchToProps = (dispatch) => ({
     login: () => dispatch(login()),
     register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
-    showToast: (text) => dispatch(showToast(text))
+    showToast: (text) => dispatch(showToast(text)),
+    fetchNews: () => dispatch(fetchNews())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

@@ -73,3 +73,25 @@ export const safeAlert = (...args) => {
 
 	setTimeout(()=>Alert.alert.apply({}, args), 1)
 }
+
+export const saveToStorage = async (key, value) => {
+        await AsyncStorage.setItem(key, value);
+}
+
+export const getIDFromStorage = async () => {
+        const value = await AsyncStorage.getItem('@lastID:key');
+        return value;
+}
+
+export const checkLastId = (newID) => {
+	if(newID != undefined) {
+        console.log(newID, 'here')
+
+        // getIDFromStorage().then(val => {
+        //     console.log(val)
+        //     if(newID != val) {
+        //         saveToStorage('@lastID:key', newID)
+        //     }
+        // })
+	}
+}
