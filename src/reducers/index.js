@@ -4,6 +4,7 @@ import addresses from './address';
 import account from './account';
 import search from './search';
 import ui from './ui';
+import feed from './feed';
 import { AppNavigator } from '../navigators/AppNavigator';
 
 // Start with two routes: The Dashboard screen, with the Login screen on top.
@@ -47,7 +48,8 @@ const AppReducer = combineReducers({
   addresses,
   account,
   search,
-  ui
+  ui,
+  feed
 });
 
 export default AppReducer;

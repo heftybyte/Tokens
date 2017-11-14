@@ -73,3 +73,4 @@ export const safeAlert = (...args) => {
 
 	setTimeout(()=>Alert.alert.apply({}, args), 1)
 }
+

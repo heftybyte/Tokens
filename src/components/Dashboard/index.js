@@ -27,7 +27,8 @@ import {
   login,
   getPortfolio
 } from '../../reducers/account';
-import { showToast } from '../../reducers/ui'
+import { showToast } from '../../reducers/ui';
+import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
 
@@ -84,6 +85,10 @@ class Dashboard extends Component {
     refreshing: false
   }
 
+  componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
+      (timestamp) => fetchFeed(timestamp)
+  );
+
   componentWillReceiveProps = async (nextProps) => {
     const { addresses, getPortfolio} = nextProps
     if (addresses.length != this.props.addresses.length) {
@@ -120,7 +125,6 @@ class Dashboard extends Component {
 
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
-
     return (
       <ScrollView
         style={styles.scrollContainer}
@@ -177,7 +181,8 @@ const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
   addresses: state.account.addresses,
   loggedIn: !!state.account.token,
-  ...state.ui
+    newsFeed: state.feed,
+  ...state.ui,
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -185,7 +190,8 @@ const mapDispatchToProps = (dispatch) => ({
     login: () => dispatch(login()),
     register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
-    showToast: (text) => dispatch(showToast(text))
+    showToast: (text) => dispatch(showToast(text)),
+    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));
