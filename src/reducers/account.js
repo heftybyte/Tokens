@@ -58,7 +58,7 @@ const updateAction = (account) => ({
 
 const addAddressAction = (addresses=[]) => ({
     type: ADD_ADDRESS,
-    payload: { addresses, stale: true }
+    data: { addresses, stale: true }
 })
 
 const deleteAddressAction = (addresses=[]) => ({
@@ -243,7 +243,7 @@ const initialState = {
     tokenDetails: {
         "marketCap": 0,
         "price": 0,
-        "quantity": 0,
+        "balance": 0,
         "totalValue": 0,
         "volume24Hr": 0,
         "change": 0,

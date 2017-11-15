@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, Image } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
@@ -11,6 +11,9 @@ import { baseURL } from '../../config'
 const styles = StyleSheet.create({
   scrollContainer: {
     backgroundColor: '#000'
+  },
+  header: {
+    marginBottom: 20
   },
   container: {
     display: 'flex',
@@ -26,6 +29,14 @@ const styles = StyleSheet.create({
     flexGrow: .5,
     flexBasis: 1
   },
+  linkContainer: {
+    flexDirection: 'column'
+  },
+  linkContainerChild: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20
+  },
   tokenHeading: {
     color: '#666',
     fontFamily: 'Nunito'
@@ -35,9 +46,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Nunito'
   },
-  header: {
-    backgroundColor: '#000'
-  },
   heading: {
     borderBottomColor: '#444',
     borderBottomWidth: 1,
@@ -45,6 +53,10 @@ const styles = StyleSheet.create({
     fontSize: 22,
     paddingBottom: 10,
     paddingLeft: 20,
+  },
+  link: {
+    color: '#fff',
+    paddingLeft: 10
   }
 });
 
@@ -55,27 +67,40 @@ class TokenDetails extends Component {
   }
 
   render() {
-    const { price, quantity, marketCap, volume24Hr, totalValue, imageUrl, symbol, change, priceChange } = this.props.tokenDetails;
+    const {
+      price,
+      balance,
+      marketCap,
+      volume24Hr,
+      totalValue,
+      imageUrl,
+      symbol,
+      change,
+      supply,
+      priceChange,
+      website,
+      twitter,
+      reddit
+    } = this.props.tokenDetails;
 
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <Header totalValue={quantity ? totalValue : price} totalChange={priceChange} totalChangePct={change} />
-        <View style={{paddingLeft: 20, flexDirection: 'row', alignItems: 'flex-start', marginVertical: 20}}>
-          <Image source={{ uri: baseURL + imageUrl }} style={{width: 30, height: 30}}/>
-          <Text style={[styles.heading, {alignSelf: 'flex-start', flex:1}]}>
-            {symbol}
-          </Text>
-        </View>
+        <Header
+          style={styles.header}
+          totalValue={balance ? totalValue : price}
+          totalChange={priceChange}
+          totalChangePct={change}
+        />
 
-        {!!quantity && <View style={styles.container}>
+        {!!balance && <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>PRICE</Text>
             <Text style={styles.tokenValue}>{'$'+formatPrice(price)}</Text>
           </View>
 
           <View style={styles.containerChild}>
-            <Text style={styles.tokenHeading}>QUANTITY</Text>
-            <Text style={styles.tokenValue}>{quantity.toLocaleString()}</Text>
+            <Text style={styles.tokenHeading}>BALANCE</Text>
+            <Text style={styles.tokenValue}>{balance.toLocaleString()}</Text>
           </View>
         </View>}
 
@@ -89,6 +114,76 @@ class TokenDetails extends Component {
             <Text style={styles.tokenHeading}>24 HR VOLUME</Text>
             <Text style={styles.tokenValue}>{`$${volume24Hr.toLocaleString()}`}</Text>
           </View>
+        </View>
+
+        <View style={styles.container}>
+          <View style={styles.containerChild}>
+            <Text style={styles.tokenHeading}>SUPPLY</Text>
+            <Text style={styles.tokenValue}>{`${(supply||0).toLocaleString()} ${symbol}`}</Text>
+          </View>
+        </View>
+
+        <View style={[styles.container, styles.linkContainer]}>
+          {!!website && <View style={[styles.containerChild, styles.linkContainerChild]}>
+              <MaterialCommunityIcons
+                name="web"
+                size={26}
+                color="white"
+                backgroundColor="black"
+              />
+              <TouchableHighlight
+                onPress={()=>{
+                  Linking.openURL(website).catch(
+                    err => console.error('An error occurred', err));
+                }}
+              >
+                <Text
+                  style={styles.link}
+                >
+                  { website }
+                </Text>
+              </TouchableHighlight>
+          </View>}
+          {!!twitter && <View style={[styles.containerChild, styles.linkContainerChild]}>
+              <MaterialCommunityIcons
+                name="twitter"
+                size={26}
+                color="white"
+                backgroundColor="black"
+              />
+              <TouchableHighlight
+                onPress={()=>{
+                  Linking.openURL(twitter).catch(
+                    err => console.error('An error occurred', err));
+                }}
+              >
+                <Text
+                  style={styles.link}
+                >
+                  { twitter }
+                </Text>
+              </TouchableHighlight>
+          </View>}
+          {!!reddit && <View style={[styles.containerChild, styles.linkContainerChild]}>
+              <MaterialCommunityIcons
+                name="reddit"
+                size={26}
+                color="white"
+                backgroundColor="black"
+              />
+              <TouchableHighlight
+                onPress={()=>{
+                  Linking.openURL(reddit).catch(
+                    err => console.error('An error occurred', err));
+                }}
+              >
+                <Text
+                  style={styles.link}
+                >
+                  { reddit }
+                </Text>
+              </TouchableHighlight>
+          </View>}
         </View>
       </ScrollView>
     )

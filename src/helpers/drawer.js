@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react"
-import { View, TouchableOpacity, Text, Platform, Alert } from "react-native"
+import { View, TouchableOpacity, Text, Platform, Alert, Image } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
@@ -12,6 +12,7 @@ import Header from "../components/Dashboard/Header"
 import Toast, { DURATION } from 'react-native-easy-toast'
 import store from '../store'
 import { NavigationActions } from "react-navigation";
+import { baseURL } from '../config'
 
 const Items = [
     {
@@ -49,9 +50,11 @@ export const withDrawer = (WrappedComponent) => {
                 navState.params && navState.params.overrideHeaderText ||
                 navState.routeName
             const toastProps = store && store.getState().ui.toastProps || {}
-
+            const isTokenDetails = navState.routeName === 'Token Details'
+            const { token } = navState && navState.params || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = ['Token Details', 'Search', 'Add Address'].indexOf(navState.routeName) > -1
+
             return (
                 <Drawer
                     ref={d => (this.drawer = d)}
@@ -80,7 +83,11 @@ export const withDrawer = (WrappedComponent) => {
                         >
                             <Left>
                                 <Button
-                                style={{ justifyContent: "center", alignItems: "center", width: 60 }}
+                                style={{ 
+                                    justifyContent: "center",
+                                    alignItems: Platform.OS === 'ios' ? "center" : "flex-start",
+                                    width: 60,
+                                }}
                                 transparent
                                 onPress={ showBackButton ?
                                     ()=>{trackTap('Menu Back'); store.dispatch(NavigationActions.back())} :
@@ -102,15 +109,23 @@ export const withDrawer = (WrappedComponent) => {
                                 </Button>
                             </Left>
                             <Body>
-                                <Text
-                                    style={{
-                                        color: '#fff',
-                                        fontSize: 16,
-                                        fontFamily: 'Nunito-ExtraLight',
-                                    }}
-                                >
-                                    {headerText}
-                                </Text>
+                                {isTokenDetails ?
+                                    <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center', flex:1}}>
+                                        <Image key={token.symbol} source={{ uri: baseURL + token.imageUrl }} style={{width: 20, height: 20}}/>
+                                        <Text style={{color: '#fff', paddingLeft: 10}}>
+                                            {token.symbol}
+                                        </Text> 
+                                    </View> :
+                                    <Text
+                                        style={{
+                                            color: '#fff',
+                                            fontSize: 16,
+                                            fontFamily: 'Nunito-ExtraLight',
+                                        }}
+                                    >
+                                        {headerText}
+                                    </Text>
+                                }
                             </Body>
                             <Right>
                                 <Button

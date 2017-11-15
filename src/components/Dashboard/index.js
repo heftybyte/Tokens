@@ -167,7 +167,7 @@ class Dashboard extends Component {
         <TokenList tokens={portfolio.tokens} />}
         { portfolio &&
         <TokenList
-          title="Top 20 Tokens By Market Cap" 
+          title="Top 100 Tokens By Market Cap" 
           tokens={portfolio.top}
           type="watchList"
         />}
