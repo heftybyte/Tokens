@@ -141,6 +141,7 @@ class TokenList extends Component {
       item={item}
       index={index}
       showTokenInfo={() => {
+        trackTap('TokenInfo:WatchList')
         this.props.goToTokenDetailsPage(item);
       }}
       showChange={this.state.showChange}
@@ -162,6 +163,7 @@ class TokenList extends Component {
       index={index}
       showChange={this.state.showChange}
       showTokenInfo={() => {
+        trackTap('TokenInfo:TokenItem')
         this.props.goToTokenDetailsPage(item);
       }}
       onPress={()=>{
@@ -182,6 +184,7 @@ class TokenList extends Component {
       item={item}
       index={index}
       showTokenInfo={() => {
+        trackTap('TokenInfo:SearchItem')
         this.props.goToTokenDetailsPage(item);
       }}
       onPress={()=>{

@@ -81,7 +81,9 @@ export const withDrawer = (WrappedComponent) => {
                         androidStatusBarColor="#000"
                         noShadow
                         >
-                            <Left>
+                            <Left style={
+                                Platform.OS === 'ios' ? {} : {flex: .4}
+                            }>
                                 <Button
                                 style={{ 
                                     justifyContent: "center",
@@ -110,7 +112,12 @@ export const withDrawer = (WrappedComponent) => {
                             </Left>
                             <Body>
                                 {isTokenDetails ?
-                                    <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center', flex:1}}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
+                                        alignItems: 'center',
+                                        flex:1
+                                    }}>
                                         <Image key={token.symbol} source={{ uri: baseURL + token.imageUrl }} style={{width: 20, height: 20}}/>
                                         <Text style={{color: '#fff', paddingLeft: 10}}>
                                             {token.symbol}
