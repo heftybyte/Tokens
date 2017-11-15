@@ -51,10 +51,9 @@ export const withDrawer = (WrappedComponent) => {
                 navState.routeName
             const toastProps = store && store.getState().ui.toastProps || {}
             const isTokenDetails = navState.routeName === 'Token Details'
-            const { token } = navState && navState.params || {}
+            const tokenDetails = store.getState().account.tokenDetails || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = ['Token Details', 'Search', 'Add Address'].indexOf(navState.routeName) > -1
-
             return (
                 <Drawer
                     ref={d => (this.drawer = d)}
@@ -81,7 +80,9 @@ export const withDrawer = (WrappedComponent) => {
                         androidStatusBarColor="#000"
                         noShadow
                         >
-                            <Left>
+                            <Left style={
+                                Platform.OS === 'ios' ? {} : {flex: .4}
+                            }>
                                 <Button
                                 style={{ 
                                     justifyContent: "center",
@@ -110,10 +111,15 @@ export const withDrawer = (WrappedComponent) => {
                             </Left>
                             <Body>
                                 {isTokenDetails ?
-                                    <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: 'center', flex:1}}>
-                                        <Image key={token.symbol} source={{ uri: baseURL + token.imageUrl }} style={{width: 20, height: 20}}/>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
+                                        alignItems: 'center',
+                                        flex:1
+                                    }}>
+                                        <Image key={tokenDetails.symbol} source={{ uri: baseURL + tokenDetails.imageUrl }} style={{width: 20, height: 20}}/>
                                         <Text style={{color: '#fff', paddingLeft: 10}}>
-                                            {token.symbol}
+                                            {tokenDetails.name||tokenDetails.symbol}
                                         </Text> 
                                     </View> :
                                     <Text
