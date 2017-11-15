@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Light'
   },
   balance: {
-    color: '#333',
+    color: '#555',
     fontSize: 12,
     fontFamily: 'Nunito'
   },
