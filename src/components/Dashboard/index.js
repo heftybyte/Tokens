@@ -89,11 +89,10 @@ class Dashboard extends Component {
       (timestamp) => fetchFeed(timestamp)
   );
 
-  componentWillReceiveProps = async (nextProps) => {
-    const { addresses, getPortfolio} = nextProps
-    if (addresses.length != this.props.addresses.length) {
-      await getPortfolio()
-      return
+  componentDidMount = async () => {
+    if (this.state.stale) {
+      await this.props.getPortfolio()
+      trackRefresh('Mount')
     }
   }
 
@@ -168,7 +167,7 @@ class Dashboard extends Component {
         <TokenList tokens={portfolio.tokens} />}
         { portfolio &&
         <TokenList
-          title="Top 20 Tokens By Market Cap" 
+          title="Top 100 Tokens By Market Cap" 
           tokens={portfolio.top}
           type="watchList"
         />}
@@ -181,8 +180,9 @@ const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
   addresses: state.account.addresses,
   loggedIn: !!state.account.token,
-    newsFeed: state.feed,
-  ...state.ui,
+  newsFeed: state.feed,
+  stale: state.account.stale,
+  ...state.ui
 })
 
 const mapDispatchToProps = (dispatch) => ({

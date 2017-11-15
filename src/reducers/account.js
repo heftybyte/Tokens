@@ -48,7 +48,7 @@ const logoutAction = () => ({
 
 const portfolioAction = (portfolio) => ({
     type: GET_PORTFOLIO,
-    data: { portfolio }
+    data: { portfolio, stale: false }
 })
 
 const updateAction = (account) => ({
@@ -58,12 +58,12 @@ const updateAction = (account) => ({
 
 const addAddressAction = (addresses=[]) => ({
     type: ADD_ADDRESS,
-    payload: { addresses }
+    data: { addresses, stale: true }
 })
 
 const deleteAddressAction = (addresses=[]) => ({
   type: DELETE_ADDRESS,
-  data: { addresses }
+  data: { addresses, stale: true }
 })
 
 const tokenDetailsAction = (tokenDetails) => ({
@@ -149,7 +149,9 @@ export const addAddress = (address) => async (dispatch, getState) => {
         dispatch(showToast(getError(err)))
         return
     }
+    dispatch(showToast('Address Added'))
     dispatch(addAddressAction(account.addresses))
+    dispatch(getPortfolio())
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
@@ -163,6 +165,7 @@ export const refreshAddress = (address) => async (dispatch, getState) => {
         dispatch(showToast(getError(err)))
         return
     }
+    dispatch(showToast('Tokens Updated'))
     dispatch(getPortfolio())
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
@@ -180,6 +183,7 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
         }
         dispatch(showToast('Address Removed'))
         dispatch(deleteAddressAction(account.addresses))
+        dispatch(getPortfolio())
     }
 
     safeAlert(
@@ -239,13 +243,15 @@ const initialState = {
     tokenDetails: {
         "marketCap": 0,
         "price": 0,
-        "quantity": 0,
+        "balance": 0,
         "totalValue": 0,
         "volume24Hr": 0,
         "change": 0,
         "priceChange": 0,
     },
-    invites: []
+    invites: [],
+    // Used to know when to fetch updated portfolio
+    stale: true
 }
 
 export const trackFeedItem = (feedItemId, type) => async (dispatch, getState) => {

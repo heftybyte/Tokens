@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import { baseURL, gainColor, lossColor } from '../../config'
 import { showToast } from '../../reducers/ui'
+import { trackAddress, trackTap } from '../../helpers/analytics'
 
 const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
@@ -145,8 +146,9 @@ class TokenList extends Component {
       showChange={this.state.showChange}
       onPress={()=>{
         this.setState({showChange: !this.state.showChange})
+        trackTap(this.state.showChange ? 'PriceToggle-watch-change' : 'PriceToggle-watch-price');
         this.props.showToast(
-          this.state.showChange ? 'Total Value' : 'Total Change',
+          this.state.showChange ? 'Total Value' : 'Total Change Since 24hrs Ago',
           { position: 'center', style: { backgroundColor: '#222' } },
           200
         )
@@ -164,10 +166,12 @@ class TokenList extends Component {
       }}
       onPress={()=>{
         this.setState({showChange: !this.state.showChange})
+        const { showChange } = this.state
+        trackTap(showChange ? 'PriceToggle-change' : 'PriceToggle-total');
         this.props.showToast(
-          this.state.showChange ? 'Total Change' : 'Total Value',
+          showChange ? 'Total Change Since 24hrs Ago' : 'Total Value',
           { position: 'center', style: { backgroundColor: '#222' } },
-          200
+          showChange ? 800 : 200
         )
       }}
     />
