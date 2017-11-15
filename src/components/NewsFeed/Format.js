@@ -47,7 +47,9 @@ const Format = (props) => {
         <TouchableWithoutFeedback
             onPress={()=>{trackNewsFeedTap(news); trackFeedItem(id, 'tap');visitLink()}}
         >
-            <Layout news={news} />
+            <View style={{flex:1}}>
+                <Layout news={news} />
+            </View>
         </TouchableWithoutFeedback>
     )
 }
