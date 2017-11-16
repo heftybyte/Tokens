@@ -38,6 +38,9 @@ class Tokens extends React.Component {
 
         BackHandler.addEventListener("onBackPress", this.goBack);
 
+        const token = await SecureStore.getItemAsync('token')
+        const id = await SecureStore.getItemAsync('id')
+
         if(Platform.OS === 'android') {
             let err = null
             const appVersion = await SecureStore.getItemAsync('appVersion')
@@ -46,12 +49,7 @@ class Tokens extends React.Component {
                 await SecureStore.setItemAsync('appVersion', newAppVersion.toString())
                 this.setState({reload: true})
             }
-        }
-
-        const token = await SecureStore.getItemAsync('token')
-        const id = await SecureStore.getItemAsync('id')
-
-        if (token && id) {
+        } else if (token && id) {
             await store.dispatch(login())
         } else {
             store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
