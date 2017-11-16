@@ -51,7 +51,7 @@ export const withDrawer = (WrappedComponent) => {
                 navState.routeName
             const toastProps = store && store.getState().ui.toastProps || {}
             const isTokenDetails = navState.routeName === 'Token Details'
-            const tokenDetails = store.getState().account.tokenDetails || {}
+            const tokenDetails = navState.params && navState.params.token || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = ['Token Details', 'Search', 'Add Address'].indexOf(navState.routeName) > -1
             return (

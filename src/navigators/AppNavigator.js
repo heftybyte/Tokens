@@ -11,24 +11,34 @@ import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import Search from '../components/Search';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
+import CardStackStyleInterpolator from 'react-navigation/lib/views/CardStackStyleInterpolator';
+
+const customAnimationFunc = () => ({
+  screenInterpolator: sceneProps => {
+    return CardStackStyleInterpolator.forFadeFromBottomAndroid(sceneProps);
+  },
+});
 
 export const AppNavigator = StackNavigator({
   Entry: { screen: Entry },
-	NormalRegistration: { screen: NormalRegistration },
-	GuestRegistration: { screen: GuestRegistration },
+  NormalRegistration: { screen: NormalRegistration },
+  GuestRegistration: { screen: GuestRegistration },
   Login: { screen: NormalRegistration },
   Dashboard: { screen: Dashboard },
   Accounts : { screen: ViewAccounts },
   'Add Address': { screen: AddAddress },
   Search: { screen: Search },
-	Register: { screen: Register },
+  Register: { screen: Register },
   'Token Details': { screen: TokenDetails }
 }, {
-	headerMode: "none",
+  headerMode: "none",
   cardStyle: {
     backgroundColor: '#000'
-  }
+  },
+  transitionConfig: customAnimationFunc
 });
+
+
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
   <AppNavigator
