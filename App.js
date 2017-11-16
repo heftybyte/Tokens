@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { AppRegistry, BackHandler, Platform } from 'react-native';
+import { AppRegistry, BackHandler, Platform, Alert } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './src/store/index';
 import { login } from './src/reducers/account'
@@ -9,7 +9,8 @@ import { AppLoading, Font, SecureStore } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
-import PromptReload from './src/components/Entry/PromptReload';
+import PromptReload from './src/components/Entry/PromptReload'
+import { getError } from './src/helpers/functions'
 require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
@@ -45,7 +46,9 @@ class Tokens extends React.Component {
             let err = null
             const appVersion = await SecureStore.getItemAsync('appVersion')
             const newAppVersion = await getAppVersion().catch(e=>err=e)
-            if (appVersion !== newAppVersion) {
+            if(err){
+               Alert.alert(getError(err))
+            }else if (appVersion !== newAppVersion) {
                 await SecureStore.setItemAsync('appVersion', newAppVersion.toString())
                 this.setState({reload: true})
             }
