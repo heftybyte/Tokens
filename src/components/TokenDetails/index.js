@@ -109,12 +109,12 @@ class TokenDetails extends Component {
         <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>MARKET CAP</Text>
-            <Text style={styles.tokenValue}>{'$'+marketCap.toLocaleString()}</Text>
+            <Text style={styles.tokenValue}>{'$'+formatPrice(marketCap)}</Text>
           </View>
 
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>24 HR VOLUME</Text>
-            <Text style={styles.tokenValue}>{`$${volume24Hr.toLocaleString()}`}</Text>
+            <Text style={styles.tokenValue}>{`$${formatPrice(volume24Hr)}`}</Text>
           </View>
         </View>
 
