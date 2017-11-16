@@ -9,7 +9,7 @@ import { AppLoading, Font, SecureStore } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
-import PromptReload from './src/components/Entry/PromptReload'
+import PromptReload from './src/components/Entry/PromptReload';
 require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
@@ -38,6 +38,15 @@ class Tokens extends React.Component {
 
         BackHandler.addEventListener("onBackPress", this.goBack);
 
+        if(Platform.OS === 'android') {
+            let err = null
+            const appVersion = await SecureStore.getItemAsync('appVersion')
+            const newAppVersion = await getAppVersion().catch(e=>err=e)
+            if (appVersion !== newAppVersion) {
+                await SecureStore.setItemAsync('appVersion', newAppVersion.toString())
+                this.setState({reload: true})
+            }
+        }
 
         const token = await SecureStore.getItemAsync('token')
         const id = await SecureStore.getItemAsync('id')
@@ -46,15 +55,6 @@ class Tokens extends React.Component {
             await store.dispatch(login())
         } else {
             store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
-        }
-
-        if(Platform.OS === 'android') {
-            const appVersion = await SecureStore.getItemAsync('appVersion')
-            const newAppVersion = (await getAppVersion()).version
-            if (appVersion !== newAppVersion) {
-                await SecureStore.setItemAsync('appVersion', newAppVersion.toString())
-                this.setState({reload: true})
-            }
         }
 
         this.setState({

@@ -101,6 +101,6 @@ export const getNewsFeed = async (timestamp) => {
     return res.data;
 }
 export const getAppVersion = async () => {
-    const res = await instance.get(`/appmeta/version`)
-    return res.data
+    const res = await instance.get(`/apmea/version`)
+    return res.data.version
 }
