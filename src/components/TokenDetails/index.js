@@ -61,9 +61,13 @@ const styles = StyleSheet.create({
 });
 
 class TokenDetails extends Component {
-  componentWillMount = async () => {
-    const { getTokenDetails, symbol } = this.props
-    await getTokenDetails(symbol)
+  componentDidMount() {
+    const { navigation, getTokenDetails } = this.props
+    const { token } = navigation.state.params
+
+    if (!token.marketCap) {
+      getTokenDetails(token.symbol)
+    }
   }
 
   render() {
@@ -72,22 +76,21 @@ class TokenDetails extends Component {
       balance,
       marketCap,
       volume24Hr,
-      totalValue,
-      imageUrl,
       symbol,
       change,
+      change7d,
       supply,
       priceChange,
+      priceChange7d,
       website,
       twitter,
       reddit
-    } = this.props.tokenDetails;
-
+    } = this.props.token;
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
         <Header
           style={styles.header}
-          totalValue={balance ? totalValue : price}
+          totalValue={balance ? (balance * price) : price}
           totalChange={priceChange}
           totalChangePct={change}
         />
@@ -107,17 +110,17 @@ class TokenDetails extends Component {
         <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>MARKET CAP</Text>
-            <Text style={styles.tokenValue}>{'$'+marketCap.toLocaleString()}</Text>
+            <Text style={styles.tokenValue}>{'$'+formatPrice(marketCap)}</Text>
           </View>
 
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>24 HR VOLUME</Text>
-            <Text style={styles.tokenValue}>{`$${volume24Hr.toLocaleString()}`}</Text>
+            <Text style={styles.tokenValue}>{`$${formatPrice(volume24Hr)}`}</Text>
           </View>
         </View>
 
         <View style={styles.container}>
-          <View style={styles.containerChild}>
+          <View style={[styles.containerChild, {flexGrow:1}]}>
             <Text style={styles.tokenHeading}>SUPPLY</Text>
             <Text style={styles.tokenValue}>{`${(supply||0).toLocaleString()} ${symbol}`}</Text>
           </View>
@@ -196,6 +199,10 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state, props) => ({
   symbol: props.navigation.state.params.token.symbol,
+  token: {
+    ...state.account.tokenDetails,
+    ...props.navigation.state.params.token
+  },
   tokenDetails: state.account.tokenDetails,
   portfolio: state.account.portfolio
 })

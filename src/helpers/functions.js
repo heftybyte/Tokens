@@ -6,6 +6,7 @@ import {
 	registerUserForPushNotifications
 } from './api';
 import { setLoading } from '../reducers/ui'
+import { baseURL } from '../config'
 
 export const genericError = () => {
     Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
@@ -74,3 +75,4 @@ export const safeAlert = (...args) => {
 	setTimeout(()=>Alert.alert.apply({}, args), 1)
 }
 
+export const getTokenImage = (token) => `${baseURL}/img/tokens/${token.id}.png`

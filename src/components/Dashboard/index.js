@@ -91,7 +91,7 @@ class Dashboard extends Component {
 
   componentDidMount = async () => {
     if (this.state.stale) {
-      await this.props.getPortfolio()
+      this.props.getPortfolio()
       trackRefresh('Mount')
     }
   }
@@ -165,7 +165,7 @@ class Dashboard extends Component {
         <News feed={mockNewsFeed} />
         { portfolio && portfolio.tokens &&
         <TokenList tokens={portfolio.tokens} />}
-        { portfolio &&
+        { portfolio && portfolio.top &&
         <TokenList
           title="Top 100 Tokens By Market Cap" 
           tokens={portfolio.top}
