@@ -45,12 +45,10 @@ class Tokens extends React.Component {
         if(Platform.OS === 'android') {
             let err = null
             const appVersion = await SecureStore.getItemAsync('appVersion')
-            const newAppVersion = await getAppVersion().catch(e=>{
-                err = e;
-                return err
-            })
+            const newAppVersion = await getAppVersion().catch(e=>err=e)
             if(err){
                Alert.alert(getError(err))
+               return
             }else if (appVersion !== newAppVersion) {
                 await SecureStore.setItemAsync('appVersion', newAppVersion.toString())
                 this.setState({reload: true})
