@@ -100,3 +100,7 @@ export const getNewsFeed = async (timestamp) => {
     const res = await instance.get(`/feed/latest?timestamp=${timestamp}`)
     return res.data;
 }
+export const getAppVersion = async () => {
+    const res = await instance.get(`/apmea/version`)
+    return res.data.version
+}
