@@ -202,7 +202,6 @@ class TokenList extends Component {
       search: this.renderSearchListItem
     }
     const dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
-
     return (
       <View>
         <SectionList
