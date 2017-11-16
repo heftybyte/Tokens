@@ -7,6 +7,7 @@ import { observer } from "mobx-react/native"
 import { Button, Header as NBHeader, Left, Body, Right, Content } from "native-base"
 import { Constants } from 'expo'
 import Spinner from 'react-native-loading-spinner-overlay';
+import { getTokenImage } from '../helpers/functions'
 import { trackTap } from '../helpers/analytics'
 import Header from "../components/Dashboard/Header"
 import Toast, { DURATION } from 'react-native-easy-toast'
@@ -117,7 +118,7 @@ export const withDrawer = (WrappedComponent) => {
                                         alignItems: 'center',
                                         flex:1
                                     }}>
-                                        <Image key={tokenDetails.symbol} source={{ uri: baseURL + tokenDetails.imageUrl }} style={{width: 20, height: 20}}/>
+                                        <Image key={tokenDetails.symbol} source={{ uri: getTokenImage(tokenDetails) }} style={{width: 20, height: 20}}/>
                                         <Text style={{color: '#fff', paddingLeft: 10}}>
                                             {tokenDetails.name||tokenDetails.symbol}
                                         </Text> 

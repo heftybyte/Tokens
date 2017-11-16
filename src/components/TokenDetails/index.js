@@ -76,11 +76,12 @@ class TokenDetails extends Component {
       balance,
       marketCap,
       volume24Hr,
-      imageUrl,
       symbol,
       change,
+      change7d,
       supply,
       priceChange,
+      priceChange7d,
       website,
       twitter,
       reddit

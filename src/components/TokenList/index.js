@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
-import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
+import { formatPrice, formatCurrencyChange, getTokenImage } from '../../helpers/functions'
 import { baseURL, gainColor, lossColor } from '../../config'
 import { showToast } from '../../reducers/ui'
 import { trackAddress, trackTap } from '../../helpers/analytics'
@@ -22,7 +22,7 @@ const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <Text style={styles.orderText}>{index+1}.</Text>
         <View>
-          <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
         </View>
 
         <View style={styles.symbolContainer}>
@@ -63,7 +63,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
     <TouchableOpacity onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
-          <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
         </View>
 
         <View style={styles.symbolContainer}>
@@ -102,7 +102,7 @@ const SearchItem = ({ item, onPress, showTokenInfo, index }) => {
     <TouchableOpacity onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
-          <Image source={{ uri: baseURL + item.imageUrl }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
         </View>
 
         <View style={styles.symbolContainer}>

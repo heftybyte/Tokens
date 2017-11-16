@@ -78,7 +78,7 @@ class Header extends Component {
             <View style={styles.changeContainer}>
               <Text style={[styles.portfolioDelta, gain ? styles.gain : styles.loss]}>
                   {formatCurrencyChange((totalChange||0))} ({(totalChangePct||0).toFixed(2)}%)
-                  <Text style={styles.portfolioDeltaPeriod}> in 24h</Text>
+                  <Text style={styles.portfolioDeltaPeriod}> last 24hrs</Text>
               </Text>
             </View>
           }
