@@ -67,13 +67,13 @@ class AddAddress extends Component {
 
   saveAddress = async (data) => {
     const text = (typeof data === 'string') && data || this.state.inputValue;
-    const { addAddress, navigateBack } = this.props
+    const { addAddress, navigate } = this.props
     if(!text || !text.length) {
       Alert.alert('Enter an address to save');
       return;
     }
     await addAddress(text);
-    await navigateBack()
+    await navigate('Accounts')
   }
 
   render(){
@@ -107,7 +107,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     addAddress: (address) => dispatch(addAddress(address)),
-    navigateBack: (routeName) => dispatch(NavigationActions.back())
+    navigate: (routeName) => dispatch(NavigationActions.navigate({ routeName }))
   }
 }
 
