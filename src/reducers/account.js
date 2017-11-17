@@ -12,7 +12,9 @@ import {
     getAccount,
     getTokenDetailsForAccount,
     logoutAccount,
-    trackFeedActivity
+    trackFeedActivity,
+	addToAccountWatchlist,
+	removeFromAccountWatchlist
 } from '../helpers/api'
 import { safeAlert } from '../helpers/functions'
 import {
@@ -27,6 +29,8 @@ export const LOGIN = 'account/LOGIN'
 export const LOGOUT = 'account/LOGOUT'
 export const GET_PORTFOLIO = 'account/GET_PORTFOLIO'
 export const UPDATE = 'account/UPDATE'
+export const ADD_WATCHLIST = 'account/ADD_WATCHLIST'
+export const REMOVE_FROM_WATCHLIST = 'account/REMOVE_FROM_WATCHLIST'
 export const ADD_ADDRESS = 'account/ADD_ADDRESS'
 export const DELETE_ADDRESS = 'account/DELETE_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
@@ -54,6 +58,16 @@ const portfolioAction = (portfolio) => ({
 const updateAction = (account) => ({
     type: UPDATE,
     data: { account }
+})
+
+const addWatchListAction = (watchList = []) => ({
+	type: ADD_WATCHLIST,
+	data: { watchList, stale: true }
+})
+
+const removeFromWatchListAction = (watchList = []) => ({
+	type: REMOVE_FROM_WATCHLIST,
+	data: { watchList, stale: true }
 })
 
 const addAddressAction = (addresses=[]) => ({
@@ -139,6 +153,47 @@ export const logout = () => async(dispatch, getState) => {
     dispatch(resetAction)
 }
 
+export const addToWatchlist = (symbol) => async (dispatch, getState) => {
+	let err = null
+	const { id } = getState().account
+	dispatch(setLoading(true, `Adding ${symbol} to Watchlist`))
+	const account = await addToAccountWatchlist(id, symbol).catch(e=>err=e)
+	dispatch(setLoading(false))
+	if (err) {
+		dispatch(showToast(getError(err)))
+		return
+	}
+	dispatch(showToast(`${symbol} Added To Watchlist`))
+	dispatch(addWatchListAction(account.watchList))
+	dispatch(getPortfolio())
+}
+
+export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
+	const ok = async () => {
+		let err = null
+		const { id } = getState().account
+		dispatch(setLoading(true, `${symbol} From Watchlist`))
+		const account = await removeFromAccountWatchlist(id, symbol).catch(e=>err=e)
+		dispatch(setLoading(false))
+		if (err) {
+			dispatch(showToast(getError(err)))
+			return
+		}
+		dispatch(showToast(`${symbol} Removed From Watchlist`))
+		dispatch(removeFromWatchListAction(account.watchList))
+		dispatch(getPortfolio())
+	}
+
+	safeAlert(
+		'Are you sure?',
+		`Confirm Unwatching of ${symbol}`,
+		[
+			{text: 'OK', onPress: ok, style: 'destructive'},
+			{text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
+		],
+		{ cancelable: false }
+	)
+}
 export const addAddress = (address) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
@@ -233,12 +288,16 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
 
 const initialState = {
     addresses : [],
+		watchList: [],
     id: null,
     token: null,
     portfolio: {
         totalPriceChange: 0,
         totalPriceChangePct: 0,
-        totalValue: 0
+        totalValue: 0,
+        tokens: [],
+        top: [],
+        watchList: []
     },
     tokenDetails: {
         "marketCap": 0,
@@ -251,7 +310,8 @@ const initialState = {
     },
     invites: [],
     // Used to know when to fetch updated portfolio
-    stale: true
+    stale: true,
+    watchListMap: {}
 }
 
 export const trackFeedItem = (feedItemId, type) => async (dispatch, getState) => {
@@ -262,7 +322,6 @@ export const trackFeedItem = (feedItemId, type) => async (dispatch, getState) =>
 export default (state = initialState, action) => {
     switch(action.type) {
         case REGISTER:
-        case LOGIN:
         case GET_PORTFOLIO:
         case GET_TOKEN_DETAILS:
         case UPDATE:
@@ -271,6 +330,18 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data
+            }
+        case LOGIN:
+        case ADD_WATCHLIST:
+        case REMOVE_FROM_WATCHLIST:
+            const watchListMap = {}
+            action.data.watchList.forEach((symbol)=>
+                watchListMap[symbol] = true
+            )
+            return {
+                ...state,
+                ...action.data,
+                watchListMap
             }
         case LOGOUT:
             return {

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import Header from '../Dashboard/Header';
-import { getTokenDetails } from '../../reducers/account';
-import { baseURL } from '../../config'
+import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
+import { baseURL, lossColor, brandColor } from '../../config'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -57,7 +57,35 @@ const styles = StyleSheet.create({
   link: {
     color: '#fff',
     paddingLeft: 10
-  }
+  },
+  priceContainer: {
+    width: 96,
+    height: 40,
+    backgroundColor: lossColor,
+    borderRadius: 8,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+    paddingHorizontal: 13
+  },
+  noPrice: {
+    backgroundColor: '#000',
+    borderColor: '#fff'
+  },
+  noPriceText: {
+    color: '#fff'
+  },
+  watchText: {
+    color: '#fff'
+  },
+  unwatchText: {
+    color: brandColor
+  },
+  unwatchContainer: {
+    borderColor: brandColor,
+    paddingHorizontal: 8
+  },
 });
 
 class TokenDetails extends Component {
@@ -72,20 +100,28 @@ class TokenDetails extends Component {
 
   render() {
     const {
-      price,
-      balance,
-      marketCap,
-      volume24Hr,
-      symbol,
-      change,
-      change7d,
-      supply,
-      priceChange,
-      priceChange7d,
-      website,
-      twitter,
-      reddit
-    } = this.props.token;
+      addToWatchlist,
+      removeFromWatchList,
+      watchListMap,
+      token: {
+        price,
+        balance,
+        marketCap,
+        volume24Hr,
+        symbol,
+        change,
+        change7d,
+        supply,
+        priceChange,
+        priceChange7d,
+        website,
+        twitter,
+        reddit
+      }
+    } = this.props;
+
+    const isWatching = watchListMap[symbol]
+
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
         <Header
@@ -123,6 +159,27 @@ class TokenDetails extends Component {
           <View style={[styles.containerChild, {flexGrow:1}]}>
             <Text style={styles.tokenHeading}>SUPPLY</Text>
             <Text style={styles.tokenValue}>{`${(supply||0).toLocaleString()} ${symbol}`}</Text>
+          </View>
+        </View>
+
+        <View style={styles.container, {marginTop: 10}}>
+          <View style={[styles.containerChild, {flexGrow:1, alignItems: 'center'},]}>
+            <TouchableOpacity
+              onPress={() => isWatching ? removeFromWatchList(symbol) : addToWatchlist(symbol) }
+              style={[
+                  styles.priceContainer,
+                  styles.noPrice,
+                  isWatching ? styles.unwatchContainer : {}
+              ]}
+            >
+              {
+                isWatching ?
+                <Text style={[styles.unwatchText]}>UNWATCH</Text>
+                  :
+                <Text style={[styles.watchText]}>WATCH</Text>
+              }
+
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -194,7 +251,9 @@ class TokenDetails extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getTokenDetails: (sym) => dispatch(getTokenDetails(sym))
+  getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
+  addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
+  removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol))
 })
 
 const mapStateToProps = (state, props) => ({
@@ -204,7 +263,8 @@ const mapStateToProps = (state, props) => ({
     ...props.navigation.state.params.token
   },
   tokenDetails: state.account.tokenDetails,
-  portfolio: state.account.portfolio
+  portfolio: state.account.portfolio,
+  watchListMap: state.account.watchListMap
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(TokenDetails));
