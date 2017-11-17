@@ -8,6 +8,7 @@ import { store } from './store'
 import { Field } from "../lib/Field"
 import Header from './header'
 import Footer from './footer'
+import { invitesEnabled } from '../../config'
 
 export const Normal = observer(
 	(navigation) => (
@@ -31,7 +32,7 @@ export const Normal = observer(
 				}}
 			>
 				<Content>
-				{store.type === 'normal' &&
+				{invitesEnabled && store.type === 'normal' &&
 					<Field
 						label="Invite Code"
 						returnKeyType="next"
