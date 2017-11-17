@@ -9,7 +9,7 @@ import { getLinkTextByType } from './helpers'
 class ImageLeft extends React.Component {
 
     render() {
-        const { news: {title, image, body, type } } = this.props
+        const { news: {title, image, body, type, bookmarked } } = this.props
 
         return (
             <Grid>
@@ -39,9 +39,11 @@ class ImageLeft extends React.Component {
                       { getLinkTextByType(type) }&gt;
                     </Text>
                     </Col>
-                    <Col size={.2}>
-                        <SaveButton item={this.props.news}/>
-                    </Col>
+                    { !bookmarked &&
+                        <Col size={.2}>
+                            <SaveButton item={this.props.news}/>
+                        </Col>
+                    }
                 </Row>
             </Grid>
         )

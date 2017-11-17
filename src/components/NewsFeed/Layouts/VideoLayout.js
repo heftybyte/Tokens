@@ -7,7 +7,7 @@ import { Video } from 'expo';
 class VideoDefault extends React.Component {
 
     render() {
-        const { news: { link } } = this.props
+        const { news: { link, bookmarked } } = this.props
 
         return (
             <View>
@@ -22,7 +22,9 @@ class VideoDefault extends React.Component {
                     repeat
                     style={{ height: 250 }}
                 />
-                <SaveButton item={this.props.news}/>
+                { !bookmarked &&
+                    <SaveButton item={this.props.news}/>
+                }
             </View>
         )
     }

@@ -9,7 +9,7 @@ import { getLinkTextByType } from './helpers'
 class TextDefault extends React.Component {
 
     render() {
-        const { news: {title, body, link, type } } = this.props
+        const { news: {title, body, link, type, bookmarked } } = this.props
         
         return (
             <Grid>
@@ -36,9 +36,11 @@ class TextDefault extends React.Component {
                         { getLinkTextByType(type) }&gt;
                     </Text>
                     </Col>
-                    <Col size={.2}>
-                        <SaveButton item={this.props.news}/>
-                    </Col>
+                    { !bookmarked &&
+                        <Col size={.2}>
+                            <SaveButton item={this.props.news}/>
+                        </Col>
+                    }
                 </Row>
             </Grid>
         )   

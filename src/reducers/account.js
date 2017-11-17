@@ -239,7 +239,7 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
 }
 
 export const getBookmark = (news) => async (dispatch, getState) => {
-    console.log(news);
+    //console.log(news);
     // let err = null
     // const { id } = getState().account
     // const res = await bookMark(id, news).catch(e=>err=e)
@@ -299,6 +299,7 @@ export default (state = initialState, action) => {
                 ...initialState
             }
         case BOOKMARK:
+                action.data["bookmarked"] = true;
             return {
                 ...state,
                 bookmarks: [ action.data, ...state.bookmarks]
