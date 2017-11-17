@@ -39,7 +39,7 @@ const Format = (props) => {
     }
 
     const visitLink = ()=>{
-        link && link.uri && Linking.openURL(link.uri)
+        link && link.uri && Linking.openURL(link.uri + '?referrer=tokens-express')
           .catch(err => console.error('An error occurred', err))
     }
 

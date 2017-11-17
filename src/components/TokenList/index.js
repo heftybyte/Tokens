@@ -22,7 +22,7 @@ const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <Text style={styles.orderText}>{index+1}.</Text>
         <View>
-          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={styles.image}/>
         </View>
 
         <View style={styles.symbolContainer}>
@@ -63,7 +63,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
     <TouchableOpacity onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
-          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={styles.image}/>
         </View>
 
         <View style={styles.symbolContainer}>
@@ -102,7 +102,7 @@ const SearchItem = ({ item, onPress, showTokenInfo, index }) => {
     <TouchableOpacity onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
-          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={styles.image}/>
         </View>
 
         <View style={styles.symbolContainer}>
@@ -322,6 +322,11 @@ const styles = StyleSheet.create({
   orderText: {
     color: '#fff',
     fontSize: 12
+  },
+  image: {
+    width: 30,
+    height: 30,
+    borderRadius: 8
   }
 });
 
