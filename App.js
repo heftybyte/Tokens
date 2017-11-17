@@ -37,10 +37,15 @@ class Tokens extends React.Component {
             'Nunito-ExtraLight': require('./assets/fonts/Nunito-ExtraLight.ttf'),
         })
 
+        this.setState({
+            isReady: true
+        })
+
         BackHandler.addEventListener("onBackPress", this.goBack);
 
         const token = await SecureStore.getItemAsync('token')
         const id = await SecureStore.getItemAsync('id')
+
 
         if (Platform.OS === 'android') {
             let err = null
@@ -52,16 +57,15 @@ class Tokens extends React.Component {
                return
             } else if (appVersion && appVersion !== newAppVersion) {
                 this.setState({reload: true})
+                return 
             }
-        } else if (token && id) {
+        }
+
+        if (token && id) {
             await store.dispatch(login())
         } else {
             store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         }
-
-        this.setState({
-            isReady: true
-        })
     }
 
     goBack = () => {
