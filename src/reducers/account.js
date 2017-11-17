@@ -29,8 +29,8 @@ export const LOGIN = 'account/LOGIN'
 export const LOGOUT = 'account/LOGOUT'
 export const GET_PORTFOLIO = 'account/GET_PORTFOLIO'
 export const UPDATE = 'account/UPDATE'
-export const ADD_WASHLIST = 'account/ADD_WATCHLIST'
-export const REMOVE_FROM_WASHLIST = 'account/REMOVE_FROM_WASHLIST'
+export const ADD_WATCHLIST = 'account/ADD_WATCHLIST'
+export const REMOVE_FROM_WATCHLIST = 'account/REMOVE_FROM_WATCHLIST'
 export const ADD_ADDRESS = 'account/ADD_ADDRESS'
 export const DELETE_ADDRESS = 'account/DELETE_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
@@ -61,12 +61,12 @@ const updateAction = (account) => ({
 })
 
 const addWatchListAction = (watchList = []) => ({
-	type: ADD_WASHLIST,
+	type: ADD_WATCHLIST,
 	data: { watchList, stale: true }
 })
 
 const removeFromWatchListAction = (watchList = []) => ({
-	type: REMOVE_FROM_WASHLIST,
+	type: REMOVE_FROM_WATCHLIST,
 	data: { watchList, stale: true }
 })
 
@@ -186,7 +186,7 @@ export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
 
 	safeAlert(
 		'Are you sure?',
-		`Confirm Removal of ${symbol}`,
+		`Confirm Unwatching of ${symbol}`,
 		[
 			{text: 'OK', onPress: ok, style: 'destructive'},
 			{text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
@@ -310,7 +310,8 @@ const initialState = {
     },
     invites: [],
     // Used to know when to fetch updated portfolio
-    stale: true
+    stale: true,
+    watchListMap: {}
 }
 
 export const trackFeedItem = (feedItemId, type) => async (dispatch, getState) => {
@@ -321,17 +322,26 @@ export const trackFeedItem = (feedItemId, type) => async (dispatch, getState) =>
 export default (state = initialState, action) => {
     switch(action.type) {
         case REGISTER:
-        case LOGIN:
         case GET_PORTFOLIO:
         case GET_TOKEN_DETAILS:
         case UPDATE:
         case ADD_ADDRESS:
         case DELETE_ADDRESS:
-	      case ADD_WASHLIST:
-	      case REMOVE_FROM_WASHLIST:
             return {
                 ...state,
                 ...action.data
+            }
+        case LOGIN:
+        case ADD_WATCHLIST:
+        case REMOVE_FROM_WATCHLIST:
+            const watchListMap = {}
+            action.data.watchList.forEach((symbol)=>
+                watchListMap[symbol] = true
+            )
+            return {
+                ...state,
+                ...action.data,
+                watchListMap
             }
         case LOGOUT:
             return {
