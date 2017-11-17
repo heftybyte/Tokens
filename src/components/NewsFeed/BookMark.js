@@ -17,7 +17,7 @@ class BookMarks extends React.Component {
     {
         return (
             <View style={styles.slide}>
-                <Format format={item.format} news={item} bookmarked={true} />
+                <Format format={item.format} news={item} />
             </View>
         )
     }
