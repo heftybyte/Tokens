@@ -122,6 +122,13 @@ class Dashboard extends Component {
     trackRefresh('Manual')
   }
 
+  getWatchListSource = (portfolio) => {
+		if(portfolio.watchList.length === 0){
+			return portfolio.top
+		}
+		return portfolio.watchList
+  }
+
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
     return (
@@ -163,9 +170,15 @@ class Dashboard extends Component {
           />
         }
         <News feed={mockNewsFeed} />
-        { portfolio && portfolio.tokens &&
+        { portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
-        { portfolio && portfolio.top &&
+        { portfolio.watchList.length &&
+        <TokenList
+            title="Your WatchList"
+            tokens={portfolio.watchList}
+            type="watchList"
+          />}
+        { portfolio.top.length
         <TokenList
           title="Top 100 Tokens By Market Cap" 
           tokens={portfolio.top}

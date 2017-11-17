@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, AsyncStorage, Alert, TextInput, Button, ScrollView } from 'react-native';
+import { StyleSheet, View, AsyncStorage, Alert, TextInput, Button, ScrollView, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
 import { fetchTokens } from '../../actions/search';
@@ -54,7 +54,12 @@ class SearchPage extends Component {
 
     render(){
       const { tokens, query } = this.state
+	    const { watchList } = this.props
 
+	    let watchListObj = {}
+	    watchList.forEach(symbol => {
+		    watchListObj[symbol] = symbol
+	    })
       return (
         <View style={styles.wrapper}>
           <TextInput
@@ -71,6 +76,7 @@ class SearchPage extends Component {
             <TokenList
               style={styles.list}
               tokens={tokens.filter(token=>token.symbol.indexOf(query) > -1)}
+              watchList={watchListObj}
               type="search"
             />
           </ScrollView>
@@ -84,9 +90,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  tokens: state.search.tokens,
-  fetched: state.search.fetchedFromStorage,
-  portfolio: state.account.portfolio
+    tokens: state.search.tokens,
+    fetched: state.search.fetchedFromStorage,
+    portfolio: state.account.portfolio,
+		watchList: state.account.watchList
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(SearchPage));

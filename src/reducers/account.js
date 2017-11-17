@@ -12,7 +12,9 @@ import {
     getAccount,
     getTokenDetailsForAccount,
     logoutAccount,
-    trackFeedActivity
+    trackFeedActivity,
+		addToAccountWashList,
+		removeFromAccountWashList
 } from '../helpers/api'
 import { safeAlert } from '../helpers/functions'
 import {
@@ -27,6 +29,8 @@ export const LOGIN = 'account/LOGIN'
 export const LOGOUT = 'account/LOGOUT'
 export const GET_PORTFOLIO = 'account/GET_PORTFOLIO'
 export const UPDATE = 'account/UPDATE'
+export const ADD_WASHLIST = 'account/ADD_WATCHLIST'
+export const REMOVE_FROM_WASHLIST = 'account/REMOVE_FROM_WASHLIST'
 export const ADD_ADDRESS = 'account/ADD_ADDRESS'
 export const DELETE_ADDRESS = 'account/DELETE_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
@@ -54,6 +58,16 @@ const portfolioAction = (portfolio) => ({
 const updateAction = (account) => ({
     type: UPDATE,
     data: { account }
+})
+
+const addWatchListAction = (watchList = []) => ({
+	type: ADD_WASHLIST,
+	data: { watchList, stale: true }
+})
+
+const removeFromWatchListAction = (watchList = []) => ({
+	type: REMOVE_FROM_WASHLIST,
+	data: { watchList, stale: true }
 })
 
 const addAddressAction = (addresses=[]) => ({
@@ -139,6 +153,47 @@ export const logout = () => async(dispatch, getState) => {
     dispatch(resetAction)
 }
 
+export const addToWashList = (symbol) => async (dispatch, getState) => {
+	let err = null
+	const { id } = getState().account
+	dispatch(setLoading(true, 'Adding to WashList'))
+	const account = await addToAccountWashList(id, symbol).catch(e=>err=e)
+	dispatch(setLoading(false))
+	if (err) {
+		dispatch(showToast(getError(err)))
+		return
+	}
+	dispatch(showToast('Symbol Added To Watch-List'))
+	dispatch(addWatchListAction(account.watchList))
+	dispatch(getPortfolio())
+}
+
+export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
+	const ok = async () => {
+		let err = null
+		const { id } = getState().account
+		dispatch(setLoading(true, 'Removing From WashList'))
+		const account = await removeFromAccountWashList(id, symbol).catch(e=>err=e)
+		dispatch(setLoading(false))
+		if (err) {
+			dispatch(showToast(getError(err)))
+			return
+		}
+		dispatch(showToast('Symbol Removed From WatchList'))
+		dispatch(removeFromWatchListAction(account.watchList))
+		dispatch(getPortfolio())
+	}
+
+	safeAlert(
+		'Are you sure?',
+		`Confirm Unwatch of ${symbol}`,
+		[
+			{text: 'OK', onPress: ok, style: 'destructive'},
+			{text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
+		],
+		{ cancelable: false }
+	)
+}
 export const addAddress = (address) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
@@ -233,12 +288,16 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
 
 const initialState = {
     addresses : [],
+		watchList: [],
     id: null,
     token: null,
     portfolio: {
         totalPriceChange: 0,
         totalPriceChangePct: 0,
-        totalValue: 0
+        totalValue: 0,
+        tokens: [],
+        top: [],
+        watchList: []
     },
     tokenDetails: {
         "marketCap": 0,
@@ -268,6 +327,8 @@ export default (state = initialState, action) => {
         case UPDATE:
         case ADD_ADDRESS:
         case DELETE_ADDRESS:
+	      case ADD_WASHLIST:
+	      case REMOVE_FROM_WASHLIST:
             return {
                 ...state,
                 ...action.data
