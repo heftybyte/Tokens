@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, View } from 'react-native';
 import { styles } from '../Style'
+import SaveButton from '../SaveButton'
 import { Video } from 'expo';
 
 class VideoDefault extends React.Component {
@@ -21,6 +22,7 @@ class VideoDefault extends React.Component {
                     repeat
                     style={{ height: 250 }}
                 />
+                <SaveButton item={this.props.news}/>
             </View>
         )
     }

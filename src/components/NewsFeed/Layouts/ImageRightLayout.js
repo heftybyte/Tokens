@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, View, Image, Linking } from 'react-native';
 import { Grid, Col, Row } from "react-native-easy-grid";
 import {styles} from '../Style'
+import SaveButton from '../SaveButton'
 import { getLinkTextByType } from './helpers'
 
 
@@ -15,7 +16,7 @@ class ImageRight extends React.Component {
                 <Row size={20}>
                     <Text style={styles.title}>{title.toUpperCase()}</Text>
                 </Row>
-                <Row size={60} style={styles.center}>
+                <Row size={70} style={styles.center}>
                     <Col size={65}>
                         <Text style={styles.body}>{body}</Text>
                     </Col>
@@ -26,8 +27,9 @@ class ImageRight extends React.Component {
                         />
                     </Col>
                 </Row>
-                <Row size={20} style={{alignItems: 'flex-end'}}>
+                <Row size={10} style={{alignItems: 'flex-end'}}>
                     <Row>
+                    <Col size={.8}>
                         <Text
                           style={styles.link}
                           onPress={()=>{
@@ -37,6 +39,10 @@ class ImageRight extends React.Component {
                         >
                           { getLinkTextByType(type) }&gt;
                         </Text>
+                        </Col>
+                        <Col size={.2}>
+                            <SaveButton item={this.props.news}/>
+                        </Col>
                     </Row>
                 </Row>
             </Grid>

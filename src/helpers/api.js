@@ -104,3 +104,8 @@ export const getAppVersion = async () => {
     const res = await instance.get(`/appmeta/version`)
     return res.data
 }
+
+export const bookMark = async (id, bookmark) => {
+    let res = await instance.get(`/accounts/${id}/bookmarks/${bookmark.id}`, { bookmark })
+    return res.data
+}
