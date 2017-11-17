@@ -86,11 +86,13 @@ class AddAddress extends Component {
           hasCameraPermission={this.state.hasCameraPermission}
           onChangeText={this.onChangeText}
           saveAddress={this.saveAddress}
-        />
-        <QRScanner 
-          style={styles.scanner}
-          scannerOpen={this.state.scannerOpen}
-          handleBarCodeRead={this.handleBarCodeRead}
+          children={
+            <QRScanner 
+              style={styles.scanner}
+              scannerOpen={this.state.scannerOpen}
+              handleBarCodeRead={this.handleBarCodeRead}
+            />
+          }
         />
       </View>
     );
