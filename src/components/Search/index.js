@@ -93,7 +93,7 @@ const mapStateToProps = (state) => ({
     tokens: state.search.tokens,
     fetched: state.search.fetchedFromStorage,
     portfolio: state.account.portfolio,
-		watchList: state.account.watchList
+    watchList: state.account.watchList
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(SearchPage));

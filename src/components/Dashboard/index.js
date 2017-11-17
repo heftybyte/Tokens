@@ -163,15 +163,15 @@ class Dashboard extends Component {
           />
         }
         <News feed={mockNewsFeed} />
-        { portfolio.tokens.length &&
+        { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
-        { portfolio.watchList.length &&
+        { !!portfolio.watchList.length &&
         <TokenList
-            title="Your WatchList"
+            title="Watchlist"
             tokens={portfolio.watchList}
             type="watchList"
           />}
-        { portfolio.top.length
+        { !!portfolio.top.length &&
         <TokenList
           title="Top 100 Tokens By Market Cap" 
           tokens={portfolio.top}

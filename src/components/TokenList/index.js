@@ -11,12 +11,12 @@ import {
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { formatPrice, formatCurrencyChange, getTokenImage } from '../../helpers/functions'
-import { baseURL, gainColor, lossColor } from '../../config'
+import { baseURL, gainColor, lossColor, brandColor } from '../../config'
 import { showToast } from '../../reducers/ui'
 import { trackAddress, trackTap } from '../../helpers/analytics'
 import {
-	addToWashList,
-	removeFromWatchList
+  addToWashList,
+  removeFromWatchList
 } from '../../reducers/account';
 
 const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
@@ -102,7 +102,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
 };
 
 const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
-	let itemOnWashList = !!watchList[item.symbol]
+  let itemOnWashList = !!watchList[item.symbol]
   return (
     <TouchableOpacity onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
@@ -117,15 +117,16 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
           onPress={() => onPress(itemOnWashList, item.symbol) }
           style={[
               styles.priceContainer,
-              styles.noPrice
+              styles.noPrice,
+              itemOnWashList ? styles.unwatchContainer : {}
           ]}
         >
-	        {
-		        itemOnWashList ?
-		        <Text style={[styles.unwatchText]}>UNWATCH</Text>
-			        :
-		        <Text style={[styles.watchText]}>WATCH</Text>
-	        }
+          {
+            itemOnWashList ?
+            <Text style={[styles.unwatchText]}>UNWATCH</Text>
+              :
+            <Text style={[styles.watchText]}>WATCH</Text>
+          }
 
         </TouchableOpacity>
       </View>
@@ -197,13 +198,13 @@ class TokenList extends Component {
         this.props.goToTokenDetailsPage(item);
       }}
       onPress={(setWatch, symbol)=>{
-      	if(setWatch){
-		      //Alert.alert('Watch list coming soon delete')
-		      this.props.removeFromWatchList(symbol)
-	      } else {
-		      //Alert.alert('Watch list coming soon add' + symbol)
-		      this.props.addToWashList(symbol)
-	      }
+        if(setWatch){
+          //Alert.alert('Watch list coming soon delete')
+          this.props.removeFromWatchList(symbol)
+        } else {
+          //Alert.alert('Watch list coming soon add' + symbol)
+          this.props.addToWashList(symbol)
+        }
       }}
     />
   )
@@ -236,8 +237,8 @@ class TokenList extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-		addToWashList: symbol => dispatch(addToWashList(symbol)),
-		removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
+    addToWashList: symbol => dispatch(addToWashList(symbol)),
+    removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
     goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} })),
     showToast: (msg, props, duration) => dispatch(showToast(msg, props, duration))
 })
@@ -270,8 +271,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 12,
-    paddingLeft: 13,
-    paddingRight: 13
+    paddingHorizontal: 13
   },
   noPrice: {
     backgroundColor: '#000',
@@ -280,12 +280,16 @@ const styles = StyleSheet.create({
   noPriceText: {
     color: '#fff'
   },
-	watchText: {
-		color: '#fff'
-	},
-	unwatchText: {
-		color: '#6b2fe2'
-	},
+  watchText: {
+    color: '#fff'
+  },
+  unwatchText: {
+    color: brandColor
+  },
+  unwatchContainer: {
+    borderColor: brandColor,
+    paddingHorizontal: 8
+  },
   longerPriceContainer: {
     paddingLeft: 30,
     paddingRight: 30

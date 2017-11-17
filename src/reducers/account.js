@@ -156,14 +156,14 @@ export const logout = () => async(dispatch, getState) => {
 export const addToWashList = (symbol) => async (dispatch, getState) => {
 	let err = null
 	const { id } = getState().account
-	dispatch(setLoading(true, 'Adding to WashList'))
+	dispatch(setLoading(true, `Adding ${symbol} to Watchlist`))
 	const account = await addToAccountWashList(id, symbol).catch(e=>err=e)
 	dispatch(setLoading(false))
 	if (err) {
 		dispatch(showToast(getError(err)))
 		return
 	}
-	dispatch(showToast('Symbol Added To Watch-List'))
+	dispatch(showToast(`${symbol} Added To Watchlist`))
 	dispatch(addWatchListAction(account.watchList))
 	dispatch(getPortfolio())
 }
@@ -172,21 +172,21 @@ export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
 	const ok = async () => {
 		let err = null
 		const { id } = getState().account
-		dispatch(setLoading(true, 'Removing From WashList'))
+		dispatch(setLoading(true, `${symbol} From Watchlist`))
 		const account = await removeFromAccountWashList(id, symbol).catch(e=>err=e)
 		dispatch(setLoading(false))
 		if (err) {
 			dispatch(showToast(getError(err)))
 			return
 		}
-		dispatch(showToast('Symbol Removed From WatchList'))
+		dispatch(showToast(`${symbol} Removed From Watchlist`))
 		dispatch(removeFromWatchListAction(account.watchList))
 		dispatch(getPortfolio())
 	}
 
 	safeAlert(
 		'Are you sure?',
-		`Confirm Unwatch of ${symbol}`,
+		`Confirm Removal of ${symbol}`,
 		[
 			{text: 'OK', onPress: ok, style: 'destructive'},
 			{text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
