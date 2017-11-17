@@ -46,7 +46,6 @@ class Tokens extends React.Component {
         const token = await SecureStore.getItemAsync('token')
         const id = await SecureStore.getItemAsync('id')
 
-
         if (Platform.OS === 'android') {
             let err = null
             const appVersion = await SecureStore.getItemAsync('appVersion')

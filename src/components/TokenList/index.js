@@ -157,7 +157,7 @@ class TokenList extends Component {
         this.setState({showChange: !this.state.showChange})
         trackTap(this.state.showChange ? 'PriceToggle-watch-change' : 'PriceToggle-watch-price');
         this.props.showToast(
-          this.state.showChange ? 'Total Value' : 'Total Change Since 24hrs Ago',
+          this.state.showChange ? 'Price' : 'Change Since 24hrs Ago',
           { position: 'center', style: { backgroundColor: '#222' } },
           200
         )
