@@ -1,12 +1,12 @@
 const newsApi = [
   {
     "id": 12,
-    "title": "Wired",
+    "title": "ETHNews",
     "type": "ARTICLE",
-    "body": "$280M WORTH OF ETHEREUM IS TRAPPED THANKS TO A DUMB BUG",
+    "body": "Zug And uPort See First Citizens’ Identity Registered On The Ethereum Blockchain",
     "link": {
       "type": "external",
-      "uri": "https://www.wired.com/story/280m-worth-of-ethereum-is-trapped-for-a-pretty-dumb-reason/",
+      "uri": "https://www.ethnews.com/zug-and-uport-see-first-citizens-identity-registered-on-the-ethereum-blockchain",
       "params": null
     },
     "image": "",
@@ -25,48 +25,48 @@ const newsApi = [
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-10-13T20:06:53.586Z"
+    "createdAt": "2017-10-13T20:06:53.586Z"
   },
   {
     "id": 1,
-    "title": "Quantstamp Pre-sale",
+    "title": "Qlink Pre-sale",
     "type": "AD",
-    "body": "Quantstamp is the first scalable security-audit protocol designed to find vulnerabilities in Ethereum smart contracts.",
+    "body": "Decentralized mobile network dedicated to constructing an open-source telecom infrastructure on blockchain",
     "link": {
       "type": "external",
-      "uri": "https://quantstamp.com/"
+      "uri": "https://qlink.mobi/f/qlink"
     },
-    "image": "https://cdn.icodrops.com/wp-content/uploads/2017/10/Quantstamp-150x150.jpg",
+    "image": "https://cdn.icodrops.com/wp-content/uploads/2017/11/Qlink-150x150.jpg",
     "format": "IMAGE_RIGHT",
-      "createdAt": "2017-12-13T20:06:53.586Z"
+    "createdAt": "2017-12-13T20:06:53.586Z"
   },
   {
     "id": 2,
-    "title": "CNBC",
+    "title": "Coindesk",
     "type": "ARTICLE",
-    "body": "ICO market ‘very young’ so we are still the best place to raise cash, Nasdaq exec says",
+    "body": "Parity Team Publishes Postmortem on $160 Million Ether Freeze",
     "link": {
       "type": "external",
-      "uri": "https://www.cnbc.com/2017/11/07/initial-coin-offering-ico-market-very-young-nasdaq-exec-says.html",
+      "uri": "https://www.coindesk.com/parity-team-publishes-postmortem-160-million-ether-freeze/",
       "params": null
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-01-13T20:06:53.586Z"
+    "createdAt": "2017-01-13T20:06:53.586Z"
   },
   {
     "id": 3,
-    "title": "Coindesk",
+    "title": "Forbes",
     "type": "ARTICLE",
-    "body": "Ripio Raises $31 Million in Private Ethereum Token Sale",
+    "body": "Crypto Craze: Ethereum May Not Be A Bubble Despite 3,700% Explosion",
     "link": {
       "type": "external",
-      "uri": "https://www.coindesk.com/ripio-raises-31-million-private-ethereum-token-sale/",
+      "uri": "https://www.forbes.com/sites/trangho/2017/11/12/crypto-craze-ethereum-may-not-be-a-bubble-despite-3700-explosion/#11e3673f1027",
       "params": null
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-02-13T20:06:53.586Z"
+    "createdAt": "2017-02-13T20:06:53.586Z"
   },
   {
     "id": 4,
@@ -80,20 +80,20 @@ const newsApi = [
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-04-13T20:06:53.586Z"
+    "createdAt": "2017-04-13T20:06:53.586Z"
   },
   {
     "id": 5,
-    "title": "Ammbr ICO",
+    "title": "Bloom ICO",
     "type": "AD",
-    "body": "The Ammbr network will bridge the last-mile gap that is currently poorly handled by traditional Internet Service Providers.",
+    "body": "Bloom is an end-to-end protocol for identity attestation, risk assessment and credit scoring, entirely on the blockchain.",
     "link": {
       "type": "external",
-      "uri": "https://tokensale.aeron.aero/register/"
+      "uri": "https://hellobloom.io/"
     },
-    "image": "https://tokenmarket.net/blockchain/blockchain/assets/ammbr/logo_big.png",
+    "image": "https://cdn.icodrops.com/wp-content/uploads/2017/10/Bloom-150x150.jpg",
     "format": "IMAGE_RIGHT",
-      "createdAt": "2017-11-13T20:06:53.586Z"
+    "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 6,
@@ -107,7 +107,7 @@ const newsApi = [
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-06-13T20:06:53.586Z"
+    "createdAt": "2017-06-13T20:06:53.586Z"
   },
   {
     "id": 7,
@@ -121,7 +121,7 @@ const newsApi = [
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-11-13T20:06:53.586Z"
+    "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 8,
@@ -135,20 +135,20 @@ const newsApi = [
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-11-13T20:06:53.586Z"
+    "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 9,
-    "title": "LAToken ICO",
+    "title": "Nuggets ICO",
     "type": "AD",
-    "body": "Blockchain protocol and platform for tokenizing and trading traditional assets.",
+    "body": "Transform the way you buy, login and verify your identity online.",
     "link": {
       "type": "external",
-      "uri": "https://sale.latoken.com/"
+      "uri": "https://nuggets.tokenhub.com/"
     },
-    "image": "https://icodrops.com/wp-content/uploads/2017/09/L2SxNgoN_400x400-150x150.jpg",
+    "image": "https://cdn.icodrops.com/wp-content/uploads/2017/11/Nuggets-150x150.jpeg",
     "format": "IMAGE_RIGHT",
-      "createdAt": "2017-11-13T20:06:53.586Z"
+    "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 10,
@@ -162,7 +162,7 @@ const newsApi = [
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-11-13T20:06:53.586Z"
+    "createdAt": "2017-11-13T20:06:53.586Z"
   },
   {
     "id": 11,
@@ -176,7 +176,7 @@ const newsApi = [
     },
     "image": "",
     "format": "TEXT",
-      "createdAt": "2017-11-13T20:06:53.586Z"
+    "createdAt": "2017-11-13T20:06:53.586Z"
   }
 ];
 
