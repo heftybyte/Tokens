@@ -1,12 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, Button, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, TextInput, Button, View, TouchableHighlight, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { trackAddress, trackTap } from '../../helpers/analytics'
+import { lossColor, brandColor } from '../../config'
 
 const styles = StyleSheet.create({
     topContainer:{
-        alignItems: 'center'
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'flex-start'
     },
     accountLabel: {
         color: '#fff'
@@ -16,12 +19,12 @@ const styles = StyleSheet.create({
       paddingHorizontal: 5,
       color: '#fff',
       borderRadius: 5,
-      width: '100%',
       height: 40,
       fontSize: 12,
       textAlign: 'center'
     },
     inputContainer: {
+      height: 40,
       width: '90%',
       backgroundColor: "#161616",
     },
@@ -34,8 +37,29 @@ const styles = StyleSheet.create({
       backgroundColor: '#6b2fe2',
       padding: 10,
       borderRadius: 10,
-      flexDirection: 'row',
-      marginTop: 20,
+      flexDirection: 'row'
+    },
+    buttonContainer: {
+      width: 110,
+      height: 40,
+      backgroundColor: lossColor,
+      borderRadius: 8,
+      borderWidth: 2,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 12,
+      paddingHorizontal: 5,
+      marginHorizontal: 10,
+    },
+    noPrice: {
+      backgroundColor: '#000',
+      borderColor: '#fff'
+    },
+    noPriceText: {
+      color: '#fff'
+    },
+    buttonText: {
+      color: '#fff'
     }
   });
 
@@ -55,28 +79,49 @@ const AccountInput = ({
             style={styles.accountInput}
             value={inputValue}
             onChangeText={onChangeText}
-            placeholder={'Enter Ethereum Address'}
-            placeholderTextColor='#333'
+            placeholder={'Enter Ethereum Address or scan QR code'}
+            placeholderTextColor='#444'
           />
         </View>
-        {children}
-        { !scannerOpen ? <TouchableHighlight onPress={()=>{trackAddress('Save', 'Button');saveAddress()}} style={[styles.btn, { marginBottom: 20 }]}>
-          <Text style={{color: 'white'}}>Save Address</Text>
-        </TouchableHighlight> : null }   
-        <TouchableHighlight
-          onPress={()=>{trackTap('Toggle QRScanner');toggleQRScanner()}}
-          disabled={!hasCameraPermission}
-        >
-          <View style={styles.btn}>
-            <MaterialCommunityIcons
-                name="qrcode"
-                size={22}
-                color="white"
-                style={{padding: 0, margin: 0,marginRight: 10}}
-              />
-            <Text style={{color: 'white'}}>{scannerOpen ? 'Close QR Scanner' :'Scan QR Code'}</Text>
-          </View>
-        </TouchableHighlight>
+        <View style={{marginVertical: scannerOpen ? 20 : 10}}>
+          {children}
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'stretch'}}>
+          <TouchableOpacity
+            onPress={()=>{trackTap('Toggle QRScanner');toggleQRScanner()}}
+            disabled={!hasCameraPermission}
+            style={[
+                styles.buttonContainer,
+                styles.noPrice
+            ]}
+          >
+            {
+              <View style={{flex:1, alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
+                <MaterialCommunityIcons
+                    name="qrcode"
+                    size={20}
+                    color="white"
+                    style={{marginRight: 10}}
+                  />
+                <Text style={[styles.buttonText]}>{scannerOpen ? 'CLOSE' :'SCAN'}</Text>
+              </View>
+            }
+          </TouchableOpacity>
+          { !scannerOpen &&
+             <TouchableOpacity
+              onPress={()=>{trackAddress('Save', 'Button');saveAddress()}}
+              style={[
+                  styles.buttonContainer,
+                  styles.noPrice
+              ]}
+            >
+              {
+                <Text style={[styles.buttonText]}>SAVE</Text>
+              }
+
+            </TouchableOpacity>
+            }
+        </View>
     </View>
     );
 };

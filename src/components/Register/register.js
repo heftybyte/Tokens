@@ -81,7 +81,7 @@ const Register = observer(
 							<View style={{flex: 1, paddingLeft: 10}}>
 								<Text style={styles.text}>GUEST MODE</Text>
 							</View>
-							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Temporary account, can expire at any time')}/>
+							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Account dedicated to this device only')}/>
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity

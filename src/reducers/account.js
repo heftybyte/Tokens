@@ -206,7 +206,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     }
     dispatch(showToast('Address Added'))
     dispatch(addAddressAction(account.addresses))
-    dispatch(getPortfolio())
+    dispatch(getPortfolio(true, 'Scanning For Tokens'))
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
@@ -253,12 +253,12 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
 
 }
 
-export const getPortfolio = (showUILoader=true) => async (dispatch, getState) => {
+export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
 
     if (showUILoader) {
-        dispatch(setLoading(true, 'Loading Portfolio'))
+        dispatch(setLoading(true, msg || 'Loading Portfolio'))
     }
     let portfolio = await getAccountPortfolio(id).catch(e=>err=e)
     if (showUILoader) {

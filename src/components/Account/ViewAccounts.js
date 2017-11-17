@@ -18,7 +18,7 @@ import { deleteAddress, refreshAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 import { trackAddress, trackTap } from '../../helpers/analytics'
-import { brandColor } from '../../config'
+import { brandColor, invitesEnabled } from '../../config'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -164,7 +164,7 @@ class ViewAddresses extends Component {
               </Right>
             </CardItem>
          </Card>
-          {(token || id) &&
+          {(token || id) && invitesEnabled &&
             <View>
             <Card>
               <CardItem
