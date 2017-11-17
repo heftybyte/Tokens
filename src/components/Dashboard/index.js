@@ -122,13 +122,6 @@ class Dashboard extends Component {
     trackRefresh('Manual')
   }
 
-  getWatchListSource = (portfolio) => {
-		if(portfolio.watchList.length === 0){
-			return portfolio.top
-		}
-		return portfolio.watchList
-  }
-
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
     return (
