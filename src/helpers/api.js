@@ -56,12 +56,12 @@ export const logoutAccount = async () => {
 	await instance.post(`/accounts/logout`, {})
 }
 
-export const addToAccountWashList = async (id, symbol) => {
+export const addToAccountWatchlist = async (id, symbol) => {
 	const res = await instance.post(`/accounts/${id}/watch-list`, { symbol })
 	return res.data
 }
 
-export const removeFromAccountWashList = async (id, symbol) => {
+export const removeFromAccountWatchlist = async (id, symbol) => {
 	const res = await instance.delete(`/accounts/${id}/watch-list/${symbol}`)
 	return res.data
 }

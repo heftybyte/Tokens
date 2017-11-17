@@ -13,8 +13,8 @@ import {
     getTokenDetailsForAccount,
     logoutAccount,
     trackFeedActivity,
-		addToAccountWashList,
-		removeFromAccountWashList
+	addToAccountWatchlist,
+	removeFromAccountWatchlist
 } from '../helpers/api'
 import { safeAlert } from '../helpers/functions'
 import {
@@ -153,11 +153,11 @@ export const logout = () => async(dispatch, getState) => {
     dispatch(resetAction)
 }
 
-export const addToWashList = (symbol) => async (dispatch, getState) => {
+export const addToWatchlist = (symbol) => async (dispatch, getState) => {
 	let err = null
 	const { id } = getState().account
 	dispatch(setLoading(true, `Adding ${symbol} to Watchlist`))
-	const account = await addToAccountWashList(id, symbol).catch(e=>err=e)
+	const account = await addToAccountWatchlist(id, symbol).catch(e=>err=e)
 	dispatch(setLoading(false))
 	if (err) {
 		dispatch(showToast(getError(err)))
@@ -173,7 +173,7 @@ export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
 		let err = null
 		const { id } = getState().account
 		dispatch(setLoading(true, `${symbol} From Watchlist`))
-		const account = await removeFromAccountWashList(id, symbol).catch(e=>err=e)
+		const account = await removeFromAccountWatchlist(id, symbol).catch(e=>err=e)
 		dispatch(setLoading(false))
 		if (err) {
 			dispatch(showToast(getError(err)))

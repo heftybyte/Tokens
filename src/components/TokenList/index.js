@@ -15,7 +15,7 @@ import { baseURL, gainColor, lossColor, brandColor } from '../../config'
 import { showToast } from '../../reducers/ui'
 import { trackAddress, trackTap } from '../../helpers/analytics'
 import {
-  addToWashList,
+  addToWatchlist,
   removeFromWatchList
 } from '../../reducers/account';
 
@@ -102,7 +102,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
 };
 
 const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
-  let itemOnWashList = !!watchList[item.symbol]
+  let itemOnWatchlist = !!watchList[item.symbol]
   return (
     <TouchableOpacity onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
@@ -114,15 +114,15 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
           <Text style={styles.symbol}>{item.symbol}</Text>
         </View>
         <TouchableOpacity
-          onPress={() => onPress(itemOnWashList, item.symbol) }
+          onPress={() => onPress(itemOnWatchlist, item.symbol) }
           style={[
               styles.priceContainer,
               styles.noPrice,
-              itemOnWashList ? styles.unwatchContainer : {}
+              itemOnWatchlist ? styles.unwatchContainer : {}
           ]}
         >
           {
-            itemOnWashList ?
+            itemOnWatchlist ?
             <Text style={[styles.unwatchText]}>UNWATCH</Text>
               :
             <Text style={[styles.watchText]}>WATCH</Text>
@@ -203,7 +203,7 @@ class TokenList extends Component {
           this.props.removeFromWatchList(symbol)
         } else {
           //Alert.alert('Watch list coming soon add' + symbol)
-          this.props.addToWashList(symbol)
+          this.props.addToWatchlist(symbol)
         }
       }}
     />
@@ -237,7 +237,7 @@ class TokenList extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addToWashList: symbol => dispatch(addToWashList(symbol)),
+    addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
     removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
     goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} })),
     showToast: (msg, props, duration) => dispatch(showToast(msg, props, duration))
