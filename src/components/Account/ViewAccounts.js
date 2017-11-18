@@ -164,51 +164,51 @@ class ViewAddresses extends Component {
               </Right>
             </CardItem>
          </Card>
-          {(token || id) && invitesEnabled &&
-            <View>
-            <Card>
-              <CardItem
-                header
-                style={{backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1}}
-              >
-                <Text style={{color:'#fff'}}>Your Invites</Text>
-              </CardItem>
-              {invites.map(
-                  (code, index) =>
-                  <CardItem
-                    key={index}
-                    style={{
-                      backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1
-                    }}
-                  >
-                    <Text
-                      style={{color: '#fff', fontSize: 12, flex: .8 }}
-                      numberOfLines={1}
+          {(token || id) &&
+          <View>
+            {invitesEnabled && <Card>
+                <CardItem
+                  header
+                  style={{backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1}}
+                >
+                  <Text style={{color:'#fff'}}>Your Invites</Text>
+                </CardItem>
+                {invites.map(
+                    (code, index) =>
+                    <CardItem
+                      key={index}
+                      style={{
+                        backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1
+                      }}
                     >
-                      {code}
-                    </Text>
-                  </CardItem>
-              )}
-              {!invites.length && 
-                <CardItem footer style={{backgroundColor: '#000'}}>
-                  <TouchableHighlight
-                    onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
-                  >
-                    <Text
-                      style={{color: '#fff', fontSize: 12}}
+                      <Text
+                        style={{color: '#fff', fontSize: 12, flex: .8 }}
+                        numberOfLines={1}
+                      >
+                        {code}
+                      </Text>
+                    </CardItem>
+                )}
+                {!invites.length && 
+                  <CardItem footer style={{backgroundColor: '#000'}}>
+                    <TouchableHighlight
+                      onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
                     >
-                      Tweet <Text style={{color: brandColor, fontSize: 12}}>@tokens_express</Text> to get invites
-                    </Text>
-                  </TouchableHighlight>
-                </CardItem>}
-             </Card>
+                      <Text
+                        style={{color: '#fff', fontSize: 12}}
+                      >
+                        Tweet <Text style={{color: brandColor, fontSize: 12}}>@tokens_express</Text> to get invites
+                      </Text>
+                    </TouchableHighlight>
+                  </CardItem>}
+               </Card>}
               <TouchableHighlight
                   style={[styles.logoutBtn, {marginTop: 100}]}
                   onPress={()=>{trackTap('Logout');logout()}}
               >
                 <Text style={styles.logoutBtnText}>Logout</Text>
               </TouchableHighlight>
-            </View>}
+          </View>}
       </ScrollView>
     );
   }
