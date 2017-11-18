@@ -275,10 +275,10 @@ export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getStat
 export const getTokenDetails = (sym) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
-
-    dispatch(setLoading(true, `Loading ${sym} Details`))
+    // removing load screen until freeze issue is resolved
+    // dispatch(setLoading(true, `Loading ${sym} Details`))
     const tokenDetails = await getTokenDetailsForAccount(id, sym).catch(e=>err=e)
-    dispatch(setLoading(false))
+    // dispatch(setLoading(false))
     if (err) {
         dispatch(showToast(getError(err)))
         return
