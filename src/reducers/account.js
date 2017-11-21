@@ -94,7 +94,7 @@ export const createAccount = (params) => async (dispatch, getState) => {
         return
     }
     await SecureStore.setItemAsync('id', newAccount.id)
-    const pseudonymType = params.email ? 'email' : 'username'
+    const pseudonymType = 'username'
     await AsyncStorage.setItem('pseudonym', JSON.stringify({ type: pseudonymType, value: params[pseudonymType] }))
     dispatch(registerAction(newAccount.id))
     dispatch(login(params))

@@ -40,11 +40,11 @@ export const Normal = observer(
 						placeholder="q3frrdsd"
 					/>}
 					<Field
-						label="Email"
+						label="Username"
 						returnKeyType="next"
-						value={store.getField('email')}
-						onChange={v => store.changetext('email', v)}
-						placeholder="e.g vitalik@ethereum.org"
+						value={store.getField('username')}
+						onChange={v => store.changetext('username', v)}
+						placeholder="e.g vitalik23"
 					/>
 					<Field
 						label="Password"
