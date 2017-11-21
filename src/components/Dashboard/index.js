@@ -43,7 +43,8 @@ const currencyFormatOptions =  {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000'
+    backgroundColor: '#000',
+    flex: 1
   },
   container: {
     alignItems: 'center',
@@ -82,7 +83,8 @@ const styles = StyleSheet.create({
 
 class Dashboard extends Component {
   state = {
-    refreshing: false
+    refreshing: false,
+    stickyNewsSection: false
   }
 
   componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
@@ -100,6 +102,12 @@ class Dashboard extends Component {
     const hiddenHeight = event.nativeEvent.contentOffset.y;
     const { setParams } = this.props.navigation;
     const { totalValue } = this.props.portfolio;
+
+    if (hiddenHeight >= 149) {
+      this.setState({ stickyNewsSection: true })
+    } else {
+      this.setState({ stickyNewsSection: false })
+    }
 
     if (hiddenHeight >= 70 && totalValue) {
 
@@ -125,59 +133,62 @@ class Dashboard extends Component {
   render = () => {
     const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
     return (
-      <ScrollView
-        style={styles.scrollContainer}
-        containerStyleContent={styles.container}
-        onScroll={this.handleScroll}
-        onScrollEndDrag={this.handleScroll}
-        scrollEventThrottle={16}
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh}
-          />
-        }
-      >
-        <StatusBar
-          backgroundColor="#000"
-          barStyle="light-content"
-        />
-        { !addresses.length  ?
-          <TouchableHighlight
-            onPress={()=>{goToAddressPage({type: 'Accounts'})}}
+      <View style={{flex: 1}}>
+        {this.state.stickyNewsSection && <News feed={mockNewsFeed} sticky={this.state.stickyNewsSection}/>}
+        <ScrollView
+          style={styles.scrollContainer}
+          containerStyleContent={styles.container}
+          onScroll={this.handleScroll}
+          onScrollEndDrag={this.handleScroll}
+          scrollEventThrottle={16}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
           >
-            <View style={styles.addBtn}>
-              <MaterialCommunityIcons
-                style={styles.addBtnIcon}
-                name="plus-circle-outline"
-                size={22}
-                color="white"
-              />
-              <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
-            </View>
-          </TouchableHighlight>
-        : <Header
-            totalValue={portfolio.totalValue}
-            totalChange={portfolio.totalPriceChange}
-            totalChangePct={portfolio.totalPriceChangePct}
-          />
-        }
-        <News feed={mockNewsFeed} />
-        { !!portfolio.tokens.length &&
-        <TokenList tokens={portfolio.tokens} />}
-        { !!portfolio.watchList.length &&
-        <TokenList
-            title="Watchlist"
-            tokens={portfolio.watchList}
-            type="watchList"
-          />}
-        { !!portfolio.top.length &&
-        <TokenList
-          title="Top 100 Tokens By Market Cap" 
-          tokens={portfolio.top}
-          type="watchList"
-        />}
-      </ScrollView>
+            <StatusBar
+              backgroundColor="#000"
+              barStyle="light-content"
+            />
+            { !addresses.length  ?
+              <TouchableHighlight
+                onPress={()=>{goToAddressPage({type: 'Accounts'})}}
+                >
+                  <View style={styles.addBtn}>
+                    <MaterialCommunityIcons
+                      style={styles.addBtnIcon}
+                      name="plus-circle-outline"
+                      size={22}
+                      color="white"
+                    />
+                    <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
+                  </View>
+                </TouchableHighlight>
+                : <Header
+                  totalValue={portfolio.totalValue}
+                  totalChange={portfolio.totalPriceChange}
+                  totalChangePct={portfolio.totalPriceChangePct}
+                />
+              }
+              {!this.state.stickyNewsSection && <News feed={mockNewsFeed} />}
+              { !!portfolio.tokens.length &&
+                <TokenList tokens={portfolio.tokens} />}
+                { !!portfolio.watchList.length &&
+                  <TokenList
+                    title="Watchlist"
+                    tokens={portfolio.watchList}
+                    type="watchList"
+                  />}
+                  { !!portfolio.top.length &&
+                    <TokenList
+                      title="Top 100 Tokens By Market Cap"
+                      tokens={portfolio.top}
+                      type="watchList"
+                    />}
+        </ScrollView>
+      </View>
     )
   }
 }

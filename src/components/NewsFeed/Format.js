@@ -48,7 +48,7 @@ const Format = (props) => {
             onPress={()=>{trackNewsFeedTap(news); trackFeedItem(id, 'tap');visitLink()}}
         >
             <View style={{flex:1}}>
-                <Layout news={news} />
+                <Layout news={news} stickyNewsSection={props.stickyNewsSection}/>
             </View>
         </TouchableWithoutFeedback>
     )
