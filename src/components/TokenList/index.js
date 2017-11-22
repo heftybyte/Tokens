@@ -61,7 +61,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
   const formattedTotal = item.price ?
     `$${formatPrice(item.balance * item.price)}` :
     'N/A'
-  const formattedPriceChange = formatCurrencyChange(formatPrice(item.priceChange||0)) || 'N/A'
+  const formattedPriceChange = formatCurrencyChange(item.priceChange||0) || 'N/A'
 
   return (
     <TouchableOpacity onPress={showTokenInfo}>

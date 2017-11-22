@@ -16,7 +16,8 @@ export const formatPrice = (price) => {
 	if (price < 1) {
 		return price.toFixed(5)
 	}
-	let [whole, decimal] = price.toFixed(2).split('.')
+	let whole, decimal
+	[whole, decimal] = price.toFixed(2).split('.')
 	return `${Number(whole).toLocaleString()}.${decimal}`
 }
 
