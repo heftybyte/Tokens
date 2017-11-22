@@ -1,44 +1,44 @@
 const newsApi = [
   {
     "id": 12,
-    "title": "ETHNews",
+    "title": "CoinDesk",
     "type": "ARTICLE",
-    "body": "Zug And uPort See First Citizens’ Identity Registered On The Ethereum Blockchain",
+    "body": "New Code Released for Vlad Zamfir's Ethereum 'Casper' Upgrade",
     "link": {
       "type": "external",
-      "uri": "https://www.ethnews.com/zug-and-uport-see-first-citizens-identity-registered-on-the-ethereum-blockchain",
+      "uri": "https://www.coindesk.com/ethereum-developer-vlad-zamfir-uploads-first-casper-protocol-code/",
       "params": null
     },
     "image": "",
     "format": "TEXT",
-    "createdAt": "2017-11-13T20:06:53.586Z"
+    "createdAt": "2017-11-22T20:06:53.586Z"
   },
   {
     "id": 11,
-    "title": "Futurism",
+    "title": "Motherboard",
     "type": "ARTICLE",
-    "body": "Ethereum’s Co-Founder Just Unveiled His Plan for the Future of Cryptocurrency",
+    "body": "An Ethereum Startup Just Vanished After People Invested $374K",
     "link": {
       "type": "external",
-      "uri": "https://futurism.com/ethereums-co-founder-just-unveiled-his-plan-for-the-future-of-cryptocurrency/",
+      "uri": "https://motherboard.vice.com/en_us/article/j5j34x/ethereum-startup-confido-vanished-after-people-invested-374k-ico",
       "params": null
     },
     "image": "",
     "format": "TEXT",
-    "createdAt": "2017-10-13T20:06:53.586Z"
+    "createdAt": "2017-11-22T20:06:53.586Z"
   },
   {
     "id": 1,
-    "title": "Qlink Pre-sale",
+    "title": "indaHash ICO",
     "type": "AD",
-    "body": "Decentralized mobile network dedicated to constructing an open-source telecom infrastructure on blockchain",
+    "body": "Our mission is to tokenize the entire influencer industry to solve major issues between brands, influencers and their audiences.",
     "link": {
       "type": "external",
-      "uri": "https://qlink.mobi/f/qlink"
+      "uri": "https://indahash.com/ico"
     },
-    "image": "https://cdn.icodrops.com/wp-content/uploads/2017/11/Qlink-150x150.jpg",
+    "image": "https://cdn.icodrops.com/wp-content/uploads/2017/10/indaHash-150x150.jpg",
     "format": "IMAGE_RIGHT",
-    "createdAt": "2017-12-13T20:06:53.586Z"
+    "createdAt": "2017-11-22T20:06:53.586Z"
   },
   {
     "id": 2,
@@ -84,16 +84,16 @@ const newsApi = [
   },
   {
     "id": 5,
-    "title": "Bloom ICO",
+    "title": "WaBi ICO",
     "type": "AD",
-    "body": "Bloom is an end-to-end protocol for identity attestation, risk assessment and credit scoring, entirely on the blockchain.",
+    "body": "Digital token backed by safe products. We place secure anti-counterfeiting labels on consumer products in China and internationally.",
     "link": {
       "type": "external",
-      "uri": "https://hellobloom.io/"
+      "uri": "https://www.wacoin.io/"
     },
-    "image": "https://cdn.icodrops.com/wp-content/uploads/2017/10/Bloom-150x150.jpg",
+    "image": "https://cdn.icodrops.com/wp-content/uploads/2017/10/G_iaqlP3_400x400-150x150.jpg",
     "format": "IMAGE_RIGHT",
-    "createdAt": "2017-11-13T20:06:53.586Z"
+    "createdAt": "2017-11-22T20:06:53.586Z"
   },
   {
     "id": 6,
