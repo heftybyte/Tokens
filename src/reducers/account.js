@@ -194,6 +194,7 @@ export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
 		{ cancelable: false }
 	)
 }
+
 export const addAddress = (address) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
@@ -202,7 +203,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     dispatch(setLoading(false))
     if (err) {
         dispatch(showToast(getError(err)))
-        return
+        return err
     }
     dispatch(showToast('Address Added'))
     dispatch(addAddressAction(account.addresses))

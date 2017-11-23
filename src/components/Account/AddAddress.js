@@ -72,8 +72,10 @@ class AddAddress extends Component {
       Alert.alert('Enter an address to save');
       return;
     }
-    await addAddress(text);
-    await navigate('Accounts')
+    const err = await addAddress(text);
+    if (!err) {
+      await navigate('Accounts')
+    }
   }
 
   render(){
