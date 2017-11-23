@@ -176,14 +176,15 @@ class TokenList extends Component {
         this.props.goToTokenDetailsPage(item);
       }}
       onPress={()=>{
-        this.setState({showChange: !this.state.showChange})
-        const { showChange } = this.state
-        trackTap(showChange ? 'PriceToggle-change' : 'PriceToggle-total');
-        this.props.showToast(
-          showChange ? 'Total Change Since 24hrs Ago' : 'Total Value',
-          { position: 'center', style: { backgroundColor: '#222' } },
-          showChange ? 800 : 200
-        )
+        this.setState({showChange: !this.state.showChange}, () => {
+          const { showChange } = this.state
+          trackTap(showChange ? 'PriceToggle-change' : 'PriceToggle-total');
+          this.props.showToast(
+            showChange ? 'Total Change Since 24hrs Ago' : 'Total Value',
+            { position: 'center', style: { backgroundColor: '#222' } },
+            showChange ? 800 : 200
+          )
+        })
       }}
     />
   )
