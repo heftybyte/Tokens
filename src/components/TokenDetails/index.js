@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     paddingLeft: 10
   },
+  readmore: {
+    color: '#6b2fe2',
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: 'Nunito-Light'
+  },
   priceContainer: {
     width: 96,
     height: 40,
@@ -89,6 +95,9 @@ const styles = StyleSheet.create({
 });
 
 class TokenDetails extends Component {
+  state = {
+    readMore: false
+  }
   componentDidMount() {
     const { navigation, getTokenDetails } = this.props
     const { token } = navigation.state.params
@@ -116,7 +125,8 @@ class TokenDetails extends Component {
         priceChange7d,
         website,
         twitter,
-        reddit
+        reddit,
+        description
       }
     } = this.props;
 
@@ -162,7 +172,7 @@ class TokenDetails extends Component {
           </View>
         </View>
 
-        <View style={styles.container, {marginTop: 10}}>
+        <View style={[styles.container, {marginTop: 10}]}>
           <View style={[styles.containerChild, {flexGrow:1, alignItems: 'center'},]}>
             <TouchableOpacity
               onPress={() => isWatching ? removeFromWatchList(symbol) : addToWatchlist(symbol) }
@@ -244,6 +254,25 @@ class TokenDetails extends Component {
                 </Text>
               </TouchableHighlight>
           </View>}
+            <View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
+              <Text style={styles.tokenHeading}>DESCRIPTION</Text>
+              <Text style={[styles.tokenValue, {fontSize: 15,textAlign: 'justify'}]}>
+                  {this.state.readMore?
+                      description:
+                      description.slice(0, 200)
+                  }
+                  </Text>
+                {description.length > 200 && (<TouchableHighlight
+                    onPress={() => this.setState({readMore: !this.state.readMore})}
+                    style={{marginTop: 7}}>
+                  <Text
+                      style={styles.readmore}
+                  >
+                      { this.state.readMore?'Close':'Read more' }
+                  </Text>
+                </TouchableHighlight>)
+                }
+            </View>
         </View>
       </ScrollView>
     )
