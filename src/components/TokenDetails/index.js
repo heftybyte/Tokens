@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     paddingLeft: 10
   },
+  readmore: {
+    color: '#6b2fe2',
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: 'Nunito-Light'
+  },
   priceContainer: {
     width: 96,
     height: 40,
@@ -89,6 +95,9 @@ const styles = StyleSheet.create({
 });
 
 class TokenDetails extends Component {
+  state = {
+    readMore: false
+  }
   componentDidMount() {
     const { navigation, getTokenDetails } = this.props
     const { token } = navigation.state.params
@@ -116,11 +125,13 @@ class TokenDetails extends Component {
         priceChange7d,
         website,
         twitter,
-        reddit
+        reddit,
+        description
       }
     } = this.props;
 
     const isWatching = watchListMap[symbol]
+    const maxDescDisplayLength = 180
 
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
@@ -162,7 +173,7 @@ class TokenDetails extends Component {
           </View>
         </View>
 
-        <View style={styles.container, {marginTop: 10}}>
+        <View style={[styles.container, {marginTop: 10}]}>
           <View style={[styles.containerChild, {flexGrow:1, alignItems: 'center'},]}>
             <TouchableOpacity
               onPress={() => isWatching ? removeFromWatchList(symbol) : addToWatchlist(symbol) }
@@ -184,6 +195,24 @@ class TokenDetails extends Component {
         </View>
 
         <View style={[styles.container, styles.linkContainer]}>
+          <View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
+              <Text style={styles.tokenHeading}>DESCRIPTION</Text>
+              <Text
+                numberOfLines={this.state.readMore ? 0 : 4}
+                style={[styles.tokenValue, {fontSize: 15,textAlign: 'justify', paddingTop: 5}]}>
+                  {description}
+                  </Text>
+                {description.length > maxDescDisplayLength && (<TouchableHighlight
+                    onPress={() => this.setState({readMore: !this.state.readMore})}
+                    style={{marginTop: 7}}>
+                  <Text
+                      style={styles.readmore}
+                  >
+                      { this.state.readMore?'Close':'Read more' }
+                  </Text>
+                </TouchableHighlight>)
+                }
+          </View>
           {!!website && <View style={[styles.containerChild, styles.linkContainerChild]}>
               <MaterialCommunityIcons
                 name="web"
