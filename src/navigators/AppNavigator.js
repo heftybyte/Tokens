@@ -11,7 +11,7 @@ import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import Search from '../components/Search';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
-import CardStackStyleInterpolator from 'react-navigation/lib/views/CardStack/CardStackStyleInterpolator';
+import CardStackStyleInterpolator from 'react-navigation/lib/views/CardStackStyleInterpolator';
 
 const customAnimationFunc = () => ({
   screenInterpolator: sceneProps => {
