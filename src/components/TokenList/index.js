@@ -6,7 +6,8 @@ import {
     SectionList,
     Image,
     TouchableOpacity,
-    Alert
+    Alert,
+    Button
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -22,7 +23,7 @@ import {
 const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
   return (
-    <TouchableOpacity onPress={showTokenInfo}> 
+    <TouchableOpacity onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <Text style={styles.orderText}>{index+1}.</Text>
         <View>
@@ -55,7 +56,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
   const changeStyle = item.change > 0 ? styles.gain : styles.loss
   const changeTextStyle = !item.change && styles.neutralColor || (parseInt(item.change) > -1 ? styles.gainColor : styles.lossColor)
   const isLongPrice = (`${item.balance * item.price}`).length >= 11
-  const formattedPrice = item.price ? 
+  const formattedPrice = item.price ?
     `@ $${formatPrice(item.price)}` :
     ''
   const formattedTotal = item.price ?
@@ -73,7 +74,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>
-            {Number(item.balance.toFixed(5)).toLocaleString()} {formattedPrice} 
+            {Number(item.balance.toFixed(5)).toLocaleString()} {formattedPrice}
           </Text>
         </View>
         {/*<Text style={[changeTextStyle, styles.changeText]}>
@@ -104,7 +105,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
 const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
   let itemOnWatchlist = !!watchList[item.symbol]
   return (
-    <TouchableOpacity onPress={showTokenInfo}> 
+    <TouchableOpacity onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
           <Image source={{ uri: getTokenImage(item) }} style={styles.image}/>
@@ -137,11 +138,21 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
 class TokenList extends Component {
 
   state = {
-    showChange: false
+    showChange: false,
+    showTruncatedList: true,
+    sectionFooterText: 'show more'
   }
 
   static defaultProps = {
-    type: "tokens"
+    type: "tokens",
+    truncate: 10
+  }
+
+  sectionFooterPress = () => {
+    this.setState({
+      showTruncatedList: !this.state.showTruncatedList,
+      sectionFooterText: (this.state.sectionFooterText === 'show more' ? 'show less' : 'show more')
+    })
   }
 
   renderWatchListItem = ({item, index}) => (
@@ -217,7 +228,8 @@ class TokenList extends Component {
       watchList: this.renderWatchListItem,
       search: this.renderSearchListItem
     }
-    const dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
+    let dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
+    dataTokens = this.state.showTruncatedList ? dataTokens.slice(0, this.props.truncate) : dataTokens;
     return (
       <View>
         <SectionList
@@ -230,6 +242,11 @@ class TokenList extends Component {
               renderItem: render[this.props.type]
             }
           ]}
+          renderSectionFooter={() => <View style={{flex: 1}}>
+            <View>
+              <Button title={this.state.sectionFooterText} onPress={this.sectionFooterPress}/>
+            </View>
+          </View>}
         />
       </View>
     );
