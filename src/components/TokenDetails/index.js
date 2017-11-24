@@ -131,6 +131,7 @@ class TokenDetails extends Component {
     } = this.props;
 
     const isWatching = watchListMap[symbol]
+    const maxDescDisplayLength = 180
 
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
@@ -196,13 +197,12 @@ class TokenDetails extends Component {
         <View style={[styles.container, styles.linkContainer]}>
           <View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
               <Text style={styles.tokenHeading}>DESCRIPTION</Text>
-              <Text style={[styles.tokenValue, {fontSize: 15,textAlign: 'justify', paddingTop: 5}]}>
-                  {this.state.readMore?
-                      description:
-                      description.slice(0, 150) + '...'
-                  }
+              <Text
+                numberOfLines={this.state.readMore ? 0 : 4}
+                style={[styles.tokenValue, {fontSize: 15,textAlign: 'justify', paddingTop: 5}]}>
+                  {description}
                   </Text>
-                {description.length > 150 && (<TouchableHighlight
+                {description.length > maxDescDisplayLength && (<TouchableHighlight
                     onPress={() => this.setState({readMore: !this.state.readMore})}
                     style={{marginTop: 7}}>
                   <Text
