@@ -136,9 +136,10 @@ export const login = (params) => async (dispatch, getState) => {
 
 export const logout = () => async(dispatch, getState) => {
     let token = await SecureStore.getItemAsync('token')
-    if (token) {
+		let notification_token = await SecureStore.getItemAsync('notification_token')
+    if (token && notification_token) {
         setAuthHeader(token)
-        await logoutAccount()
+        await logoutAccount(notification_token)
     }
     await SecureStore.deleteItemAsync('token')
     await SecureStore.deleteItemAsync('id')
