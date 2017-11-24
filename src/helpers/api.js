@@ -52,8 +52,8 @@ export const loginAccount = async (params) => {
   return res.data
 }
 
-export const logoutAccount = async () => {
-	await instance.post(`/accounts/logout`, {})
+export const logoutAccount = async (notification_token) => {
+	await instance.post(`/accounts/logout`, { notification_token })
 }
 
 export const addToAccountWatchlist = async (id, symbol) => {
