@@ -3,29 +3,29 @@ const newsApi = [
     "id": 12,
     "title": "CoinDesk",
     "type": "ARTICLE",
-    "body": "New Code Released for Vlad Zamfir's Ethereum 'Casper' Upgrade",
+    "body": "All-Time High: Ether Prices Pass $440 as Key Level Breached",
     "link": {
       "type": "external",
-      "uri": "https://www.coindesk.com/ethereum-developer-vlad-zamfir-uploads-first-casper-protocol-code/",
+      "uri": "https://www.coindesk.com/all-time-high-ether-prices-pass-440-as-key-level-breached/",
       "params": null
     },
     "image": "",
     "format": "TEXT",
-    "createdAt": "2017-11-22T20:06:53.586Z"
+    "createdAt": "2017-11-24T20:06:53.586Z"
   },
   {
     "id": 11,
-    "title": "Motherboard",
+    "title": "The Merkle",
     "type": "ARTICLE",
-    "body": "An Ethereum Startup Just Vanished After People Invested $374K",
+    "body": "The History of Ethereum in 500 Words",
     "link": {
       "type": "external",
-      "uri": "https://motherboard.vice.com/en_us/article/j5j34x/ethereum-startup-confido-vanished-after-people-invested-374k-ico",
+      "uri": "https://themerkle.com/the-history-of-ethereum-in-500-words/",
       "params": null
     },
     "image": "",
     "format": "TEXT",
-    "createdAt": "2017-11-22T20:06:53.586Z"
+    "createdAt": "2017-11-24T20:06:53.586Z"
   },
   {
     "id": 1,
@@ -42,12 +42,12 @@ const newsApi = [
   },
   {
     "id": 2,
-    "title": "Coindesk",
+    "title": "Cryptocoins News",
     "type": "ARTICLE",
-    "body": "Parity Team Publishes Postmortem on $160 Million Ether Freeze",
+    "body": "Future Flight: Air New Zealand is Experimenting with a Public Ethereum Blockchain",
     "link": {
       "type": "external",
-      "uri": "https://www.coindesk.com/parity-team-publishes-postmortem-160-million-ether-freeze/",
+      "uri": "https://www.cryptocoinsnews.com/future-flight-air-new-zealand-experimenting-ethereum-blockchain/",
       "params": null
     },
     "image": "",
@@ -56,12 +56,12 @@ const newsApi = [
   },
   {
     "id": 3,
-    "title": "Forbes",
+    "title": "Cryptocoins News",
     "type": "ARTICLE",
-    "body": "Crypto Craze: Ethereum May Not Be A Bubble Despite 3,700% Explosion",
+    "body": "Zug Citizens Begin Digital ID Registration on an Ethereum Blockchain",
     "link": {
       "type": "external",
-      "uri": "https://www.forbes.com/sites/trangho/2017/11/12/crypto-craze-ethereum-may-not-be-a-bubble-despite-3700-explosion/#11e3673f1027",
+      "uri": "https://www.cryptocoinsnews.com/uport-self-sovereign-identity-opens-to-residents-of-zug/",
       "params": null
     },
     "image": "",
