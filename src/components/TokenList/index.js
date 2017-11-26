@@ -229,7 +229,8 @@ class TokenList extends Component {
       search: this.renderSearchListItem
     }
     let dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
-    dataTokens = this.state.showTruncatedList ? dataTokens.slice(0, this.props.truncate) : dataTokens;
+    let truncatedTokenList = this.state.showTruncatedList ? dataTokens.slice(0, this.props.truncate) : dataTokens;
+
     return (
       <View>
         <SectionList
@@ -237,16 +238,12 @@ class TokenList extends Component {
           renderSectionHeader={({section}) => !!section.title && <Text style={styles.sectionHeader}>{section.title}</Text>}
           sections={[
             {
-              data: dataTokens,
+              data: truncatedTokenList,
               title: (this.props.title || '').toUpperCase(),
               renderItem: render[this.props.type]
             }
           ]}
-          renderSectionFooter={() => <View style={{flex: 1}}>
-            <View>
-              <Button title={this.state.sectionFooterText} onPress={this.sectionFooterPress}/>
-            </View>
-          </View>}
+          renderSectionFooter={() => this.props.truncate === dataTokens.length ?  null : <Button title={this.state.sectionFooterText} onPress={this.sectionFooterPress}/>}
         />
       </View>
     );
