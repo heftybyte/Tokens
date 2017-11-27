@@ -86,8 +86,8 @@ class Dashboard extends Component {
   }
 
   componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
-      (timestamp) => fetchFeed(timestamp)
-  );
+      (timestamp) => this.props.fetchFeed(timestamp)
+);
 
   componentDidMount = async () => {
     if (this.state.stale) {
@@ -162,7 +162,7 @@ class Dashboard extends Component {
             totalChangePct={portfolio.totalPriceChangePct}
           />
         }
-        <News feed={mockNewsFeed} />
+        <News feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
         { !!portfolio.watchList.length &&

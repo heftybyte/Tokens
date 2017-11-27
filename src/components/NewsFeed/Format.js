@@ -1,5 +1,6 @@
 import React from 'react'
 import { Linking, View, TouchableWithoutFeedback } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import ImageLeft from './Layouts/ImageLeftLayout'
 import ImageRight from './Layouts/ImageRightLayout'
 import ImageDefault from './Layouts/ImageLayout'
@@ -9,6 +10,7 @@ import Video from './Layouts/VideoLayout'
 import { trackNewsFeedTap } from '../../helpers/analytics'
 import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
 import { connect } from 'react-redux';
+import store from '../../store';
 
 const Format = (props) => {
     let Layout
@@ -43,9 +45,40 @@ const Format = (props) => {
           .catch(err => console.error('An error occurred', err))
     }
 
+    const openExternalApp = () => {
+        // URIs should be of the form APPNAME://PATH
+        link && link.uri && Linking.openURL(link.uri)
+        .catch(err => console.error('An error occurred', err))
+    }
+
+    const navigateToPage = ()=> {
+        // URIs should be of the form tokens://ROUTENAME
+        if(!link.uri) {
+            const err = new Error('Link Uri not supplied');
+            console.error('An error occurred', err);
+            return;
+        }
+        const {params} = link;
+        const uriParts = uri.split('//');
+        const routeName = uriParts[1];
+        NavigationActions.navigate(routeName, params);
+    }
+
+    const handleLink = () => {
+        switch(link.target){
+            case "web": 
+                visitLink();
+                break;
+            case "internal":
+                navigateToPage();
+            case "app":
+                openExternalApp();
+        }
+    }
+
     return (
         <TouchableWithoutFeedback
-            onPress={()=>{trackNewsFeedTap(news); trackFeedItem(id, 'tap');visitLink()}}
+            onPress={()=>{trackNewsFeedTap(news); trackFeedItem(id, 'tap');handleLink()}}
         >
             <View style={{flex:1}}>
                 <Layout news={news} />
