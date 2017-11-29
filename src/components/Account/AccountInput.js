@@ -88,7 +88,7 @@ const AccountInput = ({
         </View>
         <View style={{flexDirection: 'row', alignItems: 'stretch'}}>
           <TouchableOpacity
-            onPress={()=>{trackTap('Toggle QRScanner');toggleQRScanner()}}
+            onPress={()=>{trackTap('ToggleQRScanner');toggleQRScanner()}}
             disabled={!hasCameraPermission}
             style={[
                 styles.buttonContainer,

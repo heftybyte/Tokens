@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import { SecureStore } from 'expo'
+import { Amplitude, SecureStore } from 'expo'
 import {
     loginAccount,
     registerAccount,
@@ -13,8 +13,8 @@ import {
     getTokenDetailsForAccount,
     logoutAccount,
     trackFeedActivity,
-	addToAccountWatchlist,
-	removeFromAccountWatchlist
+    addToAccountWatchlist,
+    removeFromAccountWatchlist
 } from '../helpers/api'
 import { safeAlert } from '../helpers/functions'
 import {
@@ -23,7 +23,6 @@ import {
     registerForPushNotificationsAsync
 } from '../helpers/functions'
 import { setLoading, showToast } from './ui'
-
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
 export const LOGOUT = 'account/LOGOUT'
@@ -128,6 +127,7 @@ export const login = (params) => async (dispatch, getState) => {
         dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         return
     }
+    Amplitude.setUserId(account.id)
     dispatch(loginAction(token, account))
     registerForPushNotificationsAsync()
     dispatch(getPortfolio())

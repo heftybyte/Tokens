@@ -92,7 +92,6 @@ class Dashboard extends Component {
   componentDidMount = async () => {
     if (this.state.stale) {
       this.props.getPortfolio()
-      trackRefresh('Mount')
     }
   }
 
@@ -119,7 +118,7 @@ class Dashboard extends Component {
     this.setState({refreshing: true})
     await this.props.getPortfolio(false)
     this.setState({refreshing: false})
-    trackRefresh('Manual')
+    trackRefresh('Dashboard')
   }
 
   render = () => {
