@@ -1,10 +1,14 @@
 import { Amplitude } from 'expo';
 import { Analytics, ScreenHit, Event } from 'expo-analytics';
 import { NavigationActions } from 'react-navigation';
+import { ENVIRONMENT } from 'react-native-dotenv';
 
-Amplitude.initialize('2909f6e422ac271d0370e84eef9b74fc')
+if (ENVIRONMENT !== 'development') {
+  Amplitude.initialize('2909f6e422ac271d0370e84eef9b74fc')
+}
 
-const analytics = new Analytics('UA-104515335-2');
+const GA_ID = ENVIRONMENT !== 'development' ? 'UA-104515335-2' : 'dev'
+const analytics = new Analytics(GA_ID);
 
 Amplitude.logEvent('AppLoad')
 analytics.hit(new ScreenHit('Load'));

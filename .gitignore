@@ -5,3 +5,4 @@ npm-debug.*
 .idea/vcs.xml
 .idea
 .DS_Store
+.env
