@@ -4,13 +4,11 @@ import { AppRegistry, BackHandler, Platform, Alert } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './src/store/index';
 import { login } from './src/reducers/account'
-import { getAppVersion } from './src/helpers/api'
-import { AppLoading, Font, SecureStore } from 'expo';
+import { AppLoading, Font, SecureStore, Util } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
 import PromptReload from './src/components/Entry/PromptReload'
-import { getError } from './src/helpers/functions'
 require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
@@ -47,17 +45,9 @@ class Tokens extends React.Component {
         const id = await SecureStore.getItemAsync('id')
 
         if (Platform.OS === 'android') {
-            let err = null
-            const appVersion = await SecureStore.getItemAsync('appVersion')
-            const newAppVersion = await getAppVersion().catch(e=>err=e)
-            await SecureStore.setItemAsync('appVersion', newAppVersion)
-            if(err){
-               Alert.alert(getError(err))
-               return
-            } else if (appVersion && appVersion !== newAppVersion) {
-                this.setState({reload: true})
-                return 
-            }
+
+            Util.addNewVersionListenerExperimental(()=>this.setState({reload: true}))
+
         }
 
         if (token && id) {
