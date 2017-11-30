@@ -116,9 +116,9 @@ export const getAppVersion = async () => {
     return res.data
 }
 
-const log = (level) => (message) => {
-    console.log({ message, level })
-    instance.post('/client-logs', { message, level })
+const log = (level) => (message, data) => {
+    console.log({ message, data, level })
+    instance.post('/client-logs', { message, data, level })
 }
 
 export const logger = {
