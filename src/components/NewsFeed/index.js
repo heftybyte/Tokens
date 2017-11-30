@@ -12,12 +12,12 @@ const Dot = (color) => (
   <View
     style={{
       backgroundColor: color,
-      width: 4, 
+      width: 4,
       height: 4,
-      borderRadius: 2, 
-      marginLeft: 3, 
-      marginRight: 3, 
-      marginTop: 3, 
+      borderRadius: 2,
+      marginLeft: 3,
+      marginRight: 3,
+      marginTop: 3,
       marginBottom: 3,
     }}
   />
@@ -28,8 +28,8 @@ const News = (props) => {
 
   const feed = (props.feed || []).map((news, index) => {
     return (
-        <View key={index} style={styles.slide}>
-            <Format format={news.format} news={news} />
+        <View key={index} style={props.sticky ? styles.stickySlide() : styles.slide}>
+            <Format format={news.format} news={news} stickyNewsSection={props.sticky}/>
         </View>
     )
   })
@@ -37,25 +37,27 @@ const News = (props) => {
     let oldIndex = 0;
 
   return (
+    <View style={props.sticky ? styles.stickyContainerWrapper : {flex: 1}}>
       <Swiper
         loop={false}
         paginationStyle={{
-            backgroundColor: "#0f0f0f",
-            bottom: 5,
-            borderRadius: 10
-        }} 
+          backgroundColor: "#0f0f0f",
+          bottom: 5,
+          borderRadius: 10
+        }}
         dot={Dot('#333')}
         activeDot={Dot('#fff')}
-        containerStyle={styles.container}
+        containerStyle={props.sticky ? styles.stickyContainer : styles.container}
         onIndexChanged={(index)=>{
           trackNewsFeedSwipe(props.feed[index])
           trackFeedItem(props.feed[index].id, 'view')
-            saveLatestTimestamp(props.feed[oldIndex].createdAt)
-            oldIndex = index
+          saveLatestTimestamp(props.feed[oldIndex].createdAt)
+          oldIndex = index
         }}
-       >
-        { feed }
-      </Swiper>
+        >
+          { feed }
+        </Swiper>
+    </View>
   )
 }
 

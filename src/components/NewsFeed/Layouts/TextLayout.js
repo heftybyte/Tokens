@@ -9,19 +9,25 @@ class TextDefault extends React.Component {
 
     render() {
         const { news: {title, body, link, type } } = this.props
-        
+
         return (
             <Grid>
                 <Row size={20}>
                     <Text style={styles.title}>{title.toUpperCase()}</Text>
                 </Row>
                 <Row size={60} style={{alignItems: 'center'}}>
-                    <Text 
+                  {this.props.stickyNewsSection ?
+                    <Text
+                        style={[styles.center, styles.body, styles.stickyNewsSectionText()]}
+                        numberOfLines={4}
+                    >
+                        {body}
+                    </Text> : <Text
                         style={[styles.center, styles.body, styles.textDefault]}
                         numberOfLines={4}
                     >
                         {body}
-                    </Text>
+                    </Text>}
                 </Row>
                 <Row size={20} style={{alignItems: 'flex-end'}}>
                     <Text
@@ -35,7 +41,7 @@ class TextDefault extends React.Component {
                     </Text>
                 </Row>
             </Grid>
-        )   
+        )
     }
 }
 

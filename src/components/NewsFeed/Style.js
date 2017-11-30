@@ -4,6 +4,16 @@ export const styles = {
         height: 200,
         paddingTop: 7
     },
+    stickyContainer: {
+      height: 150
+    },
+    stickyContainerWrapper: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: 1,
+      flex: 1
+    },
     slide: {
         backgroundColor: '#000',
         borderColor: '#000',
@@ -14,6 +24,9 @@ export const styles = {
         flex: 1,
         padding: 5,
         marginHorizontal: 7,
+    },
+    stickySlide: function () {
+      return Object.assign({}, this.slide, { marginHorizontal: 0, borderRadius: 0, paddingBottom: 15})
     },
     body: {
         color: '#fff',
@@ -42,6 +55,9 @@ export const styles = {
     textDefault: {
         fontSize: 20,
         fontFamily: 'Raleway'
+    },
+    stickyNewsSectionText: function () {
+      return Object.assign({}, this.textDefault, { fontSize: 14 })
     },
     imageLeft: {
         flexDirection: 'row',
