@@ -28,6 +28,7 @@ class Tokens extends React.Component {
     }
     async componentDidMount() {
         const firstRun = !(await SecureStore.getItemAsync('postfirstRun'))
+        logger.info({ msg: 'App.js', firstRun })
         if (firstRun) {
             SecureStore.setItemAsync('postfirstRun', JSON.stringify(true))
             Util.reload()
@@ -54,10 +55,10 @@ class Tokens extends React.Component {
         const token = await SecureStore.getItemAsync('token')
         const id = await SecureStore.getItemAsync('id')
 
+        logger.info({ msg: 'App.js', token, id })
         if (Platform.OS === 'android') {
             Util.addNewVersionListenerExperimental(()=>Util.reload())
         }
-        logger.info({ msg: 'App.js', token, id })
         if (token && id) {
             await store.dispatch(login())
         } else {
