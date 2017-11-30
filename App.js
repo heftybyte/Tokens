@@ -9,7 +9,7 @@ import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
 import { ENVIRONMENT } from 'react-native-dotenv';
-import { logger } from './src/helpers/api'
+import { logger, logLocalData } from './src/helpers/api'
 require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
@@ -20,7 +20,7 @@ if (ENVIRONMENT !== 'development') {
 }
 
 logger.info(`current environment: ${ENVIRONMENT}`)
-
+logLocalData()
 class Tokens extends React.Component {
     state = {
         isReady: false,

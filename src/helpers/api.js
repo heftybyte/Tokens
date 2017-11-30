@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import { NavigationActions } from 'react-navigation'
 import axios from 'axios';
-import Expo from 'expo';
+import Expo, { SecureStore } from 'expo';
 import store from '../store'
 import { login } from '../reducers/account'
 import { baseURL } from '../config'
@@ -122,12 +122,36 @@ const log = (level) => (message, data) => {
 }
 
 export const logger = {
-  info: log('info'),
-  debug: log('debug'),
-  warning: log('warning'),
-  notice: log('notice'),
-  err: log('err'),
-  crit: log('crit'),
-  alert: log('alert'),
-  emerg: log('emerg')
+    info: log('info'),
+    debug: log('debug'),
+    warning: log('warning'),
+    notice: log('notice'),
+    err: log('err'),
+    crit: log('crit'),
+    alert: log('alert'),
+    emerg: log('emerg')
+}
+
+export const logLocalData = async () => {
+    const localData = {}
+
+    const token = await SecureStore.getItemAsync('token')
+    const id = await SecureStore.getItemAsync('id')
+    logger.info('SecureStore', { id, token })
+
+    AsyncStorage.getAllKeys((err, keys) => {
+        AsyncStorage.multiGet(keys, (err, stores) => {
+            stores.forEach((result, i, store) => {
+                 // get at each store's key/value so you can work with it
+                 let key = store[i][0];
+                 let value = store[i][1];
+                 if (key !== 'tokens' && key !== 'guestAccounts') {
+                    localData[key] = value
+                 }
+            });
+            logger.info('AsyncStorage', localData)
+        });
+    });
+
+
 }
