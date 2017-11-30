@@ -8,7 +8,6 @@ import { AppLoading, Font, SecureStore, Util } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
-import PromptReload from './src/components/Entry/PromptReload'
 import { ENVIRONMENT } from 'react-native-dotenv';
 import { logger } from './src/helpers/api'
 require('number-to-locale-string')
@@ -20,7 +19,7 @@ if (ENVIRONMENT !== 'development') {
     Sentry.config(publicDSN).install();
 }
 
-console.log(`current environment: ${ENVIRONMENT}`)
+logger.info(`current environment: ${ENVIRONMENT}`)
 
 class Tokens extends React.Component {
     state = {
@@ -28,6 +27,11 @@ class Tokens extends React.Component {
         reload: false
     }
     async componentDidMount() {
+        const firstRun = !(await SecureStore.getItemAsync('postfirstRun'))
+        if (firstRun) {
+            SecureStore.setItemAsync('postfirstRun', JSON.stringify(true))
+            Util.reload()
+        }
         await Font.loadAsync({
             'Raleway': require('./assets/fonts/Raleway-Regular.ttf'),
             'Raleway-Light': require('./assets/fonts/Raleway-Light.ttf'),
@@ -51,9 +55,7 @@ class Tokens extends React.Component {
         const id = await SecureStore.getItemAsync('id')
 
         if (Platform.OS === 'android') {
-
-            Util.addNewVersionListenerExperimental(()=>this.setState({reload: true}))
-
+            Util.addNewVersionListenerExperimental(()=>Util.reload())
         }
         logger.info({ msg: 'App.js', token, id })
         if (token && id) {
@@ -82,7 +84,7 @@ class Tokens extends React.Component {
 
         return isReady && (
                 <Provider style={{backgroundColor: '#000'}} store={store}>
-                    { reload ? <PromptReload /> : <AppWithNavigationState /> }
+                    { <AppWithNavigationState /> }
                 </Provider>
             )
     }
