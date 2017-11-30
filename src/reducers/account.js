@@ -14,7 +14,8 @@ import {
     logoutAccount,
     trackFeedActivity,
     addToAccountWatchlist,
-    removeFromAccountWatchlist
+    removeFromAccountWatchlist,
+    logger
 } from '../helpers/api'
 import { safeAlert } from '../helpers/functions'
 import {
@@ -112,10 +113,13 @@ export const login = (params) => async (dispatch, getState) => {
         }
         token = res.id
         account = res.user
+        logger.info({ id, msg: 'user login via params'})
         setAuthHeader(token)
         await SecureStore.setItemAsync('token', token)
         await SecureStore.setItemAsync('id', account.id)
     } else if (token && id) {
+        console.log('login info log')
+        logger.info({ id, msg: 'user login via SecureStore'})
         setAuthHeader(token)
         account = await getAccount(id).catch(e=>err=e)
         if (err) {
@@ -135,6 +139,7 @@ export const login = (params) => async (dispatch, getState) => {
 }
 
 export const logout = () => async(dispatch, getState) => {
+    logger.info({ id, msg: 'user logout'})
     let token = await SecureStore.getItemAsync('token')
 		let notification_token = await SecureStore.getItemAsync('notification_token')
     if (token && notification_token) {

@@ -10,6 +10,7 @@ import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
 import PromptReload from './src/components/Entry/PromptReload'
 import { ENVIRONMENT } from 'react-native-dotenv';
+import { logger } from './src/helpers/api'
 require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
@@ -54,7 +55,7 @@ class Tokens extends React.Component {
             Util.addNewVersionListenerExperimental(()=>this.setState({reload: true}))
 
         }
-
+        logger.info({ msg: 'App.js', token, id })
         if (token && id) {
             await store.dispatch(login())
         } else {
@@ -71,7 +72,6 @@ class Tokens extends React.Component {
         return false;
 
     }
-
 
     componentWillUnmount() {
         BackHandler.removeEventListener("onBackPress", this.goBack);

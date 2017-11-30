@@ -115,3 +115,19 @@ export const getAppVersion = async () => {
     const res = await instance.get(`/appmeta/version`)
     return res.data
 }
+
+const log = (level) => (message) => {
+    console.log({ message, level })
+    instance.post('/client-logs', { message, level })
+}
+
+export const logger = {
+  info: log('info'),
+  debug: log('debug'),
+  warning: log('warning'),
+  notice: log('notice'),
+  err: log('err'),
+  crit: log('crit'),
+  alert: log('alert'),
+  emerg: log('emerg')
+}
