@@ -25,11 +25,6 @@ const Items = [
         name: "Account",
         icon: "account-circle",
         route: "Accounts"
-    },
-    {
-        name: "Chart",
-        icon: "account-circle",
-        route: "Chart"
     }
 ]
 
