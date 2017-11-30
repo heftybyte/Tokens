@@ -9,7 +9,7 @@ import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
 import { ENVIRONMENT } from 'react-native-dotenv';
-import { logger } from './src/helpers/api'
+import { logger, logLocalData } from './src/helpers/api'
 require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
@@ -20,7 +20,7 @@ if (ENVIRONMENT !== 'development') {
 }
 
 logger.info(`current environment: ${ENVIRONMENT}`)
-
+logLocalData()
 class Tokens extends React.Component {
     state = {
         isReady: false,
@@ -28,7 +28,7 @@ class Tokens extends React.Component {
     }
     async componentDidMount() {
         const firstRun = !(await SecureStore.getItemAsync('postfirstRun'))
-        logger.info({ msg: 'App.js', firstRun })
+        logger.info('From App.js', { firstRun })
         if (firstRun) {
             SecureStore.setItemAsync('postfirstRun', JSON.stringify(true))
             Util.reload()
@@ -55,7 +55,7 @@ class Tokens extends React.Component {
         const token = await SecureStore.getItemAsync('token')
         const id = await SecureStore.getItemAsync('id')
 
-        logger.info({ msg: 'App.js', token, id })
+        logger.info('From App.js', { token, id })
         if (Platform.OS === 'android') {
             Util.addNewVersionListenerExperimental(()=>Util.reload())
         }
