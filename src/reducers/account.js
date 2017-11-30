@@ -139,7 +139,8 @@ export const login = (params) => async (dispatch, getState) => {
 }
 
 export const logout = () => async(dispatch, getState) => {
-    logger.info({ id, msg: 'user logout'})
+    let id = await SecureStore.getItemAsync('id')
+    logger.info({id, msg: 'user logout'})
     let token = await SecureStore.getItemAsync('token')
 		let notification_token = await SecureStore.getItemAsync('notification_token')
     if (token && notification_token) {
