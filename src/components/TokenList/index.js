@@ -145,7 +145,7 @@ class TokenList extends Component {
 
   static defaultProps = {
     type: "tokens",
-    truncate: 10
+    truncate: 0
   }
 
   sectionFooterPress = () => {
@@ -229,7 +229,7 @@ class TokenList extends Component {
       search: this.renderSearchListItem
     }
     let dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
-    let truncatedTokenList = this.state.showTruncatedList ? dataTokens.slice(0, this.props.truncate) : dataTokens;
+    let truncatedTokenList = (this.state.showTruncatedList && this.props.truncate > 0) ? dataTokens.slice(0, this.props.truncate) : dataTokens;
 
     return (
       <View>
@@ -243,7 +243,7 @@ class TokenList extends Component {
               renderItem: render[this.props.type]
             }
           ]}
-          renderSectionFooter={() => this.props.truncate === dataTokens.length ?  null : <Button title={this.state.sectionFooterText} onPress={this.sectionFooterPress}/>}
+          renderSectionFooter={() => this.props.truncate === dataTokens.length || this.props.truncate === 0 ?  null : <Button title={this.state.sectionFooterText} onPress={this.sectionFooterPress}/>}
         />
       </View>
     );
