@@ -163,7 +163,7 @@ class Dashboard extends Component {
             totalChangePct={portfolio.totalPriceChangePct}
           />
         }
-        <Chart data={portfolioPriceData} />
+        <Chart data={portfolioPriceData} totalChangePct={portfolio.totalPriceChangePct} />
         <News feed={mockNewsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
