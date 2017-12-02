@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import { Button } from 'native-base';
-import { VictoryContainer, VictoryGroup, VictoryCursorContainer, VictoryLine, VictoryAxis, VictoryTheme } from "victory-native";
+import { VictoryGroup, VictoryCursorContainer, VictoryLine, VictoryTheme } from "victory-native";
 import { gainColor, lossColor } from '../../config'
 
 const styles = StyleSheet.create({
@@ -27,7 +27,6 @@ class Chart extends Component {
 
     render() {
         const { data, totalChangePct } = this.props
-        const gain = totalChangePct >= 0
         let chartBtns = periods.map((x, i)=>(
             <Button onPress={()=>this.setState({selected: i})} key={i} transparent style={styles.chrtBtn}>
                 <Text style={{color: this.state.selected===i?'#fff':'#6b2fe2'}}>{x}</Text>
@@ -39,13 +38,12 @@ class Chart extends Component {
             <VictoryGroup height={170} padding={{ top: 5, bottom: 0, left: 20, right: 20 }}
             containerComponent={
                 <VictoryCursorContainer
-                cursorDimension="y"
+                cursorDimension="x"
                 cursorLabel={(d) => `guygiughiuhiohiuguyftyf`}
-                style={{ labels: { fill: "#fff", stroke: "#fff", strokeWidth: 5 } }}
                 />
             }>
             <VictoryLine
-                style={{ data: { stroke: gain ? gainColor : lossColor } }}
+                style={{ data: { stroke: (totalChangePct >= 0) ? gainColor : lossColor } }}
                 data={data.slice(0, data.length * ((this.state.selected + 1) * (100/periods.length))/100)}
             />
             </VictoryGroup>
