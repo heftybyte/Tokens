@@ -15,7 +15,7 @@ class Chart extends Component {
 
     render() {
         const { data, totalChangePct } = this.props
-        let config = new ChartConfig(totalChangePct >= 0?gainColor:lossColor)
+        let config = new ChartConfig(data, totalChangePct >= 0?gainColor:lossColor)
         return (
             <ChartView style={{height:300}} config={config.conf} options={config.options} stock={true} style={styles.chart}></ChartView>                
         )

@@ -1,6 +1,4 @@
-import portfolioPriceData from './data'
-
-export function ChartConfig (color){
+export function ChartConfig (data, color){
 
         this.conf={ 
                 chart: {
@@ -83,7 +81,7 @@ export function ChartConfig (color){
                 },
                 series: [{
                     name: 'ETH Stock Price',
-                    data: portfolioPriceData,
+                    data: data,
                     type: 'spline',
                     tooltip: {
                         valueDecimals: 2
