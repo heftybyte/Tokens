@@ -46,6 +46,7 @@
     "react-native-drawer": "^2.5.0",
     "react-native-easy-grid": "^0.1.15",
     "react-native-easy-toast": "^1.0.8",
+    "react-native-highcharts": "^1.0.2",
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-material-textfield": "^0.10.2",
     "react-native-swiper": "^1.5.11",
