@@ -1,12 +1,12 @@
 const newsApi = [
   {
     "id": 12,
-    "title": "CoinDesk",
+    "title": "Business Insider",
     "type": "ARTICLE",
-    "body": "All-Time High: Ether Prices Pass $440 as Key Level Breached",
+    "body": "Ethereum's blockchain is jamming up because of a new game that lets people buy virtual cats",
     "link": {
       "type": "external",
-      "uri": "https://www.coindesk.com/all-time-high-ether-prices-pass-440-as-key-level-breached/",
+      "uri": "http://www.businessinsider.com/ethereum-is-jamming-up-because-of-a-game-for-buying-virtual-cats-2017-12",
       "params": null
     },
     "image": "",
@@ -15,12 +15,12 @@ const newsApi = [
   },
   {
     "id": 11,
-    "title": "The Merkle",
+    "title": "Business Insider",
     "type": "ARTICLE",
-    "body": "The History of Ethereum in 500 Words",
+    "body": "http://www.businessinsider.com/cryptocurrency-airline-surf-air-accepting-bitcoin-payments-2017-12",
     "link": {
       "type": "external",
-      "uri": "https://themerkle.com/the-history-of-ethereum-in-500-words/",
+      "uri": "http://www.businessinsider.com/cryptocurrency-airline-surf-air-accepting-bitcoin-payments-2017-12",
       "params": null
     },
     "image": "",
@@ -42,12 +42,12 @@ const newsApi = [
   },
   {
     "id": 2,
-    "title": "Cryptocoins News",
+    "title": "Techcrunch",
     "type": "ARTICLE",
-    "body": "Future Flight: Air New Zealand is Experimenting with a Public Ethereum Blockchain",
+    "body": "Parity CEO is confident that $150M in frozen Ethereum isn’t lost forever",
     "link": {
       "type": "external",
-      "uri": "https://www.cryptocoinsnews.com/future-flight-air-new-zealand-experimenting-ethereum-blockchain/",
+      "uri": "https://techcrunch.com/2017/12/05/parity-ceo-says-shes-confident-that-its-280m-in-frozen-ethereum-isnt-lost-forever/",
       "params": null
     },
     "image": "",
@@ -56,12 +56,12 @@ const newsApi = [
   },
   {
     "id": 3,
-    "title": "Cryptocoins News",
+    "title": "CoinTelegraph",
     "type": "ARTICLE",
-    "body": "Zug Citizens Begin Digital ID Registration on an Ethereum Blockchain",
+    "body": "With Development and Price, Where Does Ethereum Go Long-Term?",
     "link": {
       "type": "external",
-      "uri": "https://www.cryptocoinsnews.com/uport-self-sovereign-identity-opens-to-residents-of-zug/",
+      "uri": "https://cointelegraph.com/news/with-development-and-price-where-does-ethereum-go-long-term",
       "params": null
     },
     "image": "",
@@ -97,12 +97,12 @@ const newsApi = [
   },
   {
     "id": 6,
-    "title": "The Merkle",
+    "title": "Bitcoin.com",
     "type": "ARTICLE",
-    "body": "Ethereum Price Is on Target to Hit $400 in the Near Future",
+    "body": "Bitcoin-Based Ethereum Smart Contract and Sidechain Rival RSK Launches Today",
     "link": {
       "type": "external",
-      "uri": "https://themerkle.com/ethereum-price-is-on-target-to-hit-400-in-the-near-future/",
+      "uri": "https://news.bitcoin.com/bitcoin-ethereum-smart-contract-sidechain-rsk-launches/",
       "params": null
     },
     "image": "",
