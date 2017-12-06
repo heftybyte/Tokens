@@ -20,9 +20,9 @@ export const GET_HISTORICAL_PRICE_DATA = (data) => ({
     data: data
 })
 
-export const getChartData = () => async(dispatch) => {
+export const getChartData = (fsym,tsym,format) => async(dispatch) => {
     let err = null
-    let res = await getPricedata().catch(e=>err=e)
+    let res = await getPricedata(fsym,tsym,format).catch(e=>err=e)
     if (err) {
         dispatch(showToast(getError(err)))
         return
@@ -31,9 +31,9 @@ export const getChartData = () => async(dispatch) => {
     
 }
 
-export const getHistoricalChartData = () => async(dispatch) => {
+export const getHistoricalChartData = (fsym,tsym,format,period) => async(dispatch) => {
     let err = null
-    let res = await getHistoricalPricedata().catch(e=>err=e)
+    let res = await getHistoricalPricedata(fsym,tsym,format,period).catch(e=>err=e)
     if (err) {
         dispatch(showToast(getError(err)))
         return
