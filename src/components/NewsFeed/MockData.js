@@ -17,7 +17,7 @@ const newsApi = [
     "id": 11,
     "title": "Business Insider",
     "type": "ARTICLE",
-    "body": "http://www.businessinsider.com/cryptocurrency-airline-surf-air-accepting-bitcoin-payments-2017-12",
+    "body": "The world's first 'all you can fly' airline is now accepting payments in bitcoin and ethereum",
     "link": {
       "type": "external",
       "uri": "http://www.businessinsider.com/cryptocurrency-airline-surf-air-accepting-bitcoin-payments-2017-12",
