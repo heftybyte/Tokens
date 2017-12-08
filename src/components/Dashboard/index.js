@@ -199,7 +199,7 @@ const mapDispatchToProps = (dispatch) => ({
     register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
     showToast: (text) => dispatch(showToast(text)),
-    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp))
+    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

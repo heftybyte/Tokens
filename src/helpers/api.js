@@ -116,6 +116,16 @@ export const getAppVersion = async () => {
     return res.data
 }
 
+export const getPricedata = async (fsym='OMG',tsym='USD',format='chart') => {
+    const res = await instance.get(`/ticker/prices/now?fsym=${fsym}&tsym=${tsym}&format=${format}`)
+    return res.data
+}
+
+export const getHistoricalPricedata = async (fsym='OMG',tsym='USD',format='chart',period='1d') => {
+    const res = await instance.get(`/ticker/price/historical?fsym=${fsym}&tsym=${tsym}&period=${period}&format=${format}`)
+    return res.data
+}
+
 const log = (level) => (message, data) => {
     console.log({ message, data, level })
     instance.post('/client-logs', { message, data, level })
