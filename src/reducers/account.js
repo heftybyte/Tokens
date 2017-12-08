@@ -13,6 +13,7 @@ import {
     getTokenDetailsForAccount,
     logoutAccount,
     trackFeedActivity,
+    bookMark,
     addToAccountWatchlist,
     removeFromAccountWatchlist,
     logger
@@ -35,6 +36,7 @@ export const ADD_ADDRESS = 'account/ADD_ADDRESS'
 export const DELETE_ADDRESS = 'account/DELETE_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
 export const REFRESH_ADDRESS = 'account/REFRESH_ADDRESS'
+export const BOOKMARK = 'account/BOOKMARK'
 
 const registerAction = (id) => ({
     type: REGISTER,
@@ -83,6 +85,11 @@ const deleteAddressAction = (addresses=[]) => ({
 const tokenDetailsAction = (tokenDetails) => ({
   type: GET_TOKEN_DETAILS,
   data: { tokenDetails }
+})
+
+export const bookmark = (newsItem) => ({
+    type: BOOKMARK,
+    data: newsItem
 })
 
 export const createAccount = (params) => async (dispatch, getState) => {
@@ -294,6 +301,20 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
     dispatch(tokenDetailsAction(tokenDetails))
 }
 
+export const getBookmark = (news) => async (dispatch, getState) => {
+    //console.log(news);
+    // let err = null
+    // const { id } = getState().account
+    // const res = await bookMark(id, news).catch(e=>err=e)
+    //
+    // if (err) {
+    //     console.log(err)
+    //     return genericError();
+    // }
+    dispatch(bookmark(news))
+}
+
+
 const initialState = {
     addresses : [],
 		watchList: [],
@@ -319,6 +340,7 @@ const initialState = {
     invites: [],
     // Used to know when to fetch updated portfolio
     stale: true,
+    bookmarks: [],
     watchListMap: {}
 }
 
@@ -354,6 +376,12 @@ export default (state = initialState, action) => {
         case LOGOUT:
             return {
                 ...initialState
+            }
+        case BOOKMARK:
+                action.data["bookmarked"] = true;
+            return {
+                ...state,
+                bookmarks: [ action.data, ...state.bookmarks]
             }
         default:
             return {

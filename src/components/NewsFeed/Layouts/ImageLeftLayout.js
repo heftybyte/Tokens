@@ -1,14 +1,15 @@
 import React from 'react'
 import { Text, View, Image} from 'react-native';
-import { Grid, Row } from "react-native-easy-grid";
+import { Grid, Row, Col } from "react-native-easy-grid";
 import {styles} from '../Style'
+import SaveButton from '../SaveButton'
 import { getLinkTextByType } from './helpers'
 
 
 class ImageLeft extends React.Component {
 
     render() {
-        const { news: {title, image, body, type } } = this.props
+        const { news: {title, image, body, type, bookmarked } } = this.props
 
         return (
             <Grid>
@@ -27,6 +28,7 @@ class ImageLeft extends React.Component {
                     </Col>
                 </Row>
                 <Row size={10}>
+                <Col size={.8}>
                     <Text
                       style={styles.link}
                       onPress={()=>{
@@ -36,6 +38,12 @@ class ImageLeft extends React.Component {
                     >
                       { getLinkTextByType(type) }&gt;
                     </Text>
+                    </Col>
+                    { !bookmarked &&
+                        <Col size={.2}>
+                            <SaveButton item={this.props.news}/>
+                        </Col>
+                    }
                 </Row>
             </Grid>
         )

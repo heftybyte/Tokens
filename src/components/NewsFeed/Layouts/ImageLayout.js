@@ -1,14 +1,14 @@
 import React from 'react'
 import { Text, View, Image, Dimensions } from 'react-native';
 import { Grid, Row } from "react-native-easy-grid";
-
+import SaveButton from '../SaveButton'
 import {styles} from '../Style'
 
 class ImageDefault extends React.Component {
     state = {}
 
     componentDidMount() {
-        const { news: { image } } = this.props
+        const { news: { image, bookmarked } } = this.props
 
         Image.getSize(image, (srcWidth, srcHeight) => {
           const maxHeight = Dimensions.get('window').height;
@@ -35,6 +35,9 @@ class ImageDefault extends React.Component {
                             source={{ uri: image }}
                         />
                     </View>
+                    { !bookmarked &&
+                        <SaveButton item={this.props.news}/>
+                    }
                 </Row>
             </Grid>
         )

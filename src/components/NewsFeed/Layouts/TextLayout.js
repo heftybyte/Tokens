@@ -2,13 +2,14 @@ import React from 'react'
 import { Linking, Text } from 'react-native';
 import { Grid, Col, Row } from "react-native-easy-grid";
 import {styles} from '../Style'
+import SaveButton from '../SaveButton'
 import { getLinkTextByType } from './helpers'
 
 
 class TextDefault extends React.Component {
 
     render() {
-        const { news: {title, body, link, type } } = this.props
+        const { news: {title, body, link, type, bookmarked } } = this.props
         
         return (
             <Grid>
@@ -24,6 +25,7 @@ class TextDefault extends React.Component {
                     </Text>
                 </Row>
                 <Row size={20} style={{alignItems: 'flex-end'}}>
+                <Col size={.8}>
                     <Text
                         style={styles.link}
                         onPress={()=>{
@@ -33,6 +35,12 @@ class TextDefault extends React.Component {
                     >
                         { getLinkTextByType(type) }&gt;
                     </Text>
+                    </Col>
+                    { !bookmarked &&
+                        <Col size={.2}>
+                            <SaveButton item={this.props.news}/>
+                        </Col>
+                    }
                 </Row>
             </Grid>
         )   

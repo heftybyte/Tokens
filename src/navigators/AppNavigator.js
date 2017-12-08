@@ -10,6 +10,7 @@ import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import Search from '../components/Search';
+import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 import CardStackStyleInterpolator from 'react-navigation/lib/views/CardStack/CardStackStyleInterpolator';
 
@@ -28,6 +29,7 @@ export const AppNavigator = StackNavigator({
   Accounts : { screen: ViewAccounts },
   'Add Address': { screen: AddAddress },
   Search: { screen: Search },
+  Bookmarks: { screen: BookMarks },
   Register: { screen: Register },
   'Token Details': { screen: TokenDetails }
 }, {

@@ -1,14 +1,14 @@
 import React from 'react'
 import { Text, View} from 'react-native';
 import { Grid, Row } from "react-native-easy-grid";
-
+import SaveButton from '../SaveButton'
 import {styles} from '../Style'
 
 
 class TextCenter extends React.Component {
 
     render() {
-        const { news: { title, body } } = this.props
+        const { news: { title, body, bookmarked } } = this.props
 
         return (
             <Grid>
@@ -17,6 +17,9 @@ class TextCenter extends React.Component {
                 </Row>
                 <Row size={80}>
                     <Text style={[styles.body, styles.textDefault]}>{body}</Text>
+                    { !bookmarked &&
+                        <SaveButton item={this.props.news}/>
+                    }
                 </Row>
             </Grid>
         )

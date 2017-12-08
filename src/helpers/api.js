@@ -117,6 +117,11 @@ export const getAppVersion = async () => {
     return res.data
 }
 
+export const bookMark = async (id, bookmark) => {
+    let res = await instance.get(`/accounts/${id}/bookmarks/${bookmark.id}`, { bookmark })
+    return res.data
+}
+
 export const getPricedata = async (fsym='OMG',tsym='USD',format='chart') => {
     const res = await instance.get(`/ticker/prices/now?fsym=${fsym}&tsym=${tsym}&format=${format}`)
     return res.data
@@ -163,6 +168,4 @@ export const logLocalData = async () => {
             logger.info('AsyncStorage', localData)
         });
     });
-
-
 }
