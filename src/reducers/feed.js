@@ -8,7 +8,6 @@ import { AsyncStorage } from 'react-native'
 
 export const saveLatestTimestamp = async (newTimestamp) => {
     if(newTimestamp !== undefined) {
-
         let oldTimestamp = await AsyncStorage.getItem('feed:latestTimestamp');
         const oldDate = +(new Date(oldTimestamp))
         const newDate = +(new Date(newTimestamp))
@@ -27,14 +26,13 @@ export const getFeed = (data) => ({
     payload: data
 });
 
-export const fetchFeed = () => async (dispatch, getState) => {
+export const fetchFeed = (timestamp) => async (dispatch, getState) => {
     let err = null;
-    const news = await getNewsFeed().catch(e=>err=e)
+    const news = await getNewsFeed(timestamp).catch(e=>err=e)
     if (err) {
         dispatch(showToast(getError(err)))
         return
     }
-
 
     dispatch(getFeed(news));
 }
@@ -45,9 +43,9 @@ const initialState = [];
 export default (state = initialState, action) => {
     switch(action.type) {
         case types.GET_NEWS_FEED:
-            return {
+            return [
                 ...state, ...action.payload
-            }
+            ]
         default:
             return state
     }
