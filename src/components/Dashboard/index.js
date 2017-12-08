@@ -19,6 +19,7 @@ import { NavigationActions } from 'react-navigation';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
+import Chart from '../Chart';
 import mockNewsFeed from '../NewsFeed/MockData'
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
@@ -31,6 +32,7 @@ import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
+import portfolioPriceData from '../Chart/data'
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -161,6 +163,7 @@ class Dashboard extends Component {
             totalChangePct={portfolio.totalPriceChangePct}
           />
         }
+        <Chart data={portfolioPriceData} totalChangePct={portfolio.totalPriceChangePct} />
         <News feed={mockNewsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
