@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
@@ -96,8 +96,10 @@ const styles = StyleSheet.create({
 
 class TokenDetails extends Component {
   state = {
-    readMore: false
+    readMore: false,
+    refreshing: false
   }
+
   componentDidMount() {
     const { navigation, getTokenDetails } = this.props
     const { token } = navigation.state.params
@@ -105,6 +107,13 @@ class TokenDetails extends Component {
     if (!token.marketCap) {
       getTokenDetails(token.symbol)
     }
+  }
+
+  _onRefresh = async () => {
+    const { symbol } = this.props.navigation.state.params.token
+    this.setState({refreshing: true})
+    await this.props.getTokenDetails(symbol)
+    this.setState({refreshing: false})
   }
 
   render() {
@@ -134,7 +143,16 @@ class TokenDetails extends Component {
     const maxDescDisplayLength = 180
 
     return (
-      <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
+      <ScrollView
+        style={styles.scrollContainer}
+        containerStyleContent={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }
+      >
         <Header
           style={styles.header}
           totalValue={balance ? (balance * price) : price}

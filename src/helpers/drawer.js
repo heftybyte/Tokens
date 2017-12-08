@@ -92,7 +92,7 @@ export const withDrawer = (WrappedComponent) => {
                                 }}
                                 transparent
                                 onPress={ showBackButton ?
-                                    ()=>{trackTap('Menu Back'); store.dispatch(NavigationActions.back())} :
+                                    ()=>{trackTap('Menu:Back'); store.dispatch(NavigationActions.back())} :
                                     ()=>{trackTap('Menu'); this.openDrawer()}
                                 }>
                                     {showBackButton ?

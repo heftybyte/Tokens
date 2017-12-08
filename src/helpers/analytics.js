@@ -1,38 +1,51 @@
+import { Amplitude } from 'expo';
 import { Analytics, ScreenHit, Event } from 'expo-analytics';
 import { NavigationActions } from 'react-navigation';
+import { ENVIRONMENT } from 'react-native-dotenv';
 
+if (ENVIRONMENT !== 'development') {
+  Amplitude.initialize('2909f6e422ac271d0370e84eef9b74fc')
+}
 
-const analytics = new Analytics('UA-104515335-2');
+const GA_ID = ENVIRONMENT !== 'development' ? 'UA-104515335-2' : 'dev'
+const analytics = new Analytics(GA_ID);
 
+Amplitude.logEvent('AppLoad')
 analytics.hit(new ScreenHit('Load'));
 
 export const trackScreenView = (screenName) => {
-	analytics.hit(new ScreenHit(screenName))
+  Amplitude.logEventWithProperties('ScreenView', { name: screenName })
+  analytics.hit(new ScreenHit(screenName))
 }
 
 const getFeedItemLabel = (feedItem) =>
-	`${feedItem.title} - ${feedItem.body} - ${feedItem.id}`
+  `${feedItem.title} - ${feedItem.body} - ${feedItem.id}`
 
 export const trackNewsFeedSwipe = (feedItem) => {
   const label = getFeedItemLabel(feedItem)
+  Amplitude.logEventWithProperties('NewsFeedSwipe', { label })
   analytics.hit(new Event('News Feed', 'Swipe', label))
 }
 
 export const trackNewsFeedTap = (feedItem) => {
-	const label = getFeedItemLabel(feedItem)
-	analytics.hit(new Event('News Feed', 'Tap', label))
+  const label = getFeedItemLabel(feedItem)
+  Amplitude.logEventWithProperties('NewsFeedTap', { label })
+  analytics.hit(new Event('News Feed', 'Tap', label))
 }
 
 export const trackTap = (label) => {
-	analytics.hit(new Event('UI', 'Button Tap', label))
+  Amplitude.logEvent(`'Tap${label}`)
+  analytics.hit(new Event('UI', 'Button Tap', label))
 }
 
 export const trackAddress = (action, label) => {
-	analytics.hit(new Event('Address', action, label))
+  Amplitude.logEvent(`${action}Adddress`)
+  analytics.hit(new Event('Address', action, label))
 }
 
-export const trackRefresh = (action) => {
-  analytics.hit(new Event('Refresh', action))
+export const trackRefresh = (content) => {
+  Amplitude.logEvent(`${content}Refresh`)
+  analytics.hit(new Event('Refresh', content))
 }
 
 const getCurrentRouteName = (navigationState) => {

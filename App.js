@@ -4,26 +4,35 @@ import { AppRegistry, BackHandler, Platform, Alert } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './src/store/index';
 import { login } from './src/reducers/account'
-import { getAppVersion } from './src/helpers/api'
-import { AppLoading, Font, SecureStore } from 'expo';
+import { AppLoading, Font, SecureStore, Util } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
-import PromptReload from './src/components/Entry/PromptReload'
-import { getError } from './src/helpers/functions'
+import { ENVIRONMENT } from 'react-native-dotenv';
+import { logger, logLocalData } from './src/helpers/api'
 require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
 const publicDSN = process.env.SENTRY_PUBLIC_DSN || 'https://af6c590a432d4ef49746f9d2fc8a4b8e@sentry.io/242835'
-Sentry.config(publicDSN).install();
 
+if (ENVIRONMENT !== 'development') {
+    Sentry.config(publicDSN).install();
+}
 
+logger.info(`current environment: ${ENVIRONMENT}`)
+logLocalData()
 class Tokens extends React.Component {
     state = {
         isReady: false,
         reload: false
     }
     async componentDidMount() {
+        const firstRun = !(await SecureStore.getItemAsync('postfirstRun'))
+        logger.info('From App.js', { firstRun })
+        if (firstRun) {
+            SecureStore.setItemAsync('postfirstRun', JSON.stringify(true))
+            Util.reload()
+        }
         await Font.loadAsync({
             'Raleway': require('./assets/fonts/Raleway-Regular.ttf'),
             'Raleway-Light': require('./assets/fonts/Raleway-Light.ttf'),
@@ -46,20 +55,10 @@ class Tokens extends React.Component {
         const token = await SecureStore.getItemAsync('token')
         const id = await SecureStore.getItemAsync('id')
 
+        logger.info('From App.js', { token, id })
         if (Platform.OS === 'android') {
-            let err = null
-            const appVersion = await SecureStore.getItemAsync('appVersion')
-            const newAppVersion = await getAppVersion().catch(e=>err=e)
-            await SecureStore.setItemAsync('appVersion', newAppVersion)
-            if(err){
-               Alert.alert(getError(err))
-               return
-            } else if (appVersion && appVersion !== newAppVersion) {
-                this.setState({reload: true})
-                return 
-            }
+            Util.addNewVersionListenerExperimental(()=>Util.reload())
         }
-
         if (token && id) {
             await store.dispatch(login())
         } else {
@@ -77,7 +76,6 @@ class Tokens extends React.Component {
 
     }
 
-
     componentWillUnmount() {
         BackHandler.removeEventListener("onBackPress", this.goBack);
     }
@@ -87,7 +85,7 @@ class Tokens extends React.Component {
 
         return isReady && (
                 <Provider style={{backgroundColor: '#000'}} store={store}>
-                    { reload ? <PromptReload /> : <AppWithNavigationState /> }
+                    { <AppWithNavigationState /> }
                 </Provider>
             )
     }

@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import { SecureStore } from 'expo'
+import { Amplitude, SecureStore } from 'expo'
 import {
     loginAccount,
     registerAccount,
@@ -13,8 +13,9 @@ import {
     getTokenDetailsForAccount,
     logoutAccount,
     trackFeedActivity,
-	addToAccountWatchlist,
-	removeFromAccountWatchlist
+    addToAccountWatchlist,
+    removeFromAccountWatchlist,
+    logger
 } from '../helpers/api'
 import { safeAlert } from '../helpers/functions'
 import {
@@ -23,7 +24,6 @@ import {
     registerForPushNotificationsAsync
 } from '../helpers/functions'
 import { setLoading, showToast } from './ui'
-
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
 export const LOGOUT = 'account/LOGOUT'
@@ -113,10 +113,13 @@ export const login = (params) => async (dispatch, getState) => {
         }
         token = res.id
         account = res.user
+        logger.info('user login via params', { id })
         setAuthHeader(token)
         await SecureStore.setItemAsync('token', token)
         await SecureStore.setItemAsync('id', account.id)
     } else if (token && id) {
+        console.log('login info log')
+        logger.info('user login via SecureStore', { id })
         setAuthHeader(token)
         account = await getAccount(id).catch(e=>err=e)
         if (err) {
@@ -128,6 +131,7 @@ export const login = (params) => async (dispatch, getState) => {
         dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         return
     }
+    Amplitude.setUserId(account.id)
     dispatch(loginAction(token, account))
     registerForPushNotificationsAsync()
     dispatch(getPortfolio())
@@ -135,6 +139,8 @@ export const login = (params) => async (dispatch, getState) => {
 }
 
 export const logout = () => async(dispatch, getState) => {
+    let id = await SecureStore.getItemAsync('id')
+    logger.info('user logout', { id })
     let token = await SecureStore.getItemAsync('token')
 		let notification_token = await SecureStore.getItemAsync('notification_token')
     if (token && notification_token) {
