@@ -16,7 +16,8 @@ export const formatPrice = (price) => {
 	if (price < 1) {
 		return price.toFixed(5)
 	}
-	let [whole, decimal] = price.toFixed(2).split('.')
+	let whole, decimal
+	[whole, decimal] = price.toFixed(2).split('.')
 	return `${Number(whole).toLocaleString()}.${decimal}`
 }
 
@@ -47,6 +48,7 @@ export const registerForPushNotificationsAsync = async () => {
 	// Get the token that uniquely identifies this device
 	let token = await Notifications.getExpoPushTokenAsync();
 	let userToken = await SecureStore.getItemAsync('token')
+	await SecureStore.setItemAsync('notification_token', token)
 	setAuthHeader(userToken)
 	await registerUserForPushNotifications({token})
 }

@@ -19,6 +19,7 @@ import { NavigationActions } from 'react-navigation';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
+import Chart from '../Chart';
 import mockNewsFeed from '../NewsFeed/MockData'
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
@@ -31,6 +32,7 @@ import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
+import portfolioPriceData from '../Chart/data'
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -86,13 +88,12 @@ class Dashboard extends Component {
   }
 
   componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
-      (timestamp) => fetchFeed(timestamp)
-  );
+      (timestamp) => this.props.fetchFeed(timestamp)
+);
 
   componentDidMount = async () => {
     if (this.state.stale) {
       this.props.getPortfolio()
-      trackRefresh('Mount')
     }
   }
 
@@ -119,7 +120,7 @@ class Dashboard extends Component {
     this.setState({refreshing: true})
     await this.props.getPortfolio(false)
     this.setState({refreshing: false})
-    trackRefresh('Manual')
+    trackRefresh('Dashboard')
   }
 
   render = () => {
@@ -162,10 +163,17 @@ class Dashboard extends Component {
             totalChangePct={portfolio.totalPriceChangePct}
           />
         }
-        <News feed={mockNewsFeed} />
-        { portfolio && portfolio.tokens &&
+        <Chart data={portfolioPriceData} totalChangePct={portfolio.totalPriceChangePct} />
+        <News feed={this.props.newsFeed} />
+        { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
-        { portfolio && portfolio.top &&
+        { !!portfolio.watchList.length &&
+        <TokenList
+            title="Watchlist"
+            tokens={portfolio.watchList}
+            type="watchList"
+          />}
+        { !!portfolio.top.length &&
         <TokenList
           title="Top 100 Tokens By Market Cap" 
           tokens={portfolio.top}
@@ -191,7 +199,7 @@ const mapDispatchToProps = (dispatch) => ({
     register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
     showToast: (text) => dispatch(showToast(text)),
-    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp))
+    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

@@ -11,21 +11,22 @@ const styles = StyleSheet.create({
     img: {
         height: '20%',
         width: '30%',
-        flex: 5
+        marginTop: -50
     },
     mainText: {
         color: '#fff',
-        paddingTop: 30,
-        flex: 5
+        padding: 20,
+        textAlign: 'center'
     }
 })
 
 
 const PromptReload = () => (
     <View style={styles.container}>
-    <Image resizeMode='contain' style={styles.img} source={require("../../../assets/Tokens_Icon.png")} />
-    <Text style={styles.mainText}>App has been updated. Please reload app.</Text>
-</View>)
+        <Image resizeMode='contain' style={styles.img} source={require("../../../assets/Tokens_Icon.png")} />
+        <Text style={styles.mainText}>An updated version of the app has been downloaded, please relaunch the app.</Text>
+    </View>
+)
 
 
 export default PromptReload

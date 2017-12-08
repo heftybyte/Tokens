@@ -8,6 +8,7 @@ import { store } from './store'
 import { Field } from "../lib/Field"
 import Header from './header'
 import Footer from './footer'
+import { invitesEnabled } from '../../config'
 
 export const Normal = observer(
 	(navigation) => (
@@ -31,7 +32,7 @@ export const Normal = observer(
 				}}
 			>
 				<Content>
-				{store.type === 'normal' &&
+				{invitesEnabled && store.type === 'normal' &&
 					<Field
 						label="Invite Code"
 						returnKeyType="next"
@@ -39,11 +40,11 @@ export const Normal = observer(
 						placeholder="q3frrdsd"
 					/>}
 					<Field
-						label="Email"
+						label="Username"
 						returnKeyType="next"
-						value={store.getField('email')}
-						onChange={v => store.changetext('email', v)}
-						placeholder="e.g vitalik@ethereum.org"
+						value={store.getField('username')}
+						onChange={v => store.changetext('username', v)}
+						placeholder="e.g vitalik23"
 					/>
 					<Field
 						label="Password"

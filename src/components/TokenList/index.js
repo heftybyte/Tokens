@@ -11,9 +11,13 @@ import {
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { formatPrice, formatCurrencyChange, getTokenImage } from '../../helpers/functions'
-import { baseURL, gainColor, lossColor } from '../../config'
+import { baseURL, gainColor, lossColor, brandColor } from '../../config'
 import { showToast } from '../../reducers/ui'
 import { trackAddress, trackTap } from '../../helpers/analytics'
+import {
+  addToWatchlist,
+  removeFromWatchList
+} from '../../reducers/account';
 
 const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
@@ -22,7 +26,7 @@ const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <Text style={styles.orderText}>{index+1}.</Text>
         <View>
-          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={styles.image}/>
         </View>
 
         <View style={styles.symbolContainer}>
@@ -57,13 +61,13 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
   const formattedTotal = item.price ?
     `$${formatPrice(item.balance * item.price)}` :
     'N/A'
-  const formattedPriceChange = formatCurrencyChange(formatPrice(item.priceChange||0)) || 'N/A'
+  const formattedPriceChange = formatCurrencyChange(item.priceChange||0) || 'N/A'
 
   return (
     <TouchableOpacity onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
-          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={styles.image}/>
         </View>
 
         <View style={styles.symbolContainer}>
@@ -97,29 +101,33 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
   )
 };
 
-const SearchItem = ({ item, onPress, showTokenInfo, index }) => {
+const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
+  let itemOnWatchlist = !!watchList[item.symbol]
   return (
     <TouchableOpacity onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
-          <Image source={{ uri: getTokenImage(item) }} style={{width: 30, height: 30}}/>
+          <Image source={{ uri: getTokenImage(item) }} style={styles.image}/>
         </View>
 
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
         </View>
         <TouchableOpacity
-          onPress={onPress}
+          onPress={() => onPress(itemOnWatchlist, item.symbol) }
           style={[
               styles.priceContainer,
-              styles.noPrice
+              styles.noPrice,
+              itemOnWatchlist ? styles.unwatchContainer : {}
           ]}
         >
-          <Text style={[
-            styles.noPriceText
-          ]}>
-            WATCH
-          </Text>
+          {
+            itemOnWatchlist ?
+            <Text style={[styles.unwatchText]}>UNWATCH</Text>
+              :
+            <Text style={[styles.watchText]}>WATCH</Text>
+          }
+
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -149,7 +157,7 @@ class TokenList extends Component {
         this.setState({showChange: !this.state.showChange})
         trackTap(this.state.showChange ? 'PriceToggle-watch-change' : 'PriceToggle-watch-price');
         this.props.showToast(
-          this.state.showChange ? 'Total Value' : 'Total Change Since 24hrs Ago',
+          this.state.showChange ? 'Price' : 'Change Since 24hrs Ago',
           { position: 'center', style: { backgroundColor: '#222' } },
           200
         )
@@ -162,19 +170,21 @@ class TokenList extends Component {
       item={item}
       index={index}
       showChange={this.state.showChange}
+      watchList={this.props.watchList}
       showTokenInfo={() => {
         trackTap('TokenInfo:TokenItem')
         this.props.goToTokenDetailsPage(item);
       }}
       onPress={()=>{
-        this.setState({showChange: !this.state.showChange})
-        const { showChange } = this.state
-        trackTap(showChange ? 'PriceToggle-change' : 'PriceToggle-total');
-        this.props.showToast(
-          showChange ? 'Total Change Since 24hrs Ago' : 'Total Value',
-          { position: 'center', style: { backgroundColor: '#222' } },
-          showChange ? 800 : 200
-        )
+        this.setState({showChange: !this.state.showChange}, () => {
+          const { showChange } = this.state
+          trackTap(showChange ? 'PriceToggle-change' : 'PriceToggle-total');
+          this.props.showToast(
+            showChange ? 'Total Change Since 24hrs Ago' : 'Total Value',
+            { position: 'center', style: { backgroundColor: '#222' } },
+            showChange ? 800 : 200
+          )
+        })
       }}
     />
   )
@@ -183,12 +193,19 @@ class TokenList extends Component {
     <SearchItem
       item={item}
       index={index}
+      watchList={this.props.watchList}
       showTokenInfo={() => {
         trackTap('TokenInfo:SearchItem')
         this.props.goToTokenDetailsPage(item);
       }}
-      onPress={()=>{
-        Alert.alert('Watch list coming soon')
+      onPress={(setWatch, symbol)=>{
+        if(setWatch){
+          //Alert.alert('Watch list coming soon delete')
+          this.props.removeFromWatchList(symbol)
+        } else {
+          //Alert.alert('Watch list coming soon add' + symbol)
+          this.props.addToWatchlist(symbol)
+        }
       }}
     />
   )
@@ -221,6 +238,8 @@ class TokenList extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+    addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
+    removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
     goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} })),
     showToast: (msg, props, duration) => dispatch(showToast(msg, props, duration))
 })
@@ -245,7 +264,7 @@ const styles = StyleSheet.create({
     flex: .6
   },
   priceContainer: {
-    width: 90,
+    width: 96,
     height: 40,
     backgroundColor: lossColor,
     borderRadius: 8,
@@ -253,8 +272,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 12,
-    paddingLeft: 13,
-    paddingRight: 13
+    paddingHorizontal: 13
   },
   noPrice: {
     backgroundColor: '#000',
@@ -262,6 +280,16 @@ const styles = StyleSheet.create({
   },
   noPriceText: {
     color: '#fff'
+  },
+  watchText: {
+    color: '#fff'
+  },
+  unwatchText: {
+    color: brandColor
+  },
+  unwatchContainer: {
+    borderColor: brandColor,
+    paddingHorizontal: 8
   },
   longerPriceContainer: {
     paddingLeft: 30,
@@ -322,6 +350,11 @@ const styles = StyleSheet.create({
   orderText: {
     color: '#fff',
     fontSize: 12
+  },
+  image: {
+    width: 30,
+    height: 30,
+    borderRadius: 8
   }
 });
 

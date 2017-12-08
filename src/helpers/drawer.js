@@ -97,7 +97,7 @@ export const withDrawer = (WrappedComponent) => {
                                 }}
                                 transparent
                                 onPress={ showBackButton ?
-                                    ()=>{trackTap('Menu Back'); store.dispatch(NavigationActions.back())} :
+                                    ()=>{trackTap('Menu:Back'); store.dispatch(NavigationActions.back())} :
                                     ()=>{trackTap('Menu'); this.openDrawer()}
                                 }>
                                     {showBackButton ?
@@ -123,7 +123,7 @@ export const withDrawer = (WrappedComponent) => {
                                         alignItems: 'center',
                                         flex:1
                                     }}>
-                                        <Image key={tokenDetails.symbol} source={{ uri: getTokenImage(tokenDetails) }} style={{width: 20, height: 20}}/>
+                                        <Image key={tokenDetails.symbol} source={{ uri: getTokenImage(tokenDetails) }} style={{width: 20, height: 20, borderRadius: 5}}/>
                                         <Text style={{color: '#fff', paddingLeft: 10}}>
                                             {tokenDetails.name||tokenDetails.symbol}
                                         </Text> 

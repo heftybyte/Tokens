@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import Header from '../Dashboard/Header';
-import { getTokenDetails } from '../../reducers/account';
-import { baseURL } from '../../config'
+import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
+import { baseURL, lossColor, brandColor } from '../../config'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -57,10 +57,49 @@ const styles = StyleSheet.create({
   link: {
     color: '#fff',
     paddingLeft: 10
-  }
+  },
+  readmore: {
+    color: '#6b2fe2',
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: 'Nunito-Light'
+  },
+  priceContainer: {
+    width: 96,
+    height: 40,
+    backgroundColor: lossColor,
+    borderRadius: 8,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+    paddingHorizontal: 13
+  },
+  noPrice: {
+    backgroundColor: '#000',
+    borderColor: '#fff'
+  },
+  noPriceText: {
+    color: '#fff'
+  },
+  watchText: {
+    color: '#fff'
+  },
+  unwatchText: {
+    color: brandColor
+  },
+  unwatchContainer: {
+    borderColor: brandColor,
+    paddingHorizontal: 8
+  },
 });
 
 class TokenDetails extends Component {
+  state = {
+    readMore: false,
+    refreshing: false
+  }
+
   componentDidMount() {
     const { navigation, getTokenDetails } = this.props
     const { token } = navigation.state.params
@@ -70,24 +109,50 @@ class TokenDetails extends Component {
     }
   }
 
+  _onRefresh = async () => {
+    const { symbol } = this.props.navigation.state.params.token
+    this.setState({refreshing: true})
+    await this.props.getTokenDetails(symbol)
+    this.setState({refreshing: false})
+  }
+
   render() {
     const {
-      price,
-      balance,
-      marketCap,
-      volume24Hr,
-      symbol,
-      change,
-      change7d,
-      supply,
-      priceChange,
-      priceChange7d,
-      website,
-      twitter,
-      reddit
-    } = this.props.token;
+      addToWatchlist,
+      removeFromWatchList,
+      watchListMap,
+      token: {
+        price,
+        balance,
+        marketCap,
+        volume24Hr,
+        symbol,
+        change,
+        change7d,
+        supply,
+        priceChange,
+        priceChange7d,
+        website,
+        twitter,
+        reddit,
+        description
+      }
+    } = this.props;
+
+    const isWatching = watchListMap[symbol]
+    const maxDescDisplayLength = 180
+
     return (
-      <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
+      <ScrollView
+        style={styles.scrollContainer}
+        containerStyleContent={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }
+      >
         <Header
           style={styles.header}
           totalValue={balance ? (balance * price) : price}
@@ -126,7 +191,46 @@ class TokenDetails extends Component {
           </View>
         </View>
 
+        <View style={[styles.container, {marginTop: 10}]}>
+          <View style={[styles.containerChild, {flexGrow:1, alignItems: 'center'},]}>
+            <TouchableOpacity
+              onPress={() => isWatching ? removeFromWatchList(symbol) : addToWatchlist(symbol) }
+              style={[
+                  styles.priceContainer,
+                  styles.noPrice,
+                  isWatching ? styles.unwatchContainer : {}
+              ]}
+            >
+              {
+                isWatching ?
+                <Text style={[styles.unwatchText]}>UNWATCH</Text>
+                  :
+                <Text style={[styles.watchText]}>WATCH</Text>
+              }
+
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <View style={[styles.container, styles.linkContainer]}>
+          <View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
+              <Text style={styles.tokenHeading}>DESCRIPTION</Text>
+              <Text
+                numberOfLines={this.state.readMore ? 0 : 4}
+                style={[styles.tokenValue, {fontSize: 15,textAlign: 'justify', paddingTop: 5}]}>
+                  {description}
+                  </Text>
+                {description.length > maxDescDisplayLength && (<TouchableHighlight
+                    onPress={() => this.setState({readMore: !this.state.readMore})}
+                    style={{marginTop: 7}}>
+                  <Text
+                      style={styles.readmore}
+                  >
+                      { this.state.readMore?'Close':'Read more' }
+                  </Text>
+                </TouchableHighlight>)
+                }
+          </View>
           {!!website && <View style={[styles.containerChild, styles.linkContainerChild]}>
               <MaterialCommunityIcons
                 name="web"
@@ -194,7 +298,9 @@ class TokenDetails extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getTokenDetails: (sym) => dispatch(getTokenDetails(sym))
+  getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
+  addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
+  removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol))
 })
 
 const mapStateToProps = (state, props) => ({
@@ -204,7 +310,8 @@ const mapStateToProps = (state, props) => ({
     ...props.navigation.state.params.token
   },
   tokenDetails: state.account.tokenDetails,
-  portfolio: state.account.portfolio
+  portfolio: state.account.portfolio,
+  watchListMap: state.account.watchListMap
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(TokenDetails));
