@@ -12,6 +12,7 @@ import { baseURL, lossColor, brandColor } from '../../config'
 import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
 import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
+import VideoPlayer from './player';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -103,6 +104,10 @@ const styles = StyleSheet.create({
     borderColor: brandColor,
     paddingHorizontal: 8
   },
+  video: {
+    width: '100%',
+    height: 250
+  }
 });
 
 const tokenValueStyle = v => v.toString().length > 8 ? styles.tokenValueWrapped : styles.tokenValue
@@ -158,6 +163,7 @@ class TokenDetails extends Component {
         twitter,
         reddit,
         description,
+        videoUrl
       },
       priceData,
       chartLoading,
@@ -201,6 +207,12 @@ class TokenDetails extends Component {
           style={{paddingBottom: 20}}
           onChange={()=>this.props.getHistoricalPrices({fsyms: symbol, tsyms: 'USD'})}
         />
+        {!!videoUrl && <View style={styles.containerChild}>
+          <VideoPlayer
+            url={videoUrl}
+            style={styles.video}/>
+        </View>}
+        
 
         {!!balance && <View style={styles.container}>
           <View style={styles.containerChild}>
