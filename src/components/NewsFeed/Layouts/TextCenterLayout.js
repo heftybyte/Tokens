@@ -8,7 +8,7 @@ import {styles} from '../Style'
 class TextCenter extends React.Component {
 
     render() {
-        const { news: { title, body, bookmarked } } = this.props
+        const { news: { title, body }, bookmarked } = this.props
 
         return (
             <Grid>
@@ -17,9 +17,7 @@ class TextCenter extends React.Component {
                 </Row>
                 <Row size={80}>
                     <Text style={[styles.body, styles.textDefault]}>{body}</Text>
-                    { !bookmarked &&
-                        <SaveButton item={this.props.news}/>
-                    }
+                    <SaveButton bookmarked={bookmarked} item={this.props.news}/>
                 </Row>
             </Grid>
         )

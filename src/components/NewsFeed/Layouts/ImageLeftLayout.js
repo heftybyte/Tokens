@@ -9,7 +9,7 @@ import { getLinkTextByType } from './helpers'
 class ImageLeft extends React.Component {
 
     render() {
-        const { news: {title, image, body, type, bookmarked } } = this.props
+        const { news: {title, image, body, type }, bookmarked } = this.props
 
         return (
             <Grid>
@@ -28,22 +28,20 @@ class ImageLeft extends React.Component {
                     </Col>
                 </Row>
                 <Row size={10}>
-                <Col size={.8}>
-                    <Text
-                      style={styles.link}
-                      onPress={()=>{
-                        link && Linking.openURL(link.uri)
-                          .catch(err => console.error('An error occurred', err));
-                      }}
-                    >
-                      { getLinkTextByType(type) }&gt;
-                    </Text>
+                    <Col size={.8}>
+                        <Text
+                          style={styles.link}
+                          onPress={()=>{
+                            link && Linking.openURL(link.uri)
+                              .catch(err => console.error('An error occurred', err));
+                          }}
+                        >
+                          { getLinkTextByType(type) }&gt;
+                        </Text>
                     </Col>
-                    { !bookmarked &&
-                        <Col size={.2}>
-                            <SaveButton item={this.props.news}/>
-                        </Col>
-                    }
+                    <Col size={.2}>
+                        <SaveButton bookmarked={bookmarked} item={this.props.news}/>
+                    </Col>
                 </Row>
             </Grid>
         )

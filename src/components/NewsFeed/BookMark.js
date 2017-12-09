@@ -22,8 +22,7 @@ class BookMarks extends React.Component {
         )
     }
 
-    render(){
-        console.log(this.props.bookmarks)
+    render() {
         return (
             this.props.bookmarks.length?
                 <FlatList

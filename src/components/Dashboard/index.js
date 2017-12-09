@@ -19,20 +19,21 @@ import { NavigationActions } from 'react-navigation';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
-import Chart from '../Chart';
+import Chart from '../Chart/Chart';
+import RangeSelector from '../Chart/RangeSelector';
 import mockNewsFeed from '../NewsFeed/MockData'
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
 import {
   register,
   login,
-  getPortfolio
+  getPortfolio,
+  getPortfolioChart
 } from '../../reducers/account';
 import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
-import portfolioPriceData from '../Chart/data'
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -89,11 +90,12 @@ class Dashboard extends Component {
 
   componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
       (timestamp) => this.props.fetchFeed(timestamp)
-);
+  );
 
   componentDidMount = async () => {
     if (this.state.stale) {
       this.props.getPortfolio()
+      this.props.getPortfolioChart()
     }
   }
 
@@ -118,13 +120,16 @@ class Dashboard extends Component {
 
   _onRefresh = async () => {
     this.setState({refreshing: true})
-    await this.props.getPortfolio(false)
+    await Promise.all([
+      this.props.getPortfolio(false),
+      this.props.getPortfolioChart()
+    ])
     this.setState({refreshing: false})
     trackRefresh('Dashboard')
   }
 
   render = () => {
-    const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
+    const { portfolio, portfolioChart, goToAddressPage, loggedIn, addresses } = this.props
     return (
       <ScrollView
         style={styles.scrollContainer}
@@ -163,7 +168,11 @@ class Dashboard extends Component {
             totalChangePct={portfolio.totalPriceChangePct}
           />
         }
-        <Chart data={portfolioPriceData} totalChangePct={portfolio.totalPriceChangePct} />
+
+        { /* disable until balance service complete*/
+          false && <Chart data={portfolioChart} totalChangePct={portfolio.totalPriceChangePct} />}
+        { /* disable until balance service complete*/
+          false && <RangeSelector onChange={this.props.getPortfolioChart}/>}
         <News feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
@@ -186,6 +195,7 @@ class Dashboard extends Component {
 
 const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
+  portfolioChart: state.account.portfolioChart,
   addresses: state.account.addresses,
   loggedIn: !!state.account.token,
   newsFeed: state.feed,
@@ -198,8 +208,9 @@ const mapDispatchToProps = (dispatch) => ({
     login: () => dispatch(login()),
     register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
+    getPortfolioChart: () => dispatch(getPortfolioChart()),
     showToast: (text) => dispatch(showToast(text)),
-    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
+    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

@@ -77,4 +77,11 @@ export const safeAlert = (...args) => {
 	setTimeout(()=>Alert.alert.apply({}, args), 1)
 }
 
+export const getQueryString = (params) => {
+    return Object.keys(params || {})
+      .filter(k=>params[k]!==undefined)
+      .map(k=>`${k}=${params[k]}`)
+      .join('&')
+}
+
 export const getTokenImage = (token) => `${baseURL}/img/tokens/${token.id}.png`

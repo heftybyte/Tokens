@@ -9,7 +9,7 @@ import { getLinkTextByType } from './helpers'
 class TextDefault extends React.Component {
 
     render() {
-        const { news: {title, body, link, type, bookmarked } } = this.props
+        const { news: {title, body, link, type }, bookmarked } = this.props
         
         return (
             <Grid>
@@ -25,22 +25,20 @@ class TextDefault extends React.Component {
                     </Text>
                 </Row>
                 <Row size={20} style={{alignItems: 'flex-end'}}>
-                <Col size={.8}>
-                    <Text
-                        style={styles.link}
-                        onPress={()=>{
-                          link && Linking.openURL(link.uri)
-                            .catch(err => console.error('An error occurred', err));
-                        }}
-                    >
-                        { getLinkTextByType(type) }&gt;
-                    </Text>
+                    <Col size={.8}>
+                        <Text
+                            style={styles.link}
+                            onPress={()=>{
+                              link && Linking.openURL(link.uri)
+                                .catch(err => console.error('An error occurred', err));
+                            }}
+                        >
+                            { getLinkTextByType(type) }&gt;
+                        </Text>
                     </Col>
-                    { !bookmarked &&
-                        <Col size={.2}>
-                            <SaveButton item={this.props.news}/>
-                        </Col>
-                    }
+                    <Col size={.2} style={{flexDirection:'row', justifyContent: 'flex-end'}}>
+                        <SaveButton bookmarked={bookmarked} item={this.props.news} />
+                    </Col>
                 </Row>
             </Grid>
         )   

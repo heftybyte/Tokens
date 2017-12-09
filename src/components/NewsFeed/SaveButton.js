@@ -1,34 +1,39 @@
 import React from 'react';
-import { TouchableHighlight, Text, Alert} from 'react-native'
+import { TouchableHighlight, Text } from 'react-native'
 import { Button, Icon } from 'native-base'
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import { bookmark, getBookmark } from '../../reducers/account';
-
+import { bookmark, saveBookmark, removeBookmark } from '../../reducers/account';
+import { showToast } from '../../reducers/ui';
 
 
 class SaveButton extends React.Component {
 
-
-    savetoBookmark = () => {
-        this.props.bookmark(this.props.item)
-        Alert.alert('News feed saved to bookmarks!!')
+    updateBookmark = async (save) => {
+        if (save) {
+            await this.props.saveBookmark(this.props.item)
+            this.props.showToast('Saved to Bookmarks')
+        } else {
+            await this.props.removeBookmark(this.props.item)
+            this.props.showToast('Removed from Bookmarks')
+        }
     }
 
-
     render(){
+        const { bookmarked } = this.props
         return (
-            <Button transparent onPress={this.savetoBookmark} title="Bookmark news item" style={{paddingTop: 35}}>
-                <Ionicons name="ios-bookmark" size={28} color="white" />
+            <Button transparent onPress={()=>this.updateBookmark(!bookmarked)} title="Bookmark news item" style={{paddingTop: 35}}>
+                <Ionicons name={ bookmarked ? "ios-bookmark" : "ios-bookmark-outline"} size={18} color="white" />
             </Button>
         )
     }
 
 }
 
-
 const mapDispatchToProps = (dispatch) => ({
-    bookmark: (e) => dispatch(getBookmark(e))
+    saveBookmark: (e) => dispatch(saveBookmark(e)),
+    removeBookmark: (e) => dispatch(removeBookmark(e)),
+    showToast: (msg) => dispatch(showToast(msg))
 })
 
 export default connect( null, mapDispatchToProps)(SaveButton);
