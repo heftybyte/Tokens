@@ -153,7 +153,7 @@ class ViewAddresses extends Component {
             <CardItem
               footer
               style={{backgroundColor: '#000', borderColor: '#fff'}}
-            > 
+            >
               <Body />
               <Right>
                 <TouchableHighlight
@@ -189,7 +189,7 @@ class ViewAddresses extends Component {
                       </Text>
                     </CardItem>
                 )}
-                {!invites.length && 
+                {!invites.length &&
                   <CardItem footer style={{backgroundColor: '#000'}}>
                     <TouchableHighlight
                       onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
@@ -234,4 +234,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(ViewAddresses));
+export default connect(mapStateToProps, mapDispatchToProps)(ViewAddresses);

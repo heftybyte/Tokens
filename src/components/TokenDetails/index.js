@@ -314,4 +314,4 @@ const mapStateToProps = (state, props) => ({
   watchListMap: state.account.watchListMap
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(TokenDetails));
+export default connect(mapStateToProps, mapDispatchToProps)(TokenDetails);

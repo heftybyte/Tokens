@@ -93,4 +93,4 @@ const mapStateToProps = (state) => ({
     watchListMap: state.account.watchListMap
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(SearchPage));
+export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);
