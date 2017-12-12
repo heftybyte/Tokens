@@ -1,6 +1,6 @@
-import { Alert, AsyncStorage } from 'react-native'
+import { Alert, AsyncStorage, Share } from 'react-native'
 import currencyFormatter from 'currency-formatter';
-import { Permissions, Notifications, SecureStore } from 'expo';
+import { Permissions, Notifications, SecureStore, Constants } from 'expo';
 import {
 	setAuthHeader,
 	registerUserForPushNotifications
@@ -104,3 +104,9 @@ export const getQueryString = (params) => {
 }
 
 export const getTokenImage = (token) => `${baseURL}/img/tokens/${token.id}.png`
+
+export const shareTokenDetails = () => {
+	let link = `${Constants.linkingUri}?hello=world&goodbye=now`
+	let content = {message:'Testing an app. IGNOREddd \n Hello suckers\n'+link, title:'Title', url: link}
+	Share.share(content, {dialogTitle: 'Share this token'})
+}

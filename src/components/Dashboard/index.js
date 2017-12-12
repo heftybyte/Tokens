@@ -11,7 +11,8 @@ import {
   Alert,
   StatusBar,
   Button,
-  RefreshControl
+  RefreshControl,
+  Linking
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
@@ -28,13 +29,18 @@ import {
   register,
   login,
   getPortfolio,
-  getPortfolioChart
+  getPortfolioChart,
+  getTokenDetails
 } from '../../reducers/account';
 import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
 import { update as _updateToken } from '../../reducers/token'
+import portfolioPriceData from '../Chart/data'
+import { Constants } from 'expo';
+
+const qs = require('qs');
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -95,10 +101,25 @@ class Dashboard extends Component {
   );
 
   componentDidMount = async () => {
+    Linking.addEventListener('url', this.handleOpenURL);
     if (this.state.stale) {
       this.props.getPortfolio()
       this.props.getPortfolioChart()
     }
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleOpenURL);
+  }
+
+  handleOpenURL = async (event) => { 
+    let queryString = event.url.replace(Constants.linkingUri, '')
+    if (queryString) {
+      let data = qs.parse(queryString);
+      let sym = JSON.stringify(data).hello
+      console.log(sym)
+    }
+    //this.props.goToAddressPage({type: 'Accounts'})
   }
 
   handleScroll = (event) => {
@@ -237,7 +258,8 @@ const mapDispatchToProps = (dispatch) => ({
     getPortfolioChart: () => dispatch(getPortfolioChart()),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
-    updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close}))
+    updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close})),
+    getTokenDetails: (sym) => dispatch(getTokenDetails(sym))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

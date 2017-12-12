@@ -14,6 +14,7 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 import store from '../store'
 import { NavigationActions } from "react-navigation";
 import { baseURL } from '../config'
+import { shareTokenDetails } from './functions'
 
 const Items = [
     {
@@ -146,13 +147,23 @@ export const withDrawer = (WrappedComponent) => {
                                 }
                             </Body>
                             <Right>
+                            {isTokenDetails ?
                                 <Button
                                     style={{ justifyContent: "center", alignItems: "center", width: 60 }}
                                     transparent
-                                    onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
+                                    onPress={()=>{shareTokenDetails()}}
                                 >
-                                    <Ionicons name="ios-search-outline" size={28} color="white" />
+                                    <Ionicons name="ios-share" size={28} color="white" />
                                 </Button>
+                                :
+                                <Button
+                                style={{ justifyContent: "center", alignItems: "center", width: 60 }}
+                                transparent
+                                onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
+                            >
+                                <Ionicons name="ios-search-outline" size={28} color="white" />
+                            </Button>
+                            }
                             </Right>
                         </NBHeader>
                         <Spinner

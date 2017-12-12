@@ -41,6 +41,7 @@
     "number-to-locale-string": "^1.0.1",
     "object-hash": "^1.2.0",
     "prop-types": "^15.5.10",
+    "qs": "^6.5.1",
     "react": "16.0.0-alpha.12",
     "react-native": "https://github.com/expo/react-native/archive/sdk-21.0.2.tar.gz",
     "react-native-dotenv": "^0.1.0",
