@@ -34,7 +34,8 @@ import {
 } from '../../reducers/account';
 import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
-import { withDrawer } from '../../helpers/drawer';
+import { withDrawer } from '../../helpers/drawer'
+import { getTokenDetailsForAccount } from '../../helpers/api'
 import { trackRefresh } from '../../helpers/analytics'
 import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
@@ -115,11 +116,10 @@ class Dashboard extends Component {
   handleOpenURL = async (event) => { 
     let queryString = event.url.replace(Constants.linkingUri, '')
     if (queryString) {
-      let data = qs.parse(queryString);
-      let sym = JSON.stringify(data).hello
-      console.log(sym)
+      var data = qs.parse(queryString)
+      let item  =  await this.props.getTokenDetails(data.symbol, true)
+      this.props.goToTokenDetailsPage(item);
     }
-    //this.props.goToAddressPage({type: 'Accounts'})
   }
 
   handleScroll = (event) => {
@@ -259,7 +259,8 @@ const mapDispatchToProps = (dispatch) => ({
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
     updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close})),
-    getTokenDetails: (sym) => dispatch(getTokenDetails(sym))
+    getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
+    goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} }))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));
