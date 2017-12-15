@@ -322,7 +322,7 @@ export const getPortfolioChart = () => async (dispatch, getState) => {
     dispatch(portfolioChartAction(chart))
 }
 
-export const getTokenDetails = (sym, noDispatch) => async (dispatch, getState) => {
+export const getTokenDetails = (sym) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
     // removing load screen until freeze issue is resolved
@@ -333,11 +333,9 @@ export const getTokenDetails = (sym, noDispatch) => async (dispatch, getState) =
         dispatch(showToast(getError(err)))
         return
     }
-    if (noDispatch) {
-        return tokenDetails;
-    }else{
+    
         dispatch(tokenDetailsAction(tokenDetails))
-    }
+        return tokenDetails;
     
 }
 

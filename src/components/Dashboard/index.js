@@ -102,7 +102,7 @@ class Dashboard extends Component {
   );
 
   componentDidMount = async () => {
-    Linking.addEventListener('url', this.handleOpenURL);
+    Linking.addEventListener('url', this.handleDeepLink);
     if (this.state.stale) {
       this.props.getPortfolio()
       this.props.getPortfolioChart()
@@ -110,14 +110,15 @@ class Dashboard extends Component {
   }
 
   componentWillUnmount() {
-    Linking.removeEventListener('url', this.handleOpenURL);
+    Linking.removeEventListener('url', this.handleDeepLink);
   }
 
-  handleOpenURL = async (event) => { 
+  handleDeepLink = async (event) => { 
     let queryString = event.url.replace(Constants.linkingUri, '')
     if (queryString) {
       var data = qs.parse(queryString)
-      let item  =  await this.props.getTokenDetails(data.symbol, true)
+      let item  =  await this.props.getTokenDetails(data.symbol)
+      console.log(item)
       this.props.goToTokenDetailsPage(item);
     }
   }

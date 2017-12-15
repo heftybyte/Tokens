@@ -151,7 +151,7 @@ export const withDrawer = (WrappedComponent) => {
                                 <Button
                                     style={{ justifyContent: "center", alignItems: "center", width: 60 }}
                                     transparent
-                                    onPress={()=>{shareTokenDetails(tokenDetails)}}
+                                    onPress={()=>{shareTokenDetails(tokenDetails.symbol)}}
                                 >
                                     <Ionicons name="ios-share" size={28} color="white" />
                                 </Button>

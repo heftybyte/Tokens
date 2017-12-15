@@ -105,11 +105,8 @@ export const getQueryString = (params) => {
 
 export const getTokenImage = (token) => `${baseURL}/img/tokens/${token.id}.png`
 
-export const shareTokenDetails = (token) => {
-	const {price,marketCap,volume24Hr,symbol,supply, website,twitter,reddit, description} = token
+export const shareTokenDetails = (symbol) => {
 	let link = `${Constants.linkingUri}symbol=${symbol}`
-	let content = { url: link, message:`Token: $${symbol}  \t Price: $${formatPrice(price)} \n Market Capitalisation: $${formatPrice(marketCap)}
-	 \n 24HR Volume: $${formatPrice(volume24Hr)} \n Description: ${description} \n Website: ${website} \t Twitter: ${twitter} \t `,
-	 title:`Share ${symbol} token info`}
+	let content = { url: link, message:`Check out ${symbol} Token on the Tokens app`}
 	Share.share(content, {dialogTitle: `Share ${symbol} token`})
 }
