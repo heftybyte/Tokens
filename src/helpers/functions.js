@@ -8,6 +8,26 @@ import {
 import { setLoading } from '../reducers/ui'
 import { baseURL } from '../config'
 
+export const mapAxis = (points, value, dimension) => {
+	let start = 0
+	let end = points.length - 1
+	let mid = Math.floor((end - start) / 2)
+	let point = null
+
+	while ( start < end ) {
+		const testPoint = points[mid]
+		if (testPoint[dimension] > value) {
+			end = mid - 1
+		} else if (testPoint[dimension] < value) {
+			start = mid + 1
+		} else {
+			break
+		}
+		mid = Math.floor((end+start)/2)
+	}
+	return points[mid]
+}
+
 export const genericError = () => {
     Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
 }

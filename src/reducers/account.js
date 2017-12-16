@@ -202,7 +202,7 @@ export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
 	const ok = async () => {
 		let err = null
 		const { id } = getState().account
-		dispatch(setLoading(true, `${symbol} From Watchlist`))
+		dispatch(setLoading(true, `Removing ${symbol} From Watchlist`))
 		const account = await removeFromAccountWatchlist(id, symbol).catch(e=>err=e)
 		dispatch(setLoading(false))
 		if (err) {
@@ -343,10 +343,24 @@ export const getBookmark = (news) => async (dispatch, getState) => {
 
 export const saveBookmark = (news) => async (dispatch, getState) => {
     dispatch(saveBookmarkAction(news))
+    dispatch(showToast("Saved to Bookmarks"))
 }
 
 export const removeBookmark = (news) => async (dispatch, getState) => {
-    dispatch(removeBookmarkAction(news))
+    const ok = () => {
+        dispatch(removeBookmarkAction(news))
+        dispatch(showToast("Removed from Bookmarks"))
+    }
+
+    safeAlert(
+        'Are you sure?',
+        `Confirm Removal of Bookmark`,
+        [
+            {text: 'OK', onPress: ok, style: 'destructive'},
+            {text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
+        ],
+        { cancelable: false }
+    )
 }
 
 const initialState = {
@@ -362,7 +376,7 @@ const initialState = {
         top: [],
         watchList: []
     },
-    portfolioChart: [],
+    portfolioChart: [{x:0,y:0},{x:0,y:0}],
     tokenDetails: {
         "marketCap": 0,
         "price": 0,

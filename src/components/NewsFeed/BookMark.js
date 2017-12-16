@@ -31,7 +31,7 @@ class BookMarks extends React.Component {
                     keyExtractor={(item, index) => index}
                 />
                 :(<View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 18, textAlign: 'center', color: '#fff'}}>There are no saved news feed in your Bookmarks.</Text>
+                <Text style={{fontSize: 18, textAlign: 'center', color: '#fff'}}>You have no bookmarks.</Text>
             </View>)
         )
     }

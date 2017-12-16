@@ -15,6 +15,7 @@ class TextDefault extends React.Component {
             <Grid>
                 <Row size={20}>
                     <Text style={styles.title}>{title.toUpperCase()}</Text>
+                    <SaveButton bookmarked={bookmarked} item={this.props.news} />
                 </Row>
                 <Row size={60} style={{alignItems: 'center'}}>
                     <Text 
@@ -25,7 +26,7 @@ class TextDefault extends React.Component {
                     </Text>
                 </Row>
                 <Row size={20} style={{alignItems: 'flex-end'}}>
-                    <Col size={.8}>
+                    <Col size={80}>
                         <Text
                             style={styles.link}
                             onPress={()=>{
@@ -35,9 +36,6 @@ class TextDefault extends React.Component {
                         >
                             { getLinkTextByType(type) }&gt;
                         </Text>
-                    </Col>
-                    <Col size={.2} style={{flexDirection:'row', justifyContent: 'flex-end'}}>
-                        <SaveButton bookmarked={bookmarked} item={this.props.news} />
                     </Col>
                 </Row>
             </Grid>

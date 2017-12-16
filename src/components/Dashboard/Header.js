@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import currencyFormatter from 'currency-formatter';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import { gainColor, lossColor } from '../../config'
+import moment from 'moment'
 
 const styles = StyleSheet.create({
   container: {
@@ -57,16 +58,39 @@ const currencyFormatOptions =  {
   decimalDigits: 2
 };
 
+const datePeriodOptions = {
+  'mddyyyy': {month:'short',day:'numeric',year:'numeric'},
+  'hhm': {hour: 'numeric', minute: 'numeric'},
+  'mddyyyyhhm': {
+    month:'short',
+    day:'numeric',
+    year:'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  }
+}
+const formatDate = (d, period) => {
+  switch(period) {
+    case '1d':
+      return moment(d).format('h:mm a')
+      break;
+    case '1w':
+      return moment(d).format('h:mm a MMM Do')
+      break;
+    default:
+      return moment(d).format('MMM Do, YYYY')
+  }
+}
+
 class Header extends Component {
 
   render () {
-    const { totalValue, totalChange, totalChangePct, style } = this.props
+    const { totalValue, totalChange, totalChangePct, style, timestamp, period } = this.props
     const gain = (totalChangePct||0) > 0
     const valueParts = formatPrice(totalValue).split(/\$|\./)
     const smallerFont = valueParts[0].length >= 7 ?
-      styles.smallHeaderFont :
-      {}
-
+      styles.smallHeaderFont : {}
+    const formattedDate = timestamp ? formatDate(new Date(timestamp), period) : 'last 24hrs'
     return (
       <View style={[styles.container, style || {}]}>
         <Text>
@@ -78,7 +102,7 @@ class Header extends Component {
             <View style={styles.changeContainer}>
               <Text style={[styles.portfolioDelta, gain ? styles.gain : styles.loss]}>
                   {formatCurrencyChange((totalChange||0))} ({(totalChangePct||0).toFixed(2)}%)
-                  <Text style={styles.portfolioDeltaPeriod}> last 24hrs</Text>
+                  <Text style={styles.portfolioDeltaPeriod}>{ ' ' + formattedDate }</Text>
               </Text>
             </View>
           }

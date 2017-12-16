@@ -14,6 +14,7 @@ class ImageRight extends React.Component {
             <Grid>
                 <Row size={20}>
                     <Text style={styles.title}>{title.toUpperCase()}</Text>
+                    <SaveButton bookmarked={bookmarked} item={this.props.news} />
                 </Row>
                 <Row size={70} style={styles.center}>
                     <Col size={65}>
@@ -26,7 +27,7 @@ class ImageRight extends React.Component {
                         />
                     </Col>
                 </Row>
-                <Row size={10} style={{alignItems: 'flex-end'}}>
+                <Row size={10}>
                     <Col size={.75}>
                         <Text
                           style={styles.link}
@@ -37,9 +38,6 @@ class ImageRight extends React.Component {
                         >
                           { getLinkTextByType(type) }&gt;
                         </Text>
-                    </Col>
-                    <Col size={.25} style={{flexDirection:'row', justifyContent: 'flex-end'}}>
-                        <SaveButton bookmarked={bookmarked} item={this.props.news} />
                     </Col>
                 </Row>
             </Grid>

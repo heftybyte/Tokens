@@ -15,6 +15,7 @@ class ImageLeft extends React.Component {
             <Grid>
                 <Row size={20}>
                     <Text style={styles.title}>{title.toUpperCase()}</Text>
+                    <SaveButton bookmarked={bookmarked} item={this.props.news}/>
                 </Row>
                 <Row size={70} style={styles.center}>
                     <Col size={35} style={styles.imageLeft}>
@@ -38,9 +39,6 @@ class ImageLeft extends React.Component {
                         >
                           { getLinkTextByType(type) }&gt;
                         </Text>
-                    </Col>
-                    <Col size={.2}>
-                        <SaveButton bookmarked={bookmarked} item={this.props.news}/>
                     </Col>
                 </Row>
             </Grid>

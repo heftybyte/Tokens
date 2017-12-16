@@ -12,18 +12,25 @@ class SaveButton extends React.Component {
     updateBookmark = async (save) => {
         if (save) {
             await this.props.saveBookmark(this.props.item)
-            this.props.showToast('Saved to Bookmarks')
         } else {
             await this.props.removeBookmark(this.props.item)
-            this.props.showToast('Removed from Bookmarks')
         }
     }
 
     render(){
         const { bookmarked } = this.props
         return (
-            <Button transparent onPress={()=>this.updateBookmark(!bookmarked)} title="Bookmark news item" style={{paddingTop: 35}}>
-                <Ionicons name={ bookmarked ? "ios-bookmark" : "ios-bookmark-outline"} size={18} color="white" />
+            <Button
+                transparent
+                onPress={()=>this.updateBookmark(!bookmarked)}
+                title="Save"
+                style={{top:-12, left: 5}}
+            >
+                <Ionicons
+                    name={ bookmarked ? "ios-bookmark" : "ios-bookmark-outline"}
+                    size={20}
+                    color={bookmarked ? "#666" : "#333"}
+                />
             </Button>
         )
     }
