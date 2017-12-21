@@ -49,7 +49,13 @@ const styles = StyleSheet.create({
   tokenValue: {
     color: '#fff',
     fontSize: 20,
-    fontFamily: 'Nunito'
+    fontFamily: 'Nunito',
+  },
+  tokenValueWrapped: {
+    color: '#fff',
+    fontSize: 20,
+    fontFamily: 'Nunito',
+    width: 150
   },
   heading: {
     borderBottomColor: '#444',
@@ -98,6 +104,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8
   },
 });
+
+const tokenValueStyle = v => v.toString().length > 8 ? styles.tokenValueWrapped : styles.tokenValue
 
 class TokenDetails extends Component {
   state = {
@@ -193,11 +201,16 @@ class TokenDetails extends Component {
           style={{paddingBottom: 20}}
           onChange={()=>this.props.getHistoricalPrices({fsyms: symbol, tsyms: 'USD'})}
         />
+        {!!balance && <View style={styles.container}>
+          <View style={styles.containerChild}>
+            <Text style={styles.tokenHeading}>PRICE</Text>
+            <Text style={tokenValueStyle(price)}>{'$'+formatPrice(price)}</Text>
+          </View>
 
         {!!balance && <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>BALANCE</Text>
-            <Text style={styles.tokenValue}>{balance.toLocaleString()}</Text>
+            <Text style={tokenValueStyle(balance)}>{balance.toLocaleString()}</Text>
           </View>
         
           <View style={styles.containerChild}>
@@ -209,12 +222,12 @@ class TokenDetails extends Component {
         <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>MARKET CAP</Text>
-            <Text style={styles.tokenValue}>{'$'+formatPrice(marketCap)}</Text>
+            <Text style={tokenValueStyle(marketCap)}>{'$'+formatPrice(marketCap)}</Text>
           </View>
 
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>24 HR VOLUME</Text>
-            <Text style={styles.tokenValue}>{`$${formatPrice(volume24Hr)}`}</Text>
+            <Text style={tokenValueStyle(volume24Hr)}>{`$${formatPrice(volume24Hr)}`}</Text>
           </View>
         </View>
 
