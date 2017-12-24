@@ -72,7 +72,7 @@ class Chart extends Component {
 
         return (
             <View
-                onTouchStart={()=>this.onTouch(true)}
+                onTouchMove={()=>this.onTouch(true)}
                 onTouchEnd={()=>this.onTouch(false)}
                 style={styles.container}
             >
