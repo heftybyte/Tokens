@@ -24,7 +24,7 @@ class SaveButton extends React.Component {
                 transparent
                 onPress={()=>this.updateBookmark(!bookmarked)}
                 title="Save"
-                style={{top:-12, left: 5}}
+                style={{top:-12, left: 0}}
             >
                 <Ionicons
                     name={ bookmarked ? "ios-bookmark" : "ios-bookmark-outline"}

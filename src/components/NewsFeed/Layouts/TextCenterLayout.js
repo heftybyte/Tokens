@@ -13,7 +13,7 @@ class TextCenter extends React.Component {
         return (
             <Grid>
                 <Row size={20}>
-                    <Text style={styles.title}>{title.toUpperCase()}</Text>
+                    <Text style={[styles.title, {paddingLeft: 10}]}>{title.toUpperCase()}</Text>
                     <SaveButton bookmarked={bookmarked} item={this.props.news}/>
                 </Row>
                 <Row size={80}>
