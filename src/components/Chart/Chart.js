@@ -6,6 +6,23 @@ import { Line } from 'victory-native/lib';
 import { gainColor, lossColor } from '../../config'
 import { mapAxis } from '../../helpers/functions'
 
+// Use pageX instead of locationX to get around https://github.com/facebook/react-native/issues/7221
+const onTouchMove = VictoryCursorContainer.defaultEvents[0].eventHandlers.onTouchMove
+VictoryCursorContainer.defaultEvents[0].eventHandlers.onTouchMove = (evt, targetProps) => {
+    const keys = Object.keys(evt)
+    const mutatedEvt = {}
+    // shallow copy
+    keys.forEach(key=>{
+        mutatedEvt[key] = evt[key]
+    })
+    // overwrite cooridnates
+    mutatedEvt.nativeEvent = {
+        ...evt.nativeEvent,
+        locationX: evt.nativeEvent.pageX
+    }
+    return onTouchMove(mutatedEvt, targetProps)
+}
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
