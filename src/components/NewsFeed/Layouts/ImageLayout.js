@@ -8,7 +8,7 @@ class ImageDefault extends React.Component {
     state = {}
 
     componentDidMount() {
-        const { news: { image, bookmarked } } = this.props
+        const { news: { image }, bookmarked } = this.props
 
         Image.getSize(image, (srcWidth, srcHeight) => {
           const maxHeight = Dimensions.get('window').height;
@@ -35,9 +35,7 @@ class ImageDefault extends React.Component {
                             source={{ uri: image }}
                         />
                     </View>
-                    { !bookmarked &&
-                        <SaveButton item={this.props.news}/>
-                    }
+                    <SaveButton bookmarked={bookmarked} item={this.props.news}/>
                 </Row>
             </Grid>
         )

@@ -9,11 +9,12 @@ import { getLinkTextByType } from './helpers'
 class ImageRight extends React.Component {
 
     render() {
-        const { news: { title, body, image, link, type, bookmarked } } = this.props
+        const { news: { title, body, image, link, type }, bookmarked } = this.props
         return (
             <Grid>
                 <Row size={20}>
-                    <Text style={styles.title}>{title.toUpperCase()}</Text>
+                    <SaveButton bookmarked={bookmarked} item={this.props.news} />
+                    <Text style={[styles.title, {paddingLeft:10}]}>{title.toUpperCase()}</Text>
                 </Row>
                 <Row size={70} style={styles.center}>
                     <Col size={65}>
@@ -26,8 +27,7 @@ class ImageRight extends React.Component {
                         />
                     </Col>
                 </Row>
-                <Row size={10} style={{alignItems: 'flex-end'}}>
-                    <Row>
+                <Row size={10}>
                     <Col size={.75}>
                         <Text
                           style={styles.link}
@@ -38,13 +38,7 @@ class ImageRight extends React.Component {
                         >
                           { getLinkTextByType(type) }&gt;
                         </Text>
-                        </Col>
-                            { !bookmarked &&
-                                <Col size={.25}>
-                                    <SaveButton item={this.props.news}/>
-                                </Col>
-                            }
-                    </Row>
+                    </Col>
                 </Row>
             </Grid>
         )

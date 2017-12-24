@@ -4,9 +4,14 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
+import Chart from '../Chart/Chart';
+import RangeSelector from '../Chart/RangeSelector';
 import Header from '../Dashboard/Header';
 import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
 import { baseURL, lossColor, brandColor } from '../../config'
+import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
+import { update as _updateToken } from '../../reducers/token'
+import portfolioPriceData from '../Chart/data'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -97,22 +102,31 @@ const styles = StyleSheet.create({
 class TokenDetails extends Component {
   state = {
     readMore: false,
-    refreshing: false
+    refreshing: false,
+    chartIsTouched: false
   }
 
   componentDidMount() {
-    const { navigation, getTokenDetails } = this.props
+    const { navigation, getTokenDetails, getHistoricalPrices, updateToken } = this.props
     const { token } = navigation.state.params
-
+    getHistoricalPrices({fsyms: token.symbol, tsyms: 'USD'})
+    updateToken(token.price)
     if (!token.marketCap) {
       getTokenDetails(token.symbol)
     }
   }
 
   _onRefresh = async () => {
-    const { symbol } = this.props.navigation.state.params.token
+    const {
+      getTokenDetails,
+      getHistoricalPrices,
+      navigation: { state: { params: { token: { symbol } } } }
+    } = this.props
     this.setState({refreshing: true})
-    await this.props.getTokenDetails(symbol)
+    await Promise.all([
+      getTokenDetails(symbol),
+      getHistoricalPrices({fsyms: symbol, tsyms: 'USD'})
+    ])
     this.setState({refreshing: false})
   }
 
@@ -120,7 +134,7 @@ class TokenDetails extends Component {
     const {
       addToWatchlist,
       removeFromWatchList,
-      watchListMap,
+      isWatching,
       token: {
         price,
         balance,
@@ -135,15 +149,20 @@ class TokenDetails extends Component {
         website,
         twitter,
         reddit,
-        description
-      }
+        description,
+      },
+      priceData,
+      chartLoading,
+      headerData,
+      updateToken,
+      period
     } = this.props;
-
-    const isWatching = watchListMap[symbol]
     const maxDescDisplayLength = 180
-
+    const { chartIsTouched } = this.state
+    const displayPrice = chartIsTouched ? headerData.price : price
     return (
       <ScrollView
+        scrollEnabled={!chartIsTouched}
         style={styles.scrollContainer}
         containerStyleContent={styles.container}
         refreshControl={
@@ -155,20 +174,35 @@ class TokenDetails extends Component {
       >
         <Header
           style={styles.header}
-          totalValue={balance ? (balance * price) : price}
+          totalValue={displayPrice}
+          timestamp={chartIsTouched && headerData.timestamp}
           totalChange={priceChange}
           totalChangePct={change}
+          period={period}
+        />
+
+        <Chart
+          data={priceData}
+          totalChangePct={change}
+          loading={chartLoading}
+          onCursorChange={(point)=>updateToken(point.y, point.x)}
+          onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
+        />
+
+        <RangeSelector
+          style={{paddingBottom: 20}}
+          onChange={()=>this.props.getHistoricalPrices({fsyms: symbol, tsyms: 'USD'})}
         />
 
         {!!balance && <View style={styles.container}>
           <View style={styles.containerChild}>
-            <Text style={styles.tokenHeading}>PRICE</Text>
-            <Text style={styles.tokenValue}>{'$'+formatPrice(price)}</Text>
-          </View>
-
-          <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>BALANCE</Text>
             <Text style={styles.tokenValue}>{balance.toLocaleString()}</Text>
+          </View>
+        
+          <View style={styles.containerChild}>
+            <Text style={styles.tokenHeading}>HOLDINGS</Text>
+            <Text style={styles.tokenValue}>{'$'+formatPrice(displayPrice*balance)}</Text>
           </View>
         </View>}
 
@@ -299,19 +333,37 @@ class TokenDetails extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
+  getHistoricalPrices: ({fsyms,tsyms,format='chart',start,end,period}) =>
+    dispatch(_getHistoricalPrices({fsyms,tsyms,format,start,end,period})),
   addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
-  removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol))
+  removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
+  updateToken: (price, timestamp)=> dispatch(_updateToken({timestamp, price}))
 })
 
-const mapStateToProps = (state, props) => ({
-  symbol: props.navigation.state.params.token.symbol,
-  token: {
+const mapStateToProps = (state, props) => {
+  const token = {
     ...state.account.tokenDetails,
     ...props.navigation.state.params.token
-  },
-  tokenDetails: state.account.tokenDetails,
-  portfolio: state.account.portfolio,
-  watchListMap: state.account.watchListMap
-})
+  }
+  const symbol = token.symbol
+  const { watchListMap } = state.account
+  const isWatching = watchListMap[symbol]
+  const { chart } = state.ticker.historicalPrices
+  const priceData = (chart[symbol] && chart[symbol]['USD'] || [])
+    .slice(0,1440)
+
+  return {
+    token,
+    symbol,
+    tokenDetails: state.account.tokenDetails,
+    portfolio: state.account.portfolio,
+    watchListMap,
+    isWatching,
+    priceData,
+    chartLoading: state.ticker.historicalPrices.loading.chart,
+    headerData: state.token,
+    period: state.ticker.period
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(TokenDetails));

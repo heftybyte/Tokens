@@ -7,6 +7,7 @@ import { trackNewsFeedSwipe } from '../../helpers/analytics'
 import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
 import {saveLatestTimestamp} from '../../reducers/feed'
 import { connect } from 'react-redux';
+import mock from './MockData'
 
 const Dot = (color) => (
   <View
@@ -28,13 +29,13 @@ const News = (props) => {
 
   const feed = (props.feed || []).map((news, index) => {
     return (
-        <View key={index} style={styles.slide}>
+        <View key={`news-${index}`} style={styles.slide}>
             <Format format={news.format} news={news} />
         </View>
     )
   })
 
-    let oldIndex = 0;
+  let oldIndex = 0;
 
   return (
       <Swiper
@@ -50,8 +51,8 @@ const News = (props) => {
         onIndexChanged={(index)=>{
           trackNewsFeedSwipe(props.feed[index])
           trackFeedItem(props.feed[index].id, 'view')
-            saveLatestTimestamp(props.feed[oldIndex].createdAt)
-            oldIndex = index
+          saveLatestTimestamp(props.feed[oldIndex].createdAt)
+          oldIndex = index
         }}
        >
         { feed }

@@ -9,12 +9,13 @@ import { getLinkTextByType } from './helpers'
 class ImageLeft extends React.Component {
 
     render() {
-        const { news: {title, image, body, type, bookmarked } } = this.props
+        const { news: {title, image, body, type }, bookmarked } = this.props
 
         return (
             <Grid>
                 <Row size={20}>
-                    <Text style={styles.title}>{title.toUpperCase()}</Text>
+                    <Text style={[styles.title, {paddingRight: 10}]}>{title.toUpperCase()}</Text>
+                    <SaveButton bookmarked={bookmarked} item={this.props.news}/>
                 </Row>
                 <Row size={70} style={styles.center}>
                     <Col size={35} style={styles.imageLeft}>
@@ -28,22 +29,17 @@ class ImageLeft extends React.Component {
                     </Col>
                 </Row>
                 <Row size={10}>
-                <Col size={.8}>
-                    <Text
-                      style={styles.link}
-                      onPress={()=>{
-                        link && Linking.openURL(link.uri)
-                          .catch(err => console.error('An error occurred', err));
-                      }}
-                    >
-                      { getLinkTextByType(type) }&gt;
-                    </Text>
+                    <Col size={.8}>
+                        <Text
+                          style={styles.link}
+                          onPress={()=>{
+                            link && Linking.openURL(link.uri)
+                              .catch(err => console.error('An error occurred', err));
+                          }}
+                        >
+                          { getLinkTextByType(type) }&gt;
+                        </Text>
                     </Col>
-                    { !bookmarked &&
-                        <Col size={.2}>
-                            <SaveButton item={this.props.news}/>
-                        </Col>
-                    }
                 </Row>
             </Grid>
         )
