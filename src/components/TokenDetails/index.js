@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Dimensions from 'Dimensions';
 import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
@@ -12,6 +13,10 @@ import { baseURL, lossColor, brandColor } from '../../config'
 import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
 import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
+import VideoPlayer from './player';
+
+const window = Dimensions.get('window');
+const viewWidth = window.width - 40;
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -103,6 +108,11 @@ const styles = StyleSheet.create({
     borderColor: brandColor,
     paddingHorizontal: 8
   },
+  video: {
+    width: viewWidth,
+    height: viewWidth/(16/9),
+    backgroundColor: '#000'
+  }
 });
 
 const tokenValueStyle = v => v.toString().length > 8 ? styles.tokenValueWrapped : styles.tokenValue
@@ -158,6 +168,7 @@ class TokenDetails extends Component {
         twitter,
         reddit,
         description,
+        videoUrl
       },
       priceData,
       chartLoading,
@@ -333,6 +344,13 @@ class TokenDetails extends Component {
                 </Text>
               </TouchableHighlight>
           </View>}
+
+        {!!videoUrl && <View style={[styles.container, {paddingLeft:0,paddingRight:20,paddingBottom:10}]}>
+            <VideoPlayer
+                url={videoUrl}
+                style={styles.video}
+            />
+        </View>}
         </View>
       </ScrollView>
     )
