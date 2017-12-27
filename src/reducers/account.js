@@ -163,7 +163,12 @@ export const login = (params) => async (dispatch, getState) => {
     registerForPushNotificationsAsync()
     dispatch(getPortfolio())
     dispatch(getPortfolioChart())
-    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+    dispatch(NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Dashboard' })
+      ]
+    }))
 }
 
 export const logout = () => async(dispatch, getState) => {
