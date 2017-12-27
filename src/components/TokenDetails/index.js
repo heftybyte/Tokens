@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Dimensions from 'Dimensions';
 import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
@@ -13,6 +14,9 @@ import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/tick
 import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
 import VideoPlayer from './player';
+
+const window = Dimensions.get('window');
+const viewWidth = window.width - 40;
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -105,8 +109,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8
   },
   video: {
-    width: '100%',
-    height: 250
+    width: viewWidth,
+    height: viewWidth/(16/9),
+    backgroundColor: '#000'
   }
 });
 
@@ -207,12 +212,6 @@ class TokenDetails extends Component {
           style={{paddingBottom: 20}}
           onChange={()=>this.props.getHistoricalPrices({fsyms: symbol, tsyms: 'USD'})}
         />
-        {!!videoUrl && <View style={styles.containerChild}>
-          <VideoPlayer
-            url={videoUrl}
-            style={styles.video}/>
-        </View>}
-        
 
         {!!balance && <View style={styles.container}>
           <View style={styles.containerChild}>
@@ -345,6 +344,13 @@ class TokenDetails extends Component {
                 </Text>
               </TouchableHighlight>
           </View>}
+
+        {!!videoUrl && <View style={[styles.container, {paddingLeft:0,paddingRight:20,paddingBottom:10}]}>
+            <VideoPlayer
+                url={videoUrl}
+                style={styles.video}
+            />
+        </View>}
         </View>
       </ScrollView>
     )
