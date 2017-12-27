@@ -333,7 +333,10 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
         dispatch(showToast(getError(err)))
         return
     }
-    dispatch(tokenDetailsAction(tokenDetails))
+    
+        dispatch(tokenDetailsAction(tokenDetails))
+        return tokenDetails;
+    
 }
 
 export const getBookmark = (news) => async (dispatch, getState) => {

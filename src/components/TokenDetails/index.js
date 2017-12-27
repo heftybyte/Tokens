@@ -255,7 +255,7 @@ class TokenDetails extends Component {
         </View>
 
         <View style={[styles.container, styles.linkContainer]}>
-          <View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
+          {description ?<View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
               <Text style={styles.tokenHeading}>DESCRIPTION</Text>
               <Text
                 numberOfLines={this.state.readMore ? 0 : 4}
@@ -272,7 +272,7 @@ class TokenDetails extends Component {
                   </Text>
                 </TouchableHighlight>)
                 }
-          </View>
+          </View>:null}
           {!!website && <View style={[styles.containerChild, styles.linkContainerChild]}>
               <MaterialCommunityIcons
                 name="web"

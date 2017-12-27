@@ -11,7 +11,8 @@ import {
   Alert,
   StatusBar,
   Button,
-  RefreshControl
+  RefreshControl,
+  Linking
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
@@ -28,13 +29,19 @@ import {
   register,
   login,
   getPortfolio,
-  getPortfolioChart
+  getPortfolioChart,
+  getTokenDetails
 } from '../../reducers/account';
 import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
-import { withDrawer } from '../../helpers/drawer';
+import { withDrawer } from '../../helpers/drawer'
+import { getTokenDetailsForAccount } from '../../helpers/api'
 import { trackRefresh } from '../../helpers/analytics'
 import { update as _updateToken } from '../../reducers/token'
+import portfolioPriceData from '../Chart/data'
+import { Constants } from 'expo';
+
+const qs = require('qs');
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -95,9 +102,24 @@ class Dashboard extends Component {
   );
 
   componentDidMount = async () => {
+    Linking.addEventListener('url', this.handleDeepLink);
     if (this.state.stale) {
       this.props.getPortfolio()
       this.props.getPortfolioChart()
+    }
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleDeepLink);
+  }
+
+  handleDeepLink = async (event) => { 
+    let queryString = event.url.replace(Constants.linkingUri, '')
+    if (queryString) {
+      var data = qs.parse(queryString)
+      let item  =  await this.props.getTokenDetails(data.symbol)
+      console.log(item)
+      this.props.goToTokenDetailsPage(item);
     }
   }
 
@@ -237,7 +259,9 @@ const mapDispatchToProps = (dispatch) => ({
     getPortfolioChart: () => dispatch(getPortfolioChart()),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
-    updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close}))
+    updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close})),
+    getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
+    goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} }))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));
