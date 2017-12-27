@@ -11,7 +11,9 @@ export const update = (data) => (dispatch) => {
 
 const initialState = {
     timestamp: 0,
-    price: 0
+    price: 0,
+    change_pct: 0,
+    change_close: 0
 }
 
 export default (state = initialState, action) => {

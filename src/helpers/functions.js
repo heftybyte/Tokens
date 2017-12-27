@@ -13,7 +13,6 @@ export const mapAxis = (points, value, dimension) => {
 	let end = points.length - 1
 	let mid = Math.floor((end - start) / 2)
 	let point = null
-
 	while ( start < end ) {
 		const testPoint = points[mid]
 		if (testPoint[dimension] > value) {

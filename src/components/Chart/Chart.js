@@ -93,6 +93,7 @@ class Chart extends Component {
                         />
                     }>
                     <VictoryLine
+                        scale={{x: "time", y: "linear"}}
                         style={{
                             data: {
                                 stroke: (totalChangePct >= 0) ? gainColor : lossColor,
