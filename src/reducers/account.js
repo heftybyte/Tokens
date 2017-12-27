@@ -40,6 +40,7 @@ export const REFRESH_ADDRESS = 'account/REFRESH_ADDRESS'
 export const SAVE_BOOKMARK = 'account/SAVE_BOOKMARK'
 export const REMOVE_BOOKMARK = 'account/REMOVE_BOOKMARK'
 export const GET_PORTFOLIO_CHART = 'account/GET_PORTFOLIO_CHART'
+export const LOADING_CHART = 'account/LOADING_CHART'
 
 const registerAction = (id) => ({
     type: REGISTER,
@@ -105,6 +106,10 @@ const removeBookmarkAction = (newsItem) => ({
     data: newsItem
 })
 
+const loadingChartAction = (chartLoading) => ({
+    type: LOADING_CHART,
+    data: { chartLoading }
+})
 
 export const createAccount = (params) => async (dispatch, getState) => {
     let err = null
@@ -306,11 +311,14 @@ export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getStat
 export const getPortfolioChart = () => async (dispatch, getState) => {
     let err = null
     const { account: { id }, ticker: { period } } = getState()
+    dispatch(loadingChartAction(true))
     let chart = await getAccountPortfolioChart(id, period).catch(e=>err=e)
     if (err) {
       logger.err('getPortfolioChart', err)
+        dispatch(loadingChartAction(false))
       return
     }
+    dispatch(loadingChartAction(false))
     dispatch(portfolioChartAction(chart))
 }
 
@@ -376,6 +384,7 @@ const initialState = {
         top: [],
         watchList: []
     },
+    chartLoading: false,
     portfolioChart: [{x:0,y:0},{x:0,y:0}],
     tokenDetails: {
         "marketCap": 0,
@@ -407,6 +416,7 @@ export default (state = initialState, action) => {
         case UPDATE:
         case ADD_ADDRESS:
         case DELETE_ADDRESS:
+        case LOADING_CHART:
             return {
                 ...state,
                 ...action.data

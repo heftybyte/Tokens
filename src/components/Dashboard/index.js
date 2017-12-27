@@ -34,6 +34,7 @@ import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer';
 import { trackRefresh } from '../../helpers/analytics'
+import { update as _updateToken } from '../../reducers/token'
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -85,7 +86,8 @@ const styles = StyleSheet.create({
 
 class Dashboard extends Component {
   state = {
-    refreshing: false
+    refreshing: false,
+    chartIsTouched: false
   }
 
   componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
@@ -129,9 +131,22 @@ class Dashboard extends Component {
   }
 
   render = () => {
-    const { portfolio, portfolioChart, goToAddressPage, loggedIn, addresses } = this.props
+    const {
+      portfolio,
+      portfolioChart,
+      chartLoading,
+      goToAddressPage,
+      loggedIn,
+      addresses,
+      updateToken,
+      headerData,
+      period
+    } = this.props
+    const { chartIsTouched } = this.state
+    const displayPrice = chartIsTouched ? headerData.price : portfolio.totalValue
     return (
       <ScrollView
+        scrollEnabled={!chartIsTouched}
         style={styles.scrollContainer}
         containerStyleContent={styles.container}
         onScroll={this.handleScroll}
@@ -163,16 +178,24 @@ class Dashboard extends Component {
             </View>
           </TouchableHighlight>
         : <Header
-            totalValue={portfolio.totalValue}
-            totalChange={portfolio.totalPriceChange}
-            totalChangePct={portfolio.totalPriceChangePct}
+            totalValue={displayPrice}
+            timestamp={chartIsTouched && headerData.timestamp}
+            totalChange={chartIsTouched && headerData.change_close || portfolio.totalPriceChange}
+            totalChangePct={chartIsTouched && headerData.change_pct || portfolio.totalPriceChangePct}
+            period={period}
           />
         }
 
-        { /* disable until balance service complete*/
-          false && <Chart data={portfolioChart} totalChangePct={portfolio.totalPriceChangePct} />}
-        { /* disable until balance service complete*/
-          false && <RangeSelector onChange={this.props.getPortfolioChart}/>}
+        <Chart
+          data={portfolioChart}
+          totalChangePct={portfolio.totalPriceChangePct}
+          onCursorChange={(point)=>updateToken(point.y, point.x, point.change_pct, point.change_close)}
+          loading={chartLoading}
+          onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
+        />
+        
+        <RangeSelector onChange={this.props.getPortfolioChart} />
+        
         <News feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
@@ -195,11 +218,14 @@ class Dashboard extends Component {
 
 const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
+  chartLoading: state.account.chartLoading,
   portfolioChart: state.account.portfolioChart,
   addresses: state.account.addresses,
   loggedIn: !!state.account.token,
   newsFeed: state.feed,
   stale: state.account.stale,
+  headerData: state.token,
+  period: state.ticker.period,
   ...state.ui
 })
 
@@ -210,7 +236,8 @@ const mapDispatchToProps = (dispatch) => ({
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
     getPortfolioChart: () => dispatch(getPortfolioChart()),
     showToast: (text) => dispatch(showToast(text)),
-    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp))
+    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
+    updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close}))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));

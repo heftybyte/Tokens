@@ -176,8 +176,8 @@ class TokenDetails extends Component {
           style={styles.header}
           totalValue={displayPrice}
           timestamp={chartIsTouched && headerData.timestamp}
-          totalChange={priceChange}
-          totalChangePct={change}
+          totalChange={chartIsTouched && headerData.change_close || priceChange}
+          totalChangePct={chartIsTouched && headerData.change_pct || change}
           period={period}
         />
 
@@ -185,7 +185,7 @@ class TokenDetails extends Component {
           data={priceData}
           totalChangePct={change}
           loading={chartLoading}
-          onCursorChange={(point)=>updateToken(point.y, point.x)}
+          onCursorChange={(point)=>updateToken(point.y, point.x, point.change_pct, point.change_close)}
           onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
         />
 
@@ -337,7 +337,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(_getHistoricalPrices({fsyms,tsyms,format,start,end,period})),
   addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
   removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
-  updateToken: (price, timestamp)=> dispatch(_updateToken({timestamp, price}))
+  updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close}))
 })
 
 const mapStateToProps = (state, props) => {
@@ -350,7 +350,6 @@ const mapStateToProps = (state, props) => {
   const isWatching = watchListMap[symbol]
   const { chart } = state.ticker.historicalPrices
   const priceData = (chart[symbol] && chart[symbol]['USD'] || [])
-    .slice(0,1440)
 
   return {
     token,
