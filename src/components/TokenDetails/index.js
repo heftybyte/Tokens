@@ -201,11 +201,6 @@ class TokenDetails extends Component {
           style={{paddingBottom: 20}}
           onChange={()=>this.props.getHistoricalPrices({fsyms: symbol, tsyms: 'USD'})}
         />
-        {!!balance && <View style={styles.container}>
-          <View style={styles.containerChild}>
-            <Text style={styles.tokenHeading}>PRICE</Text>
-            <Text style={tokenValueStyle(price)}>{'$'+formatPrice(price)}</Text>
-          </View>
 
         {!!balance && <View style={styles.container}>
           <View style={styles.containerChild}>
@@ -215,7 +210,7 @@ class TokenDetails extends Component {
         
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>HOLDINGS</Text>
-            <Text style={styles.tokenValue}>{'$'+formatPrice(displayPrice*balance)}</Text>
+            <Text style={tokenValueStyle(displayPrice*balance)}>{'$'+formatPrice(displayPrice*balance)}</Text>
           </View>
         </View>}
 
