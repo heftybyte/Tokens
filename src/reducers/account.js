@@ -135,6 +135,10 @@ export const login = (params) => async (dispatch, getState) => {
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
+            const { error } = err.response.data;
+            if(error && error.statusCode === 401) {
+                error.message = 'Incorrect username or password';
+            }
             dispatch(showToast(getError(err)))
             return
         }
