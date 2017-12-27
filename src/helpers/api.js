@@ -4,6 +4,7 @@ import axios from 'axios';
 import Expo, { SecureStore } from 'expo';
 import store from '../store'
 import { login } from '../reducers/account'
+import { getQueryString } from '../helpers/functions'
 import { baseURL } from '../config'
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Accept'] = 'application/json';
@@ -31,6 +32,7 @@ instance.interceptors.response.use(res => res, async (err) => {
     }
     store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
   }
+  console.log({err})
   return Promise.reject(err);
 });
 
@@ -92,6 +94,11 @@ export const getAccountPortfolio = async (id) => {
   return res.data
 }
 
+export const getAccountPortfolioChart = async (id, period) => {
+  const res = await instance.get(`/accounts/${id}/portfolio-chart?period=${period}`)
+  return res.data
+}
+
 export const getTokenDetailsForAccount  = async (id, sym) => {
   const res = await instance.get(`/accounts/${id}/portfolio/token/${sym}`)
   return res.data
@@ -122,13 +129,14 @@ export const bookMark = async (id, bookmark) => {
     return res.data
 }
 
-export const getPricedata = async (fsym='OMG',tsym='USD',format='chart') => {
-    const res = await instance.get(`/ticker/prices/now?fsym=${fsym}&tsym=${tsym}&format=${format}`)
+export const getPrices = async ({fsyms,tsyms='USD'}) => {
+    const res = await instance.get(`/ticker/prices/now?fsyms=${fsyms}&tsym=${tsyms}`)
     return res.data
 }
 
-export const getHistoricalPricedata = async (fsym='OMG',tsym='USD',format='chart',period='1d') => {
-    const res = await instance.get(`/ticker/price/historical?fsym=${fsym}&tsym=${tsym}&period=${period}&format=${format}`)
+export const getHistoricalPrices = async ({fsyms,tsyms='USD',start=0,end=0,format='chart',period,interval}) => {
+    const queryString = getQueryString({fsyms,tsyms,start,end,format,period,interval})
+    const res = await instance.get(`/ticker/prices/historical?${queryString}`)
     return res.data
 }
 

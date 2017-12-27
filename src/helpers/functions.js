@@ -1,12 +1,31 @@
-import { Alert, AsyncStorage } from 'react-native'
+import { Alert, AsyncStorage, Share } from 'react-native'
 import currencyFormatter from 'currency-formatter';
-import { Permissions, Notifications, SecureStore } from 'expo';
+import { Permissions, Notifications, SecureStore, Constants } from 'expo';
 import {
 	setAuthHeader,
 	registerUserForPushNotifications
 } from './api';
 import { setLoading } from '../reducers/ui'
 import { baseURL } from '../config'
+
+export const mapAxis = (points, value, dimension) => {
+	let start = 0
+	let end = points.length - 1
+	let mid = Math.floor((end - start) / 2)
+	let point = null
+	while ( start < end ) {
+		const testPoint = points[mid]
+		if (testPoint[dimension] > value) {
+			end = mid - 1
+		} else if (testPoint[dimension] < value) {
+			start = mid + 1
+		} else {
+			break
+		}
+		mid = Math.floor((end+start)/2)
+	}
+	return points[mid]
+}
 
 export const genericError = () => {
     Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
@@ -77,4 +96,17 @@ export const safeAlert = (...args) => {
 	setTimeout(()=>Alert.alert.apply({}, args), 1)
 }
 
+export const getQueryString = (params) => {
+    return Object.keys(params || {})
+      .filter(k=>params[k]!==undefined)
+      .map(k=>`${k}=${params[k]}`)
+      .join('&')
+}
+
 export const getTokenImage = (token) => `${baseURL}/img/tokens/${token.id}.png`
+
+export const shareTokenDetails = (symbol) => {
+	let link = `${Constants.linkingUri}symbol=${symbol}`
+	let content = { url: link, message:`Check out ${symbol} Token on the Tokens app`}
+	Share.share(content, {dialogTitle: `Share ${symbol} token`})
+}

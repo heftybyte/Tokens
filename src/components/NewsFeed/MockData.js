@@ -86,7 +86,7 @@ const newsApi = [
     "id": 5,
     "title": "WaBi ICO",
     "type": "AD",
-    "body": "Digital token backed by safe products. We place secure anti-counterfeiting labels on consumer products in China and internationally.",
+    "body": "We place secure anti-counterfeiting labels on consumer products in China and internationally.",
     "link": {
       "target": "web",
       "uri": "https://www.wacoin.io/"

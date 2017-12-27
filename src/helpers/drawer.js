@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react"
-import { View, TouchableOpacity, Text, Platform, Alert, Image } from "react-native"
+import { View, TouchableOpacity, Text, Platform, Alert, Image, Dimensions } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
@@ -14,6 +14,7 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 import store from '../store'
 import { NavigationActions } from "react-navigation";
 import { baseURL } from '../config'
+import { shareTokenDetails } from './functions'
 
 const Items = [
     {
@@ -60,6 +61,12 @@ export const withDrawer = (WrappedComponent) => {
             const tokenDetails = navState.params && navState.params.token || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = ['Token Details', 'Search', 'Add Address'].indexOf(navState.routeName) > -1
+
+            // add top padding for iphone X
+            const isIos = Platform.OS === 'ios';
+            const isIphoneX = isIos && Dimensions.get('window').height === 812;
+            const iphoneHeaderHeight = isIphoneX ? 30 : 0;
+
             return (
                 <Drawer
                     ref={d => (this.drawer = d)}
@@ -80,7 +87,7 @@ export const withDrawer = (WrappedComponent) => {
                             borderBottomWidth: 0,
                             shadowOffset: { height: 0, width: 0 },
                             shadowOpacity: 0,
-                            paddingTop: Platform.OS  === 'ios' ? 0 : Constants.statusBarHeight ,
+                            paddingTop: Platform.OS  === 'ios' ? iphoneHeaderHeight : Constants.statusBarHeight ,
                             height: 80
                         }}
                         androidStatusBarColor="#000"
@@ -140,13 +147,23 @@ export const withDrawer = (WrappedComponent) => {
                                 }
                             </Body>
                             <Right>
+                            {isTokenDetails ?
                                 <Button
                                     style={{ justifyContent: "center", alignItems: "center", width: 60 }}
                                     transparent
-                                    onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
+                                    onPress={()=>{shareTokenDetails(tokenDetails.symbol)}}
                                 >
-                                    <Ionicons name="ios-search-outline" size={28} color="white" />
+                                    <Ionicons name="ios-share" size={28} color="white" />
                                 </Button>
+                                :
+                                <Button
+                                style={{ justifyContent: "center", alignItems: "center", width: 60 }}
+                                transparent
+                                onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
+                            >
+                                <Ionicons name="ios-search-outline" size={28} color="white" />
+                            </Button>
+                            }
                             </Right>
                         </NBHeader>
                         <Spinner

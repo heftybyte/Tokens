@@ -9,8 +9,8 @@ import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
 import { ENVIRONMENT } from 'react-native-dotenv';
+import './src/helpers/polyfill'
 import { logger, logLocalData } from './src/helpers/api'
-require('number-to-locale-string')
 
 Sentry.enableInExpoDevelopment = true;
 const publicDSN = process.env.SENTRY_PUBLIC_DSN || 'https://af6c590a432d4ef49746f9d2fc8a4b8e@sentry.io/242835'

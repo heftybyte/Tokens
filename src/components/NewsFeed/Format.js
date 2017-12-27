@@ -12,11 +12,46 @@ import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
 import { connect } from 'react-redux';
 import store from '../../store';
 
+const visitLink = (link)=>{
+    link && link.uri && Linking.openURL(link.uri + '?utm_source=tokens-express')
+      .catch(err => console.error('An error occurred', err))
+}
+
+const openExternalApp = (link) => {
+    // URIs should be of the form APPNAME://PATH
+    link && link.uri && Linking.openURL(link.uri)
+    .catch(err => console.error('An error occurred', err))
+}
+
+const navigateToPage = (link)=> {
+    // URIs should be of the form tokens://ROUTENAME
+    if(!link.uri) {
+        const err = new Error('Link Uri not supplied');
+        console.error('An error occurred', err);
+        return;
+    }
+    const {params} = link;
+    const uriParts = link.uri.split('//');
+    const routeName = uriParts[1];
+    NavigationActions.navigate(routeName, params);
+}
+
+const handleLink = (link) => {
+    switch(link.target){
+        case "web": 
+            visitLink(link);
+            break;
+        case "internal":
+            navigateToPage(link);
+        case "app":
+            openExternalApp(link);
+    }
+}
+
 const Format = (props) => {
     let Layout
-    const { format, news, news: { link }, trackFeedItem } = props
+    const { format, news, news: { link }, trackFeedItem, bookmarkMap } = props
     const { id } = news;
-
     switch(format) {
         case "TEXT":
             Layout = TextDefault
@@ -40,54 +75,19 @@ const Format = (props) => {
             Layout = View
     }
 
-    const visitLink = ()=>{
-        link && link.uri && Linking.openURL(link.uri + '?referrer=tokens-express')
-          .catch(err => console.error('An error occurred', err))
-    }
-
-    const openExternalApp = () => {
-        // URIs should be of the form APPNAME://PATH
-        link && link.uri && Linking.openURL(link.uri)
-        .catch(err => console.error('An error occurred', err))
-    }
-
-    const navigateToPage = ()=> {
-        // URIs should be of the form tokens://ROUTENAME
-        if(!link.uri) {
-            const err = new Error('Link Uri not supplied');
-            console.error('An error occurred', err);
-            return;
-        }
-        const {params} = link;
-        const uriParts = uri.split('//');
-        const routeName = uriParts[1];
-        NavigationActions.navigate(routeName, params);
-    }
-
-    const handleLink = () => {
-        switch(link.target){
-            case "web": 
-                visitLink();
-                break;
-            case "internal":
-                navigateToPage();
-            case "app":
-                openExternalApp();
-        }
-    }
-
     return (
         <TouchableWithoutFeedback
-            onPress={()=>{trackNewsFeedTap(news); trackFeedItem(id, 'tap');handleLink()}}
+            onPress={()=>{trackNewsFeedTap(news); trackFeedItem(id, 'tap');handleLink(link)}}
         >
             <View style={{flex:1}}>
-                <Layout news={news} />
+                <Layout news={news} bookmarked={!!bookmarkMap[news.id]} />
             </View>
         </TouchableWithoutFeedback>
     )
 }
 
 const mapStateToProps = (state) => ({
+    bookmarkMap: state.account.bookmarkMap
 })
 
 const mapDispatchToProps = (dispatch) => ({
