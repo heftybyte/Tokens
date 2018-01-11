@@ -13,16 +13,16 @@ class ImageRight extends React.Component {
         return (
             <Grid>
                 <Row size={20}>
-                    <SaveButton bookmarked={bookmarked} item={this.props.news} />
-                    <Text style={[styles.title, {paddingLeft:10}]}>{title.toUpperCase()}</Text>
+                    {/*<SaveButton bookmarked={bookmarked} item={this.props.news} />*/}
+                    <Text style={[styles.title]}>{title.toUpperCase()}</Text>
                 </Row>
                 <Row size={70} style={styles.center}>
-                    <Col size={65}>
+                    <Col size={80}>
                         <Text style={styles.body}>{body}</Text>
                     </Col>
-                    <Col size={35} style={styles.imageRight}>
+                    <Col size={20} style={[styles.imageRight, { justifyContent: 'center' }]}>
                         <Image
-                            style={{ width: 80, height: 80, borderRadius: 40 }}
+                            style={{ width: 50, height: 50, borderRadius: 25 }}
                             source={{uri: `${image}`}}
                         />
                     </Col>

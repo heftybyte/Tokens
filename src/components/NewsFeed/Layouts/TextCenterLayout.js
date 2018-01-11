@@ -14,7 +14,7 @@ class TextCenter extends React.Component {
             <Grid>
                 <Row size={20}>
                     <Text style={[styles.title, {paddingLeft: 10}]}>{title.toUpperCase()}</Text>
-                    <SaveButton bookmarked={bookmarked} item={this.props.news}/>
+                    {/*<SaveButton bookmarked={bookmarked} item={this.props.news}/>*/}
                 </Row>
                 <Row size={80}>
                     <Text style={[styles.body, styles.textDefault]}>{body}</Text>

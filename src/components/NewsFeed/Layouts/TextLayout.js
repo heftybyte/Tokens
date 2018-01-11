@@ -14,8 +14,8 @@ class TextDefault extends React.Component {
         return (
             <Grid>
                 <Row size={20}>
-                    <SaveButton bookmarked={bookmarked} item={this.props.news} />
-                    <Text style={[styles.title, {paddingLeft: 10}]}>{title.toUpperCase()}</Text>
+                    {/*<SaveButton bookmarked={bookmarked} item={this.props.news} />*/}
+                    <Text style={[styles.title]}>{title.toUpperCase()}</Text>
                 </Row>
                 <Row size={60} style={{alignItems: 'center'}}>
                     <Text 

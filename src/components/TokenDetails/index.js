@@ -40,12 +40,15 @@ const styles = StyleSheet.create({
     flexBasis: 1
   },
   linkContainer: {
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
   linkContainerChild: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20
+    flex: 1
+  },
+  description: {
+    flexDirection: 'column'
   },
   tokenHeading: {
     color: '#666',
@@ -108,10 +111,29 @@ const styles = StyleSheet.create({
     borderColor: brandColor,
     paddingHorizontal: 8
   },
+  videoCover: {
+    width: viewWidth,
+    height: viewWidth/(16/9),
+    backgroundColor: '#000',
+    position: 'absolute',
+    zIndex: 99,
+    color: '#fff',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity: .92
+  },
+  coverText: {
+    color: '#dedede',
+    fontSize: 20
+  },
   video: {
     width: viewWidth,
     height: viewWidth/(16/9),
     backgroundColor: '#000'
+  },
+  externalLink: {
+    marginRight: 20
   }
 });
 
@@ -121,7 +143,8 @@ class TokenDetails extends Component {
   state = {
     readMore: false,
     refreshing: false,
-    chartIsTouched: false
+    chartIsTouched: false,
+    showVideoCover: true
   }
 
   componentDidMount() {
@@ -176,6 +199,7 @@ class TokenDetails extends Component {
       updateToken,
       period
     } = this.props;
+    const { showVideoCover } = this.state;
     const maxDescDisplayLength = 180
     const { chartIsTouched } = this.state
     const displayPrice = chartIsTouched ? headerData.price : price
@@ -265,7 +289,7 @@ class TokenDetails extends Component {
           </View>
         </View>
 
-        <View style={[styles.container, styles.linkContainer]}>
+        <View style={[styles.container, styles.description]}>
           {description ?<View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
               <Text style={styles.tokenHeading}>DESCRIPTION</Text>
               <Text
@@ -284,72 +308,68 @@ class TokenDetails extends Component {
                 </TouchableHighlight>)
                 }
           </View>:null}
-          {!!website && <View style={[styles.containerChild, styles.linkContainerChild]}>
-              <MaterialCommunityIcons
-                name="web"
-                size={26}
-                color="white"
-                backgroundColor="black"
-              />
-              <TouchableHighlight
-                onPress={()=>{
-                  Linking.openURL(website).catch(
-                    err => console.error('An error occurred', err));
-                }}
-              >
-                <Text
-                  style={styles.link}
-                >
-                  { website }
-                </Text>
-              </TouchableHighlight>
-          </View>}
-          {!!twitter && <View style={[styles.containerChild, styles.linkContainerChild]}>
-              <MaterialCommunityIcons
-                name="twitter"
-                size={26}
-                color="white"
-                backgroundColor="black"
-              />
-              <TouchableHighlight
-                onPress={()=>{
-                  Linking.openURL(twitter).catch(
-                    err => console.error('An error occurred', err));
-                }}
-              >
-                <Text
-                  style={styles.link}
-                >
-                  { twitter }
-                </Text>
-              </TouchableHighlight>
-          </View>}
-          {!!reddit && <View style={[styles.containerChild, styles.linkContainerChild]}>
-              <MaterialCommunityIcons
-                name="reddit"
-                size={26}
-                color="white"
-                backgroundColor="black"
-              />
-              <TouchableHighlight
-                onPress={()=>{
-                  Linking.openURL(reddit).catch(
-                    err => console.error('An error occurred', err));
-                }}
-              >
-                <Text
-                  style={styles.link}
-                >
-                  { reddit }
-                </Text>
-              </TouchableHighlight>
-          </View>}
+        </View>
 
-        {!!videoUrl && <View style={[styles.container, {paddingLeft:0,paddingRight:20,paddingBottom:10}]}>
-            <VideoPlayer
-                url={videoUrl}
-                style={styles.video}
-            />
+        <View style={[styles.container, styles.linkContainer]}>
+          <View style={{flexDirection: 'row'}}>
+            {!!website && <TouchableHighlight
+                  onPress={()=>{
+                    Linking.openURL(website).catch(
+                      err => console.error('An error occurred', err));
+                  }}
+                  style={styles.externalLink}
+                >
+                  <MaterialCommunityIcons
+                    name="web"
+                    size={30}
+                    color="white"
+                    backgroundColor="black"
+                  />
+                </TouchableHighlight>}
+            {!!twitter && <TouchableHighlight
+                  onPress={()=>{
+                    Linking.openURL(twitter).catch(
+                      err => console.error('An error occurred', err));
+                  }}
+                  style={styles.externalLink}
+                >
+                  <MaterialCommunityIcons
+                    name="twitter"
+                    size={30}
+                    color="white"
+                    backgroundColor="black"
+                  />
+                </TouchableHighlight>}
+            {!!reddit && <TouchableHighlight
+                  onPress={()=>{
+                    Linking.openURL(reddit).catch(
+                      err => console.error('An error occurred', err));
+                  }}
+                  style={styles.externalLink}
+                >
+                  <MaterialCommunityIcons
+                    name="reddit"
+                    size={30}
+                    color="white"
+                    backgroundColor="black"
+                  />
+                </TouchableHighlight>}
+          </View>
+        {!!videoUrl && <View style={[styles.container, {paddingLeft:0,paddingRight:20,paddingBottom:10, marginTop: 20}]}>
+              {showVideoCover && <TouchableHighlight
+                onPress={()=>this.setState({showVideoCover: false})}
+                style={styles.videoCover}
+              >
+                {<MaterialCommunityIcons
+                    name="play-circle"
+                    size={60}
+                    color="white"
+                />}
+              </TouchableHighlight>}
+              <VideoPlayer
+                  url={videoUrl}
+                  style={styles.video}
+              />
         </View>}
         </View>
       </ScrollView>

@@ -1,5 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
+import Dimensions from 'Dimensions'
 import Swiper from 'react-native-swiper'
 import {styles} from './Style'
 import Format from './Format'
@@ -8,6 +9,8 @@ import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
 import {saveLatestTimestamp} from '../../reducers/feed'
 import { connect } from 'react-redux';
 import mock from './MockData'
+
+const window = Dimensions.get('window');
 
 const Dot = (color) => (
   <View
@@ -19,7 +22,7 @@ const Dot = (color) => (
       marginLeft: 3, 
       marginRight: 3, 
       marginTop: 3, 
-      marginBottom: 3,
+      marginBottom: 3
     }}
   />
 )
@@ -34,16 +37,17 @@ const News = (props) => {
         </View>
     )
   })
-
+  const paginationLeft = window.width - (125)
   let oldIndex = 0;
 
   return (
       <Swiper
         loop={false}
         paginationStyle={{
-            backgroundColor: "#0f0f0f",
+            backgroundColor: "transparent",
+            width: '50%',
             bottom: 5,
-            borderRadius: 10
+            left: paginationLeft
         }} 
         dot={Dot('#333')}
         activeDot={Dot('#fff')}
