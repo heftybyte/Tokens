@@ -252,6 +252,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     dispatch(showToast('Address Added'))
     dispatch(addAddressAction(account.addresses))
     dispatch(getPortfolio(true, 'Scanning For Tokens'))
+    dispatch(getPortfolioChart())
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
@@ -267,6 +268,7 @@ export const refreshAddress = (address) => async (dispatch, getState) => {
     }
     dispatch(showToast('Tokens Updated'))
     dispatch(getPortfolio())
+    dispatch(getPortfolioChart())
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
@@ -284,6 +286,7 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
         dispatch(showToast('Address Removed'))
         dispatch(deleteAddressAction(account.addresses))
         dispatch(getPortfolio())
+        dispatch(getPortfolioChart())
     }
 
     safeAlert(
