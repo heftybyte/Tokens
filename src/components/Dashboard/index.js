@@ -208,15 +208,18 @@ class Dashboard extends Component {
           />
         }
 
-        <Chart
-          data={portfolioChart}
-          totalChangePct={portfolio.totalPriceChangePct}
-          onCursorChange={(point)=>updateToken(point.y, point.x, point.change_pct, point.change_close)}
-          loading={chartLoading}
-          onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
-        />
-        
-        <RangeSelector onChange={this.props.getPortfolioChart} />
+        { !!addresses.length && 
+          <Chart
+            data={portfolioChart}
+            totalChangePct={portfolio.totalPriceChangePct}
+            onCursorChange={(point)=>updateToken(point.y, point.x, point.change_pct, point.change_close)}
+            loading={chartLoading}
+            onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
+          />
+        }
+        { !! addresses.length && 
+          <RangeSelector onChange={this.props.getPortfolioChart} />
+        }
         
         <News feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
