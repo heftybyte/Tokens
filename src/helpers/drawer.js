@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react"
 import { View, TouchableOpacity, Text, Platform, Alert, Image, Dimensions } from "react-native"
-import { connect } from "react-redux"
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
@@ -84,7 +83,7 @@ export const withDrawer = (WrappedComponent) => {
                     >
                         <NBHeader
                         style={{
-                            backgroundColor: "#000",
+                            backgroundColor: "#000", 
                             borderBottomWidth: 0,
                             shadowOffset: { height: 0, width: 0 },
                             shadowOpacity: 0,
@@ -98,7 +97,7 @@ export const withDrawer = (WrappedComponent) => {
                                 Platform.OS === 'ios' ? {} : {flex: .4}
                             }>
                                 <Button
-                                style={{
+                                style={{ 
                                     justifyContent: "center",
                                     alignItems: Platform.OS === 'ios' ? "center" : "flex-start",
                                     width: 60,
@@ -134,7 +133,7 @@ export const withDrawer = (WrappedComponent) => {
                                         <Image key={tokenDetails.symbol} source={{ uri: getTokenImage(tokenDetails) }} style={{width: 20, height: 20, borderRadius: 5}}/>
                                         <Text style={{color: '#fff', paddingLeft: 10}}>
                                             {tokenDetails.name||tokenDetails.symbol}
-                                        </Text>
+                                        </Text> 
                                     </View> :
                                     <Text
                                         style={{
@@ -186,15 +185,17 @@ export const withDrawer = (WrappedComponent) => {
     }
 }
 
+const DashboardMenu = ({ navigation, totalValue }) => (
+    <View style={{flex: 1, backgroundColor: "#111"}}>
+        <Header style={{paddingTop: 40}} totalValue={totalValue} />
+        {Items.map(ListItem(navigation))}
+    </View>
+)
+
 const ListItem = (navigation) => ({ name, route, icon }) => (
     <TouchableOpacity
         key={route}
-        onPress={() => {
-          setTimeout(() => {
-            navigation.navigate(route)
-          }, 100)
-          navigation.navigate('DrawerClose')
-        }}
+        onPress={() => navigation.navigate(route)}
     >
         <View
             style={{
@@ -214,16 +215,3 @@ const ListItem = (navigation) => ({ name, route, icon }) => (
         </View>
     </TouchableOpacity>
 )
-
-const DashboardMenu = ({ navigation, totalValue }) => (
-    <View style={{flex: 1, backgroundColor: "#111"}}>
-        <Header style={{paddingTop: 40}} totalValue={totalValue || 0} />
-        {Items.map(ListItem(navigation))}
-    </View>
-)
-
-const mapStateToProps = (state) => ({
-  totalValue: state.account.portfolio.totalValue
-})
-
-export default connect(mapStateToProps, {})(DashboardMenu)

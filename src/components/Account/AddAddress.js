@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 10,
   },
-  container: {
+  container: {  
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -51,7 +51,7 @@ class AddAddress extends Component {
     this.toggleQRScanner();
     let processedAddress = data.substr(data.search("0x"), 42);
     this.setState({inputValue: processedAddress});
-
+   
     trackAddress('Save', 'QRScanner')
     if (processedAddress.length !== 42 || processedAddress.substr(0,2) !== '0x') {
       Alert.alert('This Ethereum Address is Invalid')
@@ -81,7 +81,7 @@ class AddAddress extends Component {
   render(){
     return (
       <View style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <AccountInput
+        <AccountInput 
           toggleQRScanner={this.toggleQRScanner}
           scannerOpen={this.state.scannerOpen}
           inputValue={this.state.inputValue}
@@ -89,7 +89,7 @@ class AddAddress extends Component {
           onChangeText={this.onChangeText}
           saveAddress={this.saveAddress}
           children={
-            <QRScanner
+            <QRScanner 
               style={styles.scanner}
               scannerOpen={this.state.scannerOpen}
               handleBarCodeRead={this.handleBarCodeRead}
@@ -113,4 +113,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddAddress);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(AddAddress));
