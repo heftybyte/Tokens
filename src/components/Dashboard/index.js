@@ -135,7 +135,6 @@ class Dashboard extends Component {
       .split(/\$|\./);
 
       const valueString = `\$${valueParts[0]}${valueParts[1]}.${valueParts[2]||'00'}`;
-
       setParams && setParams({ overrideHeaderText: valueString });
     } else {
       setParams && setParams({ overrideHeaderText: null });
@@ -232,7 +231,7 @@ class Dashboard extends Component {
           />}
         { !!portfolio.top.length &&
         <TokenList
-          title="Top 100 Tokens By Market Cap" 
+          title="Top 100 Tokens By Market Cap"
           tokens={portfolio.top}
           type="watchList"
         />}
@@ -267,4 +266,4 @@ const mapDispatchToProps = (dispatch) => ({
     goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} }))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

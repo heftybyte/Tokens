@@ -411,4 +411,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(TokenDetails));
+export default connect(mapStateToProps, mapDispatchToProps)(TokenDetails);
