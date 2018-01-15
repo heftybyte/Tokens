@@ -17,7 +17,7 @@ export const Guest = observer(
 				style={{
 					flex: 1
 				}}
-				behavior="padding"
+				behavior="padding"				
 			>
 			<View
 				style={{
