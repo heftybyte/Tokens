@@ -62,7 +62,7 @@ export const changePeriod = (period) => async(dispatch) => {
 }
 
 const initialState = {
-    period: '1w',
+    period: '1d',
     prices: {
         chart: {},
         raw: {},

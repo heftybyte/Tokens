@@ -28,7 +28,7 @@ class ImageRight extends React.Component {
                     </Col>
                 </Row>
                 <Row size={10}>
-                    <Col size={.75}>
+                    <Col size={80}>
                         <Text
                           style={styles.link}
                           onPress={()=>{

@@ -131,7 +131,7 @@ export const login = (params) => async (dispatch, getState) => {
     let account = null
     let id = await SecureStore.getItemAsync('id')
     let token = await SecureStore.getItemAsync('token')
-    logger.debug({id,token})
+    logger.debug('login', {id,token})
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {

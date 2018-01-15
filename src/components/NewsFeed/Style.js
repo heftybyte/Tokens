@@ -18,7 +18,7 @@ export const styles = {
     body: {
         color: '#fff',
         fontFamily: 'Nunito-Light',
-        fontSize: '13.5rem'
+        fontSize: 13.5
     },
     title: {
         color: '#777',
@@ -41,7 +41,7 @@ export const styles = {
 
     },
     textDefault: {
-        fontSize: '18rem',
+        fontSize: 18,
         fontFamily: 'Raleway'
     },
     imageLeft: {
