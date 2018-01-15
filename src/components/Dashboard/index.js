@@ -11,7 +11,8 @@ import {
   Alert,
   StatusBar,
   Button,
-  RefreshControl
+  RefreshControl,
+  Linking
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
@@ -19,20 +20,28 @@ import { NavigationActions } from 'react-navigation';
 import TokenList from '../TokenList';
 import Header from './Header';
 import News from '../NewsFeed';
-import Chart from '../Chart';
+import Chart from '../Chart/Chart';
+import RangeSelector from '../Chart/RangeSelector';
 import mockNewsFeed from '../NewsFeed/MockData'
 import mockTokens from '../TokenList/data';
 import mockWatchlist from '../TokenList/watchlist-data';
 import {
   register,
   login,
-  getPortfolio
+  getPortfolio,
+  getPortfolioChart,
+  getTokenDetails
 } from '../../reducers/account';
 import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
-import { withDrawer } from '../../helpers/drawer';
+import { withDrawer } from '../../helpers/drawer'
+import { getTokenDetailsForAccount } from '../../helpers/api'
 import { trackRefresh } from '../../helpers/analytics'
+import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
+import { Constants } from 'expo';
+
+const qs = require('qs');
 
 const currencyFormatOptions =  {
   code: 'USD',
@@ -84,16 +93,33 @@ const styles = StyleSheet.create({
 
 class Dashboard extends Component {
   state = {
-    refreshing: false
+    refreshing: false,
+    chartIsTouched: false
   }
 
   componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
       (timestamp) => this.props.fetchFeed(timestamp)
-);
+  );
 
   componentDidMount = async () => {
+    Linking.addEventListener('url', this.handleDeepLink);
     if (this.state.stale) {
       this.props.getPortfolio()
+      this.props.getPortfolioChart()
+    }
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleDeepLink);
+  }
+
+  handleDeepLink = async (event) => { 
+    let queryString = event.url.replace(Constants.linkingUri, '')
+    if (queryString) {
+      var data = qs.parse(queryString)
+      let item  =  await this.props.getTokenDetails(data.symbol)
+      console.log(item)
+      this.props.goToTokenDetailsPage(item);
     }
   }
 
@@ -117,15 +143,31 @@ class Dashboard extends Component {
 
   _onRefresh = async () => {
     this.setState({refreshing: true})
-    await this.props.getPortfolio(false)
+    await Promise.all([
+      this.props.getPortfolio(false),
+      this.props.getPortfolioChart()
+    ])
     this.setState({refreshing: false})
     trackRefresh('Dashboard')
   }
 
   render = () => {
-    const { portfolio, goToAddressPage, loggedIn, addresses } = this.props
+    const {
+      portfolio,
+      portfolioChart,
+      chartLoading,
+      goToAddressPage,
+      loggedIn,
+      addresses,
+      updateToken,
+      headerData,
+      period
+    } = this.props
+    const { chartIsTouched } = this.state
+    const displayPrice = chartIsTouched ? headerData.price : portfolio.totalValue
     return (
       <ScrollView
+        scrollEnabled={!chartIsTouched}
         style={styles.scrollContainer}
         containerStyleContent={styles.container}
         onScroll={this.handleScroll}
@@ -157,12 +199,27 @@ class Dashboard extends Component {
             </View>
           </TouchableHighlight>
         : <Header
-            totalValue={portfolio.totalValue}
-            totalChange={portfolio.totalPriceChange}
-            totalChangePct={portfolio.totalPriceChangePct}
+            totalValue={displayPrice}
+            timestamp={chartIsTouched && headerData.timestamp}
+            totalChange={chartIsTouched && headerData.change_close || portfolio.totalPriceChange}
+            totalChangePct={chartIsTouched && headerData.change_pct || portfolio.totalPriceChangePct}
+            period={period}
           />
         }
-        <Chart data={portfolioPriceData} totalChangePct={portfolio.totalPriceChangePct} />
+
+        { !!addresses.length && 
+          <Chart
+            data={portfolioChart}
+            totalChangePct={portfolio.totalPriceChangePct}
+            onCursorChange={(point)=>updateToken(point.y, point.x, point.change_pct, point.change_close)}
+            loading={chartLoading}
+            onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
+          />
+        }
+        { !! addresses.length && 
+          <RangeSelector onChange={this.props.getPortfolioChart} />
+        }
+        
         <News feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
@@ -185,10 +242,14 @@ class Dashboard extends Component {
 
 const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
+  chartLoading: state.account.chartLoading,
+  portfolioChart: state.account.portfolioChart,
   addresses: state.account.addresses,
   loggedIn: !!state.account.token,
   newsFeed: state.feed,
   stale: state.account.stale,
+  headerData: state.token,
+  period: state.ticker.period,
   ...state.ui
 })
 
@@ -197,8 +258,12 @@ const mapDispatchToProps = (dispatch) => ({
     login: () => dispatch(login()),
     register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
+    getPortfolioChart: () => dispatch(getPortfolioChart()),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
+    updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close})),
+    getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
+    goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} }))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

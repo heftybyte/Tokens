@@ -9,26 +9,26 @@ import { getLinkTextByType } from './helpers'
 class ImageRight extends React.Component {
 
     render() {
-        const { news: { title, body, image, link, type, bookmarked } } = this.props
+        const { news: { title, body, image, link, type }, bookmarked } = this.props
         return (
             <Grid>
                 <Row size={20}>
-                    <Text style={styles.title}>{title.toUpperCase()}</Text>
+                    {/*<SaveButton bookmarked={bookmarked} item={this.props.news} />*/}
+                    <Text style={[styles.title]}>{title.toUpperCase()}</Text>
                 </Row>
                 <Row size={70} style={styles.center}>
-                    <Col size={65}>
+                    <Col size={80}>
                         <Text style={styles.body}>{body}</Text>
                     </Col>
-                    <Col size={35} style={styles.imageRight}>
+                    <Col size={20} style={[styles.imageRight, { justifyContent: 'center' }]}>
                         <Image
-                            style={{ width: 80, height: 80, borderRadius: 40 }}
+                            style={{ width: 50, height: 50, borderRadius: 25 }}
                             source={{uri: `${image}`}}
                         />
                     </Col>
                 </Row>
-                <Row size={10} style={{alignItems: 'flex-end'}}>
-                    <Row>
-                    <Col size={.75}>
+                <Row size={10}>
+                    <Col size={80}>
                         <Text
                           style={styles.link}
                           onPress={()=>{
@@ -38,13 +38,7 @@ class ImageRight extends React.Component {
                         >
                           { getLinkTextByType(type) }&gt;
                         </Text>
-                        </Col>
-                            { !bookmarked &&
-                                <Col size={.25}>
-                                    <SaveButton item={this.props.news}/>
-                                </Col>
-                            }
-                    </Row>
+                    </Col>
                 </Row>
             </Grid>
         )

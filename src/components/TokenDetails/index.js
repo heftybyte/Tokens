@@ -1,12 +1,22 @@
 import React, { Component } from 'react';
+import Dimensions from 'Dimensions';
 import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
+import Chart from '../Chart/Chart';
+import RangeSelector from '../Chart/RangeSelector';
 import Header from '../Dashboard/Header';
 import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
 import { baseURL, lossColor, brandColor } from '../../config'
+import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
+import { update as _updateToken } from '../../reducers/token'
+import portfolioPriceData from '../Chart/data'
+import VideoPlayer from './player';
+
+const window = Dimensions.get('window');
+const viewWidth = window.width - 40;
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -30,12 +40,15 @@ const styles = StyleSheet.create({
     flexBasis: 1
   },
   linkContainer: {
-    flexDirection: 'column'
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
   linkContainerChild: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20
+    flex: 1
+  },
+  description: {
+    flexDirection: 'column'
   },
   tokenHeading: {
     color: '#666',
@@ -44,7 +57,13 @@ const styles = StyleSheet.create({
   tokenValue: {
     color: '#fff',
     fontSize: 20,
-    fontFamily: 'Nunito'
+    fontFamily: 'Nunito',
+  },
+  tokenValueWrapped: {
+    color: '#fff',
+    fontSize: 20,
+    fontFamily: 'Nunito',
+    width: 150
   },
   heading: {
     borderBottomColor: '#444',
@@ -92,27 +111,63 @@ const styles = StyleSheet.create({
     borderColor: brandColor,
     paddingHorizontal: 8
   },
+  videoCover: {
+    width: viewWidth,
+    height: viewWidth/(16/9),
+    backgroundColor: '#000',
+    position: 'absolute',
+    zIndex: 99,
+    color: '#fff',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity: .92
+  },
+  coverText: {
+    color: '#dedede',
+    fontSize: 20
+  },
+  video: {
+    width: viewWidth,
+    height: viewWidth/(16/9),
+    backgroundColor: '#000'
+  },
+  externalLink: {
+    marginRight: 20
+  }
 });
+
+const tokenValueStyle = v => v.toString().length > 8 ? styles.tokenValueWrapped : styles.tokenValue
 
 class TokenDetails extends Component {
   state = {
     readMore: false,
-    refreshing: false
+    refreshing: false,
+    chartIsTouched: false,
+    showVideoCover: true
   }
 
   componentDidMount() {
-    const { navigation, getTokenDetails } = this.props
+    const { navigation, getTokenDetails, getHistoricalPrices, updateToken } = this.props
     const { token } = navigation.state.params
-
+    getHistoricalPrices({fsyms: token.symbol, tsyms: 'USD'})
+    updateToken(token.price)
     if (!token.marketCap) {
       getTokenDetails(token.symbol)
     }
   }
 
   _onRefresh = async () => {
-    const { symbol } = this.props.navigation.state.params.token
+    const {
+      getTokenDetails,
+      getHistoricalPrices,
+      navigation: { state: { params: { token: { symbol } } } }
+    } = this.props
     this.setState({refreshing: true})
-    await this.props.getTokenDetails(symbol)
+    await Promise.all([
+      getTokenDetails(symbol),
+      getHistoricalPrices({fsyms: symbol, tsyms: 'USD'})
+    ])
     this.setState({refreshing: false})
   }
 
@@ -120,7 +175,7 @@ class TokenDetails extends Component {
     const {
       addToWatchlist,
       removeFromWatchList,
-      watchListMap,
+      isWatching,
       token: {
         price,
         balance,
@@ -135,15 +190,22 @@ class TokenDetails extends Component {
         website,
         twitter,
         reddit,
-        description
-      }
+        description,
+        videoUrl
+      },
+      priceData,
+      chartLoading,
+      headerData,
+      updateToken,
+      period
     } = this.props;
-
-    const isWatching = watchListMap[symbol]
+    const { showVideoCover } = this.state;
     const maxDescDisplayLength = 180
-
+    const { chartIsTouched } = this.state
+    const displayPrice = chartIsTouched ? headerData.price : price
     return (
       <ScrollView
+        scrollEnabled={!chartIsTouched}
         style={styles.scrollContainer}
         containerStyleContent={styles.container}
         refreshControl={
@@ -155,32 +217,47 @@ class TokenDetails extends Component {
       >
         <Header
           style={styles.header}
-          totalValue={balance ? (balance * price) : price}
-          totalChange={priceChange}
+          totalValue={displayPrice}
+          timestamp={chartIsTouched && headerData.timestamp}
+          totalChange={chartIsTouched && headerData.change_close || priceChange}
+          totalChangePct={chartIsTouched && headerData.change_pct || change}
+          period={period}
+        />
+
+        <Chart
+          data={priceData}
           totalChangePct={change}
+          loading={chartLoading}
+          onCursorChange={(point)=>updateToken(point.y, point.x, point.change_pct, point.change_close)}
+          onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
+        />
+
+        <RangeSelector
+          style={{paddingBottom: 20}}
+          onChange={()=>this.props.getHistoricalPrices({fsyms: symbol, tsyms: 'USD'})}
         />
 
         {!!balance && <View style={styles.container}>
           <View style={styles.containerChild}>
-            <Text style={styles.tokenHeading}>PRICE</Text>
-            <Text style={styles.tokenValue}>{'$'+formatPrice(price)}</Text>
-          </View>
-
-          <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>BALANCE</Text>
-            <Text style={styles.tokenValue}>{balance.toLocaleString()}</Text>
+            <Text style={tokenValueStyle(balance)}>{balance.toLocaleString()}</Text>
+          </View>
+        
+          <View style={styles.containerChild}>
+            <Text style={styles.tokenHeading}>HOLDINGS</Text>
+            <Text style={tokenValueStyle(displayPrice*balance)}>{'$'+formatPrice(displayPrice*balance)}</Text>
           </View>
         </View>}
 
         <View style={styles.container}>
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>MARKET CAP</Text>
-            <Text style={styles.tokenValue}>{'$'+formatPrice(marketCap)}</Text>
+            <Text style={tokenValueStyle(marketCap)}>{'$'+formatPrice(marketCap)}</Text>
           </View>
 
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>24 HR VOLUME</Text>
-            <Text style={styles.tokenValue}>{`$${formatPrice(volume24Hr)}`}</Text>
+            <Text style={tokenValueStyle(volume24Hr)}>{`$${formatPrice(volume24Hr)}`}</Text>
           </View>
         </View>
 
@@ -212,8 +289,8 @@ class TokenDetails extends Component {
           </View>
         </View>
 
-        <View style={[styles.container, styles.linkContainer]}>
-          <View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
+        <View style={[styles.container, styles.description]}>
+          {description ?<View style={[styles.containerChild, {flexGrow:1, paddingRight: 20}]}>
               <Text style={styles.tokenHeading}>DESCRIPTION</Text>
               <Text
                 numberOfLines={this.state.readMore ? 0 : 4}
@@ -230,67 +307,70 @@ class TokenDetails extends Component {
                   </Text>
                 </TouchableHighlight>)
                 }
+          </View>:null}
+        </View>
+
+        <View style={[styles.container, styles.linkContainer]}>
+          <View style={{flexDirection: 'row'}}>
+            {!!website && <TouchableHighlight
+                  onPress={()=>{
+                    Linking.openURL(website).catch(
+                      err => console.error('An error occurred', err));
+                  }}
+                  style={styles.externalLink}
+                >
+                  <MaterialCommunityIcons
+                    name="web"
+                    size={30}
+                    color="white"
+                    backgroundColor="black"
+                  />
+                </TouchableHighlight>}
+            {!!twitter && <TouchableHighlight
+                  onPress={()=>{
+                    Linking.openURL(twitter).catch(
+                      err => console.error('An error occurred', err));
+                  }}
+                  style={styles.externalLink}
+                >
+                  <MaterialCommunityIcons
+                    name="twitter"
+                    size={30}
+                    color="white"
+                    backgroundColor="black"
+                  />
+                </TouchableHighlight>}
+            {!!reddit && <TouchableHighlight
+                  onPress={()=>{
+                    Linking.openURL(reddit).catch(
+                      err => console.error('An error occurred', err));
+                  }}
+                  style={styles.externalLink}
+                >
+                  <MaterialCommunityIcons
+                    name="reddit"
+                    size={30}
+                    color="white"
+                    backgroundColor="black"
+                  />
+                </TouchableHighlight>}
           </View>
-          {!!website && <View style={[styles.containerChild, styles.linkContainerChild]}>
-              <MaterialCommunityIcons
-                name="web"
-                size={26}
-                color="white"
-                backgroundColor="black"
-              />
-              <TouchableHighlight
-                onPress={()=>{
-                  Linking.openURL(website).catch(
-                    err => console.error('An error occurred', err));
-                }}
+        {!!videoUrl && <View style={[styles.container, {paddingLeft:0,paddingRight:20,paddingBottom:10, marginTop: 20}]}>
+              {showVideoCover && <TouchableHighlight
+                onPress={()=>this.setState({showVideoCover: false})}
+                style={styles.videoCover}
               >
-                <Text
-                  style={styles.link}
-                >
-                  { website }
-                </Text>
-              </TouchableHighlight>
-          </View>}
-          {!!twitter && <View style={[styles.containerChild, styles.linkContainerChild]}>
-              <MaterialCommunityIcons
-                name="twitter"
-                size={26}
-                color="white"
-                backgroundColor="black"
+                {<MaterialCommunityIcons
+                    name="play-circle"
+                    size={60}
+                    color="white"
+                />}
+              </TouchableHighlight>}
+              <VideoPlayer
+                  url={videoUrl}
+                  style={styles.video}
               />
-              <TouchableHighlight
-                onPress={()=>{
-                  Linking.openURL(twitter).catch(
-                    err => console.error('An error occurred', err));
-                }}
-              >
-                <Text
-                  style={styles.link}
-                >
-                  { twitter }
-                </Text>
-              </TouchableHighlight>
-          </View>}
-          {!!reddit && <View style={[styles.containerChild, styles.linkContainerChild]}>
-              <MaterialCommunityIcons
-                name="reddit"
-                size={26}
-                color="white"
-                backgroundColor="black"
-              />
-              <TouchableHighlight
-                onPress={()=>{
-                  Linking.openURL(reddit).catch(
-                    err => console.error('An error occurred', err));
-                }}
-              >
-                <Text
-                  style={styles.link}
-                >
-                  { reddit }
-                </Text>
-              </TouchableHighlight>
-          </View>}
+        </View>}
         </View>
       </ScrollView>
     )
@@ -299,19 +379,36 @@ class TokenDetails extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
+  getHistoricalPrices: ({fsyms,tsyms,format='chart',start,end,period}) =>
+    dispatch(_getHistoricalPrices({fsyms,tsyms,format,start,end,period})),
   addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
-  removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol))
+  removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
+  updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close}))
 })
 
-const mapStateToProps = (state, props) => ({
-  symbol: props.navigation.state.params.token.symbol,
-  token: {
+const mapStateToProps = (state, props) => {
+  const token = {
     ...state.account.tokenDetails,
     ...props.navigation.state.params.token
-  },
-  tokenDetails: state.account.tokenDetails,
-  portfolio: state.account.portfolio,
-  watchListMap: state.account.watchListMap
-})
+  }
+  const symbol = token.symbol
+  const { watchListMap } = state.account
+  const isWatching = watchListMap[symbol]
+  const { chart } = state.ticker.historicalPrices
+  const priceData = (chart[symbol] && chart[symbol]['USD'] || [])
+
+  return {
+    token,
+    symbol,
+    tokenDetails: state.account.tokenDetails,
+    portfolio: state.account.portfolio,
+    watchListMap,
+    isWatching,
+    priceData,
+    chartLoading: state.ticker.historicalPrices.loading.chart,
+    headerData: state.token,
+    period: state.ticker.period
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokenDetails);

@@ -1,23 +1,24 @@
 export const styles = {
     container: {
-        backgroundColor: '#0f0f0f',
-        height: 200,
-        paddingTop: 7
+        backgroundColor: '#000',
+        height: 130,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: '#111'
     },
     slide: {
         backgroundColor: '#000',
-        borderColor: '#000',
-        height:175,
-        maxHeight:175,
+        borderColor: 'transparent',
+        height:130,
+        maxHeight:130,
         borderWidth: 10,
-        borderRadius: 10,
-        flex: 1,
         padding: 5,
-        marginHorizontal: 7,
+        flex: 1
     },
     body: {
         color: '#fff',
-        fontFamily: 'Nunito-Light'
+        fontFamily: 'Nunito-Light',
+        fontSize: 13.5
     },
     title: {
         color: '#777',
@@ -40,7 +41,7 @@ export const styles = {
 
     },
     textDefault: {
-        fontSize: 20,
+        fontSize: 18,
         fontFamily: 'Raleway'
     },
     imageLeft: {

@@ -29,13 +29,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#000',
-    borderWidth: 5,
-    borderStyle: 'solid',
-    borderColor: '#f00',
     position: 'relative'
   },
   header: {
-    backgroundColor: '#000'
+    backgroundColor: '#000',
+    color:'#fff',
+    textAlign: 'center',
+    fontSize: 20
   },
   title: {
     color: '#fff',
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   text:{
-      color: '#fff',
+    color: '#fff',
   },
   centerText: {
     textAlign: 'center'
@@ -105,23 +105,13 @@ class ViewAddresses extends Component {
     } = this.props
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <Card>
-          <CardItem
-            header
-            style={{backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1}}
-          >
-            <Text style={{color:'#fff'}}>Your Ethereum Addresses</Text>
-          </CardItem>
+        <View style={{borderColor: '#000'}}>
+          <Text style={styles.header}>Your Ethereum Addresses</Text>
           {addresses.map(
               (address, index) =>
-              <CardItem
-                key={index}
-                style={{
-                  backgroundColor: '#000', borderColor: '#111', borderBottomWidth: 1
-                }}
-              >
+              <View style={{flex: 1, flexDirection: 'row'}}>
                 <Text
-                  style={{color: '#fff', fontSize: 12, flex: .8 }}
+                  style={{color: '#fff', fontSize: 12, flex: .8, paddingVertical: 20 }}
                   numberOfLines={1}
                 >
                   {address.id}
@@ -148,12 +138,8 @@ class ViewAddresses extends Component {
                     />
                   </TouchableHighlight>
                 </Right>
-              </CardItem>
+              </View>
           )}
-            <CardItem
-              footer
-              style={{backgroundColor: '#000', borderColor: '#fff'}}
-            >
               <Body />
               <Right>
                 <TouchableHighlight
@@ -162,8 +148,7 @@ class ViewAddresses extends Component {
                   <Text style={{color:brandColor}}>+ Add Address</Text>
                 </TouchableHighlight>
               </Right>
-            </CardItem>
-         </Card>
+         </View>
           {(token || id) &&
           <View>
             {invitesEnabled && <Card>

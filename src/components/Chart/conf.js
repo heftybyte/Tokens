@@ -5,65 +5,11 @@ export function ChartConfig (data, color){
                     marginTop: 0,
                     backgroundColor: '#000',
                 },
+                tooltip: {
+                    enabled: false
+                },
                 rangeSelector: {
-                    selected: 0,
-                    allButtonsEnabled: true,
-                    inputEnabled: false,
-                    verticalAlign: 'bottom',
-                    buttonPosition: {
-                        align: 'center',
-                    },
-                    buttonTheme: {
-                        fill: '',
-                        style: {
-                            color: '#6b2fe2',
-                            textTransform: 'uppercase',
-                            backgroundColor: 'transparent'
-                        },
-                        states: {
-                            select: {
-                                fill: '#6b2fe2',
-                                style: {
-                                    color: 'white'
-                                }
-                            }
-                        }
-                    },
-                    buttons: [{
-                            type: 'hour',
-                            count: 1,
-                            text: '1h'
-                        },
-                        {
-                            type: 'hour',
-                            count: 2,
-                            text: '2h'
-                        },
-                        {
-                            type: 'day',
-                            count: 1,
-                            text: '1d'
-                        },
-                        {
-                            type: 'week',
-                            count: 1,
-                            text: '1w'
-                        },
-                        {
-                            type: 'month',
-                            count: 1,
-                            text: '1m'
-                        },
-                        {
-                            type: 'year',
-                            count: 1,
-                            text: '1y'
-                        },
-                        {
-                            type: 'all',
-                            text: 'All'
-                        },
-                    ]
+                    enabled: false
                 },
                 navigator: {
                     enabled: false
@@ -72,19 +18,21 @@ export function ChartConfig (data, color){
                     enabled: false
                 },
                 xAxis: {
+                    type: 'datetime',
                     visible: false,
                     minRange: 3600 * 1000,
+                    labels: false
                 },
                 yAxis: {
                     gridLineWidth: 0,
                     visible: false,
+                    labels: false
                 },
                 series: [{
-                    name: 'ETH Stock Price',
                     data: data,
                     type: 'spline',
                     tooltip: {
-                        valueDecimals: 2
+                        enabled: false
                     }
                 }],
                 plotOptions: {
@@ -101,8 +49,8 @@ export function ChartConfig (data, color){
         }
 
        this.options = {
-                    lang:{
-                        rangeSelectorZoom: ''
-                    }
+            lang:{
+                rangeSelectorZoom: ''
+            }
         }
 }

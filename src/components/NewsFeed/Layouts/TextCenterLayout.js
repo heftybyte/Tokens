@@ -8,18 +8,16 @@ import {styles} from '../Style'
 class TextCenter extends React.Component {
 
     render() {
-        const { news: { title, body, bookmarked } } = this.props
+        const { news: { title, body }, bookmarked } = this.props
 
         return (
             <Grid>
                 <Row size={20}>
-                    <Text style={styles.title}>{title.toUpperCase()}</Text>
+                    <Text style={[styles.title, {paddingLeft: 10}]}>{title.toUpperCase()}</Text>
+                    {/*<SaveButton bookmarked={bookmarked} item={this.props.news}/>*/}
                 </Row>
                 <Row size={80}>
                     <Text style={[styles.body, styles.textDefault]}>{body}</Text>
-                    { !bookmarked &&
-                        <SaveButton item={this.props.news}/>
-                    }
                 </Row>
             </Grid>
         )

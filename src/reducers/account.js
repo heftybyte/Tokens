@@ -6,6 +6,7 @@ import {
     registerAccount,
     setAuthHeader,
     getAccountPortfolio,
+    getAccountPortfolioChart,
     addAccountAddress,
     refreshAccountAddress,
     deleteAccountAddress,
@@ -36,7 +37,10 @@ export const ADD_ADDRESS = 'account/ADD_ADDRESS'
 export const DELETE_ADDRESS = 'account/DELETE_ADDRESS'
 export const GET_TOKEN_DETAILS = 'account/GET_TOKEN_DETAILS'
 export const REFRESH_ADDRESS = 'account/REFRESH_ADDRESS'
-export const BOOKMARK = 'account/BOOKMARK'
+export const SAVE_BOOKMARK = 'account/SAVE_BOOKMARK'
+export const REMOVE_BOOKMARK = 'account/REMOVE_BOOKMARK'
+export const GET_PORTFOLIO_CHART = 'account/GET_PORTFOLIO_CHART'
+export const LOADING_CHART = 'account/LOADING_CHART'
 
 const registerAction = (id) => ({
     type: REGISTER,
@@ -87,9 +91,24 @@ const tokenDetailsAction = (tokenDetails) => ({
   data: { tokenDetails }
 })
 
-export const bookmark = (newsItem) => ({
-    type: BOOKMARK,
+const portfolioChartAction = (chart) => ({
+    type: GET_PORTFOLIO_CHART,
+    data: { chart }
+})
+
+const saveBookmarkAction = (newsItem) => ({
+    type: SAVE_BOOKMARK,
     data: newsItem
+})
+
+const removeBookmarkAction = (newsItem) => ({
+    type: REMOVE_BOOKMARK,
+    data: newsItem
+})
+
+const loadingChartAction = (chartLoading) => ({
+    type: LOADING_CHART,
+    data: { chartLoading }
 })
 
 export const createAccount = (params) => async (dispatch, getState) => {
@@ -112,9 +131,14 @@ export const login = (params) => async (dispatch, getState) => {
     let account = null
     let id = await SecureStore.getItemAsync('id')
     let token = await SecureStore.getItemAsync('token')
+    logger.debug('login', {id,token})
     if (params) {
         const res = await loginAccount(params).catch(e=>err=e)
         if (err) {
+            const { error } = err.response.data;
+            if(error && error.statusCode === 401) {
+                error.message = 'Incorrect username or password';
+            }
             dispatch(showToast(getError(err)))
             return
         }
@@ -142,7 +166,13 @@ export const login = (params) => async (dispatch, getState) => {
     dispatch(loginAction(token, account))
     registerForPushNotificationsAsync()
     dispatch(getPortfolio())
-    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+    dispatch(getPortfolioChart())
+    dispatch(NavigationActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Dashboard' })
+      ]
+    }))
 }
 
 export const logout = () => async(dispatch, getState) => {
@@ -186,7 +216,7 @@ export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
 	const ok = async () => {
 		let err = null
 		const { id } = getState().account
-		dispatch(setLoading(true, `${symbol} From Watchlist`))
+		dispatch(setLoading(true, `Removing ${symbol} From Watchlist`))
 		const account = await removeFromAccountWatchlist(id, symbol).catch(e=>err=e)
 		dispatch(setLoading(false))
 		if (err) {
@@ -222,6 +252,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     dispatch(showToast('Address Added'))
     dispatch(addAddressAction(account.addresses))
     dispatch(getPortfolio(true, 'Scanning For Tokens'))
+    dispatch(getPortfolioChart())
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
@@ -237,6 +268,7 @@ export const refreshAddress = (address) => async (dispatch, getState) => {
     }
     dispatch(showToast('Tokens Updated'))
     dispatch(getPortfolio())
+    dispatch(getPortfolioChart())
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
@@ -254,6 +286,7 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
         dispatch(showToast('Address Removed'))
         dispatch(deleteAddressAction(account.addresses))
         dispatch(getPortfolio())
+        dispatch(getPortfolioChart())
     }
 
     safeAlert(
@@ -287,6 +320,20 @@ export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getStat
     dispatch(portfolioAction(portfolio))
 }
 
+export const getPortfolioChart = () => async (dispatch, getState) => {
+    let err = null
+    const { account: { id }, ticker: { period } } = getState()
+    dispatch(loadingChartAction(true))
+    let chart = await getAccountPortfolioChart(id, period).catch(e=>err=e)
+    if (err) {
+      logger.err('getPortfolioChart', err)
+        dispatch(loadingChartAction(false))
+      return
+    }
+    dispatch(loadingChartAction(false))
+    dispatch(portfolioChartAction(chart))
+}
+
 export const getTokenDetails = (sym) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
@@ -298,7 +345,10 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
         dispatch(showToast(getError(err)))
         return
     }
-    dispatch(tokenDetailsAction(tokenDetails))
+    
+        dispatch(tokenDetailsAction(tokenDetails))
+        return tokenDetails;
+    
 }
 
 export const getBookmark = (news) => async (dispatch, getState) => {
@@ -314,10 +364,31 @@ export const getBookmark = (news) => async (dispatch, getState) => {
     dispatch(bookmark(news))
 }
 
+export const saveBookmark = (news) => async (dispatch, getState) => {
+    dispatch(saveBookmarkAction(news))
+    dispatch(showToast("Saved to Bookmarks"))
+}
+
+export const removeBookmark = (news) => async (dispatch, getState) => {
+    const ok = () => {
+        dispatch(removeBookmarkAction(news))
+        dispatch(showToast("Removed from Bookmarks"))
+    }
+
+    safeAlert(
+        'Are you sure?',
+        `Confirm Removal of Bookmark`,
+        [
+            {text: 'OK', onPress: ok, style: 'destructive'},
+            {text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
+        ],
+        { cancelable: false }
+    )
+}
 
 const initialState = {
     addresses : [],
-		watchList: [],
+    watchList: [],
     id: null,
     token: null,
     portfolio: {
@@ -328,6 +399,8 @@ const initialState = {
         top: [],
         watchList: []
     },
+    chartLoading: false,
+    portfolioChart: [{x:0,y:0},{x:0,y:0}],
     tokenDetails: {
         "marketCap": 0,
         "price": 0,
@@ -341,6 +414,7 @@ const initialState = {
     // Used to know when to fetch updated portfolio
     stale: true,
     bookmarks: [],
+    bookmarkMap: {},
     watchListMap: {}
 }
 
@@ -357,6 +431,7 @@ export default (state = initialState, action) => {
         case UPDATE:
         case ADD_ADDRESS:
         case DELETE_ADDRESS:
+        case LOADING_CHART:
             return {
                 ...state,
                 ...action.data
@@ -377,11 +452,35 @@ export default (state = initialState, action) => {
             return {
                 ...initialState
             }
-        case BOOKMARK:
-                action.data["bookmarked"] = true;
+        case SAVE_BOOKMARK:
+            const bookmarkMap = {[action.data.id]: true}
+            state.bookmarks.forEach((bookmark)=>
+                bookmarkMap[bookmark.id] = true
+            )
             return {
                 ...state,
-                bookmarks: [ action.data, ...state.bookmarks]
+                bookmarks: [...state.bookmarks, action.data],
+                bookmarkMap
+            }
+        case REMOVE_BOOKMARK: {
+            const bookmarks = []
+            const bookmarkMap = {}
+            state.bookmarks.forEach((bookmark)=>{
+                if (bookmark.id !== action.data.id) {
+                    bookmarks.push(bookmark)   
+                    bookmarkMap[bookmark.id] = true
+                }
+            })
+            return {
+                ...state,
+                bookmarks,
+                bookmarkMap
+            }
+        }
+        case GET_PORTFOLIO_CHART:
+            return {
+                ...state,
+                portfolioChart: [...action.data.chart]
             }
         default:
             return {
