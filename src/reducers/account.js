@@ -120,7 +120,7 @@ export const createAccount = (params) => async (dispatch, getState) => {
         return
     }
     await SecureStore.setItemAsync('id', newAccount.id)
-    const pseudonymType = 'username'
+    const pseudonymType = 'email'
     await AsyncStorage.setItem('pseudonym', JSON.stringify({ type: pseudonymType, value: params[pseudonymType] }))
     dispatch(registerAction(newAccount.id))
     dispatch(login(params))
@@ -137,7 +137,7 @@ export const login = (params) => async (dispatch, getState) => {
         if (err) {
             const { error } = err.response.data;
             if(error && error.statusCode === 401) {
-                error.message = 'Incorrect username or password';
+                error.message = 'Incorrect email or password';
             }
             dispatch(showToast(getError(err)))
             return

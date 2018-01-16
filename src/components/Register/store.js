@@ -12,17 +12,17 @@ type RegisterType = "guest" | "normal" | "login"
 class Register {
 	@observable type: RegisterType = "login"
 	@observable normal = {
-		username: '',
+		email: '',
 		password: '',
 		cpassword: '',
 		code: ''
 	}
 	@observable login = {
-		username: '',
+		email: '',
 		password: ''
 	}
 	@observable guest = {
-		username: '',
+		email: '',
 		password: '',
 		code: ''
 	}
@@ -37,28 +37,28 @@ class Register {
 
 	navigate = async (navigation) => {
 		let routeName
-		let defaultUsername = ''
+		let defaultEmail = ''
 		const pseudonym = JSON.parse(await AsyncStorage.getItem('pseudonym') || null)
 		switch(this.type) {
 			case "guest":
 				routeName = "GuestRegistration"
-				this.guest.username = uuidv4()
+				this.guest.email = uuidv4()
 				this.guest.password = uuidv4()
 				break
 			case "normal":
 				routeName = "NormalRegistration"
 				break
 			case "login":
-				if (pseudonym && pseudonym.type === 'username') {
-					defaultUsername = pseudonym.value
+				if (pseudonym && pseudonym.type === 'email') {
+					defaultEmail = pseudonym.value
 				}
 				routeName = "Login"
 				break
 		}
 		// TODO: refactor hacky way of setting a deafault value
-		this.login.username = defaultUsername
+		this.login.email = defaultEmail
 		await reduxStore.dispatch(NavigationActions.navigate({ routeName }))
-		this.login.username = defaultUsername
+		this.login.email = defaultEmail
 	}
 
 	@action
@@ -81,13 +81,13 @@ class Register {
 				return
 			}
 			params = {
-				username: this.normal.username,
+				email: this.normal.email,
 				password: this.normal.password,
 				code: this.normal.code
 			}
 		} else {
 			params = {
-				username: this.guest.username,
+				email: this.guest.email,
 				password: this.guest.password,
 				code: this.guest.code
 			}
@@ -99,7 +99,7 @@ class Register {
 	@action
 	login = async () => {
 		let params = {
-			username: this.login.username,
+			email: this.login.email,
 			password: this.login.password
 		}
 		await reduxStore.dispatch(login(params))

@@ -73,6 +73,7 @@ class AddAddress extends Component {
       return;
     }
     const err = await addAddress(text);
+    // Alert.alert('Allow up to 2 minutes for your address data to appear');
     if (!err) {
       await navigate('Accounts')
     }

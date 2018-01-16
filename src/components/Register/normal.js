@@ -40,10 +40,10 @@ export const Normal = observer(
 						placeholder="q3frrdsd"
 					/>}
 					<Field
-						label="Username"
+						label="Email"
 						returnKeyType="next"
-						value={store.getField('username')}
-						onChange={v => store.changetext('username', v)}
+						value={store.getField('email')}
+						onChange={v => store.changetext('email', v)}
 						placeholder="e.g vitalik23"
 					/>
 					<Field
