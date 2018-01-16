@@ -68,7 +68,7 @@ const Register = observer(
 							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Access your account from other devices')} />
 						</View>
 					</TouchableOpacity>
-					<TouchableOpacity
+					{/*<TouchableOpacity
 						onPress={() => store.changeType("guest")}
 					>
 						<View style={styles.item}>
@@ -83,7 +83,7 @@ const Register = observer(
 							</View>
 							<Icon name="information-outline" size={25} color="#fff" onPress={()=>Alert.alert('Account dedicated to this device only')}/>
 						</View>
-					</TouchableOpacity>
+					</TouchableOpacity>*/}
 					<TouchableOpacity
 						onPress={() => store.changeType("login")}
 					>
@@ -99,15 +99,7 @@ const Register = observer(
 							</View>
 						</View>
 					</TouchableOpacity>
-				</View>
-			</View>
-			<View style={styles.bottomButton}>
-				<View
-					style={{
-						marginRight: 10
-					}}
-				>
-					<Button onPress={() => store.navigate(navigation)} style={styles.button} transparent>
+					<Button onPress={() => store.navigate(navigation)} style={[styles.item, styles.button]} transparent>
 						<Text style={{ color: '#fff', fontFamily: 'Nunito' }}>CONTINUE</Text>
 					</Button>
 				</View>
@@ -122,14 +114,11 @@ const styles = {
 		justifyContent: 'space-between'
 	},
 	button: {
-		height: 35,
+		height: 45,
 		paddingHorizontal: 15,
-	},
-	bottomButton: {
-		flexDirection: 'row',
-		height: 50,
+		marginTop: 10,
 		backgroundColor: '#6b2fe2',
-		alignItems: 'center',
+		flexDirection: 'row',
 		justifyContent: 'flex-end'
 	},
 	item: {

@@ -32,7 +32,7 @@ export const Normal = observer(
 				}}
 			>
 				<Content>
-				{invitesEnabled && store.type === 'normal' &&
+					{invitesEnabled && store.type === 'normal' &&
 					<Field
 						label="Invite Code"
 						returnKeyType="next"
@@ -61,20 +61,12 @@ export const Normal = observer(
 						onChange={v => store.changetext('cpassword', v)}
 						placeholder="*********"
 					/>}
-					</Content>
-			</View>
-			</KeyboardAvoidingView>
-			<View style={styles.bottomButton}>
-				<View
-					style={{
-						marginRight: 10
-					}}
-				>
 					<Button onPress={store.type === 'normal' ? store.createAccount : store.login} style={styles.button} transparent>
 						<Text style={{ color: '#fff' }}>{store.type === 'normal' ? 'CREATE AN ACCOUNT' : 'LOGIN'}</Text>
 					</Button>
-				</View>
+				</Content>
 			</View>
+			</KeyboardAvoidingView>
 			<Footer toast={store.toast} />
 		</View>
 	)
@@ -90,8 +82,14 @@ const styles = {
 		justifyContent: 'flex-end'
 	},
 	button: {
-		height: 35,
+		width: '92%',
+		height: 45,
 		paddingHorizontal: 15,
+		marginTop: 10,
+		backgroundColor: '#6b2fe2',
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignSelf: 'center'
 	},
 	input: {
 		color: "#fff",
