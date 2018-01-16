@@ -3,6 +3,7 @@ import Dimensions from 'Dimensions';
 import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 import { withDrawer } from '../../helpers/drawer';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import Chart from '../Chart/Chart';
@@ -176,6 +177,7 @@ class TokenDetails extends Component {
       addToWatchlist,
       removeFromWatchList,
       isWatching,
+      goToPriceAlertPage,
       token: {
         price,
         balance,
@@ -242,7 +244,7 @@ class TokenDetails extends Component {
             <Text style={styles.tokenHeading}>BALANCE</Text>
             <Text style={tokenValueStyle(balance)}>{balance.toLocaleString()}</Text>
           </View>
-        
+
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>HOLDINGS</Text>
             <Text style={tokenValueStyle(displayPrice*balance)}>{'$'+formatPrice(displayPrice*balance)}</Text>
@@ -269,7 +271,17 @@ class TokenDetails extends Component {
         </View>
 
         <View style={[styles.container, {marginTop: 10}]}>
-          <View style={[styles.containerChild, {flexGrow:1, alignItems: 'center'},]}>
+          <View
+            style={
+              [
+                styles.containerChild,
+                {
+                  flexGrow:1,
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'space-around'
+                },
+            ]}>
             <TouchableOpacity
               onPress={() => isWatching ? removeFromWatchList(symbol) : addToWatchlist(symbol) }
               style={[
@@ -285,6 +297,15 @@ class TokenDetails extends Component {
                 <Text style={[styles.watchText]}>WATCH</Text>
               }
 
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => { goToPriceAlertPage(this.props.token) } }
+              style={[
+                  styles.priceContainer,
+                  styles.noPrice
+              ]}
+            >
+                <Text style={{color: '#fff'}}>$ ALERT</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -383,7 +404,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(_getHistoricalPrices({fsyms,tsyms,format,start,end,period})),
   addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
   removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
-  updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close}))
+  updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close})),
+  goToPriceAlertPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Price Alert', params: {token} }))
 })
 
 const mapStateToProps = (state, props) => {

@@ -12,6 +12,7 @@ import TokenDetails from '../components/TokenDetails';
 import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
+import PriceAlert from '../components/PriceAlert';
 import CardStackStyleInterpolator from 'react-navigation/lib/views/CardStack/CardStackStyleInterpolator';
 
 const customAnimationFunc = () => ({
@@ -31,7 +32,8 @@ export const AppNavigator = StackNavigator({
   Search: { screen: Search },
   Bookmarks: { screen: BookMarks },
   Register: { screen: Register },
-  'Token Details': { screen: TokenDetails }
+  'Token Details': { screen: TokenDetails },
+  'Price Alert': { screen: PriceAlert }
 }, {
   headerMode: "none",
   cardStyle: {

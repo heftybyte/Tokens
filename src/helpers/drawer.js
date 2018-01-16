@@ -57,10 +57,10 @@ export const withDrawer = (WrappedComponent) => {
                 navState.params && navState.params.overrideHeaderText ||
                 navState.routeName
             const toastProps = store && store.getState().ui.toastProps || {}
-            const isTokenDetails = navState.routeName === 'Token Details'
+            const isTokenDetails = navState.routeName === 'Token Details' || navState.routeName === 'Price Alert'
             const tokenDetails = navState.params && navState.params.token || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
-            const showBackButton = ['Token Details', 'Search', 'Add Address'].indexOf(navState.routeName) > -1
+            const showBackButton = ['Token Details', 'Search', 'Price Alert', 'Add Address'].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X
             const isIos = Platform.OS === 'ios';
@@ -83,7 +83,7 @@ export const withDrawer = (WrappedComponent) => {
                     >
                         <NBHeader
                         style={{
-                            backgroundColor: "#000", 
+                            backgroundColor: "#000",
                             borderBottomWidth: 0,
                             shadowOffset: { height: 0, width: 0 },
                             shadowOpacity: 0,
@@ -97,7 +97,7 @@ export const withDrawer = (WrappedComponent) => {
                                 Platform.OS === 'ios' ? {} : {flex: .4}
                             }>
                                 <Button
-                                style={{ 
+                                style={{
                                     justifyContent: "center",
                                     alignItems: Platform.OS === 'ios' ? "center" : "flex-start",
                                     width: 60,
@@ -133,7 +133,7 @@ export const withDrawer = (WrappedComponent) => {
                                         <Image key={tokenDetails.symbol} source={{ uri: getTokenImage(tokenDetails) }} style={{width: 20, height: 20, borderRadius: 5}}/>
                                         <Text style={{color: '#fff', paddingLeft: 10}}>
                                             {tokenDetails.name||tokenDetails.symbol}
-                                        </Text> 
+                                        </Text>
                                     </View> :
                                     <Text
                                         style={{
