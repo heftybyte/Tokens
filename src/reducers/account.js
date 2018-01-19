@@ -1,6 +1,6 @@
-import { AsyncStorage } from 'react-native'
+import { Alert, AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
-import { Amplitude, SecureStore } from 'expo'
+import { Amplitude, Permissions, SecureStore } from 'expo'
 import {
     loginAccount,
     registerAccount,
@@ -19,11 +19,11 @@ import {
     removeFromAccountWatchlist,
     logger
 } from '../helpers/api'
-import { safeAlert } from '../helpers/functions'
 import {
     genericError,
     getError,
-    registerForPushNotificationsAsync
+    registerForPushNotificationsAsync,
+    safeAlert
 } from '../helpers/functions'
 import { setLoading, showToast } from './ui'
 export const REGISTER = 'account/REGISTER'
@@ -251,8 +251,15 @@ export const addAddress = (address) => async (dispatch, getState) => {
     }
     dispatch(showToast('Address Added'))
     dispatch(addAddressAction(account.addresses))
-    dispatch(getPortfolio(true, 'Scanning For Tokens'))
-    dispatch(getPortfolioChart())
+
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+    if (status === 'granted') {
+        dispatch(showToast('Scanning address...You\'ll recieve a notification when complete'))
+    } else {
+        Alert.alert('Scanning address...enable push notifications to be notified of completion')
+    }
+    // dispatch(getPortfolio(true, 'Scanning For Tokens'))
+    // dispatch(getPortfolioChart())
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
