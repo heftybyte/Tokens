@@ -47,13 +47,14 @@ class Chart extends Component {
 
     onTouch = (e, isTouched) => {
         const { onCursorChange, onTouch, data } = this.props
-        const { pageX } = e.nativeEvent
+        const pageX = e.nativeEvent.pageX - 20
         this.setState({ isTouched, pageX })
         onTouch && onTouch(isTouched)
 
         if (!onCursorChange) return
-        const pct = pageX / deviceWidth
-        const point = data[Math.floor(pct * data.length)]
+        const pct = (pageX / (deviceWidth - 40))
+        const pointIndex = Math.floor(pct * data.length)
+        const point = data[pointIndex]
         point && onCursorChange(point)
     }
 
@@ -74,8 +75,8 @@ class Chart extends Component {
              
                 <Svg
                     height="200"
-                    width={deviceWidth}
-                    style={{position:'absolute'}}
+                    width={deviceWidth-40}
+                    style={{position: 'absolute', left: 20}}
                 >
                     <Line
                         x1={pageX}
