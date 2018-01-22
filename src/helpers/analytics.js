@@ -34,9 +34,15 @@ export const trackNewsFeedTap = (feedItem) => {
 }
 
 export const trackTap = (label) => {
-  Amplitude.logEvent(`'Tap${label}`)
+  Amplitude.logEvent(`Tap${label}`)
   analytics.hit(new Event('UI', 'Button Tap', label))
 }
+
+export const trackSearch = (query) => {
+  Amplitude.logEvent(`Search${query}`)
+  analytics.hit(new Event('Search', 'TokenSearch', query))
+}
+
 
 export const trackAddress = (action, label) => {
   Amplitude.logEvent(`${action}Adddress`)

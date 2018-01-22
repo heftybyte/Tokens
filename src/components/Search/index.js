@@ -3,6 +3,7 @@ import { StyleSheet, View, AsyncStorage, Alert, TextInput, Button, ScrollView, T
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
 import { fetchTokens } from '../../actions/search';
+import { trackSearch } from '../../helpers/analytics'
 import TokenList from '../TokenList';
 
 const styles = StyleSheet.create({
@@ -47,6 +48,7 @@ class SearchPage extends Component {
 
     handleSearch = (searchTerm) => {
       searchTerm = searchTerm.toUpperCase();
+      trackSearch(searchTerm)
       this.setState({
         query: searchTerm
       })
