@@ -1,27 +1,12 @@
 import React, { Component } from "react";
-import { ActivityIndicator, StyleSheet, TouchableOpacity, Text, View } from 'react-native';
+import { ActivityIndicator, Dimensions, StyleSheet, ScrollView, TouchableOpacity, Text, View } from 'react-native';
 import { Button } from 'native-base';
-import { VictoryGroup, VictoryCursorContainer, VictoryLine, VictoryTheme } from "victory-native";
-import { Line } from 'victory-native/lib';
+import { VictoryGroup, VictoryLine } from "victory-native";
+import Svg, { Line } from 'react-native-svg'
 import { gainColor, lossColor } from '../../config'
 import { mapAxis } from '../../helpers/functions'
 
-// Use pageX instead of locationX to get around https://github.com/facebook/react-native/issues/7221
-const onTouchMove = VictoryCursorContainer.defaultEvents[0].eventHandlers.onTouchMove
-VictoryCursorContainer.defaultEvents[0].eventHandlers.onTouchMove = (evt, targetProps) => {
-    const keys = Object.keys(evt)
-    const mutatedEvt = {}
-    // shallow copy
-    keys.forEach(key=>{
-        mutatedEvt[key] = evt[key]
-    })
-    // overwrite cooridnates
-    mutatedEvt.nativeEvent = {
-        ...evt.nativeEvent,
-        locationX: evt.nativeEvent.pageX
-    }
-    return onTouchMove(mutatedEvt, targetProps)
-}
+const { width: deviceWidth } = Dimensions.get("window")
 
 const styles = StyleSheet.create({
     container: {
@@ -56,42 +41,55 @@ const defaultChartData = [{x:0,y:0},{x:0,y:0}]
 class Chart extends Component {
 
     state = {
-        isTouched: false
+        isTouched: false,
+        pageX: 0
     }
 
-    onTouch = (isTouched) => {
-        const { onTouch } = this.props
-        this.setState({ isTouched })
+    onTouch = (e, isTouched) => {
+        const { onCursorChange, onTouch, data } = this.props
+        const { pageX } = e.nativeEvent
+        this.setState({ isTouched, pageX })
         onTouch && onTouch(isTouched)
+
+        if (!onCursorChange) return
+        const pct = pageX / deviceWidth
+        const point = data[Math.floor(pct * data.length)]
+        point && onCursorChange(point)
     }
 
     render() {
-        const { data, totalChangePct, loading, onCursorChange, cursorDimension='x' } = this.props
+        const { data, totalChangePct, loading, onCursorChange } = this.props
         const opacity = loading ? .4 : 1
-        const cursorColor = this.state.isTouched ? '#333' : 'transparent'
+        const { pageX, isTouched } = this.state
+        const cursorColor = isTouched ? '#333' : 'transparent'
 
         return (
             <View
-                onTouchMove={()=>this.onTouch(true)}
-                onTouchEnd={()=>this.onTouch(false)}
+                onTouchMove={(e)=>this.onTouch(e, true)}
+                onTouchEnd={(e)=>this.onTouch(e, false)}
                 style={styles.container}
             >
                 {loading && <ActivityIndicator style={styles.spinner} size="large" color="#fff" />}
                 {!loading && !data.length && <Text style={styles.msg}>- No Data -</Text>}
+             
+                <Svg
+                    height="200"
+                    width={deviceWidth}
+                    style={{position:'absolute'}}
+                >
+                    <Line
+                        x1={pageX}
+                        y1="0"
+                        x2={pageX}
+                        y2="200"
+                        stroke={cursorColor}
+                        strokeWidth="2"
+                    />
+                </Svg>
                 <VictoryGroup
                     height={180}
                     padding={{ top: 5, bottom: 0, left: 20, right: 20 }}
-                    containerComponent={
-                        <VictoryCursorContainer
-                            cursorDimension={cursorDimension}
-                            cursorComponent={<Line style={{stroke: cursorColor }}/>}
-                            onCursorChange={(value, props)=>{
-                                if (!onCursorChange || !value) return
-                                const point = mapAxis(data, value, cursorDimension)
-                                point && onCursorChange(point)
-                            }}
-                        />
-                    }>
+                >
                     <VictoryLine
                         scale={{x: "time", y: "linear"}}
                         style={{
