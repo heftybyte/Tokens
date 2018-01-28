@@ -11,8 +11,9 @@ export const styles = {
         borderColor: 'transparent',
         height:130,
         maxHeight:130,
-        borderWidth: 10,
-        padding: 5,
+        borderWidth: 0,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
         flex: 1
     },
     body: {

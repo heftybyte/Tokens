@@ -27,7 +27,7 @@ class ImageRight extends React.Component {
                         />
                     </Col>
                 </Row>
-                <Row size={10}>
+                <Row size={20}>
                     <Col size={80}>
                         <Text
                           style={styles.link}
