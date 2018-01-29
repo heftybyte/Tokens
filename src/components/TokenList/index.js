@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito'
   },
   symbolContainer: {
-    flex: .6
+    flex: .7
   },
   priceContainer: {
     width: 96,
