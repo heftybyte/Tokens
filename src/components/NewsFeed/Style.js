@@ -56,7 +56,6 @@ export const styles = {
     link: {
       color: '#6b2fe2',
       fontSize: 12,
-      fontWeight: 'bold',
       fontFamily: 'Nunito-Light'
     }
 }
