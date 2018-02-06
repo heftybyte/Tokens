@@ -26,7 +26,13 @@ const Items = [
         name: "Account",
         icon: "account-circle",
         route: "Accounts"
-    }/*,
+    },
+	{
+		name: "ICO List",
+		icon: "fire",
+		route: "ICOList",
+		Component: MaterialCommunityIcons
+	},/*,
     {
         name: "Bookmarks",
         icon: "bookmark",
@@ -192,7 +198,7 @@ const DashboardMenu = ({ navigation, totalValue }) => (
     </View>
 )
 
-const ListItem = (navigation) => ({ name, route, icon }) => (
+const ListItem = (navigation) => ({ name, route, icon, Component }) => (
     <TouchableOpacity
         key={route}
         onPress={() => navigation.navigate(route)}
@@ -207,7 +213,13 @@ const ListItem = (navigation) => ({ name, route, icon }) => (
             }}
         >
             <View style={{ width: 60 }}>
-                <Icon name={icon} size={25} color="#fff" />
+	            {
+		            Component ? (
+		            	<Component name={icon} size={25} color="#fff" />
+		            ) : (
+			            <Icon name={icon} size={25} color="#fff" />
+		            )
+	            }
             </View>
             <View style={{ flex: 1 }}>
                 <Text style={{ color: "#fff" }}>{name}</Text>
