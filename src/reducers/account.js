@@ -255,16 +255,16 @@ export const addAddress = (address) => async (dispatch, getState) => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
     const pushEnabled = status === 'granted'
     const params = { type: 'ADD_ADDRESS', meta: { pushEnabled } }
-    // dispatch(NavigationActions.navigate({ routeName: 'Education', params }))
-    if (status === 'granted') {
-        // Alert.alert('Scanning address...enable push notifications to be notified of completion')
-        dispatch(showToast('Scanning address...You\'ll recieve a notification when complete'))
-    } else {
-        // Alert.alert('Scanning address...enable push notifications to be notified of completion')
-    }
-    dispatch(getPortfolio(true, 'Scanning For Tokens'))
-    dispatch(getPortfolioChart())
-    dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+    dispatch(NavigationActions.navigate({ routeName: 'Education', params }))
+    // if (status === 'granted') {
+    //     // Alert.alert('Scanning address...enable push notifications to be notified of completion')
+    //     dispatch(showToast('Scanning address...You\'ll recieve a notification when complete'))
+    // } else {
+    //     // Alert.alert('Scanning address...enable push notifications to be notified of completion')
+    // }
+    // dispatch(getPortfolio(true, 'Scanning For Tokens'))
+    // dispatch(getPortfolioChart())
+    // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
 export const refreshAddress = (address) => async (dispatch, getState) => {
