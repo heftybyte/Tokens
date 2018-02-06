@@ -74,9 +74,6 @@ class AddAddress extends Component {
     }
     const err = await addAddress(text);
     // Alert.alert('Allow up to 2 minutes for your address data to appear');
-    if (!err) {
-      await navigate('Accounts')
-    }
   }
 
   render(){
@@ -110,7 +107,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     addAddress: (address) => dispatch(addAddress(address)),
-    navigate: (routeName) => dispatch(NavigationActions.navigate({ routeName }))
+    navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
   }
 }
 

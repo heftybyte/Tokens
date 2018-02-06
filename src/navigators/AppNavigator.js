@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 
 import AccountsNavigator from '../components/Account';
+import Education from '../components/Education';
 import Entry from '../components/Entry';
 import Dashboard from '../components/Dashboard';
 import AddAddress from '../components/Account/AddAddress';
@@ -22,6 +23,7 @@ const customAnimationFunc = () => ({
 });
 
 export const AppNavigator = StackNavigator({
+  Education: { screen: Education },
   Entry: { screen: Entry },
   NormalRegistration: { screen: NormalRegistration },
   GuestRegistration: { screen: GuestRegistration },

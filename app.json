@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "Tokens",
+    "name": "tokens-staging",
     "sdkVersion": "21.0.0",
     "icon": "./assets/app-icon.png",
     "orientation": "portrait",
-    "slug": "tokens",
+    "slug": "tokens-staging",
     "version": "0.0.1",
     "ios": {
-      "bundleIdentifier": "express.tokens.tokens"
+      "bundleIdentifier": "express.tokens.tokens-staging"
     },
     "android": {
-      "package": "express.tokens.tokens"
+      "package": "express.tokens.tokens-staging"
     },
     "splash": {
       "image": "./assets/splash.png",
