@@ -6,3 +6,4 @@ npm-debug.*
 .idea
 .DS_Store
 .env
+.idea
