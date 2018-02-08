@@ -29,7 +29,7 @@ class CardListItem extends Component {
 				<View style={styles.seperator} />
 				<View
 					style={{
-						width: "30%"
+						width: "35%"
 					}}
 				>
 					<Text
@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
 		width: 70,
 		height: 70,
 		borderRadius: 35,
-		backgroundColor: "#fff"
+		backgroundColor: "#fff",
+		marginLeft: 20
 	},
 	cardListRoot: {
 		height: 120,
