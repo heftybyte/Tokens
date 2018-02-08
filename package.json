@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^6.2.2",
+    "accounting": "^0.4.1",
     "axios": "^0.16.2",
     "currency-formatter": "^1.2.1",
     "expo": "^21.0.0",
