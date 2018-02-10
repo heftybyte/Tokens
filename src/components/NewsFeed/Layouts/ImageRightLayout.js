@@ -9,12 +9,14 @@ import { getLinkTextByType } from './helpers'
 class ImageRight extends React.Component {
 
     render() {
-        const { news: { title, body, image, link, type }, bookmarked } = this.props
+        const { news: { title, body, image, link, type, sponsored }, bookmarked } = this.props
         return (
             <Grid>
-                <Row size={20}>
+                <Row size={20} style={{justifyContent: 'space-between'}}>
                     {/*<SaveButton bookmarked={bookmarked} item={this.props.news} />*/}
                     <Text style={[styles.title]}>{title.toUpperCase()}</Text>
+                    {sponsored && 
+                        <Text style={[styles.title, { color: '#333' }]}>SPONSORED</Text>}
                 </Row>
                 <Row size={70} style={styles.center}>
                     <Col size={80}>
