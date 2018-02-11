@@ -356,10 +356,10 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
         dispatch(showToast(getError(err)))
         return
     }
-    
+
         dispatch(tokenDetailsAction(tokenDetails))
         return tokenDetails;
-    
+
 }
 
 export const getBookmark = (news) => async (dispatch, getState) => {
@@ -478,7 +478,7 @@ export default (state = initialState, action) => {
             const bookmarkMap = {}
             state.bookmarks.forEach((bookmark)=>{
                 if (bookmark.id !== action.data.id) {
-                    bookmarks.push(bookmark)   
+                    bookmarks.push(bookmark)
                     bookmarkMap[bookmark.id] = true
                 }
             })
