@@ -97,16 +97,16 @@ class Dashboard extends Component {
     chartIsTouched: false
   }
 
-  componentWillMount = () => AsyncStorage.getItem('feed:latestTimestamp').then(
-      (timestamp) => this.props.fetchFeed(timestamp)
-  );
-
   componentDidMount = async () => {
     Linking.addEventListener('url', this.handleDeepLink);
     if (this.state.stale) {
       this.props.getPortfolio()
       this.props.getPortfolioChart()
     }
+  }
+
+  componentWillMount = async () => {
+    this.props.fetchFeed()
   }
 
   componentWillUnmount() {

@@ -1,21 +1,9 @@
-import {getNewsFeed} from '../helpers/api'
+import { getNewsFeed } from '../helpers/api'
 import {showToast } from './ui'
 import {
     getError,
 } from '../helpers/functions'
 import { AsyncStorage } from 'react-native'
-
-
-export const saveLatestTimestamp = async (newTimestamp) => {
-    if(newTimestamp !== undefined) {
-        let oldTimestamp = await AsyncStorage.getItem('feed:latestTimestamp');
-        const oldDate = +(new Date(oldTimestamp))
-        const newDate = +(new Date(newTimestamp))
-            if(newDate >= oldDate) {
-                AsyncStorage.setItem('feed:latestTimestamp', newTimestamp)
-            }
-    }
-}
 
 export const types = {
     GET_NEWS_FEED: 'GET_NEWS_FEED',
@@ -26,26 +14,22 @@ export const getFeed = (data) => ({
     payload: data
 });
 
-export const fetchFeed = (timestamp) => async (dispatch, getState) => {
-    let err = null;
-    const news = await getNewsFeed(timestamp).catch(e=>err=e)
-    if (err) {
+export const fetchFeed = () => async (dispatch, getState) => {
+    try {
+        const accountId = getState().account.id
+        const news = await getNewsFeed(accountId)
+        dispatch(getFeed(news));
+    } catch (err) {
         dispatch(showToast(getError(err)))
-        return
-    }
-
-    dispatch(getFeed(news));
+    }   
 }
-
 
 const initialState = [];
 
 export default (state = initialState, action) => {
     switch(action.type) {
         case types.GET_NEWS_FEED:
-            return [
-                ...state, ...action.payload
-            ]
+            return action.payload
         default:
             return state
     }

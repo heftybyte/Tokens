@@ -5,8 +5,8 @@ import Swiper from 'react-native-swiper'
 import {styles} from './Style'
 import Format from './Format'
 import { trackNewsFeedSwipe } from '../../helpers/analytics'
+import { trackFeedView } from '../../helpers/api'
 import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
-import {saveLatestTimestamp} from '../../reducers/feed'
 import { connect } from 'react-redux';
 import mock from './MockData'
 
@@ -28,9 +28,9 @@ const Dot = (color) => (
 )
 
 const News = (props) => {
-  const { trackFeedItem } = props
+  const { trackFeedItem, accountId, feed } = props
 
-  const feed = (props.feed || []).map((news, index) => {
+  const feedCards = (feed || []).map((news, index) => {
     return (
         <View key={`news-${index}`} style={styles.slide}>
             <Format format={news.format} news={news} />
@@ -38,11 +38,14 @@ const News = (props) => {
     )
   })
   const paginationLeft = window.width - (125)
-  let oldIndex = 0;
 
-  return (
+  if (feedCards.length) {
+    trackFeedView(props.accountId, feed[0].id)
+  }
+
+  return feedCards.length && (
       <Swiper
-        loop={false}
+        loop={true}
         paginationStyle={{
             backgroundColor: "transparent",
             width: '50%',
@@ -53,22 +56,28 @@ const News = (props) => {
         activeDot={Dot('#fff')}
         containerStyle={styles.container}
         onIndexChanged={(index)=>{
-          trackNewsFeedSwipe(props.feed[index])
-          trackFeedItem(props.feed[index].id, 'view')
-          saveLatestTimestamp(props.feed[oldIndex].createdAt)
-          oldIndex = index
+          if (index === feedCards.length-1) {
+            this.setState({
+              lastCard: true
+            })
+          }
+          trackNewsFeedSwipe(feed[index])
+          trackFeedItem(feed[index].id, 'view')
+          trackFeedView(accountId, feed[index].id)
         }}
        >
-        { feed }
+        { feedCards }
       </Swiper>
-  )
+  ) || null
 }
 
 const mapStateToProps = (state) => ({
+  accountId: state.account.id
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    trackFeedItem: (id, action) => dispatch(_trackFeedItem(id, action))
+    trackFeedItem: (id, action) => dispatch(_trackFeedItem(id, action)),
+    trackFeedView: (itemId) => dispatch(_trackFeedView(itemId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(News);

@@ -109,7 +109,7 @@ class ViewAddresses extends Component {
           <Text style={styles.header}>Your Ethereum Addresses</Text>
           {addresses.map(
               (address, index) =>
-              <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={{flex: 1, flexDirection: 'row'}} key={index}>
                 <Text
                   style={{color: '#fff', fontSize: 12, flex: .8, paddingVertical: 20 }}
                   numberOfLines={1}

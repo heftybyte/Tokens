@@ -114,8 +114,14 @@ export const trackFeedActivity = async (feedItemId, accountId, type) => {
   instance.post(`/feed/${accountId}/action`, {feedItemId, accountId, type});
 }
 
-export const getNewsFeed = async (timestamp) => {
-    const res = await instance.get(`/feed/latest?timestamp=${timestamp}`)
+export const getNewsFeed = async (accountId) => {
+    const res = await instance.get(`/feed/${accountId}/latest`)
+    return res.data;
+}
+
+export const trackFeedView = async (accountId, itemId) => {
+  console.log(accountId, itemId)
+    const res = await instance.post(`/feed/${accountId}/item/${itemId}/view`)
     return res.data;
 }
 
