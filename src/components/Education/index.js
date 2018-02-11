@@ -10,6 +10,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Button, Text } from 'native-base';
 import Swiper from 'react-native-swiper'
 
+import { registerForPushNotificationsAsync } from '../../helpers/functions'
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -113,7 +115,10 @@ class Education extends Component {
             {message}
           </Text>
 
-          {!pushEnabled && <Button style={styles.button}>
+          {!pushEnabled && <Button
+              style={styles.button}
+              onPress={registerForPushNotificationsAsync}
+              >
             <Text>Enable Push Notifications</Text>
           </Button>}
         </View>
