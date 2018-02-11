@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
 	},
 	subText: {
 		fontSize: 22,
+		width: "90%"
 	}
 })
 
