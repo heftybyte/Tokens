@@ -66,8 +66,10 @@ export const withDrawer = (WrappedComponent) => {
             const toastProps = store && store.getState().ui.toastProps || {}
             const isTokenDetails = navState.routeName === 'Token Details' || navState.routeName === 'Price Alert'
             const tokenDetails = navState.params && navState.params.token || {}
+            const isICOdetails = navState.routeName === 'ICODetail'
+	        const icoDetails = navState.params && navState.params.ico || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
-            const showBackButton = ['Token Details', 'Search', 'Price Alert', 'Add Address'].indexOf(navState.routeName) > -1
+            const showBackButton = ['Token Details', 'Search', 'Price Alert', 'Add Address', 'ICOList', 'ICODetail'].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X
             const isIos = Platform.OS === 'ios';
@@ -130,18 +132,39 @@ export const withDrawer = (WrappedComponent) => {
                                 </Button>
                             </Left>
                             <Body>
-                                {isTokenDetails ?
+                                {isTokenDetails ? (
                                     <View style={{
                                         flexDirection: 'row',
                                         alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
                                         alignItems: 'center',
                                         flex:1
                                     }}>
-                                        <Image key={tokenDetails.symbol} source={{ uri: getTokenImage(tokenDetails) }} style={{width: 20, height: 20, borderRadius: 5}}/>
+                                        <Image
+	                                        key={tokenDetails.symbol}
+	                                        source={{ uri: getTokenImage(tokenDetails) }}
+	                                        style={{width: 20, height: 20, borderRadius: 5}}
+                                        />
                                         <Text style={{color: '#fff', paddingLeft: 10}}>
                                             {tokenDetails.name||tokenDetails.symbol}
                                         </Text>
-                                    </View> :
+                                    </View>
+	                                ) : isICOdetails ? (
+	                                <View style={{
+		                                flexDirection: 'row',
+		                                alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
+		                                alignItems: 'center',
+		                                flex:1
+	                                }}>
+		                                <Image
+			                                key={tokenDetails.symbol}
+			                                source={require("./ethereum.png")  || { uri: getTokenImage(tokenDetails)  }}
+			                                style={{width: 20, height: 20, borderRadius: 5}}
+		                                />
+		                                <Text style={{color: '#fff', paddingLeft: 10}}>
+			                                {icoDetails.name.split(" ")[0]}
+		                                </Text>
+	                                </View>
+	                                ) : (
                                     <Text
                                         style={{
                                             color: '#fff',
@@ -151,7 +174,7 @@ export const withDrawer = (WrappedComponent) => {
                                     >
                                         {headerText}
                                     </Text>
-                                }
+                                )}
                             </Body>
                             <Right>
                             {isTokenDetails ?
