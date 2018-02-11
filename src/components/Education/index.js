@@ -80,7 +80,6 @@ class Education extends Component {
 
   render() {
     const { type, meta } = this.props
-    // const type = "ADD_ADDRESS"
     const { images } = Content[type]
     const { pushEnabled } = meta
     const message = this.messageFor(pushEnabled)
@@ -92,7 +91,6 @@ class Education extends Component {
         />
       </View>
     )
-    // console.log('Education -->', {type, meta})
 
     return (
       <View
