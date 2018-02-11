@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
+import { ICOs, ICODetail } from "../components/Ico"
 
 import AccountsNavigator from '../components/Account';
 import Education from '../components/Education';
@@ -35,8 +36,15 @@ export const AppNavigator = StackNavigator({
   Bookmarks: { screen: BookMarks },
   Register: { screen: Register },
   'Token Details': { screen: TokenDetails },
-  'Price Alert': { screen: PriceAlert }
+  'Price Alert': { screen: PriceAlert },
+  ICOList: {
+  	screen: ICOs
+  },
+	ICODetail: {
+  	screen: ICODetail
+	}
 }, {
+	initialRouteName: "ICOList",
   headerMode: "none",
   cardStyle: {
     backgroundColor: '#000'

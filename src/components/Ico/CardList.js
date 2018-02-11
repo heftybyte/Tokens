@@ -1,15 +1,18 @@
 import React, { Component } from "react"
-import { StyleSheet, FlatList, View, Text, Dimensions } from "react-native"
+import { StyleSheet, FlatList, View, Text, Dimensions, TouchableOpacity } from "react-native"
 import moment from "moment"
 import { formatMoney } from "accounting"
 
 class CardListItem extends Component {
 	render() {
-		const { startDate, supply, name } = this.props
+		const { startDate, supply, name, navigation } = this.props
 		const instance = moment(startDate)
 		const [month, day] = [instance.format("MMM"), instance.format("D")]
 		return (
-			<View style={styles.cardRoot}>
+			<TouchableOpacity
+				style={styles.cardRoot}
+				onPress={() => navigation.navigate("ICODetail", { ico: this.props })}
+			>
 				<View
 					style={{
 						justifyContent: "space-between",
@@ -29,7 +32,7 @@ class CardListItem extends Component {
 				<View style={styles.seperator} />
 				<View
 					style={{
-						width: "35%"
+						width: "45%",
 					}}
 				>
 					<Text
@@ -42,14 +45,14 @@ class CardListItem extends Component {
 				<View
 					style={styles.circle}
 				/>
-			</View>
+			</TouchableOpacity>
 		)
 	}
 }
 
 export class CardList extends Component {
 	render() {
-		const { type } = this.props
+		const { type, data, navigation } = this.props
 		return (
 			<View
 				style={styles.cardListRoot}
@@ -65,16 +68,8 @@ export class CardList extends Component {
 				</View>
 				<FlatList
 					horizontal
-					renderItem={({ item }) => <CardListItem {...item} />}
-					data={[{
-						name: "Magenta Blockchain Service",
-						supply: 3490000,
-						startDate: 12263536735
-					},{
-						name: "Magenta Blockchain Service",
-						supply: 3490000,
-						startDate: 12269536735
-					}]}
+					renderItem={({ item }) => <CardListItem {...item} navigation={navigation} />}
+					data={data}
 					keyExtractor={(item) => item.startDate}
 				/>
 			</View>
@@ -84,14 +79,13 @@ export class CardList extends Component {
 
 const styles = StyleSheet.create({
 	cardRoot: {
-		flex: 1,
 		flexDirection: "row",
 		justifyContent: "flex-start",
 		alignItems: "center",
 		paddingVertical: 10,
 		paddingHorizontal: 20,
-		borderWidth: 1,
-		width: "100%",
+		borderBottomWidth: 1,
+		width: Dimensions.get("window").width,
 		borderColor: "rgba(255, 255, 255, .2)"
 	},
 	seperator: {

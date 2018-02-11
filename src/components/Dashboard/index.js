@@ -16,7 +16,6 @@ import {
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
-import { CardList } from "./CardList"
 
 import TokenList from '../TokenList';
 import Header from './Header';
@@ -237,7 +236,6 @@ class Dashboard extends Component {
           tokens={portfolio.top}
           type="watchList"
         />}
-        <CardList type={"Upcoming"} />
       </ScrollView>
     )
   }
