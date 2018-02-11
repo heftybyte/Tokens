@@ -71,9 +71,9 @@ const Dot = (color) => (
 class Education extends Component {
 
   messageFor(pushEnabled) {
-    const entry = "We're scanning the blockchain for your tokens."
-    const pushEnabledMsg = `${entry} You'll receive a push notification when its complete.`
-    const pushDisabledMsg = `${entry} Enable push notifications to be notified when its completes.`
+    const intro = "We're scanning the blockchain for your tokens."
+    const pushEnabledMsg = `${intro} You'll receive a push notification when its complete.`
+    const pushDisabledMsg = `${intro} Enable push notifications to be notified when its completes.`
 
     return pushEnabled ? pushEnabledMsg : pushDisabledMsg
   }
