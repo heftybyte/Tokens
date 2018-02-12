@@ -315,7 +315,7 @@ class TokenDetails extends Component {
               <Text style={styles.tokenHeading}>DESCRIPTION</Text>
               <Text
                 numberOfLines={this.state.readMore ? 0 : 4}
-                style={[styles.tokenValue, {fontSize: 15,textAlign: 'justify', paddingTop: 5}]}>
+                style={[styles.tokenValue, {fontSize: 15,textAlign: 'left', paddingTop: 5}]}>
                   {description}
                   </Text>
                 {description.length > maxDescDisplayLength && (<TouchableHighlight

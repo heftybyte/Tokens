@@ -5,7 +5,7 @@ import { formatMoney } from "accounting"
 
 class CardListItem extends Component {
 	render() {
-		const { startDate, supply, name, logo, navigation } = this.props
+		const { startDate, goal, supply, name, logo, category, navigation } = this.props
 		const instance = moment(startDate)
 		const [month, day] = [instance.format("MMM"), instance.format("D")]
 		return (
@@ -21,7 +21,7 @@ class CardListItem extends Component {
 					<Text
 						style={[styles.baseText, { fontSize: 35 }]}
 					>
-						{day}
+						{String(day).padStart(2,0)}
 					</Text>
 					<Text
 						style={[styles.baseText, { fontSize: 20 }]}
@@ -36,11 +36,14 @@ class CardListItem extends Component {
 					}}
 				>
 					<Text
-						style={[styles.baseText, { fontSize: 16 }]}
+						style={[styles.baseText, { fontSize: 18 }]}
 					>{name}</Text>
 					<Text
+						style={[styles.baseText, { fontSize: 12 }]}
+					>{(category || '').toUpperCase()}</Text>
+					<Text
 						style={[styles.baseText, { fontSize: 14 }]}
-					>{formatMoney(supply, "$", 0)}</Text>
+					>{formatMoney(goal, "$", 0)}</Text>
 				</View>
 				<Image
                     style={styles.logo}
@@ -62,13 +65,12 @@ export class CardList extends Component {
 					style={[styles.topicHeight]}
 				>
 					<Text
-						style={[styles.baseText]}
+						style={[styles.baseText, { fontFamily: 'Nunito' }]}
 					>
 						{type}
 					</Text>
 				</View>
 				<FlatList
-					horizontal
 					renderItem={({ item }) => <CardListItem {...item} navigation={navigation} />}
 					data={data}
 					keyExtractor={(item) => item.id}
@@ -96,7 +98,8 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20
 	},
 	baseText: {
-		color: "#fff"
+		color: "#fff",
+		fontFamily: 'Nunito-ExtraLight'
 	},
 	logo: {
 		width: 70,
@@ -114,6 +117,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "flex-start",
 		paddingHorizontal: 20,
-		backgroundColor: "#555"
+		backgroundColor: "#222",
 	}
 })

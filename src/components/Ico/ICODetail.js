@@ -1,7 +1,7 @@
 import React, { Component } from "React"
 import Dimensions from 'Dimensions';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
-import { Image, ScrollView, View, Text, StyleSheet } from "react-native"
+import { Image, Linking, ScrollView, View, Text, StyleSheet } from "react-native"
 import { connect } from "react-redux"
 import { Button } from "native-base"
 import { formatMoney } from "accounting"
@@ -19,15 +19,18 @@ class ICODetail_ extends Component {
 	render() {
 		const {
 			ico:{
-				price = .27542,
-				video = 'https://youtu.be/neCaG0LoKQ0',
+				price,
+				video,
 				image,
+				description,
+				category,
+				website,
 				whitelistLink,
-				supply = 137000000,
-				supplyOffered = "45%",
+				supply,
+				supplyOffered,
 				name,
-				symbol = "MGT",
-				goal = 45000000,
+				symbol,
+				goal,
 				startDate,
 				endDate 
 			}
@@ -127,10 +130,53 @@ class ICODetail_ extends Component {
 						<Text style={styles.headingText}>AVAILABLE</Text>
 
 						<Text style={styles.tokenMeta}>
-							{supplyOffered}
+							{supplyOffered}%
 						</Text>
 					</View>
 				</View>
+
+				<View
+					style={{
+						flexDirection: "row",
+						marginVertical: 10,
+						marginBottom: 20
+					}}
+				>
+					<View
+						style={{
+							flex: 1,
+							justifyContent: "space-between",
+							height: 50
+						}}
+					>
+						<Text style={styles.headingText}>DESCRIPTION</Text>
+
+						<Text style={[styles.tokenMeta, styles.description]}>
+							{description}
+						</Text>
+					</View>
+				</View>
+				<Button
+					block
+					transparent
+					style={{
+						justifyContent: "space-between",
+						marginTop: 30,
+						width: "100%"
+					}}
+					onPress={()=>Linking.openURL(website)}
+				>
+					<Text
+						style={[styles.tokenMeta, { fontSize: 17 }]}
+					>
+						WEBSITE
+					</Text>
+					<Icon
+						name={"chevron-right"}
+						size={25}
+						color={"#fff"}
+					/>
+				</Button>
 				{whitelistLink && <Button
 					block
 					transparent
@@ -196,6 +242,7 @@ const styles = StyleSheet.create({
 	},
 	image: {
 		width: viewWidth,
+		height: viewWidth/(16/9),
 		backgroundColor: '#000',
 		marginBottom: 10
 	},
@@ -204,6 +251,12 @@ const styles = StyleSheet.create({
 		height: viewWidth/(16/9),
 		backgroundColor: '#000',
 		marginBottom: 10
+	},
+	description: {
+		marginBottom: 20,
+		fontSize: 15,
+		textAlign: 'left',
+		paddingTop: 5
 	}
 })
 
