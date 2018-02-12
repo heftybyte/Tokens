@@ -36,7 +36,7 @@ import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer'
 import { getTokenDetailsForAccount } from '../../helpers/api'
-import { trackRefresh } from '../../helpers/analytics'
+import { trackRefresh, trackTap } from '../../helpers/analytics'
 import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
 import { Constants } from 'expo';
@@ -113,7 +113,7 @@ class Dashboard extends Component {
     Linking.removeEventListener('url', this.handleDeepLink);
   }
 
-  handleDeepLink = async (event) => { 
+  handleDeepLink = async (event) => {
     let queryString = event.url.replace(Constants.linkingUri, '')
     if (queryString) {
       var data = qs.parse(queryString)
@@ -158,6 +158,7 @@ class Dashboard extends Component {
       portfolioChart,
       chartLoading,
       goToAddressPage,
+      goToSearchPage,
       loggedIn,
       addresses,
       updateToken,
@@ -208,7 +209,7 @@ class Dashboard extends Component {
           />
         }
 
-        { !!addresses.length && 
+        { !!addresses.length &&
           <Chart
             data={portfolioChart}
             totalChangePct={portfolio.totalPriceChangePct}
@@ -217,22 +218,38 @@ class Dashboard extends Component {
             onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
           />
         }
-        { !! addresses.length && 
+        { !! addresses.length &&
           <RangeSelector onChange={this.props.getPortfolioChart} />
         }
-        
+
         <News feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
-        { !!portfolio.watchList.length &&
-        <TokenList
+        <View>
+          <TokenList
             title="Watchlist"
             tokens={portfolio.watchList}
             type="watchList"
-          />}
+          />
+          {!portfolio.watchList.length &&
+            <TouchableHighlight
+              style={{marginBottom: 20, marginTop: -20}}
+              onPress={()=>{trackTap('Search');goToSearchPage()}}
+            >
+              <View style={styles.addBtn}>
+                <MaterialCommunityIcons
+                  style={styles.addBtnIcon}
+                  name="plus-circle-outline"
+                  size={22}
+                  color="white"
+                />
+                <Text style={styles.addBtnText}>Add Tokens to Your Watchlist</Text>
+              </View>
+            </TouchableHighlight>}
+        </View>
         { !!portfolio.top.length &&
         <TokenList
-          title="Top 100 Tokens By Market Cap" 
+          title="Top 100 Tokens By Market Cap"
           tokens={portfolio.top}
           type="watchList"
         />}
@@ -256,6 +273,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Add Address' })),
+    goToSearchPage: () => dispatch(NavigationActions.navigate({ routeName: 'Search' })),
     login: () => dispatch(login()),
     register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
