@@ -1,11 +1,11 @@
 import React, { Component } from "react"
-import { StyleSheet, FlatList, View, Text, Dimensions, TouchableOpacity } from "react-native"
+import { Image, StyleSheet, FlatList, View, Text, Dimensions, TouchableOpacity } from "react-native"
 import moment from "moment"
 import { formatMoney } from "accounting"
 
 class CardListItem extends Component {
 	render() {
-		const { startDate, supply, name, navigation } = this.props
+		const { startDate, supply, name, logo, navigation } = this.props
 		const instance = moment(startDate)
 		const [month, day] = [instance.format("MMM"), instance.format("D")]
 		return (
@@ -42,9 +42,10 @@ class CardListItem extends Component {
 						style={[styles.baseText, { fontSize: 14 }]}
 					>{formatMoney(supply, "$", 0)}</Text>
 				</View>
-				<View
-					style={styles.circle}
-				/>
+				<Image
+                    style={styles.logo}
+                    source={{uri: `${logo}`}}
+                />
 			</TouchableOpacity>
 		)
 	}
@@ -70,7 +71,7 @@ export class CardList extends Component {
 					horizontal
 					renderItem={({ item }) => <CardListItem {...item} navigation={navigation} />}
 					data={data}
-					keyExtractor={(item) => item.startDate}
+					keyExtractor={(item) => item.id}
 				/>
 			</View>
 		)
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
 	baseText: {
 		color: "#fff"
 	},
-	circle: {
+	logo: {
 		width: 70,
 		height: 70,
 		borderRadius: 35,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Animated, View } from 'react-native'
 import Dimensions from 'Dimensions'
 import Swiper from 'react-native-swiper'
 import {styles} from './Style'
@@ -8,7 +8,6 @@ import { trackNewsFeedSwipe } from '../../helpers/analytics'
 import { trackFeedView } from '../../helpers/api'
 import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
 import { connect } from 'react-redux';
-import mock from './MockData'
 
 const window = Dimensions.get('window');
 
@@ -27,48 +26,104 @@ const Dot = (color) => (
   />
 )
 
-const News = (props) => {
-  const { trackFeedItem, accountId, feed } = props
+const CARD_HEIGHT = 130
 
-  const feedCards = (feed || []).map((news, index) => {
-    return (
-        <View key={`news-${index}`} style={styles.slide}>
-            <Format format={news.format} news={news} />
-        </View>
-    )
-  })
-  const paginationLeft = window.width - (125)
-
-  if (feedCards.length) {
-    trackFeedView(props.accountId, feed[0].id)
+class News extends React.Component {
+  state = {
+    heightAnim: new Animated.Value(CARD_HEIGHT),
+    endCard: {
+      format: 'IMAGE_RIGHT',
+      image: 'https://www.shareicon.net/data/128x128/2017/02/24/879486_green_512x512.png',
+      title: 'Complete',
+      body: 'All caught up! New cards will appear as they come.',
+      link: {
+        type: 'close',
+        text: 'CLOSE'
+      }
+    }
   }
 
-  return feedCards.length && (
-      <Swiper
-        loop={true}
-        paginationStyle={{
-            backgroundColor: "transparent",
-            width: '50%',
-            bottom: 5,
-            left: paginationLeft
-        }} 
-        dot={Dot('#333')}
-        activeDot={Dot('#fff')}
-        containerStyle={styles.container}
-        onIndexChanged={(index)=>{
-          if (index === feedCards.length-1) {
-            this.setState({
-              lastCard: true
-            })
+  componentDidMount() {
+    this.setState({
+      endCard: {
+        ...this.state.endCard,
+        link: {
+          ...this.state.endCard.link,
+          action: () => {
+            this.close()
           }
-          trackNewsFeedSwipe(feed[index])
-          trackFeedItem(feed[index].id, 'view')
-          trackFeedView(accountId, feed[index].id)
-        }}
-       >
-        { feedCards }
-      </Swiper>
+        }
+      }
+    })
+  }
+
+  open = () => {
+    Animated.timing(
+      this.state.heightAnim,
+      {
+        toValue: CARD_HEIGHT,
+        duration: 300
+      }
+    ).start()
+  }
+
+  close = () => {
+    Animated.timing(
+      this.state.heightAnim,
+      {
+        toValue: 0,
+        duration: 300
+      }
+    ).start()
+  }
+
+  render() {
+    let { trackFeedItem, accountId, feed } = this.props
+    if (feed && feed.length) {
+      feed.push(this.state.endCard)
+    }
+
+    const feedCards = (feed || []).map((news, index) => {
+      return (
+          <View key={`news-${index}`} style={styles.slide}>
+              <Format format={news.format} news={news} />
+          </View>
+      )
+    })
+    const paginationLeft = window.width - (125)
+
+    if (feedCards.length) {
+      feed[0].id && trackFeedView(accountId, feed[0].id)
+    }
+
+    return feedCards.length && (
+      <Animated.View style={{height: this.state.heightAnim }}>
+        <Swiper
+          loop={false}
+          paginationStyle={{
+              backgroundColor: "transparent",
+              width: '50%',
+              bottom: 5,
+              left: paginationLeft
+          }} 
+          dot={Dot('#333')}
+          activeDot={Dot('#fff')}
+          containerStyle={styles.container}
+          onIndexChanged={(index)=>{
+            const feedItem = feed[index]
+            if (!feedItem || !feedItem.id) {
+              return
+            }
+            trackNewsFeedSwipe(feedItem)
+            trackFeedItem(feedItem.id, 'view')
+            trackFeedView(accountId, feedItem.id)
+          }}
+         >
+          { feedCards }
+        </Swiper>
+      </Animated.View>
   ) || null
+  }
 }
 
 const mapStateToProps = (state) => ({

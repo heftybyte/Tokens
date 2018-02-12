@@ -1,25 +1,39 @@
 import React, { Component } from "react"
-import { View } from "react-native"
+import { ScrollView } from "react-native"
 import { withDrawer } from "../../helpers/drawer"
 import { CardList } from "./CardList"
 import { connect } from "react-redux"
 
-const props = [{
-	name: "Magenta Blockchain Service",
-	supply: 3490000,
-	startDate: 12263536735
-},{
-	name: "Magenta Blockchain Service",
-	supply: 3490000,
-	startDate: 12269536735
-}]
+const props = [
+	{
+		name: "Metronome",
+		supply: 137000000,
+		startDate: 12263536735,
+		supplyOffered: '45%',
+		symbol: 'MTL',
+		tokenId: 'tnt',
+		logo: 'https://cdn.icodrops.com/wp-content/uploads/2017/10/Metronome-150x150.jpg',
+		goal: 47000000,
+
+	},
+	{
+		name: "Lendroid",
+		supply: 3490000,
+		startDate: 12263536735,
+		supplyOffered: '45%',
+		symbol: 'MGT',
+		goal: 45000000,
+		logo: 'https://cdn.icodrops.com/wp-content/uploads/2018/01/Lendroid-logo-150x150.jpg'
+		
+	}
+]
 
 @withDrawer
 class ICOs_ extends Component {
 	render() {
 		const { navigation } = this.props
 		return (
-			<View
+			<ScrollView
 				style={{
 					flex: 1,
 				}}
@@ -39,7 +53,7 @@ class ICOs_ extends Component {
 					data={props}
 					navigation={navigation}
 				/>
-			</View>
+			</ScrollView>
 		)
 	}
 }

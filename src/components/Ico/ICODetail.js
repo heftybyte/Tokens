@@ -5,21 +5,29 @@ import { connect } from "react-redux"
 import { Button } from "native-base"
 import { formatMoney } from "accounting"
 import { withDrawer } from "../../helpers/drawer"
+import { formatPrice } from '../../helpers/functions'
+
+const tokenMetaStyle = v => v.toString().length > 8 ? styles.tokenMetaWrapped : styles.tokenMeta
 
 @withDrawer
 class ICODetail_ extends Component {
 	render() {
 		const {
-			price = 3.57,
-			video,
-			image,
-			supply = 137000000000,
-			supplyOffered = "45%",
-			name,
-			symbol = "MGT",
-			goal = 45000000,
-			startDate,
-			endDate } = this.props.navigation.state.params || {}
+			ico:{
+				price = 3.57,
+				video,
+				image,
+				whitelistLink,
+				supply = 137000000,
+				supplyOffered = "45%",
+				name,
+				symbol = "MGT",
+				goal = 45000000,
+				startDate,
+				endDate 
+			}
+		} = this.props.navigation.state.params || {}
+		const valueParts = formatPrice(price).split(/\$|\./)
 		return (
 			<View
 				style={{
@@ -35,12 +43,11 @@ class ICODetail_ extends Component {
 						height: 80,
 					}}
 				>
-					<Text
-						style={[
-							styles.baseText,
-							{ fontSize: 30 }
-						]}
-					>{formatMoney(price, "$", 2)}</Text>
+					<Text>
+						<Text style={styles.tokenValueCurrencySymbol}>$</Text>
+						<Text style={styles.tokenValue}>{valueParts[0]}</Text>
+						<Text style={styles.tokenValueCents}>.{valueParts[1]||'00'}</Text>
+					</Text>
 				</View>
 				<View
 					style={{
@@ -62,9 +69,9 @@ class ICODetail_ extends Component {
 							height: 50
 						}}
 					>
-						<Text style={[styles.baseText]}>Symbol</Text>
+						<Text style={styles.headingText}>SYMBOL</Text>
 
-						<Text style={[styles.baseText, styles.subText]}>
+						<Text style={styles.tokenMeta}>
 							{symbol}
 						</Text>
 					</View>
@@ -75,9 +82,9 @@ class ICODetail_ extends Component {
 							height: 50
 						}}
 					>
-						<Text style={[styles.baseText]}>Goal</Text>
+						<Text style={styles.headingText}>GOAL</Text>
 
-						<Text style={[styles.baseText, styles.subText]}>
+						<Text style={tokenMetaStyle(goal)}>
 							{formatMoney(goal, "$", 0)}
 						</Text>
 					</View>
@@ -96,9 +103,9 @@ class ICODetail_ extends Component {
 							height: 50
 						}}
 					>
-						<Text style={[styles.baseText]}>Supply</Text>
+						<Text style={styles.headingText}>SUPPLY</Text>
 
-						<Text style={[styles.baseText, styles.subText]}>
+						<Text style={tokenMetaStyle(supply)}>
 							{formatMoney(supply, "", 0)}
 						</Text>
 					</View>
@@ -109,9 +116,9 @@ class ICODetail_ extends Component {
 							height: 50
 						}}
 					>
-						<Text style={[styles.baseText]}>Available</Text>
+						<Text style={styles.headingText}>AVAILABLE</Text>
 
-						<Text style={[styles.baseText, styles.subText]}>
+						<Text style={styles.tokenMeta}>
 							{supplyOffered}
 						</Text>
 					</View>
@@ -126,10 +133,7 @@ class ICODetail_ extends Component {
 					}}
 				>
 					<Text
-						style={[
-							styles.baseText,
-							{ fontSize: 17 }
-						]}
+						style={[styles.tokenMeta, { fontSize: 17 }]}
 					>
 						JOIN WHITELIST
 					</Text>
@@ -147,6 +151,36 @@ class ICODetail_ extends Component {
 const styles = StyleSheet.create({
 	baseText: {
 		color: "#fff"
+	},
+	tokenValueCurrencySymbol: {
+		color: '#fff',
+		fontSize: 30,
+		fontFamily: 'Nunito-ExtraLight'
+	},
+	tokenValue: {
+		color: '#fff',
+		fontSize: 60,
+		fontFamily: 'Nunito-ExtraLight'
+	},
+	tokenValueCents: {
+		color: '#fff',
+		fontSize: 30,
+		fontFamily: 'Nunito-ExtraLight'
+	},
+	headingText: {
+		color: '#666',
+		fontFamily: 'Nunito'
+	},
+	tokenMeta: {
+		color: '#fff',
+		fontSize: 20,
+		fontFamily: 'Nunito',
+	},
+	tokenMetaWrapped: {
+		color: '#fff',
+		fontSize: 20,
+		fontFamily: 'Nunito',
+		width: 150
 	},
 	subText: {
 		fontSize: 22,

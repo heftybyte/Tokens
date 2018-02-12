@@ -34,11 +34,22 @@ class ImageRight extends React.Component {
                         <Text
                           style={styles.link}
                           onPress={()=>{
-                            link && Linking.openURL(link.uri)
-                              .catch(err => console.error('An error occurred', err));
+                            if (!link) {
+                                return
+                            }
+                            if (link.action) {
+                                link.action()
+                                return
+                            }
+                            if (link.uri) {
+                                Linking.openURL(link.uri)
+                                    .catch(
+                                        err => console.error('An error occurred', err)
+                                    );
+                            }
                           }}
                         >
-                          { getLinkTextByType(type) }&gt;
+                          { link.text || getLinkTextByType(type) }&gt;
                         </Text>
                     </Col>
                 </Row>

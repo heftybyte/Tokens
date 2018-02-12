@@ -23,14 +23,14 @@ const Items = [
         route: "Dashboard"
     },
     {
-        name: "Account",
+        name: "Accounts",
         icon: "account-circle",
         route: "Accounts"
     },
 	{
 		name: "ICO List",
 		icon: "fire",
-		route: "ICOList",
+		route: "ICO List",
 		Component: MaterialCommunityIcons,
 		color: '#ff0000'
 	},/*,
@@ -69,7 +69,9 @@ export const withDrawer = (WrappedComponent) => {
             const isICOdetails = navState.routeName === 'ICODetail'
 	        const icoDetails = navState.params && navState.params.ico || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
-            const showBackButton = ['Token Details', 'Search', 'Price Alert', 'Add Address', 'ICOList', 'ICODetail'].indexOf(navState.routeName) > -1
+            const showBackButton = [
+                'Token Details', 'Search', 'Price Alert', 'Add Address', 'ICO List', 'ICODetail'
+            ].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X
             const isIos = Platform.OS === 'ios';
@@ -141,7 +143,7 @@ export const withDrawer = (WrappedComponent) => {
                                     }}>
                                         <Image
 	                                        key={tokenDetails.symbol}
-	                                        source={{ uri: getTokenImage(tokenDetails) }}
+	                                        source={{ uri: getTokenImage(tokenDetails.id) }}
 	                                        style={{width: 20, height: 20, borderRadius: 5}}
                                         />
                                         <Text style={{color: '#fff', paddingLeft: 10}}>
@@ -156,8 +158,8 @@ export const withDrawer = (WrappedComponent) => {
 		                                flex:1
 	                                }}>
 		                                <Image
-			                                key={tokenDetails.symbol}
-			                                source={require("./ethereum.png")  || { uri: getTokenImage(tokenDetails)  }}
+			                                key={icoDetails.symbol}
+			                                source={{ uri: getTokenImage(icoDetails.tokenId) }}
 			                                style={{width: 20, height: 20, borderRadius: 5}}
 		                                />
 		                                <Text style={{color: '#fff', paddingLeft: 10}}>

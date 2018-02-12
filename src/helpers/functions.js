@@ -103,7 +103,7 @@ export const getQueryString = (params) => {
       .join('&')
 }
 
-export const getTokenImage = (token) => `${baseURL}/img/tokens/${token.id}.png`
+export const getTokenImage = (symbol) => `${baseURL}/img/tokens/${symbol}.png`
 
 export const shareTokenDetails = (symbol) => {
 	let link = `${Constants.linkingUri}symbol=${symbol}`

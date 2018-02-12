@@ -37,7 +37,7 @@ export const AppNavigator = StackNavigator({
   Register: { screen: Register },
   'Token Details': { screen: TokenDetails },
   'Price Alert': { screen: PriceAlert },
-  ICOList: {
+  'ICO List': {
   	screen: ICOs
   },
 	ICODetail: {
