@@ -14,7 +14,7 @@ import { baseURL, lossColor, brandColor } from '../../config'
 import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
 import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
-import VideoPlayer from './player';
+import VideoPlayer from '../Video';
 
 const window = Dimensions.get('window');
 const viewWidth = window.width - 40;

@@ -1,11 +1,16 @@
 import React, { Component } from "React"
+import Dimensions from 'Dimensions';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
-import { View, Text, StyleSheet } from "react-native"
+import { Image, ScrollView, View, Text, StyleSheet } from "react-native"
 import { connect } from "react-redux"
 import { Button } from "native-base"
 import { formatMoney } from "accounting"
 import { withDrawer } from "../../helpers/drawer"
 import { formatPrice } from '../../helpers/functions'
+import VideoPlayer from '../Video';
+
+const window = Dimensions.get('window');
+const viewWidth = window.width - 40;
 
 const tokenMetaStyle = v => v.toString().length > 8 ? styles.tokenMetaWrapped : styles.tokenMeta
 
@@ -14,8 +19,8 @@ class ICODetail_ extends Component {
 	render() {
 		const {
 			ico:{
-				price = 3.57,
-				video,
+				price = .27542,
+				video = 'https://youtu.be/neCaG0LoKQ0',
 				image,
 				whitelistLink,
 				supply = 137000000,
@@ -29,7 +34,7 @@ class ICODetail_ extends Component {
 		} = this.props.navigation.state.params || {}
 		const valueParts = formatPrice(price).split(/\$|\./)
 		return (
-			<View
+			<ScrollView
 				style={{
 					flex: 1,
 					marginHorizontal: 20
@@ -43,19 +48,22 @@ class ICODetail_ extends Component {
 						height: 80,
 					}}
 				>
-					<Text>
+					<Text style={{marginBottom:20}}>
 						<Text style={styles.tokenValueCurrencySymbol}>$</Text>
 						<Text style={styles.tokenValue}>{valueParts[0]}</Text>
 						<Text style={styles.tokenValueCents}>.{valueParts[1]||'00'}</Text>
 					</Text>
 				</View>
-				<View
-					style={{
-						backgroundColor: "#fff",
-						width: "100%",
-						height: 200
-					}}
-				/>
+
+			 {video && <VideoPlayer
+				   url={video}
+				   style={styles.video}
+			   />}
+			 {image && <Image
+							style={styles.image}
+							source={{uri: `${image}`}}
+						/>}
+
 				<View
 					style={{
 						flexDirection: "row",
@@ -123,7 +131,7 @@ class ICODetail_ extends Component {
 						</Text>
 					</View>
 				</View>
-				<Button
+				{whitelistLink && <Button
 					block
 					transparent
 					style={{
@@ -142,8 +150,8 @@ class ICODetail_ extends Component {
 						size={25}
 						color={"#fff"}
 					/>
-				</Button>
-			</View>
+				</Button>}
+			</ScrollView>
 		)
 	}
 }
@@ -185,6 +193,17 @@ const styles = StyleSheet.create({
 	subText: {
 		fontSize: 22,
 		width: "90%"
+	},
+	image: {
+		width: viewWidth,
+		backgroundColor: '#000',
+		marginBottom: 10
+	},
+	video: {
+		width: viewWidth,
+		height: viewWidth/(16/9),
+		backgroundColor: '#000',
+		marginBottom: 10
 	}
 })
 
