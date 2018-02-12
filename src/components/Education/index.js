@@ -10,6 +10,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Button, Text } from 'native-base';
 import Swiper from 'react-native-swiper'
 
+import { registerForPushNotificationsAsync } from '../../helpers/functions'
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -30,9 +32,9 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   button: {
-    position: 'absolute',
-    right: 30,
-    bottom: 30
+    backgroundColor: '#6b2fe2',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   buttonText: {
     color: '#fff'
@@ -55,12 +57,12 @@ const Dot = (color) => (
   <View
     style={{
       backgroundColor: color,
-      width: 4, 
+      width: 4,
       height: 4,
-      borderRadius: 2, 
-      marginLeft: 3, 
-      marginRight: 3, 
-      marginTop: 3, 
+      borderRadius: 2,
+      marginLeft: 3,
+      marginRight: 3,
+      marginTop: 3,
       marginBottom: 3
     }}
   />
@@ -68,11 +70,19 @@ const Dot = (color) => (
 
 class Education extends Component {
 
+  messageFor(pushEnabled) {
+    const intro = "We're scanning the blockchain for your tokens."
+    const pushEnabledMsg = `${intro} You'll receive a push notification when its complete.`
+    const pushDisabledMsg = `${intro} Enable push notifications to be notified when its completes.`
+
+    return pushEnabled ? pushEnabledMsg : pushDisabledMsg
+  }
+
   render() {
-    // const { type, meta } = this.props
-    const type = "ADD_ADDRESS"
+    const { type, meta } = this.props
     const { images } = Content[type]
-    console.log(Content[type].images[0])
+    const { pushEnabled } = meta
+    const message = this.messageFor(pushEnabled)
     const slides = images.map((image, i)=>
       <View style={styles.slide} key={i}>
         <Image
@@ -81,7 +91,6 @@ class Education extends Component {
         />
       </View>
     )
-    // console.log('Education -->', {type, meta})
 
     return (
       <View
@@ -91,13 +100,26 @@ class Education extends Component {
           loop={false}
           paginationStyle={{
               backgroundColor: "transparent"
-          }} 
+          }}
           dot={Dot('#333')}
           activeDot={Dot('#fff')}
           containerStyle={styles.container}
          >
           { slides }
         </Swiper>
+
+        <View style={styles.container}>
+          <Text style={styles.title}>
+            {message}
+          </Text>
+
+          {!pushEnabled && <Button
+              style={styles.button}
+              onPress={registerForPushNotificationsAsync}
+              >
+            <Text>Enable Push Notifications</Text>
+          </Button>}
+        </View>
       </View>
     );
   }
