@@ -70,7 +70,8 @@ export const withDrawer = (WrappedComponent) => {
 	        const icoDetails = navState.params && navState.params.ico || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = [
-                'Token Details', 'Search', 'Price Alert', 'Add Address', 'ICO List', 'ICODetail'
+                'Token Details', 'Search', 'Price Alert', 'Add Address',
+                'ICO List', 'ICODetail', 'Education'
             ].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X
