@@ -11,6 +11,7 @@ import { Button, Text } from 'native-base';
 import Swiper from 'react-native-swiper'
 
 import { registerForPushNotificationsAsync } from '../../helpers/functions'
+import { withDrawer } from '../../helpers/drawer'
 
 const styles = StyleSheet.create({
   container: {
@@ -128,7 +129,8 @@ class Education extends Component {
 const mapStateToProps = (state, props) => {
     return {
         ...state.ui,
-        ...props.navigation.state.params
+        ...props.navigation.state.params,
+        portfolio: state.account.portfolio,
     }
 };
 
@@ -138,4 +140,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Education);
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Education));
