@@ -5,8 +5,8 @@ import { formatMoney } from "accounting"
 
 class CardListItem extends Component {
 	render() {
-		const { startDate, goal, supply, name, logo, category, navigation } = this.props
-		const instance = moment(startDate)
+		const { type, startDate, endDate, goal, supply, name, logo, category, navigation } = this.props
+		const instance = type === 'Active' ? moment(endDate) : moment(startDate)
 		const [month, day] = [instance.format("MMM"), instance.format("D")]
 		return (
 			<TouchableOpacity
@@ -36,7 +36,7 @@ class CardListItem extends Component {
 					}}
 				>
 					<Text
-						style={[styles.baseText, { fontSize: 18 }]}
+						style={[styles.baseText, { fontSize: 17 }]}
 					>{name}</Text>
 					<Text
 						style={[styles.baseText, { fontSize: 12 }]}
@@ -65,13 +65,13 @@ export class CardList extends Component {
 					style={[styles.topicHeight]}
 				>
 					<Text
-						style={[styles.baseText, { fontFamily: 'Nunito' }]}
+						style={[styles.baseText, { fontFamily: 'Nunito', fontSize: 14 }]}
 					>
 						{type}
 					</Text>
 				</View>
 				<FlatList
-					renderItem={({ item }) => <CardListItem {...item} navigation={navigation} />}
+					renderItem={({ item }) => <CardListItem {...item} type={type} navigation={navigation} />}
 					data={data}
 					keyExtractor={(item) => item.id}
 				/>
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
 		marginLeft: 20
 	},
 	cardListRoot: {
-		height: 120,
 		width: "100%",
 	},
 	topicHeight: {

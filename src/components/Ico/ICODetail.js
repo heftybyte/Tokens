@@ -182,7 +182,6 @@ class ICODetail_ extends Component {
 					transparent
 					style={{
 						justifyContent: "space-between",
-						marginTop: 30,
 						width: "100%"
 					}}
 				>
