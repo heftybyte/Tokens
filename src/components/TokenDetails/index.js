@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const tokenValueStyle = v => v.toString().length > 8 ? styles.tokenValueWrapped : styles.tokenValue
+const tokenValueStyle = (v) =>  v && v.toString().length > 8 ? styles.tokenValueWrapped : styles.tokenValue
 
 class TokenDetails extends Component {
   state = {
@@ -201,6 +201,7 @@ class TokenDetails extends Component {
       updateToken,
       period
     } = this.props;
+
     const { showVideoCover } = this.state;
     const maxDescDisplayLength = 180
     const { chartIsTouched } = this.state
@@ -247,7 +248,7 @@ class TokenDetails extends Component {
 
           <View style={styles.containerChild}>
             <Text style={styles.tokenHeading}>HOLDINGS</Text>
-            <Text style={tokenValueStyle(displayPrice*balance)}>{'$'+formatPrice(displayPrice*balance)}</Text>
+            <Text style={tokenValueStyle(price*balance)}>{'$'+formatPrice(price*balance)}</Text>
           </View>
         </View>}
 
@@ -298,7 +299,7 @@ class TokenDetails extends Component {
               }
 
             </TouchableOpacity>
-            <TouchableOpacity
+            {/*<TouchableOpacity
               onPress={() => { goToPriceAlertPage(this.props.token) } }
               style={[
                   styles.priceContainer,
@@ -306,7 +307,7 @@ class TokenDetails extends Component {
               ]}
             >
                 <Text style={{color: '#fff'}}>$ ALERT</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>*/}
           </View>
         </View>
 

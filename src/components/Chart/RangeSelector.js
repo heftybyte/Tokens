@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native' 
 import { changePeriod } from '../../reducers/ticker'
+import { trackTap } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
     periods: {
@@ -38,6 +39,7 @@ class RangeSelector extends Component {
                         onPress={()=>{
                             this.props.changePeriod(period)
                             onChange && onChange(period)
+                            trackTap(`RangeSelector:${period}`)
                         }}
                     >
                         <Text style={[

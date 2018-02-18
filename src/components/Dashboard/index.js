@@ -218,9 +218,9 @@ class Dashboard extends Component {
             onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
           />
         }
-        { !! addresses.length &&
+        {/* !! addresses.length &&
           <RangeSelector onChange={this.props.getPortfolioChart} />
-        }
+        */}
 
         <News feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
@@ -277,7 +277,7 @@ const mapDispatchToProps = (dispatch) => ({
     login: () => dispatch(login()),
     register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
-    getPortfolioChart: () => dispatch(getPortfolioChart()),
+    getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
     updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close})),

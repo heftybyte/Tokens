@@ -331,11 +331,11 @@ export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getStat
     dispatch(portfolioAction(portfolio))
 }
 
-export const getPortfolioChart = () => async (dispatch, getState) => {
+export const getPortfolioChart = (_period) => async (dispatch, getState) => {
     let err = null
     const { account: { id }, ticker: { period } } = getState()
     dispatch(loadingChartAction(true))
-    let chart = await getAccountPortfolioChart(id, period).catch(e=>err=e)
+    let chart = await getAccountPortfolioChart(id, _period || period).catch(e=>err=e)
     if (err) {
       logger.err('getPortfolioChart', err)
         dispatch(loadingChartAction(false))
