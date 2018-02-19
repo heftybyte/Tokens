@@ -242,7 +242,7 @@ class TokenDetails extends Component {
         }
       >
         <Header
-          style={[styles.header, { opacity: animatedPrice }]}
+          style={[styles.header]}
           totalValue={displayPrice}
           timestamp={chartIsTouched && headerData.timestamp}
           totalChange={chartIsTouched && headerData.change_close || priceChange}
