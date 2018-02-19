@@ -6,7 +6,6 @@ import search from './search';
 import ui from './ui';
 import feed from './feed';
 import ticker from './ticker'
-import token from './token'
 import { AppNavigator } from '../navigators/AppNavigator';
 
 // Start with two routes: The Dashboard screen, with the Login screen on top.
@@ -52,8 +51,7 @@ const AppReducer = combineReducers({
   search,
   ui,
   feed,
-  ticker,
-  token
+  ticker
 });
 
 export default AppReducer;
