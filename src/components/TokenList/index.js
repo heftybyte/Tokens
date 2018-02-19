@@ -213,7 +213,7 @@ class TokenList extends Component {
 
   render() {
     const { showChange } = this.state
-    const { title } = this.props
+    const { title='', type } = this.props
     const render = {
       tokens: this.renderTokenItem,
       watchList: this.renderWatchListItem,
@@ -221,10 +221,12 @@ class TokenList extends Component {
     }
     const dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
 
-    if (!showChange) {
-      dataTokens.sort((a,b)=>Number(a.price * a.balance) < Number(b.price * b.balance) ? 1 : -1)
-    } else {
-      dataTokens.sort((a,b)=>Math.abs(a.priceChange) < Math.abs(b.priceChange) ? 1 : -1)
+    if (type === 'tokens') {
+      if (!showChange) {
+        dataTokens.sort((a,b)=>Number(a.price * a.balance) < Number(b.price * b.balance) ? 1 : -1)
+      } else {
+        dataTokens.sort((a,b)=>Math.abs(a.priceChange) < Math.abs(b.priceChange) ? 1 : -1)
+      }
     }
 
     return (
@@ -235,8 +237,8 @@ class TokenList extends Component {
           sections={[
             {
               data: dataTokens,
-              title: (this.props.title || '').toUpperCase(),
-              renderItem: render[this.props.type]
+              title: title.toUpperCase(),
+              renderItem: render[type]
             }
           ]}
         />

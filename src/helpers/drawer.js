@@ -180,14 +180,13 @@ export const withDrawer = (WrappedComponent) => {
                                 )}
                             </Body>
                             <Right>
-                            {isTokenDetails ?
-                                <Button
+                            {(false && isTokenDetails) ?
+                                <TouchableHighlight
                                     style={{ justifyContent: "center", alignItems: "center", width: 60 }}
-                                    transparent
                                     onPress={()=>{shareTokenDetails(tokenDetails.symbol)}}
                                 >
                                     <Ionicons name="ios-share" size={28} color="white" />
-                                </Button>
+                                </TouchableHighlight>
                                 :
                                 <Button
                                 style={{ justifyContent: "center", alignItems: "center", width: 60 }}

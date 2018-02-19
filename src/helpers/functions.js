@@ -1,12 +1,14 @@
 import { Alert, AsyncStorage, Share } from 'react-native'
 import currencyFormatter from 'currency-formatter';
 import { Permissions, Notifications, SecureStore, Constants } from 'expo';
+import { NavigationActions } from 'react-navigation';
 import {
 	setAuthHeader,
 	registerUserForPushNotifications
 } from './api';
 import { setLoading } from '../reducers/ui'
 import { baseURL } from '../config'
+import store from '../store/index';
 
 export const mapAxis = (points, value, dimension) => {
 	let start = 0
@@ -107,6 +109,19 @@ export const getTokenImage = (symbol) => `${baseURL}/img/tokens/${symbol}.png`
 
 export const shareTokenDetails = (symbol) => {
 	let link = `https://api.tokens.express/share/${symbol}`
-	let content = { url: link, message:`Check out ${symbol} on Tokens Express`}
-	Share.share(content, {dialogTitle: `Share ${symbol} token`})
+	let content = { url: link, message: `${link}`}
+	Share.share(content, { dialogTitle: `Share ${symbol} token` })
+}
+
+export const visitDeepLink = (url) => {
+ //    const queryString = url.replace(Constants.linkingUri, '')
+ //    if (queryString) {
+ //        const data = qs.parse(queryString)
+ //    }
+	// const data = parseDeepLink(url)
+ //    const { symbol } = data
+ //    store.dispatch(NavigationActions.navigate({
+ //        routeName: 'Token Details',
+ //        params: { symbol }
+ //    }))
 }

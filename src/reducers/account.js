@@ -1,6 +1,7 @@
 import { Alert, AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { Amplitude, Permissions, SecureStore } from 'expo'
+import { Linking } from 'react-native'
 import {
     loginAccount,
     registerAccount,
@@ -167,6 +168,14 @@ export const login = (params) => async (dispatch, getState) => {
     registerForPushNotificationsAsync()
     dispatch(getPortfolio())
     dispatch(getPortfolioChart())
+
+    // const url = Linking.getInitialURL().catch(e=>err=e)
+    // if (err) {
+    //     logger.error('Linking.getInitialURL', err)
+    // } else {
+    //     visitDeepLink(url)
+    //     return
+    // }
     dispatch(NavigationActions.reset({
       index: 0,
       actions: [

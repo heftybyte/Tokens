@@ -1,16 +1,17 @@
 
 import React from 'react';
-import { AppRegistry, BackHandler, Platform, Alert } from 'react-native';
+import { AppRegistry, BackHandler, Linking, Platform, Alert } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './src/store/index';
 import { login } from './src/reducers/account'
-import { AppLoading, Font, SecureStore, Util } from 'expo';
+import { AppLoading, Constants, Font, SecureStore, Util } from 'expo';
 import Sentry from 'sentry-expo';
 import { NavigationActions } from "react-navigation";
 import AppWithNavigationState from './src/navigators/AppNavigator';
 import { ENVIRONMENT } from 'react-native-dotenv';
 import './src/helpers/polyfill'
 import { logger, logLocalData } from './src/helpers/api'
+import { visitDeepLink } from './src/helpers/functions'
 import './src/helpers/notifications'
 
 Sentry.enableInExpoDevelopment = true;
@@ -65,6 +66,13 @@ class Tokens extends React.Component {
         } else {
             store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         }
+
+        Linking.addEventListener('url', this.handleDeepLink);
+    }
+
+    handleDeepLink = async (event) => {
+        const { url } = event
+        visitDeepLink(url)
     }
 
     goBack = () => {
@@ -74,11 +82,11 @@ class Tokens extends React.Component {
             return true;
         }
         return false;
-
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener("onBackPress", this.goBack);
+        Linking.removeEventListener('url', this.handleDeepLink);
     }
 
     render() {

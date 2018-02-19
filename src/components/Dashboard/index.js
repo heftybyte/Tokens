@@ -11,8 +11,7 @@ import {
   Alert,
   StatusBar,
   Button,
-  RefreshControl,
-  Linking
+  RefreshControl
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
@@ -39,7 +38,6 @@ import { getTokenDetailsForAccount } from '../../helpers/api'
 import { trackRefresh, trackTap } from '../../helpers/analytics'
 import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
-import { Constants } from 'expo';
 
 const qs = require('qs');
 
@@ -99,28 +97,9 @@ class Dashboard extends Component {
   }
 
   componentDidMount = async () => {
-    Linking.addEventListener('url', this.handleDeepLink);
     if (this.state.stale) {
       this.props.getPortfolio()
       this.props.getPortfolioChart()
-    }
-  }
-
-  componentWillMount = async () => {
-    this.props.fetchFeed()
-  }
-
-  componentWillUnmount() {
-    Linking.removeEventListener('url', this.handleDeepLink);
-  }
-
-  handleDeepLink = async (event) => {
-    let queryString = event.url.replace(Constants.linkingUri, '')
-    if (queryString) {
-      var data = qs.parse(queryString)
-      let item  =  await this.props.getTokenDetails(data.symbol)
-      console.log(item)
-      this.props.goToTokenDetailsPage(item);
     }
   }
 
