@@ -6,6 +6,7 @@ import {
     SectionList,
     Image,
     TouchableOpacity,
+    TouchableHighlight,
     Alert
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
@@ -22,7 +23,7 @@ import {
 const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
   const changeStyle = parseInt(item.change) > -1 ? styles.gain : {}
   return (
-    <TouchableOpacity onPress={showTokenInfo}> 
+    <TouchableHighlight onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <Text style={styles.orderText}>{index+1}.</Text>
         <View>
@@ -47,7 +48,7 @@ const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
           </View>
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   )
 }
 
@@ -64,7 +65,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
   const formattedPriceChange = formatCurrencyChange(item.priceChange||0) || 'N/A'
 
   return (
-    <TouchableOpacity onPress={showTokenInfo}>
+    <TouchableHighlight onPress={showTokenInfo}>
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
           <Image source={{ uri: getTokenImage(item.id) }} style={styles.image}/>
@@ -97,14 +98,14 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   )
 };
 
 const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
   let itemOnWatchlist = !!watchList[item.symbol]
   return (
-    <TouchableOpacity onPress={showTokenInfo}> 
+    <TouchableHighlight onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
         <View>
           <Image source={{ uri: getTokenImage(item.id) }} style={styles.image}/>
@@ -130,7 +131,7 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
 
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
   )
 }
 
