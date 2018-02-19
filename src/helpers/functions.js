@@ -106,7 +106,7 @@ export const getQueryString = (params) => {
 export const getTokenImage = (symbol) => `${baseURL}/img/tokens/${symbol}.png`
 
 export const shareTokenDetails = (symbol) => {
-	let link = `${Constants.linkingUri}symbol=${symbol}`
-	let content = { url: link, message:`Check out ${symbol} Token on the Tokens app`}
+	let link = `https://api.tokens.express/share/${symbol}`
+	let content = { url: link, message:`Check out ${symbol} on Tokens Express`}
 	Share.share(content, {dialogTitle: `Share ${symbol} token`})
 }

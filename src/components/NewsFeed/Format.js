@@ -1,6 +1,7 @@
 import React from 'react'
 import { Linking, View, TouchableWithoutFeedback } from 'react-native';
 import { NavigationActions } from 'react-navigation';
+import { WebBrowser } from 'expo'
 import ImageLeft from './Layouts/ImageLeftLayout'
 import ImageRight from './Layouts/ImageRightLayout'
 import ImageDefault from './Layouts/ImageLayout'
@@ -12,8 +13,8 @@ import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
 import { connect } from 'react-redux';
 import store from '../../store';
 
-const visitLink = (link)=>{
-    link && link.uri && Linking.openURL(link.uri + '?utm_source=tokens-express')
+const visitLink = (link={})=>{
+    link.uri && WebBrowser.openBrowserAsync(`${link.uri}?utm_source=tokens.express`)
       .catch(err => console.error('An error occurred', err))
 }
 
