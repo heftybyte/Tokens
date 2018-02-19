@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react"
-import { View, TouchableOpacity, Text, Platform, Alert, Image, Dimensions } from "react-native"
+import { View, TouchableHighlight, Text, Platform, Alert, Image, Dimensions } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
@@ -226,7 +226,7 @@ const DashboardMenu = ({ navigation, totalValue }) => (
 )
 
 const ListItem = (navigation) => ({ name, route, icon, Component, color }) => (
-    <TouchableOpacity
+    <TouchableHighlight
         key={route}
         onPress={() => navigation.navigate(route)}
     >
@@ -252,5 +252,5 @@ const ListItem = (navigation) => ({ name, route, icon, Component, color }) => (
                 <Text style={{ color: "#fff" }}>{name}</Text>
             </View>
         </View>
-    </TouchableOpacity>
+    </TouchableHighlight>
 )
