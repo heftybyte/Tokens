@@ -13,7 +13,6 @@ import Header from '../Dashboard/Header';
 import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
 import { baseURL, lossColor, brandColor } from '../../config'
 import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
-import { update as _updateToken } from '../../reducers/token'
 import portfolioPriceData from '../Chart/data'
 import VideoPlayer from '../Video';
 
@@ -147,27 +146,19 @@ class TokenDetails extends Component {
     refreshing: false,
     chartIsTouched: false,
     showVideoCover: true,
-    animatedPrice: new Animated.Value(0),
-    displayPrice: 0
+    displayPrice: 0,
+    portfolioTimestamp: 0,
+    totalPriceChange: 0
+    totalPriceChangePct: 0
   }
 
   componentDidMount() {
-    const { navigation, getTokenDetails, getHistoricalPrices, updateToken } = this.props
+    const { navigation, getTokenDetails, getHistoricalPrices } = this.props
     const { token } = navigation.state.params
-    this.state.animatedPrice.addListener(({ value: displayPrice})=>this.setState({ displayPrice }))
     getHistoricalPrices({fsyms: token.symbol, tsyms: 'USD'})
-    updateToken(token.price)
-    this.setState({
-      displayPrice: token.price
-    })
-    this.state.animatedPrice.setValue(token.price)
     if (!token.marketCap) {
       getTokenDetails(token.symbol)
     }
-  }
-
-  componentWillUnmount() {
-    this.state.animatedPrice.removeAllListeners()
   }
 
   _onRefresh = async () => {
@@ -183,17 +174,6 @@ class TokenDetails extends Component {
     ])
     this.setState({refreshing: false})
   }
-
-  animatePrice = throttle((price)=>{
-    Animated.timing(
-        this.state.animatedPrice,
-        {
-          toValue: price,
-          duration: 200
-        },
-        Easing.out
-    ).start()
-  }, 200)
 
   render() {
     const {
@@ -220,12 +200,10 @@ class TokenDetails extends Component {
       },
       priceData,
       chartLoading,
-      headerData,
-      updateToken,
       period
     } = this.props;
 
-    const { showVideoCover, animatedPrice, chartIsTouched } = this.state
+    const { showVideoCover, chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const maxDescDisplayLength = 180
     const displayPrice = chartIsTouched ? this.state.displayPrice : price
 
@@ -244,23 +222,22 @@ class TokenDetails extends Component {
         <Header
           style={[styles.header]}
           totalValue={displayPrice}
-          timestamp={chartIsTouched && headerData.timestamp}
-          totalChange={chartIsTouched && headerData.change_close || priceChange}
-          totalChangePct={chartIsTouched && headerData.change_pct || change}
+          timestamp={chartIsTouched && portfolioTimestamp}
+          totalChange={chartIsTouched && totalPriceChange || priceChange}
+          totalChangePct={chartIsTouched && totalPriceChangePct || change}
           period={period}
         />
-
         <Chart
           data={priceData}
           totalChangePct={change}
           loading={chartLoading}
           onCursorChange={(point)=>{
-            updateToken(point.y, point.x, point.change_pct, point.change_close)
-            if (period !== '1d' && period !== '1w') {
-              this.animatePrice(point.y)
-            } else {
-              this.setState({ displayPrice: point.y })
-            }
+            this.setState({
+              displayPrice: point.y,
+              portfolioTimestamp: point.x,
+              totalPriceChange: point.change_close,
+              totalPriceChangePct: point.change_pct,
+            })
           }}
           onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
         />
@@ -435,7 +412,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(_getHistoricalPrices({fsyms,tsyms,format,start,end,period})),
   addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
   removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
-  updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close})),
   goToPriceAlertPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Price Alert', params: {token} }))
 })
 
@@ -459,7 +435,6 @@ const mapStateToProps = (state, props) => {
     isWatching,
     priceData,
     chartLoading: state.ticker.historicalPrices.loading.chart,
-    headerData: state.token,
     period: state.ticker.period
   }
 }

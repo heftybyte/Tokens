@@ -21,12 +21,7 @@ import Header from './Header';
 import News from '../NewsFeed';
 import Chart from '../Chart/Chart';
 import RangeSelector from '../Chart/RangeSelector';
-import mockNewsFeed from '../NewsFeed/MockData'
-import mockTokens from '../TokenList/data';
-import mockWatchlist from '../TokenList/watchlist-data';
 import {
-  register,
-  login,
   getPortfolio,
   getPortfolioChart,
   getTokenDetails
@@ -34,10 +29,7 @@ import {
 import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer'
-import { getTokenDetailsForAccount } from '../../helpers/api'
 import { trackRefresh, trackTap } from '../../helpers/analytics'
-import { update as _updateToken } from '../../reducers/token'
-import portfolioPriceData from '../Chart/data'
 
 const qs = require('qs');
 
@@ -93,7 +85,10 @@ class Dashboard extends Component {
   state = {
     refreshing: false,
     chartIsTouched: false,
-    displayPrice: 0
+    displayPrice: 0,
+    portfolioTimestamp: 0,
+    totalPriceChange: 0
+    totalPriceChangePct: 0
   }
 
   componentDidMount = async () => {
@@ -101,6 +96,10 @@ class Dashboard extends Component {
       this.props.getPortfolio()
       this.props.getPortfolioChart()
     }
+  }
+
+  componentWillMount = async () => {
+    this.props.fetchFeed()
   }
 
   handleScroll = (event) => {
@@ -145,8 +144,9 @@ class Dashboard extends Component {
       headerData,
       period
     } = this.props
-    const { chartIsTouched } = this.state
+    const { chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
+
     return (
       <ScrollView
         scrollEnabled={!chartIsTouched}
@@ -182,9 +182,9 @@ class Dashboard extends Component {
           </TouchableHighlight>
         : <Header
             totalValue={displayPrice}
-            timestamp={chartIsTouched && headerData.timestamp}
-            totalChange={chartIsTouched && headerData.change_close || portfolio.totalPriceChange}
-            totalChangePct={chartIsTouched && headerData.change_pct || portfolio.totalPriceChangePct}
+            timestamp={chartIsTouched && portfolioTimestamp}
+            totalChange={chartIsTouched && totalPriceChange || portfolio.totalPriceChange}
+            totalChangePct={chartIsTouched && totalPriceChangePct || portfolio.totalPriceChangePct}
             period={period}
           />
         }
@@ -194,9 +194,11 @@ class Dashboard extends Component {
             data={portfolioChart}
             totalChangePct={portfolio.totalPriceChangePct}
             onCursorChange={(point)=>{
-              updateToken(point.y, point.x, point.change_pct, point.change_close)
               this.setState({
-                displayPrice: point.y
+                displayPrice: point.y,
+                portfolioTimestamp: point.x,
+                totalPriceChange: point.change_close,
+                totalPriceChangePct: point.change_pct,
               })
             }}
             loading={chartLoading}
@@ -259,13 +261,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Add Address' })),
     goToSearchPage: () => dispatch(NavigationActions.navigate({ routeName: 'Search' })),
-    login: () => dispatch(login()),
-    register: () => dispatch(register()),
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
     getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
-    updateToken: (price, timestamp, change_pct, change_close)=> dispatch(_updateToken({timestamp, price, change_pct, change_close})),
     getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
     goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} }))
 })

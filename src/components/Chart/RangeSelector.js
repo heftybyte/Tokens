@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native' 
+import { StyleSheet, Text, TouchableHighlight, View } from 'react-native' 
 import { changePeriod } from '../../reducers/ticker'
 import { trackTap } from '../../helpers/analytics'
 
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     periodLabel: {
-        color: '#333'
+        color: '#555'
     },
     periodLabelActive: {
         color: '#fff'
@@ -33,7 +33,7 @@ class RangeSelector extends Component {
         return (
             <View style={[styles.periods, style || {}]}>
                 {periods.map((period, i)=>
-                    <TouchableOpacity
+                    <TouchableHighlight
                         key={period}
                         style={styles.period}
                         onPress={()=>{
@@ -48,7 +48,7 @@ class RangeSelector extends Component {
                         ]}>
                             {period.toUpperCase()}
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableHighlight>
                 )}
             </View>
         )

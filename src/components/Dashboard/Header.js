@@ -72,7 +72,13 @@ const datePeriodOptions = {
 const formatDate = (d, period) => {
   switch(period) {
     case '1d':
-      return moment(d).format('h:mm a')
+      const now = new Date()
+      const dateStr = moment(d).format('h:mm a')
+      let suffix = 'Today'
+      if (d.getDate() < now.getDate()) {
+        suffix = 'Yesterday'
+      }
+      return `${dateStr} ${suffix}`
       break;
     case '1w':
       return moment(d).format('h:mm a MMM Do')
