@@ -62,7 +62,7 @@ class Chart extends Component {
         const { data, totalChangePct, loading, onCursorChange } = this.props
         const opacity = loading ? .4 : 1
         const { pageX, isTouched } = this.state
-        const cursorColor = isTouched ? '#333' : 'transparent'
+        const cursorColor = isTouched ? '#555' : 'transparent'
 
         return (
             <View
@@ -74,17 +74,17 @@ class Chart extends Component {
                 {!loading && !data.length && <Text style={styles.msg}>- No Data -</Text>}
              
                 <Svg
-                    height="200"
+                    height={200}
                     width={deviceWidth-40}
                     style={{position: 'absolute', left: 20}}
                 >
                     <Line
                         x1={pageX}
-                        y1="0"
+                        y1={0}
                         x2={pageX}
-                        y2="200"
+                        y2={200}
                         stroke={cursorColor}
-                        strokeWidth="2"
+                        strokeWidth={2}
                     />
                 </Svg>
                 <VictoryGroup

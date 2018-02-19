@@ -15,7 +15,12 @@ import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 import PriceAlert from '../components/PriceAlert';
-import CardStackStyleInterpolator from 'react-navigation/lib/views/CardStack/CardStackStyleInterpolator';
+import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
+
+import {
+  createReduxBoundAddListener,
+  createReactNavigationReduxMiddleware,
+} from 'react-navigation-redux-helpers';
 
 const customAnimationFunc = () => ({
   screenInterpolator: sceneProps => {
@@ -52,11 +57,20 @@ export const AppNavigator = StackNavigator({
   transitionConfig: customAnimationFunc
 });
 
+export const navMiddleWare = createReactNavigationReduxMiddleware(
+  "root",
+  state => state.nav,
+);
+const addListener = createReduxBoundAddListener("root");
 
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
   <AppNavigator
-    navigation={addNavigationHelpers({ dispatch, state: nav })}
+    navigation={addNavigationHelpers({
+      dispatch,
+      state: nav,
+      addListener
+    })}
   />
 );
 

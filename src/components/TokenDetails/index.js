@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Dimensions from 'Dimensions';
-import { StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
+import { Animated, Easing, StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import { throttle } from 'lodash'
 import { withDrawer } from '../../helpers/drawer';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import Chart from '../Chart/Chart';
@@ -145,17 +146,28 @@ class TokenDetails extends Component {
     readMore: false,
     refreshing: false,
     chartIsTouched: false,
-    showVideoCover: true
+    showVideoCover: true,
+    animatedPrice: new Animated.Value(0),
+    displayPrice: 0
   }
 
   componentDidMount() {
     const { navigation, getTokenDetails, getHistoricalPrices, updateToken } = this.props
     const { token } = navigation.state.params
+    this.state.animatedPrice.addListener(({ value: displayPrice})=>this.setState({ displayPrice }))
     getHistoricalPrices({fsyms: token.symbol, tsyms: 'USD'})
     updateToken(token.price)
+    this.setState({
+      displayPrice: token.price
+    })
+    this.state.animatedPrice.setValue(token.price)
     if (!token.marketCap) {
       getTokenDetails(token.symbol)
     }
+  }
+
+  componentWillUnmount() {
+    this.state.animatedPrice.removeAllListeners()
   }
 
   _onRefresh = async () => {
@@ -171,6 +183,17 @@ class TokenDetails extends Component {
     ])
     this.setState({refreshing: false})
   }
+
+  animatePrice = throttle((price)=>{
+    Animated.timing(
+        this.state.animatedPrice,
+        {
+          toValue: price,
+          duration: 200
+        },
+        Easing.out
+    ).start()
+  }, 200)
 
   render() {
     const {
@@ -202,10 +225,10 @@ class TokenDetails extends Component {
       period
     } = this.props;
 
-    const { showVideoCover } = this.state;
+    const { showVideoCover, animatedPrice, chartIsTouched } = this.state
     const maxDescDisplayLength = 180
-    const { chartIsTouched } = this.state
-    const displayPrice = chartIsTouched ? headerData.price : price
+    const displayPrice = chartIsTouched ? this.state.displayPrice : price
+
     return (
       <ScrollView
         scrollEnabled={!chartIsTouched}
@@ -219,7 +242,7 @@ class TokenDetails extends Component {
         }
       >
         <Header
-          style={styles.header}
+          style={[styles.header, { opacity: animatedPrice }]}
           totalValue={displayPrice}
           timestamp={chartIsTouched && headerData.timestamp}
           totalChange={chartIsTouched && headerData.change_close || priceChange}
@@ -231,7 +254,14 @@ class TokenDetails extends Component {
           data={priceData}
           totalChangePct={change}
           loading={chartLoading}
-          onCursorChange={(point)=>updateToken(point.y, point.x, point.change_pct, point.change_close)}
+          onCursorChange={(point)=>{
+            updateToken(point.y, point.x, point.change_pct, point.change_close)
+            if (period !== '1d' && period !== '1w') {
+              this.animatePrice(point.y)
+            } else {
+              this.setState({ displayPrice: point.y })
+            }
+          }}
           onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
         />
 

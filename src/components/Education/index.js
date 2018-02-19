@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
 const Content = {
   "ADD_ADDRESS": {
-    images: [ '../../../assets/education/scanning_address.png' ]
+    images: [ require('../../../assets/education/scanning_address.png') ]
   }
 }
 
@@ -88,7 +88,7 @@ class Education extends Component {
       <View style={styles.slide} key={i}>
         <Image
           style={styles.image}
-          source={require('../../../assets/education/scanning_address.png')}
+          source={image}
         />
       </View>
     )

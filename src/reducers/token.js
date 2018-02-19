@@ -1,3 +1,5 @@
+import throttleAction from 'throttle-action';
+
 const UPDATE = 'token/UPDATE'
 
 export const updateAction = (data) => ({
@@ -5,9 +7,11 @@ export const updateAction = (data) => ({
     data
 })
 
-export const update = (data) => (dispatch) => {
+const _update = (data) => (dispatch) => {
     dispatch(updateAction(data))
 }
+
+export const update = throttleAction(_update, 500, { trailing: false })
 
 const initialState = {
     timestamp: 0,

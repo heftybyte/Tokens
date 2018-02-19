@@ -219,7 +219,7 @@ export const withDrawer = (WrappedComponent) => {
 }
 
 const DashboardMenu = ({ navigation, totalValue }) => (
-    <View style={{flex: 1, backgroundColor: "#111"}}>
+    <View style={{flex: 1, backgroundColor: "#111", paddingTop: 40}}>
         <Header style={{paddingTop: 40}} totalValue={totalValue} />
         {Items.map(ListItem(navigation))}
     </View>

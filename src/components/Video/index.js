@@ -15,7 +15,6 @@ const VideoPlayer = ({url, style}) => {
 
 
 const parseVideo = (url)  => {
-    console.log(url, 'parsed');
     // - Supported YouTube URL formats:
     //   - http://www.youtube.com/watch?v=My2FRPA3Gf8
     //   - http://youtu.be/My2FRPA3Gf8

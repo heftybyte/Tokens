@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 import currencyFormatter from 'currency-formatter';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import { gainColor, lossColor } from '../../config'
@@ -8,7 +8,7 @@ import moment from 'moment'
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   portfolioValueCurrencySymbol: {
     color: '#fff',
@@ -85,14 +85,14 @@ const formatDate = (d, period) => {
 class Header extends Component {
 
   render () {
-    const { totalValue, totalChange, totalChangePct, style, timestamp, period } = this.props
+    const { totalValue = 0, totalChange, totalChangePct, style=[], timestamp, period } = this.props
     const gain = (totalChangePct||0) > 0
     const valueParts = formatPrice(totalValue).split(/\$|\./)
     const smallerFont = valueParts[0].length >= 7 ?
       styles.smallHeaderFont : {}
     const formattedDate = timestamp ? formatDate(new Date(timestamp), period) : 'last 24hrs'
     return (
-      <View style={[styles.container, style || {}]}>
+      <Animated.View style={[styles.container, ...style]}>
         <Text>
           <Text style={styles.portfolioValueCurrencySymbol}>$</Text>
           <Text style={[styles.portfolioValue, smallerFont]}>{valueParts[0]}</Text>
@@ -106,7 +106,7 @@ class Header extends Component {
               </Text>
             </View>
           }
-      </View>
+      </Animated.View>
     );
   }
 }
