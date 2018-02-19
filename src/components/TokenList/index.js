@@ -34,7 +34,7 @@ const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
           <Text style={styles.symbol}>{item.symbol}</Text>
           <Text style={styles.balance}>${formatPrice(item.marketCap)}</Text>
         </View>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableHighlight onPress={onPress}>
           <View style={[
             styles.priceContainer,
             changeStyle,
@@ -46,7 +46,7 @@ const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
                   `$${formatPrice(item.price)}`}
                 </Text>
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     </TouchableHighlight>
   )
@@ -80,7 +80,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
         {/*<Text style={[changeTextStyle, styles.changeText]}>
           {parseInt(item.change) ? formattedTotal : ''}
         </Text>*/}
-        <TouchableOpacity
+        <TouchableHighlight
           onPress={onPress}
           style={[
               styles.priceContainer,
@@ -94,9 +94,9 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
               !item.price ? styles.noPriceText : {}
               /*isLongPrice ? styles.longPrice : {}*/
           ]}>
-            {showChange ? formattedTotal : formattedPriceChange}
+            {showChange ? formattedPriceChange : formattedTotal}
           </Text>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     </TouchableHighlight>
   )
@@ -114,7 +114,7 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
         </View>
-        <TouchableOpacity
+        <TouchableHighlight
           onPress={() => onPress(itemOnWatchlist, item.symbol) }
           style={[
               styles.priceContainer,
@@ -129,7 +129,7 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
             <Text style={[styles.watchText]}>WATCH</Text>
           }
 
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     </TouchableHighlight>
   )
@@ -158,7 +158,7 @@ class TokenList extends Component {
         this.setState({showChange: !this.state.showChange})
         trackTap(this.state.showChange ? 'PriceToggle-watch-change' : 'PriceToggle-watch-price');
         this.props.showToast(
-          this.state.showChange ? 'Price' : 'Change Since 24hrs Ago',
+          this.state.showChange ? 'Absolute Change Since 24hrs Ago' : 'Price',
           { position: 'center', style: { backgroundColor: '#222' } },
           200
         )
@@ -181,7 +181,7 @@ class TokenList extends Component {
           const { showChange } = this.state
           trackTap(showChange ? 'PriceToggle-change' : 'PriceToggle-total');
           this.props.showToast(
-            showChange ? 'Total Change Since 24hrs Ago' : 'Total Value',
+            showChange ? 'Absolute Change Since 24hrs Ago' : 'Total Value',
             { position: 'center', style: { backgroundColor: '#222' } },
             showChange ? 800 : 200
           )
@@ -220,6 +220,13 @@ class TokenList extends Component {
       search: this.renderSearchListItem
     }
     const dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
+
+    if (!showChange) {
+      dataTokens.sort((a,b)=>Number(a.price * a.balance) < Number(b.price * b.balance) ? 1 : -1)
+    } else {
+      dataTokens.sort((a,b)=>Math.abs(a.priceChange) < Math.abs(b.priceChange) ? 1 : -1)
+    }
+
     return (
       <View>
         <SectionList

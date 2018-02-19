@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
 class Dashboard extends Component {
   state = {
     refreshing: false,
-    chartIsTouched: false
+    chartIsTouched: false,
+    displayPrice: 0
   }
 
   componentDidMount = async () => {
@@ -166,7 +167,7 @@ class Dashboard extends Component {
       period
     } = this.props
     const { chartIsTouched } = this.state
-    const displayPrice = chartIsTouched ? headerData.price : portfolio.totalValue
+    const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
     return (
       <ScrollView
         scrollEnabled={!chartIsTouched}
@@ -213,7 +214,12 @@ class Dashboard extends Component {
           <Chart
             data={portfolioChart}
             totalChangePct={portfolio.totalPriceChangePct}
-            onCursorChange={(point)=>updateToken(point.y, point.x, point.change_pct, point.change_close)}
+            onCursorChange={(point)=>{
+              updateToken(point.y, point.x, point.change_pct, point.change_close)
+              this.setState({
+                displayPrice: point.y
+              })
+            }}
             loading={chartLoading}
             onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
           />
