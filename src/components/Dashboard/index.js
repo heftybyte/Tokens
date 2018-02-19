@@ -87,7 +87,7 @@ class Dashboard extends Component {
     chartIsTouched: false,
     displayPrice: 0,
     portfolioTimestamp: 0,
-    totalPriceChange: 0
+    totalPriceChange: 0,
     totalPriceChangePct: 0
   }
 
