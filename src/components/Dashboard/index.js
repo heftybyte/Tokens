@@ -254,7 +254,7 @@ const mapStateToProps = (state) => ({
   newsFeed: state.feed,
   stale: state.account.stale,
   headerData: state.token,
-  period: state.ticker.period,
+  period: '1d',
   ...state.ui
 })
 
