@@ -1,3 +1,5 @@
+import { lossColor, brandColor } from '../../config'
+
 export const styles = {
     container: {
         backgroundColor: '#000',
@@ -54,7 +56,7 @@ export const styles = {
         justifyContent: 'flex-end'
     },
     link: {
-      color: '#6b2fe2',
+      color: brandColor,
       fontSize: 12,
       fontFamily: 'Nunito-Light'
     }

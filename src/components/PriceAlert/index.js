@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View, Text, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-
+import { lossColor, brandColor } from '../../config'
 
 import { withDrawer } from '../../helpers/drawer';
 
@@ -121,8 +121,8 @@ class PriceAlert extends Component {
               formHorizontal={true}
               labelHorizontal={true}
               labelStyle={{color: '#fff', paddingRight: 10}}
-              buttonColor={'#6b2fe2'}
-              selectedButtonColor={'#6b2fe2'}
+              buttonColor={brandColor}
+              selectedButtonColor={brandColor}
               initial={0}
               onPress={(value) => {this.setState({radioValue: value})}}
             />

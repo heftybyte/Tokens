@@ -13,7 +13,6 @@ import Header from '../Dashboard/Header';
 import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
 import { baseURL, lossColor, brandColor } from '../../config'
 import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
-import portfolioPriceData from '../Chart/data'
 import VideoPlayer from '../Video';
 
 const window = Dimensions.get('window');
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   readmore: {
-    color: '#6b2fe2',
+    color: brandColor,
     fontSize: 15,
     fontWeight: 'bold',
     fontFamily: 'Nunito-Light'

@@ -30,6 +30,7 @@ import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer'
 import { trackRefresh, trackTap } from '../../helpers/analytics'
+import { lossColor, brandColor } from '../../config'
 
 const qs = require('qs');
 
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#6b2fe2',
+    backgroundColor: brandColor,
     padding: 10,
     borderRadius: 10,
     flexDirection: 'row',
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   gain: {
-    color: '#6b2fe2'
+    color: brandColor
   },
   loss: {
     color: '#b63e15'

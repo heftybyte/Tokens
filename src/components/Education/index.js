@@ -12,6 +12,7 @@ import Swiper from 'react-native-swiper'
 
 import { registerForPushNotificationsAsync } from '../../helpers/functions'
 import { withDrawer } from '../../helpers/drawer'
+import { lossColor, brandColor } from '../../config'
 
 const styles = StyleSheet.create({
   container: {
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   button: {
-    backgroundColor: '#6b2fe2',
+    backgroundColor: brandColor,
     marginLeft: 'auto',
     marginRight: 'auto'
   },
