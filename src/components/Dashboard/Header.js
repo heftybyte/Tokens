@@ -78,7 +78,7 @@ const formatDate = (d, period) => {
       if (d.getDate() < now.getDate()) {
         suffix = 'Yesterday'
       }
-      return `${dateStr} ${suffix}`
+      return dateStr + ' ' + suffix
       break;
     case '1w':
       return moment(d).format('h:mm a MMM Do')

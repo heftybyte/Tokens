@@ -120,7 +120,6 @@ export const getNewsFeed = async (accountId) => {
 }
 
 export const trackFeedView = async (accountId, itemId) => {
-  console.log(accountId, itemId)
     const res = await instance.post(`/feed/${accountId}/item/${itemId}/view`)
     return res.data;
 }

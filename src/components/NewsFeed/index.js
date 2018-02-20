@@ -8,6 +8,7 @@ import { trackNewsFeedSwipe } from '../../helpers/analytics'
 import { trackFeedView } from '../../helpers/api'
 import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
 import { connect } from 'react-redux';
+import { fetchFeed } from '../../reducers/feed'
 
 const window = Dimensions.get('window');
 
@@ -79,7 +80,8 @@ class News extends React.Component {
 
   render() {
     let { trackFeedItem, accountId, feed } = this.props
-    if (feed && feed.length) {
+      feed = [...feed]
+    if (feed && feed.length === 1) {
       feed.push(this.state.endCard)
     }
 
@@ -95,11 +97,11 @@ class News extends React.Component {
     if (feedCards.length) {
       feed[0].id && trackFeedView(accountId, feed[0].id)
     }
-
     return feedCards.length && (
       <Animated.View style={{height: this.state.heightAnim }}>
         <Swiper
           loop={false}
+          index={0}
           paginationStyle={{
               backgroundColor: "transparent",
               width: '50%',
@@ -132,7 +134,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     trackFeedItem: (id, action) => dispatch(_trackFeedItem(id, action)),
-    trackFeedView: (itemId) => dispatch(_trackFeedView(itemId))
+    trackFeedView: (itemId) => dispatch(_trackFeedView(itemId)),
+    fetchFeed: () => dispatch(fetchFeed())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(News);

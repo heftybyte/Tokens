@@ -33,7 +33,11 @@ export const genericError = () => {
     Alert.alert('API is busy, please try again in a few seconds. If the issue persists, please email support')
 }
 
-export const formatPrice = (price) => {
+export const formatPrice = (price=0) => {
+    price = Number(price)
+    if (Number.isNaN(price)) {
+        return 0
+    }
     if (price < 1) {
         return price.toFixed(5)
     }
