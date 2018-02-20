@@ -202,10 +202,10 @@ class TokenList extends Component {
       onPress={(setWatch, symbol)=>{
         if(setWatch){
           //Alert.alert('Watch list coming soon delete')
-          this.props.removeFromWatchList(symbol)
+          this.props.removeFromWatchList(symbol, item)
         } else {
           //Alert.alert('Watch list coming soon add' + symbol)
-          this.props.addToWatchlist(symbol)
+          this.props.addToWatchlist(symbol, item)
         }
       }}
     />
@@ -248,8 +248,8 @@ class TokenList extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
-    removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
+    addToWatchlist: (symbol, token) => dispatch(addToWatchlist(symbol, token)),
+    removeFromWatchList: (symbol, token) => dispatch(removeFromWatchList(symbol, token)),
     goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} })),
     showToast: (msg, props, duration) => dispatch(showToast(msg, props, duration))
 })
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Light'
   },
   balance: {
-    color: '#555',
+    color: '#666',
     fontSize: 12,
     fontFamily: 'Nunito'
   },
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 15,
     paddingBottom: 15,
-    borderColor: '#222',
+    borderColor: '#111',
     borderTopWidth: 1
   },
   noBorderTop: {

@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     position: 'absolute',
     zIndex: 99,
-    color: '#fff',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -180,6 +179,7 @@ class TokenDetails extends Component {
       removeFromWatchList,
       isWatching,
       goToPriceAlertPage,
+      token,
       token: {
         price,
         balance,
@@ -201,7 +201,6 @@ class TokenDetails extends Component {
       chartLoading,
       period
     } = this.props;
-
     const { showVideoCover, chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const maxDescDisplayLength = 180
     const displayPrice = chartIsTouched ? this.state.displayPrice : price
@@ -290,7 +289,7 @@ class TokenDetails extends Component {
                 },
             ]}>
             <TouchableOpacity
-              onPress={() => isWatching ? removeFromWatchList(symbol) : addToWatchlist(symbol) }
+              onPress={() => isWatching ? removeFromWatchList(symbol, token) : addToWatchlist(symbol, token) }
               style={[
                   styles.priceContainer,
                   styles.noPrice,
@@ -409,8 +408,8 @@ const mapDispatchToProps = (dispatch) => ({
   getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),
   getHistoricalPrices: ({fsyms,tsyms,format='chart',start,end,period}) =>
     dispatch(_getHistoricalPrices({fsyms,tsyms,format,start,end,period})),
-  addToWatchlist: symbol => dispatch(addToWatchlist(symbol)),
-  removeFromWatchList: symbol => dispatch(removeFromWatchList(symbol)),
+  addToWatchlist: (symbol, token) => dispatch(addToWatchlist(symbol, token)),
+  removeFromWatchList: (symbol, token) => dispatch(removeFromWatchList(symbol, token)),
   goToPriceAlertPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Price Alert', params: {token} }))
 })
 

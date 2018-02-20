@@ -143,7 +143,8 @@ class Dashboard extends Component {
       addresses,
       updateToken,
       headerData,
-      period
+      period,
+      watchListSymbols
     } = this.props
     const { chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
@@ -219,7 +220,7 @@ class Dashboard extends Component {
             tokens={portfolio.watchList}
             type="watchList"
           />
-          {!portfolio.watchList.length &&
+          {!watchListSymbols.length &&
             <TouchableHighlight
               style={{marginBottom: 20, marginTop: -20}}
               onPress={()=>{trackTap('Search');goToSearchPage()}}
@@ -251,6 +252,7 @@ const mapStateToProps = (state) => ({
   chartLoading: state.account.chartLoading,
   portfolioChart: state.account.portfolioChart,
   addresses: state.account.addresses,
+  watchListSymbols: state.account.watchList,
   loggedIn: !!state.account.token,
   newsFeed: state.feed,
   stale: state.account.stale,

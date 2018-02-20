@@ -24,7 +24,8 @@ import {
     genericError,
     getError,
     registerForPushNotificationsAsync,
-    safeAlert
+    safeAlert,
+    removeArrItem
 } from '../helpers/functions'
 import { setLoading, showToast } from './ui'
 export const REGISTER = 'account/REGISTER'
@@ -206,35 +207,42 @@ export const logout = () => async(dispatch, getState) => {
     dispatch(resetAction)
 }
 
-export const addToWatchlist = (symbol) => async (dispatch, getState) => {
+export const addToWatchlist = (symbol, token) => async (dispatch, getState) => {
 	let err = null
-	const { id } = getState().account
-	dispatch(setLoading(true, `Adding ${symbol} to Watchlist`))
-	const account = await addToAccountWatchlist(id, symbol).catch(e=>err=e)
-	dispatch(setLoading(false))
-	if (err) {
-		dispatch(showToast(getError(err)))
-		return
-	}
-	dispatch(showToast(`${symbol} Added To Watchlist`))
-	dispatch(addWatchListAction(account.watchList))
-	dispatch(getPortfolio())
+	const { id, portfolio: { watchList } } = getState().account
+    const newWatchList = [...watchList, token]
+	// dispatch(setLoading(true, `Adding ${symbol} to Watchlist`))
+	dispatch(addWatchListAction(newWatchList))
+    dispatch(showToast(`${symbol} Added To Watchlist`))
+
+    const account = await addToAccountWatchlist(id, symbol).catch(e=>err=e)
+    if (err) {
+        const { watchList } = getState().account
+        const newWatchList = removeArrItem(watchList, 'symbol', symbol)
+        dispatch(showToast(getError(err)))
+        dispatch(addWatchListAction(newWatchList))
+    }
 }
 
-export const removeFromWatchList = (symbol) => async (dispatch, getState) => {
+export const removeFromWatchList = (symbol, token) => async (dispatch, getState) => {
 	const ok = async () => {
 		let err = null
-		const { id } = getState().account
-		dispatch(setLoading(true, `Removing ${symbol} From Watchlist`))
-		const account = await removeFromAccountWatchlist(id, symbol).catch(e=>err=e)
-		dispatch(setLoading(false))
-		if (err) {
-			dispatch(showToast(getError(err)))
-			return
-		}
-		dispatch(showToast(`${symbol} Removed From Watchlist`))
-		dispatch(removeFromWatchListAction(account.watchList))
-		dispatch(getPortfolio())
+		const { id, portfolio: { watchList } } = getState().account
+        const newWatchList = removeArrItem(watchList, 'symbol', symbol)
+        const removeIndex = watchList.findIndex(item=>item.symbol===symbol)
+
+        if (!newWatchList) {
+            dispatch(showToast(`${symbol} is not in your watchlist`))
+            return
+        }
+		dispatch(removeFromWatchListAction(newWatchList))
+        dispatch(showToast(`${symbol} Removed From Watchlist`))
+        const account = await removeFromAccountWatchlist(id, symbol).catch(e=>err=e)
+        if (err) {
+            newWatchList.splice(removeIndex, 0, symbol)
+            dispatch(showToast(getError(err)))
+            dispatch(removeFromWatchListAction(newWatchList))
+        }
 	}
 
 	safeAlert(
@@ -456,9 +464,7 @@ export default (state = initialState, action) => {
                 ...state,
                 ...action.data
             }
-        case LOGIN:
-        case ADD_WATCHLIST:
-        case REMOVE_FROM_WATCHLIST:
+        case LOGIN:{
             const watchListMap = {}
             action.data.watchList.forEach((symbol)=>
                 watchListMap[symbol] = true
@@ -468,6 +474,23 @@ export default (state = initialState, action) => {
                 ...action.data,
                 watchListMap
             }
+        }
+        case ADD_WATCHLIST:
+        case REMOVE_FROM_WATCHLIST:{
+            const watchListMap = {}
+            action.data.watchList.forEach((token)=>
+                watchListMap[token.symbol] = true
+            )
+            return {
+                ...state,
+                watchList: action.data.watchList.map(item=>item.symbol),
+                portfolio: {
+                    ...state.portfolio,
+                    watchList: action.data.watchList
+                },
+                watchListMap
+            }
+        }
         case LOGOUT:
             return {
                 ...initialState

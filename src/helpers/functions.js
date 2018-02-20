@@ -117,6 +117,17 @@ export const shareTokenDetails = (symbol) => {
     Share.share(content, { dialogTitle: `Share ${symbol} token` })
 }
 
+export const removeArrItem = function (inputArr, key, value) {
+    const arr = [...inputArr]
+    const removeIndex = arr.findIndex(item=>item[key]==value)
+    if (removeIndex < 0) {
+        return false
+    }
+    arr.splice(removeIndex, 1)
+    return arr
+}
+
+
 const deepRoutes = {
     '/token/[a-zA-Z0-9]': {
         'screen': 'Token Details',
