@@ -22,8 +22,9 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#fff',
-    fontSize: 20,
-    textAlign: 'center',
+    fontSize: 18,
+    paddingHorizontal: 10,
+    textAlign: 'left',
     marginBottom: 20
   },
   text:{
