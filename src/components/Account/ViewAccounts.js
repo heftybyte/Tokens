@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Clipboard,
   StyleSheet,
   TextInput,
   TouchableHighlight,
@@ -14,6 +15,7 @@ import { Permissions } from 'expo';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import Toast from 'react-native-easy-toast';
 import { deleteAddress, refreshAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
@@ -92,6 +94,11 @@ const styles = StyleSheet.create({
 
 class ViewAddresses extends Component {
 
+  copyToClipboard = (address) => {
+    Clipboard.setString(address);
+    this.toast.show('Address Copied to Your Clipboard');
+  }
+
   render(){
     const {
       token,
@@ -113,6 +120,7 @@ class ViewAddresses extends Component {
                 <Text
                   style={{color: '#fff', fontSize: 12, flex: .8, paddingVertical: 20 }}
                   numberOfLines={1}
+                  onLongPress={() => { this.copyToClipboard(address.id) }}
                 >
                   {address.id}
                 </Text>
@@ -174,7 +182,7 @@ class ViewAddresses extends Component {
                       </Text>
                     </CardItem>
                 )}
-                {!invites.length && 
+                {!invites.length &&
                   <CardItem footer style={{backgroundColor: '#000'}}>
                     <TouchableHighlight
                       onPress={()=>Linking.openURL('https://twitter.com/tokens_express')}
@@ -193,6 +201,12 @@ class ViewAddresses extends Component {
               >
                 <Text style={styles.logoutBtnText}>Logout</Text>
               </TouchableHighlight>
+              <Toast
+                  ref={(t) => { this.toast = t }}
+                  style={{backgroundColor: brandColor, padding: 20}}
+                  position='top'
+                  positionValue={200}
+              />
           </View>}
       </ScrollView>
     );
