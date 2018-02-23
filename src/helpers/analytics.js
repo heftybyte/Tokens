@@ -1,7 +1,8 @@
-import { Amplitude } from 'expo';
+import { Amplitude, Constants } from 'expo';
 import { Analytics, ScreenHit, Event } from 'expo-analytics';
 import { NavigationActions } from 'react-navigation';
-import { ENVIRONMENT } from 'react-native-dotenv';
+
+const ENVIRONMENT = Constants.isDevice ? 'production' : 'development'
 
 if (ENVIRONMENT !== 'development') {
   Amplitude.initialize('2909f6e422ac271d0370e84eef9b74fc')
