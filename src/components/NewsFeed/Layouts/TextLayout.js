@@ -1,5 +1,5 @@
 import React from 'react'
-import { Linking, Text } from 'react-native';
+import { Text } from 'react-native';
 import { Grid, Col, Row } from "react-native-easy-grid";
 import {styles} from '../Style'
 import SaveButton from '../SaveButton'
@@ -9,7 +9,7 @@ import { getLinkTextByType } from './helpers'
 class TextDefault extends React.Component {
 
     render() {
-        const { news: {title, body, link, type }, bookmarked } = this.props
+        const { news: {title, body, link, type }, bookmarked, onPress } = this.props
         
         return (
             <Grid>
@@ -29,10 +29,7 @@ class TextDefault extends React.Component {
                     <Col size={80}>
                         <Text
                             style={styles.link}
-                            onPress={()=>{
-                              link && Linking.openURL(link.uri)
-                                .catch(err => console.error('An error occurred', err));
-                            }}
+                            onPress={onPress}
                         >
                             { getLinkTextByType(type) }&gt;
                         </Text>

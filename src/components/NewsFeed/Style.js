@@ -41,7 +41,12 @@ export const styles = {
 
     },
     image: {
-
+        width: 50,
+        height: 50,
+        background: '#fff'
+    },
+    imageRound: {
+        borderRadius: 25
     },
     textDefault: {
         fontSize: 18,

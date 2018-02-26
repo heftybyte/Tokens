@@ -13,8 +13,10 @@ import { trackFeedItem as _trackFeedItem } from '../../reducers/account';
 import { connect } from 'react-redux';
 import store from '../../store';
 
+const UTM_PARAMS = 'utm_source=tokens.express&utm_medium=mobile_news_feed&utm_campaign=ico'
+
 const visitLink = (link={})=>{
-    link.uri && WebBrowser.openBrowserAsync(`${link.uri}?utm_source=tokens.express`)
+    link.uri && WebBrowser.openBrowserAsync(`${link.uri}?${UTM_PARAMS}`)
       .catch(err => console.error('An error occurred', err))
 }
 
@@ -37,15 +39,21 @@ const navigateToPage = (link)=> {
     NavigationActions.navigate(routeName, params);
 }
 
+const performLinkAction = (link)=> {
+    return link.action()
+}
+
 const handleLink = (link) => {
+    if (link.action) {
+        return performLinkAction(link);
+    }
     switch(link.target){
         case "web": 
-            visitLink(link);
-            break;
+            return visitLink(link);
         case "internal":
-            navigateToPage(link);
+            return navigateToPage(link);
         case "app":
-            openExternalApp(link);
+            return openExternalApp(link);
     }
 }
 
@@ -53,6 +61,7 @@ const Format = (props) => {
     let Layout
     const { format, news, news: { link }, trackFeedItem, bookmarkMap } = props
     const { id } = news;
+
     switch(format) {
         case "TEXT":
             Layout = TextDefault
@@ -81,7 +90,7 @@ const Format = (props) => {
             onPress={()=>{trackNewsFeedTap(news); trackFeedItem(id, 'tap');handleLink(link)}}
         >
             <View style={{flex:1}}>
-                <Layout news={news} bookmarked={!!bookmarkMap[news.id]} />
+                <Layout news={news} bookmarked={!!bookmarkMap[news.id]} onPress={()=>handleLink(link)} />
             </View>
         </TouchableWithoutFeedback>
     )

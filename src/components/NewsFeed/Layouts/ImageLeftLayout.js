@@ -9,7 +9,7 @@ import { getLinkTextByType } from './helpers'
 class ImageLeft extends React.Component {
 
     render() {
-        const { news: {title, image, body, type }, bookmarked } = this.props
+        const { news: {title, image, body, type, imageFormat }, bookmarked, onPress } = this.props
 
         return (
             <Grid>
@@ -20,7 +20,7 @@ class ImageLeft extends React.Component {
                 <Row size={70} style={styles.center}>
                     <Col size={35} style={styles.imageLeft}>
                         <Image
-                            style={{ width: 80, height: 80, borderRadius: 40 }}
+                            style={[styles.image, imageFormat === 'ROUND' ? styles.imageRound : {}]}
                             source={{ uri: image }}
                         />
                     </Col>
@@ -32,11 +32,7 @@ class ImageLeft extends React.Component {
                     <Col size={.8}>
                         <Text
                           style={styles.link}
-                          onPress={()=>{
-                            link && Linking.openURL(link.uri)
-                              .catch(err => console.error('An error occurred', err));
-                          }}
-                        >
+                          onPress={onPress}>
                           { getLinkTextByType(type) }&gt;
                         </Text>
                     </Col>
