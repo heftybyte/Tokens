@@ -1,4 +1,5 @@
 import React, { Component } from "React"
+import { WebBrowser } from "expo"
 import Dimensions from 'Dimensions';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons"
 import { Image, Linking, ScrollView, View, Text, StyleSheet } from "react-native"
@@ -20,6 +21,7 @@ class ICODetail_ extends Component {
 		const {
 			ico:{
 				price,
+				priceCurrency,
 				video,
 				image,
 				description,
@@ -31,6 +33,7 @@ class ICODetail_ extends Component {
 				name,
 				symbol,
 				goal,
+				goalCurrency,
 				startDate,
 				endDate 
 			}
@@ -52,9 +55,12 @@ class ICODetail_ extends Component {
 					}}
 				>
 					<Text style={{marginBottom:20}}>
-						<Text style={styles.tokenValueCurrencySymbol}>$</Text>
+						{priceCurrency === 'USD' &&
+						<Text style={styles.tokenValueCurrencySymbol}>$</Text>}
 						<Text style={styles.tokenValue}>{valueParts[0]}</Text>
 						<Text style={styles.tokenValueCents}>.{valueParts[1]||'00'}</Text>
+						{priceCurrency !== 'USD' &&
+						<Text style={styles.tokenValueCurrencySymbol}>{' '+priceCurrency}</Text>}
 					</Text>
 				</View>
 
@@ -96,7 +102,7 @@ class ICODetail_ extends Component {
 						<Text style={styles.headingText}>GOAL</Text>
 
 						<Text style={tokenMetaStyle(goal)}>
-							{formatMoney(goal, "$", 0)}
+							{goalCurrency == 'USD' ? formatMoney(goal, "$", 0) : formatMoney(goal, "", 0) + ' ' + goalCurrency}
 						</Text>
 					</View>
 				</View>
@@ -137,65 +143,66 @@ class ICODetail_ extends Component {
 
 				<View
 					style={{
-						flexDirection: "row",
-						marginVertical: 10,
-						marginBottom: 20
 					}}
 				>
 					<View
 						style={{
 							flex: 1,
-							justifyContent: "space-between",
-							height: 50
+							justifyContent: "space-between"
 						}}
 					>
 						<Text style={styles.headingText}>DESCRIPTION</Text>
 
-						<Text style={[styles.tokenMeta, styles.description]}>
+						<Text
+							style={[styles.tokenMeta, styles.description]}
+						>
 							{description}
 						</Text>
 					</View>
 				</View>
-				<Button
-					block
-					transparent
-					style={{
-						justifyContent: "space-between",
-						marginTop: 30,
-						width: "100%"
-					}}
-					onPress={()=>Linking.openURL(website)}
-				>
-					<Text
-						style={[styles.tokenMeta, { fontSize: 17 }]}
+				<View>
+					<Button
+						block
+						transparent
+						style={{
+							justifyContent: "space-between",
+							width: "100%"
+						}}
+						onPress={()=>WebBrowser.openBrowserAsync(website)}
 					>
-						WEBSITE
-					</Text>
-					<Icon
-						name={"chevron-right"}
-						size={25}
-						color={"#fff"}
-					/>
-				</Button>
-				{whitelistLink && <Button
-					block
-					transparent
-					style={{
-						justifyContent: "space-between",
-						width: "100%"
-					}}
-				>
-					<Text
-						style={[styles.tokenMeta, { fontSize: 17 }]}
+						<Text
+							style={[styles.tokenMeta, { fontSize: 17 }]}
+						>
+							WEBSITE
+						</Text>
+						<Icon
+							name={"chevron-right"}
+							size={25}
+							color={"#fff"}
+						/>
+					</Button>
+					{whitelistLink && <Button
+						block
+						transparent
+						style={{
+							justifyContent: "space-between",
+							width: "100%"
+						}}
+						onPress={()=>WebBrowser.openBrowserAsync(whitelistLink)}
 					>
-						JOIN WHITELIST
-					</Text>
-					<Icon
-						name={"chevron-right"}
-						size={25}
-						color={"#fff"}
-					/>
-				</Button>}
+						<Text
+							style={[styles.tokenMeta, { fontSize: 17 }]}
+						>
+							JOIN WHITELIST
+						</Text>
+						<Icon
+							name={"chevron-right"}
+							size={25}
+							color={"#fff"}
+						/>
+					</Button>
+					}
+				</View>
 			</ScrollView>
 		)
 	}

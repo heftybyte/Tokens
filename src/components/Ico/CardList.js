@@ -5,8 +5,22 @@ import { formatMoney } from "accounting"
 
 class CardListItem extends Component {
 	render() {
-		const { type, startDate, endDate, goal, supply, name, logo, category, navigation } = this.props
-		const instance = type === 'Active' ? moment(endDate) : moment(startDate)
+		const {
+			type,
+			startDate,
+			endDate,
+			displayDate,
+			goal,
+			goalCurrency,
+			supply,
+			name,
+			logo,
+			logoFormat,
+			category,
+			navigation
+		} = this.props
+		const instance = (type === 'Active' || displayDate === 'endDate') 
+			? moment(endDate) : moment(startDate)
 		const [month, day] = [instance.format("MMM"), instance.format("D")]
 		return (
 			<TouchableOpacity
@@ -43,10 +57,10 @@ class CardListItem extends Component {
 					>{(category || '').toUpperCase()}</Text>
 					<Text
 						style={[styles.baseText, { fontSize: 14 }]}
-					>{formatMoney(goal, "$", 0)}</Text>
+					>{goalCurrency === 'USD' ? formatMoney(goal, "$", 0) : formatMoney(goal, "", 0) + ' ' + goalCurrency}</Text>
 				</View>
 				<Image
-                    style={styles.logo}
+                    style={[styles.logo, logoFormat === 'ROUND' ? styles.logoRound : {}]}
                     source={{uri: `${logo}`}}
                 />
 			</TouchableOpacity>
@@ -104,9 +118,11 @@ const styles = StyleSheet.create({
 	logo: {
 		width: 70,
 		height: 70,
-		borderRadius: 35,
 		backgroundColor: "transparent",
 		marginLeft: 20
+	},
+	logoRound: {
+		borderRadius: 35,
 	},
 	cardListRoot: {
 		width: "100%",

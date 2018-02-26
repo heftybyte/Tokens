@@ -11,36 +11,21 @@ const icos = {
 			supply: 100000000,
 			startDate: 1519913420386,
 			endDate: 1522588220386,
+			displayDate: 'startDate',
 			price: 0.17,
+			priceCurrency: 'USD',
 			id: 380443432225,
 			supplyOffered: 50,
 			symbol: 'TMC',
 			tokenId: 'tmc',
 			category: 'Infrastructure',
 			video: 'https://youtu.be/okTcuq9VsAA',
-			website: 'https://tomocoin.io/',
+			website: 'https://tomocoin.io/?utm_source=tokens.express&utm_medium=ico_list&utm_campaign=ico',
 			logo: 'https://cdn.icodrops.com/wp-content/uploads/2018/01/TomoCoin-logo-150x150.jpg',
 			goal: 8500000,
-			description: 'An efficient blockchain infrastructure for decentralized applications, token issuance and integration.'
-		},
-		{
-			name: "Lendroid",
-			supply: 12000000000,
-			id: 782943452825,
-			startDate: 1487480400000,
-			endDate: 1489896000000,
-			price: 0.0178,
-			supplyOffered: '45%',
-			category: 'Trading',
-			symbol: 'LST',
-			tokenId: 'lst',
-			image: 'https://cdn.icodrops.com/wp-content/uploads/2018/01/Lendroid-banner-1.jpg',
-			goal: 42800000,
-			supplyOffered: 40,
-			website: 'https://lendroid.com/?utm_source=icodrops',
-			description: 'Lendroid is a 0x-inspired, non-rent seeking, trust-independent, open protocol enabling decentralized lending, margin trading and short selling on the Ethereum blockchain.',
-			logo: 'https://cdn.icodrops.com/wp-content/uploads/2018/01/Lendroid-logo-150x150.jpg'
-			
+			goalCurrency: 'USD',
+			description: 'An efficient blockchain infrastructure for decentralized applications, token issuance and integration.',
+			logoFormat: 'ROUND'
 		}
 	],
 	"active": [
@@ -50,6 +35,7 @@ const icos = {
 			startDate: 1486443600000,
 			endDate: 1488258000000,
 			price: 0.58,
+			priceCurrency: 'USD',
 			id: 480443432225,
 			supplyOffered: 75,
 			symbol: 'FTX',
@@ -60,7 +46,9 @@ const icos = {
 			website: 'https://www.fintrux.com/?utm_source=icodrops',
 			logo: 'https://cdn.icodrops.com/wp-content/uploads/2018/01/FintruX-logo-150x150.jpg',
 			goal: 25000000,
-			description: 'The Global P2P Lending ecosystem powered by ethereum and no-code development.'
+			goalCurrency: 'USD',
+			description: 'The Global P2P Lending ecosystem powered by ethereum and no-code development.',
+			logoFormat: 'ROUND'
 		},
 		{
 			name: "Bankera",
@@ -68,6 +56,7 @@ const icos = {
 			startDate: 1511758800000,
 			endDate: 1519794000000,
 			price: 0.0213,
+			priceCurrency: 'USD',
 			id: 880443432225,
 			supplyOffered: 50,
 			symbol: 'BNK',
@@ -77,7 +66,9 @@ const icos = {
 			website: 'http://bankera.com',
 			logo: 'https://cdn.icodrops.com/wp-content/uploads/2017/08/q8wup7Tl_400x400-150x150.jpg',
 			goal: 221400000,
-			description: 'Bankera is building a digital bank to last for the blockchain era.'
+			goalCurrency: 'USD',
+			description: 'Bankera is building a digital bank to last for the blockchain era.',
+			logoFormat: 'ROUND'
 		},
 		{
 			name: "Socialmedia.market",
@@ -85,6 +76,7 @@ const icos = {
 			startDate: 1518152400000,
 			endDate: 1521172800000,
 			price: 0.17,
+			priceCurrency: 'USD',
 			id: 980443432225,
 			supplyOffered: 80,
 			symbol: 'SMT',
@@ -94,7 +86,9 @@ const icos = {
 			website: 'https://socialmedia.market',
 			logo: 'https://cdn.icodrops.com/wp-content/uploads/2017/12/edO4-DCs_400x400-150x150.jpg',
 			goal: 14000000,
-			description: 'SocialMedia.Market – the first decentralized ecosystem to discover, create, perform and analyze advertising campaigns with social media influencers.'
+			goalCurrency: 'USD',
+			description: 'SocialMedia.Market – the first decentralized ecosystem to discover, create, perform and analyze advertising campaigns with social media influencers.',
+			logoFormat: 'ROUND'
 		}
 	],
 	"upcoming": [
@@ -104,6 +98,7 @@ const icos = {
 			startDate: 1521086400000,
 			endDate: 1523764800000,
 			price: 0.072,
+			priceCurrency: 'USD',
 			id: 658443432225,
 			supplyOffered: 40,
 			symbol: 'SENC',
@@ -113,7 +108,9 @@ const icos = {
 			website: 'https://sentinel-chain.org/',
 			logo: 'https://cdn.icodrops.com/wp-content/uploads/2018/02/Sentinel-chain-logo-150x150.jpg',
 			goal: 14400000,
-			description: 'The Sentinel Chain is a B2B marketplace specifically designed to provide affordable and secure financial services to the unbanked.'
+			goalCurrency: 'USD',
+			description: 'The Sentinel Chain is a B2B marketplace specifically designed to provide affordable and secure financial services to the unbanked.',
+			logoFormat: 'ROUND'
 		},
 		{
 			name: "Sapien Network",
@@ -121,6 +118,7 @@ const icos = {
 			startDate: 1520053200000,
 			endDate: 1522728000000,
 			price: 0.11,
+			priceCurrency: 'USD',
 			id: 894443432225,
 			supplyOffered: 50,
 			symbol: 'SPN',
@@ -130,7 +128,9 @@ const icos = {
 			website: 'https://www.sapien.network',
 			logo: 'https://cdn.icodrops.com/wp-content/uploads/2018/01/Sapien-logo-150x150.jpg',
 			goal: 30000000,
-			description: 'A customizable and privacy-focused, decentralized social news platform.'
+			goalCurrency: 'USD',
+			description: 'A customizable and privacy-focused, decentralized social news platform.',
+			logoFormat: 'ROUND'
 		},
 		{
 			name: "Havven",
@@ -138,6 +138,7 @@ const icos = {
 			startDate: 1519794000000,
 			endDate: 1520312400000,
 			price: 0.50,
+			priceCurrency: 'USD',
 			id: 893443432225,
 			supplyOffered: 50,
 			symbol: 'HAVVEN',
@@ -147,7 +148,9 @@ const icos = {
 			website: 'https://havven.io/token-sale',
 			logo: 'https://cdn.icodrops.com/wp-content/uploads/2018/02/Havven-logo-150x150.jpg',
 			goal: 30000000,
-			description: 'Havven is a decentralised payment network and stablecoin. It allows anyone to transact using a stable cryptocurrency.'
+			goalCurrency: 'USD',
+			description: 'Havven is a decentralised payment network and stablecoin. It allows anyone to transact using a stable cryptocurrency.',
+			logoFormat: 'ROUND'
 		}
 	]
 }
