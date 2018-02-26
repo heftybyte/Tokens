@@ -8,3 +8,5 @@ export const gainColor = '#50c992'
 export const lossColor = '#c96e50'
 export const brandColor = '#3FB6C6'
 export const invitesEnabled = false
+
+console.log({ baseURL })
