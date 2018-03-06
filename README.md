@@ -27,7 +27,7 @@ This requires an `app.json` file in your project's root directory. Below is a te
 {
   "expo": {
     "name": "tokens-[your name]",
-    "sdkVersion": "21.0.0",
+    "sdkVersion": "25.0.0",
     "icon": "./assets/app-icon.png",
     "orientation": "portrait",
     "slug": "tokens-[your name]",
@@ -69,7 +69,7 @@ This requires an `app.json` file in your project's root directory. Below is a te
 {
   "expo": {
     "name": "tokens-esco",
-    "sdkVersion": "21.0.0",
+    "sdkVersion": "25.0.0",
     "icon": "./assets/app-icon.png",
     "orientation": "portrait",
     "slug": "tokens-esco",
