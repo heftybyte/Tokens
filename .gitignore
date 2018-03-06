@@ -9,3 +9,4 @@ npm-debug.*
 .DS_Store
 .env
 .idea
+package-lock.json
