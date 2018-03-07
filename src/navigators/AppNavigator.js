@@ -13,9 +13,13 @@ import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';
+import Wallet from '../components/Wallet';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 import PriceAlert from '../components/PriceAlert';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
+
+// Wallet
+import RestoreWallet from '../components/Wallet/RestoreWallet';
 
 import {
   createReduxBoundAddListener,
@@ -42,12 +46,10 @@ export const AppNavigator = StackNavigator({
   Register: { screen: Register },
   'Token Details': { screen: TokenDetails },
   'Price Alert': { screen: PriceAlert },
-  'ICO List': {
-  	screen: ICOs
-  },
-	ICODetail: {
-  	screen: ICODetail
-	}
+  'ICO List': { screen: ICOs },
+   ICODetail: { screen: ICODetail },
+   Wallet: { screen: Wallet},
+    'Create Wallet': {screen: RestoreWallet}
 }, {
 	initialRouteName: "ICOList",
   headerMode: "none",

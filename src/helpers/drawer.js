@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react"
 import { View, TouchableHighlight, Text, Platform, Alert, Image, Dimensions } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
 import { observer } from "mobx-react/native"
 import { Button, Header as NBHeader, Left, Body, Right, Content } from "native-base"
@@ -23,6 +23,12 @@ const Items = [
         route: "Dashboard"
     },
     {
+        name: "My Wallet",
+        icon: "wallet",
+        route: "Wallet",
+        Component: Entypo,
+    },
+    {
         name: "Accounts",
         icon: "account-circle",
         route: "Accounts"
@@ -33,7 +39,8 @@ const Items = [
 		route: "ICO List",
 		Component: MaterialCommunityIcons,
 		color: '#ff0000'
-	},/*,
+	}
+    /*,
     {
         name: "Bookmarks",
         icon: "bookmark",
