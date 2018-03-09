@@ -30,7 +30,7 @@ This requires an `app.json` file in your project's root directory. Below is a te
     "sdkVersion": "25.0.0",
     "icon": "./assets/app-icon.png",
     "orientation": "portrait",
-    "slug": "tokens.[your name]",
+    "slug": "tokens-[your name]",
     "version": "0.0.1",
     "ios": {
       "bundleIdentifier": "express.tokens.tokens.[username]"
