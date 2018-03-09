@@ -20,23 +20,23 @@ When your feature is ready to test by stakeholders, publish your branch to Expo 
 $ exp publish
 ```
 
-This requires an `app.json` file in your project's root directory. Below is a template you can use, just replace `[your name]` with your username.
+This requires an `app.json` file in your project's root directory. Below is a template you can use, just replace `[username]` with your username.
 
 // Template
 ```json
 {
   "expo": {
-    "name": "tokens-[your name]",
+    "name": "tokens.[username]",
     "sdkVersion": "25.0.0",
     "icon": "./assets/app-icon.png",
     "orientation": "portrait",
-    "slug": "tokens-[your name]",
+    "slug": "tokens.[your name]",
     "version": "0.0.1",
     "ios": {
-      "bundleIdentifier": "express.tokens.tokens-[your name]"
+      "bundleIdentifier": "express.tokens.tokens.[username]"
     },
     "android": {
-      "package": "express.tokens.tokens-[your name]"
+      "package": "express.tokens.tokens.[username]"
     },
     "splash": {
       "image": "./assets/splash.png",
