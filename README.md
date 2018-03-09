@@ -26,7 +26,7 @@ This requires an `app.json` file in your project's root directory. Below is a te
 ```json
 {
   "expo": {
-    "name": "tokens.[username]",
+    "name": "tokens-[username]",
     "sdkVersion": "25.0.0",
     "icon": "./assets/app-icon.png",
     "orientation": "portrait",
