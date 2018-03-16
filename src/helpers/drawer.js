@@ -28,6 +28,11 @@ const Items = [
         route: "Accounts"
     },
 	{
+		name: "Chat",
+		icon: "account-circle",
+		route: "Chat"
+	},
+	{
 		name: "ICO List",
 		icon: "fire",
 		route: "ICO List",

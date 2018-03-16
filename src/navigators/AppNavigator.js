@@ -11,6 +11,7 @@ import Dashboard from '../components/Dashboard';
 import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
+import { Chat } from "../components/Chat"
 import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
@@ -34,6 +35,9 @@ const customAnimationFunc = () => ({
 });
 
 export const AppNavigator = StackNavigator({
+	Chat: {
+		screen: Chat
+	},
   Education: { screen: Education },
   Entry: { screen: Entry },
   NormalRegistration: { screen: NormalRegistration },
@@ -58,7 +62,7 @@ export const AppNavigator = StackNavigator({
   	screen: ICODetail
 	}
 }, {
-	initialRouteName: "NewWallet",
+	initialRouteName: "Entry",
   headerMode: "none",
   cardStyle: {
     backgroundColor: '#000'
