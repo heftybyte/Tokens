@@ -32,6 +32,7 @@
     "accounting": "^0.4.1",
     "axios": "^0.16.2",
     "currency-formatter": "^1.2.1",
+    "ethers": "^3.0.6",
     "expo": "^25.0.0",
     "expo-analytics": "^1.0.6",
     "lodash": "^4.17.4",
