@@ -4,6 +4,7 @@
 
 // import bip39 from 'react-native-bip39'
 import { Wallet } from 'ethers';
+import { SecureStore } from 'expo'
 
 export const GenerateMnemonic = async () => {
     // const mnemonic = await bip39.generateMnemonic(256)
@@ -13,22 +14,36 @@ export const GenerateMnemonic = async () => {
     return "meadow much ready few bundle siren like poverty announce soon hole amateur"
 }
 
-export const GenerateAddressFromMnemonic = (mnemonic, index=0) => {
-    const path = 'm/44’/60’/0’/0/${index}'
-    const wallet = Wallet.fromMnemonic(mnemonic, path);
-    return wallet.address;
+
+export const StoreWallet = async(privKey, pubKey) => {
+    const key = "wallet"
+    const currentWallet  = await SecureStore.getItemAsync(key) ||  {}
+    currentWallet[pubKey] = privKey
+    SecureStore.setItemAsync(currentWallet)
+}
+
+export const GenerateAddressFromMnemonic = async (mnemonic, index=0) => {
+    try {
+        const path = 'm/44’/60’/0’/0/${index}'
+        const wallet = Wallet.fromMnemonic(mnemonic, path);
+        return { 'address': wallet.address, 'privateKey': wallet.privateKey};
+    } catch(err){
+        return false
+    }
+
 }
 
 // const
-export const GenerateAddressFromPrivateKey = (privateKey) => {
-    try{
+export const GenerateAddressFromPrivateKey = async (privateKey) => {
+    try {
         if (privateKey.substring(0, 2) !== '0x') { privateKey = '0x' + privateKey; }
         const wallet = new Wallet(privateKey);
         // console.log(wallet)
         return wallet.address;
 
-    }catch (err){
+    } catch (err){
         console.log(err)
+        return false
     }
 
 }

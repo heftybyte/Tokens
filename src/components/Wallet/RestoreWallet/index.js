@@ -9,7 +9,7 @@ import WalletInput from './WalletInput';
 import { addAddress } from '../../../reducers/account';
 import { withDrawer } from '../../../helpers/drawer';
 import { trackAddress } from '../../../helpers/analytics'
-import { GenerateAddressFromPrivateKey, GenerateAddressFromMnemonic} from '../../../helpers/wallet';
+import { GenerateAddressFromPrivateKey, GenerateAddressFromMnemonic, StoreWallet } from '../../../helpers/wallet';
 const styles = StyleSheet.create({
   scrollContainer: {
     backgroundColor: '#000',
@@ -73,24 +73,32 @@ class RestoreWallet extends Component {
       console.log('data', text)
 
       let address = ""
+      let privateKey = ""
 
       if(this.isValidMnemonic(text)){
-          address = GenerateAddressFromMnemonic(text)
+          wallet = await GenerateAddressFromMnemonic(text)
+          if(wallet){
+              address = wallet.address
+              privateKey = wallet.privateKey
+          }
       }
 
       if(this.isValidPrivateKey(text)){
-          address = GenerateAddressFromPrivateKey(text)
+          address = await GenerateAddressFromPrivateKey(text)
+          if(address){
+              privateKey = data
+          }
       }
+      // securestore
+      StoreWallet(privateKey, address)
 
-      console.log(address)
-      // return
       const { addAddress, navigate } = this.props
       if(!text || !text.length) {
           Alert.alert('Enter an address to save');
           return;
       }
+
       const err = await addAddress(address);
-      // Alert.alert('Allow up to 2 minutes for your address data to appear');
   }
 
   render(){
