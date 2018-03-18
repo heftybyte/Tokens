@@ -48,11 +48,9 @@ class Wallet extends Component {
     onContinue = () => {
         if(this.state.new_wallet){
         	this.props.navigate('New Wallet', {})
-            // NavigationActions.navigate('New Wallet', {});
             return
         }
         this.props.navigate('Restore Wallet', {})
-        // NavigationActions.navigate('Restore Wallet', {});
     }
 
     render() {
