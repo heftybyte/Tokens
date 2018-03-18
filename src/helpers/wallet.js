@@ -14,14 +14,23 @@ export const GenerateMnemonic = async () => {
 }
 
 export const GenerateAddressFromMnemonic = (mnemonic, index=0) => {
-    const wallet = Wallet.fromMnemonic(mnemonic);
+    const path = 'm/44’/60’/0’/0/${index}'
+    const wallet = Wallet.fromMnemonic(mnemonic, path);
     return wallet.address;
 }
 
 // const
-export const GenerateAddressFromPrivateKey = (privKey) => {
-    const wallet = Wallet(privKey)
-    return wallet.address;
+export const GenerateAddressFromPrivateKey = (privateKey) => {
+    try{
+        if (privateKey.substring(0, 2) !== '0x') { privateKey = '0x' + privateKey; }
+        const wallet = new Wallet(privateKey);
+        // console.log(wallet)
+        return wallet.address;
+
+    }catch (err){
+        console.log(err)
+    }
+
 }
 
 const DeleteWallet = () => {

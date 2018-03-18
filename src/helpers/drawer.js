@@ -77,7 +77,11 @@ export const withDrawer = (WrappedComponent) => {
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = [
                 'Token Details', 'Search', 'Price Alert', 'Add Address',
-                'ICO List', 'ICODetail', 'Education'
+                'ICO List', 'ICODetail', 'Education', 'Restore Wallet'
+            ].indexOf(navState.routeName) > -1
+
+            const noSearchButton = [
+                'Restore Wallet'
             ].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X
@@ -194,13 +198,16 @@ export const withDrawer = (WrappedComponent) => {
                                     <Ionicons name="ios-share" size={28} color="white" />
                                 </TouchableHighlight>
                                 :
-                                <Button
-                                style={{ justifyContent: "center", alignItems: "center", width: 60 }}
-                                transparent
-                                onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
-                            >
-                                <Ionicons name="ios-search-outline" size={28} color="white" />
-                            </Button>
+                                (!noSearchButton) ?
+                                    <Button
+                                        style={{ justifyContent: "center", alignItems: "center", width: 60 }}
+                                        transparent
+                                        onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
+                                    >
+                                        <Ionicons name="ios-search-outline" size={28} color="white" />
+                                    </Button>
+                                :
+                                    false
                             }
                             </Right>
                         </NBHeader>
