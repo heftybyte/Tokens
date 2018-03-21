@@ -40,7 +40,7 @@ class RestoreWallet extends Component {
 
   isValidPrivateKey=(privKey) => (privKey.length == 64)
 
-    async componentWillMount() {
+  async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({hasCameraPermission: status === 'granted'});
   }
