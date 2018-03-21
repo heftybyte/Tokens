@@ -35,8 +35,8 @@ class NewWallet extends Component {
     }
 
     onWebViewMessage = (event) => {
-        console.log("Message received from webview");
-        console.log(event)
+        // console.log("Message received from webview");
+        // console.log(event)
         Alert.alert(event.nativeEvent.data)
         this.setState({
             "new_text": "world"
@@ -51,15 +51,12 @@ class NewWallet extends Component {
                 <Text style={{color: "#fefefe"}}>{this.state.new_text}</Text>
                 <View style={{backgroundColor: "#fefefe", flex: 4}}>
                     <WebView
-                            ref={webview => {
-                                        this.WebView = webview;
-                                    }}
+                            ref={webview => { this.WebView = webview; }}
                             source={require("./../../../resources/index.html")}
                             onShouldStartLoadWithRequest={() => true}
                             javaScriptEnabledAndroid={true}
-                            startInLoadingState={true}
                             style={{ flex: 1, height: 200, width: 400 }}
-                            onMessage={this.onWebViewMessage}
+                            onMessage={(event) => {this.onWebViewMessage(event)} }
                     />
                     </View>
                     <ListItem>

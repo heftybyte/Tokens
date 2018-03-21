@@ -26,29 +26,29 @@
              * @param success - success callback
              * @param error - error callback
              */
-            send: function(targetFunc, data, success, error) {
+            send: function() {
 
-                var msgObj = {
-                    targetFunc: targetFunc,
-                    data: data || {}
-                };
+                // var msgObj = {
+                //     targetFunc: targetFunc,
+                //     data: data || {}
+                // };
 
-                if (success || error) {
-                    msgObj.msgId = guid();
-                }
+                // if (success || error) {
+                //     msgObj.msgId = guid();
+                // }
 
-                var msg = JSON.stringify(msgObj);
+                // var msg = JSON.stringify(msgObj);
 
                 promiseChain = promiseChain.then(function () {
                     return new Promise(function (resolve, reject) {
-                        console.log("sending message " + msgObj.targetFunc);
+                        // console.log("sending message " + msgObj.targetFunc);
 
-                        if (msgObj.msgId) {
-                            callbacks[msgObj.msgId] = {
-                                onsuccess: success,
-                                onerror: error
-                            };
-                        }
+                        // if (msgObj.msgId) {
+                        //     callbacks[msgObj.msgId] = {
+                        //         onsuccess: success,
+                        //         onerror: error
+                        //     };
+                        // }
                         var mnemonic = bip39.generateMnemonic()
                         window.postMessage(mnemonic);
 
