@@ -6,7 +6,7 @@ import QRScanner from './../Common/QRScanner';
 import { NavigationActions } from 'react-navigation';
 import { View, Container, Header, Content, ListItem, Input,Text,
     Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form} from 'native-base';
-import { GenerateMnemonic, GenerateA } from '../../helpers/wallet'
+import { GenerateMnemonic } from '../../helpers/wallet'
 import { SecureStore} from 'expo'
 import { constants } from '../../constants';
 import { connect } from 'react-redux';

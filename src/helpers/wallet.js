@@ -16,10 +16,18 @@ export const GenerateMnemonic = async () => {
 
 
 export const StoreWallet = async(privKey, pubKey) => {
+
+    /**
+     * TODO
+     * Non-secure implementation a better approach
+     * would be encrypt using AES-256 and a password
+     * defined by user as salt.
+     */
+
     const key = "wallet"
     const currentWallet  = await SecureStore.getItemAsync(key) ||  {}
     currentWallet[pubKey] = privKey
-    SecureStore.setItemAsync(currentWallet)
+    SecureStore.setItemAsync(key, currentWallet)
 }
 
 export const GenerateAddressFromMnemonic = async (mnemonic, index=0) => {

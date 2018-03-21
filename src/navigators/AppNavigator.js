@@ -56,7 +56,7 @@ export const AppNavigator = StackNavigator({
   	screen: ICODetail
 	}
 }, {
-	initialRouteName: "ICOList",
+	initialRouteName: "NewWallet",
   headerMode: "none",
   cardStyle: {
     backgroundColor: '#000'
