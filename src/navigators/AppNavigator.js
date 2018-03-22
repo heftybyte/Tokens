@@ -20,6 +20,7 @@ import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/Car
 import Wallet from '../components/Wallet';
 import RestoreWallet from '../components/Wallet/RestoreWallet';
 import NewWallet from '../components/Wallet/NewWallet';
+import ConfirmPhrase from '../components/Wallet/ConfirmPhrase';
 
 import {
   createReduxBoundAddListener,
@@ -48,6 +49,7 @@ export const AppNavigator = StackNavigator({
   'Wallet': { screen: Wallet},
     'New Wallet': {screen: NewWallet},
     'Restore Wallet': {screen: RestoreWallet},
+    'Confirm Phrase': {screen: ConfirmPhrase},
   'Price Alert': { screen: PriceAlert },
   'ICO List': {
   	screen: ICOs

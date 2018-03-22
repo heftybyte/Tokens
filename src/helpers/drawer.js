@@ -77,11 +77,11 @@ export const withDrawer = (WrappedComponent) => {
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = [
                 'Token Details', 'Search', 'Price Alert', 'Add Address',
-                'ICO List', 'ICODetail', 'Education', 'Restore Wallet', 'New Wallet'
+                'ICO List', 'ICODetail', 'Education', 'Restore Wallet', 'New Wallet', 'Confirm Phrase'
             ].indexOf(navState.routeName) > -1
 
             const noSearchButton = [
-                'Restore Wallet', 'New Wallet'
+                'Restore Wallet', 'New Wallet', 'Confirm Phrase'
             ].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X
@@ -212,7 +212,7 @@ export const withDrawer = (WrappedComponent) => {
                             </Right>
                         </NBHeader>
                         <Spinner
-                            visible={this.props.isLoading}
+                            visible={false}
                             textContent={this.props.loadText||''}
                             textStyle={{color: '#FFF', fontSize: 16}}
                             overlayColor='rgba(0,0,0,.9)'

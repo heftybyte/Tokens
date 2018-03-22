@@ -1,12 +1,9 @@
 <html>
 <script src="./bundle.js"></script>
-<body>
-	<h1 style="color: #fefefe;">hello world</h1>
-	<button onclick="window.webViewBridge.send()">Send post message from web 2</button>
-	<hr />
-<button onclick="window.postMessage('hello world')">Send post message from web</button>
 <script>
-    window.postMessage("sending data from webview");
+	window.webViewBridge.send();
+    // window.postMessage("sending data from webview");
 </script>
+<body>
 </body>
 </html>
