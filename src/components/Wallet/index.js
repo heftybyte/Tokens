@@ -58,7 +58,7 @@ class Wallet extends Component {
             <Container>
                 <Content>
 
-                    <Text style={styles.header}>Your Ethereum Wallets</Text>
+                    <Text style={styles.header}>Your Ethereum Wallet</Text>
                     <List>
                     <ListItem
                         onPress={this.onNewWallet.bind(this)}

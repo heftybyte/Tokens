@@ -6,7 +6,7 @@ import { WebView, StyleSheet, Alert } from 'react-native';
 import QRScanner from './../../Common/QRScanner';
 import { NavigationActions } from 'react-navigation';
 import { View, Container, Header, Content, ListItem, Input,Text,
-    Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form} from 'native-base';
+    Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form } from 'native-base';
 // import { GenerateMnemonic } from '../../../helpers/wallet'
 import { withDrawer } from '../../../helpers/drawer';
 import { SecureStore} from 'expo'
@@ -16,69 +16,92 @@ import { connect } from 'react-redux';
 const styles = StyleSheet.create({
     input: {
         color: '#fff',
+    },
+    mnemonic: {
+        color: "#f3f3f3",
+        fontSize: 24,
+    },
+    title: {
+        fontSize: 36,
+        color: "#f3f3f3"
     }
 });
 
 class NewWallet extends Component {
+
     state = {
-        "mnemonic": "",
-        "new_text": "hello"
+        "mnemonic": false,
     }
 
-    createWallet = async() => {
-        const mnemonic = await GenerateMnemonic()
-        SecureStore.setItemAysnc(constants.wallet.mnemonic, mnemonic)
+    createWallet = async(mnemonic) => {
+        // const mnemonic = await GenerateMnemonic()
+        SecureStore.setItemAsync(constants.wallet.mnemonic, mnemonic)
     }
 
     handleDataReceived = (data) => {
 
     }
 
+    // componentDidMount = () => {
+    //     console.log(this.webView)
+    //     this.webView.postMessage('send mnemonic')
+    // }
+
     onWebViewMessage = (event) => {
         // console.log("Message received from webview");
         // console.log(event)
-        Alert.alert(event.nativeEvent.data)
+        // Alert.alert(event.nativeEvent.data)
+
         this.setState({
-            "new_text": "world"
+            "mnemonic": event.nativeEvent.data
         })
+
+        this.createWallet(event.nativeEvent.data)
     }
 
+    confirmPhrase = () => {
+        this.props.navigate('Price Alert', {})
+    }
 
     render() {
+        const {
+            goToConfirmPhrasePage
+        } = this.props
         return (
             <Container>
                 <Content>
-                <Text style={{color: "#fefefe"}}>{this.state.new_text}</Text>
                 <View style={{backgroundColor: "#fefefe", flex: 4}}>
                     <WebView
-                            ref={webview => { this.WebView = webview; }}
+                            ref={webview => { this.webView = webview; }}
                             source={require("./../../../resources/index.html")}
-                            onShouldStartLoadWithRequest={() => true}
-                            javaScriptEnabledAndroid={true}
-                            style={{ flex: 1, height: 200, width: 400 }}
+                            javaScriptEnabled={true}
+                            style={{}}
                             onMessage={(event) => {this.onWebViewMessage(event)} }
                     />
                     </View>
-                    <ListItem>
-                        <Form>
-                            <Item stackedLabel>
-                                <Label>Username</Label>
-                                <Input
-                                    style={styles.input}
-                                    placeholder={'Title'}
-                                    placeholderTextColor='#444'
-                                />
-                            </Item>
-                            <Text>Your Phrase</Text>
-                            <Text>Please kindly write down the phrase you would be required
-                        to re enter it in the next stage.</Text>
-                            <Input
-                                style={styles.input}
-                                multiline
-                                numberOfLines={4}
-                            />
-                        </Form>
-                    </ListItem>
+                    <Text style={styles.title}>Seed Phrase</Text>
+                    
+                    <Text style={styles.input}>Confirm your 12-word backup phrase. Keep a written copy
+                    saved and secured. This is a key that is private to you and shouldn't be shared with anyone</Text>
+
+                    <View style={{marginTop: 20,marginBottom: 100}}>
+                    {
+                        (this.state.mnemonic) ?
+                            <Text
+                                style={styles.mnemonic}
+                            >{this.state.mnemonic}</Text>
+                        :
+                        <Text
+                            style={styles.mnemonic}
+                        >loading...</Text>
+                    }
+                    </View>
+
+                <Button block primary onPress={() => { goToConfirmPhrasePage() }}>
+                    <Text>Continue</Text>
+                </Button>
+
+                    
                 </Content>
             </Container>
         )
@@ -92,7 +115,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
+        navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
+        goToConfirmPhrasePage: () => dispatch(NavigationActions.navigate({ routeName: 'Confirm Phrase' })),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(NewWallet));
