@@ -1,14 +1,9 @@
-/**
- * Created by Samparsky on 06/03/2018.
- */
-
-// import bip39 from 'react-native-bip39'
 import { Wallet } from 'ethers';
 import { SecureStore } from 'expo'
 
 export const StoreWallet = async(type, privKey, pubKey) => {
-
     const key = "wallet"
+
     let currentWallet  = await SecureStore.getItemAsync(key) ||  {}
 
     currentWallet[type] = { ...currentWallet[type], pubKey: privKey }
@@ -30,7 +25,6 @@ export const GenerateAddressFromMnemonic = async (mnemonic, index=0) => {
 
 }
 
-// const
 export const GenerateAddressFromPrivateKey = async (privateKey) => {
     try {
         if (privateKey.substring(0, 2) !== '0x') { privateKey = '0x' + privateKey; }
@@ -45,6 +39,6 @@ export const GenerateAddressFromPrivateKey = async (privateKey) => {
 
 }
 
-const DeleteWallet = () => {
-    
-}
+export const isValidPrivateKey=(privKey) => (privKey.length == 64)
+
+export const isValidMnemonic=(mnemonic)=>(mnemonic.split(' ').length == 12 || mnemonic.split(' ').length == 24)

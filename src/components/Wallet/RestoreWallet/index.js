@@ -9,7 +9,12 @@ import WalletInput from './WalletInput';
 import { addWalletAddress } from '../../../reducers/account';
 import { withDrawer } from '../../../helpers/drawer';
 import { trackAddress } from '../../../helpers/analytics'
-import { GenerateAddressFromPrivateKey, GenerateAddressFromMnemonic, StoreWallet } from '../../../helpers/wallet';
+import { GenerateAddressFromPrivateKey, 
+        GenerateAddressFromMnemonic, 
+        StoreWallet, 
+        isValidMnemonic, 
+        isValidPrivateKey } from '../../../helpers/wallet';
+
 const styles = StyleSheet.create({
   scrollContainer: {
     backgroundColor: '#000',
@@ -38,7 +43,6 @@ class RestoreWallet extends Component {
     inputValue: ''
   }
 
-  isValidPrivateKey=(privKey) => (privKey.length == 64)
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -49,13 +53,7 @@ class RestoreWallet extends Component {
     this.setState({ scannerOpen: !this.state.scannerOpen });
   }
 
-  isValidMnemonic=(mnemonic)=>(mnemonic.split(' ').length == 12 || mnemonic.split(' ').length == 24)
-
-
-
   handleBarCodeRead = ({type, data}) => {
-    console.log(data)
-    console.log(type)
 
     this.toggleQRScanner();
     this.setState({inputValue: data});
@@ -68,17 +66,13 @@ class RestoreWallet extends Component {
     this.setState({ inputValue: text });
   }
 
-  restoreWallet = async (data) => {
-      const type = 'ethereum';
-
+  restoreWallet = async (data, type = 'ethereum') => {
       const text = (typeof data === 'string') && data || this.state.inputValue;
 
       if(!text || !text.length) {
           Alert.alert('Enter an correct mnemonic or private key to save');
           return;
       }
-
-      console.log('data', text)
 
       let address = ""
       let privateKey = ""
@@ -89,13 +83,14 @@ class RestoreWallet extends Component {
               address = wallet.address
               privateKey = wallet.privateKey
           }
-      }
-
-      if(this.isValidPrivateKey(text)){
+      } else if(this.isValidPrivateKey(text)){
           address = await GenerateAddressFromPrivateKey(text)
           if(address){
               privateKey = text
           }
+      } else {
+          Alert.alert('Enter an correct mnemonic or private key to save');
+          return;
       }
 
       const { addWalletAddress } = this.props
@@ -103,6 +98,11 @@ class RestoreWallet extends Component {
       const result = await StoreWallet(type, privateKey, address)
 
       const err = await addWalletAddress(address);
+
+      if (err){
+        console.log(err)
+        Alert.alert('An error occured try again')
+      }
   }
 
   render(){
