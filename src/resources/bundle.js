@@ -27,8 +27,7 @@
              * @param error - error callback
              */
             send: function() {
-                alert('in webview bright ')
-                // var msgObj = { 
+                // var msgObj = {
                 //     targetFunc: targetFunc,
                 //     data: data || {}
                 // };

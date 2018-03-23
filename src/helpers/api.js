@@ -78,9 +78,10 @@ export const addAccountWalletAddress = async (id, address) => {
   return res.data
 }
 
-// export const 
-
-
+export const deleteAccountWalletAddress = async(id, address) => {
+    const res = await instance.delete(`/accounts/${id}/wallets/${address}`)
+    return res.data
+}
 
 export const refreshAccountAddress = async (id, address) => {
   const res = await instance.post(`/accounts/${id}/address/${address}/refresh`)

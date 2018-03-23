@@ -9,8 +9,10 @@ import { View, Container, Header, Content, ListItem, Input,Text,
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { withDrawer } from '../../../helpers/drawer';
+import { addWalletAddress } from '../../../reducers/account';
 import { SecureStore} from 'expo'
 import { constants } from '../../../constants';
+import { GenerateAddressFromMnemonic, StoreWallet } from '../../../helpers/wallet';
 
 const styles = StyleSheet.create({
     input: {
@@ -31,12 +33,29 @@ class ConfirmPhrase extends Component {
 		mnemonic: ""
 	}
 
+    createWallet = async(mnemonic) => {
+
+        const { addWalletAddress } = this.props
+        const type = 'ethereum'
+
+        const wallet = await GenerateAddressFromMnemonic(mnemonic);
+
+        if(wallet){
+            const address = wallet.address
+            const privateKey = wallet.privateKey
+
+            const result = await StoreWallet(type, privateKey, address)
+
+            const err = await addWalletAddress(address);
+        }
+
+    }
+
 	getMnemonic = (fn) => {
         SecureStore.getItemAsync(constants.wallet.mnemonic).then((data) => {
-            console.log(data)
-            Alert.alert(data)
+        	data = JSON.parse(data)
+            // Alert.alert(data)
             fn(data);
-            return
         }).catch(function(e){
 
         })
@@ -47,9 +66,9 @@ class ConfirmPhrase extends Component {
     	this.getMnemonic( (mnemonic) => {
     		if(mnemonic == this.state.mnemonic){
     			Alert.alert('Correct')
-    			return
+				this.createWallet(mnemonic)
+                return
     		}
-
     		Alert.alert('Incorrect')
     	})
     }
@@ -92,7 +111,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
+        navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
+        addWalletAddress: (address) => dispatch(addWalletAddress(address)),
     }
 }
 

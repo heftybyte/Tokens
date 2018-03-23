@@ -7,7 +7,7 @@ import QRScanner from './../../Common/QRScanner';
 import { NavigationActions } from 'react-navigation';
 import { View, Container, Header, Content, ListItem, Input,Text,
     Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form } from 'native-base';
-// import { GenerateMnemonic } from '../../../helpers/wallet'
+import { GenerateAddressFromMnemonic, StoreWallet } from '../../../helpers/wallet';
 import { withDrawer } from '../../../helpers/drawer';
 import { SecureStore} from 'expo'
 import { constants } from '../../../constants';
@@ -33,34 +33,15 @@ class NewWallet extends Component {
         "mnemonic": false,
     }
 
-    createWallet = async(mnemonic) => {
-        // const mnemonic = await GenerateMnemonic()
-        SecureStore.setItemAsync(constants.wallet.mnemonic, mnemonic)
-    }
-
-    handleDataReceived = (data) => {
-
-    }
-
-    // componentDidMount = () => {
-    //     console.log(this.webView)
-    //     this.webView.postMessage('send mnemonic')
-    // }
-
     onWebViewMessage = (event) => {
-        // console.log("Message received from webview");
-        // console.log(event)
-        // Alert.alert(event.nativeEvent.data)
 
         this.setState({
             "mnemonic": event.nativeEvent.data
         })
 
-        this.createWallet(event.nativeEvent.data)
-    }
+        SecureStore.setItemAsync(constants.wallet.mnemonic,
+            JSON.stringify(event.nativeEvent.data)).then(function(result){})
 
-    confirmPhrase = () => {
-        this.props.navigate('Price Alert', {})
     }
 
     render() {
@@ -97,11 +78,9 @@ class NewWallet extends Component {
                     }
                     </View>
 
-                <Button block primary onPress={() => { goToConfirmPhrasePage() }}>
+                <Button title={"continue"} block primary onPress={() => { goToConfirmPhrasePage() }}>
                     <Text>Continue</Text>
                 </Button>
-
-                    
                 </Content>
             </Container>
         )

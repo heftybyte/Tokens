@@ -11,6 +11,9 @@ import {
     addAccountAddress,
     refreshAccountAddress,
     deleteAccountAddress,
+    // wallet
+    addAccountWalletAddress,
+    deleteAccountWalletAddress,
     getAccount,
     getTokenDetailsForAccount,
     logoutAccount,
@@ -43,6 +46,8 @@ export const SAVE_BOOKMARK = 'account/SAVE_BOOKMARK'
 export const REMOVE_BOOKMARK = 'account/REMOVE_BOOKMARK'
 export const GET_PORTFOLIO_CHART = 'account/GET_PORTFOLIO_CHART'
 export const LOADING_CHART = 'account/LOADING_CHART'
+// wallet
+export const ADD_WALLET_ADDRESS = 'account/WALLET/ADD_ADDRESS'
 
 const registerAction = (id) => ({
     type: REGISTER,
@@ -88,6 +93,11 @@ const deleteAddressAction = (addresses=[]) => ({
   data: { addresses, stale: true }
 })
 
+const deleteWalletAddressAction = (wallets=[]) => ({
+    type: DELETE_ADDRESS,
+    data: { wallets, stale: true }
+})
+
 const tokenDetailsAction = (tokenDetails) => ({
   type: GET_TOKEN_DETAILS,
   data: { tokenDetails }
@@ -111,6 +121,12 @@ const removeBookmarkAction = (newsItem) => ({
 const loadingChartAction = (chartLoading) => ({
     type: LOADING_CHART,
     data: { chartLoading }
+})
+
+// wallet
+const addWalletAddressAction = (wallets) => ({
+    type: ADD_WALLET_ADDRESS,
+    data: {wallets}
 })
 
 export const createAccount = (params) => async (dispatch, getState) => {
@@ -329,6 +345,73 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
 
 }
 
+// wallet
+export const addWalletAddress = (address) => async (dispatch, getState) => {
+    console.log('in add wallet address');
+    let err = null
+    const { id } = getState().account
+    console.log('id', id)
+    dispatch(setLoading(true, 'Saving Address'))
+    console.log('loading true')
+    console.log(id, address)
+    const account = await addAccountWalletAddress(id, address).catch(e=>err=e)
+    console.log('accoutn address')
+
+    dispatch(setLoading(false))
+    if (err) {
+        dispatch(showToast(getError(err)))
+        return err
+    }
+    dispatch(showToast('Wallet Address created'))
+    dispatch(addWalletAddressAction(account.wallets))
+
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+    const pushEnabled = status === 'granted'
+    const params = { type: 'ADD_WALLET_ADDRESS', meta: { pushEnabled } }
+    dispatch(NavigationActions.navigate({ routeName: 'Wallet', params }))
+    // if (status === 'granted') {
+    //     // Alert.alert('Scanning address...enable push notifications to be notified of completion')
+    //     dispatch(showToast('Scanning address...You\'ll recieve a notification when complete'))
+    // } else {
+    //     // Alert.alert('Scanning address...enable push notifications to be notified of completion')
+    // }
+    // dispatch(getPortfolio(true, 'Scanning For Tokens'))
+    // dispatch(getPortfolioChart())
+    // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+}
+
+
+export const deleteWalletAddress = (address) => async (dispatch, getState) => {
+    const ok = async () => {
+        let err = null
+        const { id } = getState().account
+        dispatch(setLoading(true, 'Deleting Wallet Address'))
+
+        const account = await deleteAccountWalletAddress(id, address).catch(e=>err=e)
+
+        dispatch(setLoading(false))
+        if (err) {
+            dispatch(showToast(getError(err)))
+            return
+        }
+        dispatch(showToast('Wallet Address Removed'))
+        dispatch(deleteWalletAddressAction(account.wallets))
+        dispatch(getPortfolio())
+        dispatch(getPortfolioChart())
+    }
+
+    safeAlert(
+        'Are you sure?',
+        `Confirm deletion of ${address}`,
+        [
+            {text: 'OK', onPress: ok, style: 'destructive'},
+            {text: 'Cancel', onPress: ()=>{}, style: 'cancel'},
+        ],
+        { cancelable: false }
+    )
+}
+
+
 export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
@@ -416,6 +499,7 @@ export const removeBookmark = (news) => async (dispatch, getState) => {
 
 const initialState = {
     addresses : [],
+    wallets: [],
     watchList: [],
     id: null,
     token: null,
@@ -460,6 +544,7 @@ export default (state = initialState, action) => {
         case ADD_ADDRESS:
         case DELETE_ADDRESS:
         case LOADING_CHART:
+        case ADD_WALLET_ADDRESS:
             return {
                 ...state,
                 ...action.data

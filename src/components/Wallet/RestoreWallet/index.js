@@ -6,7 +6,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import QRScanner from '../../Common/QRScanner';
 import WalletInput from './WalletInput';
-import { addAddress } from '../../../reducers/account';
+import { addWalletAddress } from '../../../reducers/account';
 import { withDrawer } from '../../../helpers/drawer';
 import { trackAddress } from '../../../helpers/analytics'
 import { GenerateAddressFromPrivateKey, GenerateAddressFromMnemonic, StoreWallet } from '../../../helpers/wallet';
@@ -69,7 +69,15 @@ class RestoreWallet extends Component {
   }
 
   restoreWallet = async (data) => {
+      const type = 'ethereum';
+
       const text = (typeof data === 'string') && data || this.state.inputValue;
+
+      if(!text || !text.length) {
+          Alert.alert('Enter an correct mnemonic or private key to save');
+          return;
+      }
+
       console.log('data', text)
 
       let address = ""
@@ -86,19 +94,15 @@ class RestoreWallet extends Component {
       if(this.isValidPrivateKey(text)){
           address = await GenerateAddressFromPrivateKey(text)
           if(address){
-              privateKey = data
+              privateKey = text
           }
       }
-      // securestore
-      StoreWallet(privateKey, address)
 
-      const { addAddress, navigate } = this.props
-      if(!text || !text.length) {
-          Alert.alert('Enter an address to save');
-          return;
-      }
+      const { addWalletAddress } = this.props
 
-      const err = await addAddress(address);
+      const result = await StoreWallet(type, privateKey, address)
+
+      const err = await addWalletAddress(address);
   }
 
   render(){
@@ -131,7 +135,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAddress: (address) => dispatch(addAddress(address)),
+    addWalletAddress: (address) => dispatch(addWalletAddress(address)),
     navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
   }
 }
