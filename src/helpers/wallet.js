@@ -6,36 +6,25 @@
 import { Wallet } from 'ethers';
 import { SecureStore } from 'expo'
 
-export const GenerateMnemonic = async () => {
-    // const mnemonic = await bip39.generateMnemonic(256)
-    // console.log(mnemonic)
-    // return mnemonic
-    // return bip39.generateMnemonic()
-    return "meadow much ready few bundle siren like poverty announce soon hole amateur"
-}
-
-
-export const StoreWallet = async(privKey, pubKey) => {
-
-    /**
-     * TODO
-     * Non-secure implementation a better approach
-     * would be encrypt using AES-256 and a password
-     * defined by user as salt.
-     */
+export const StoreWallet = async(type, privKey, pubKey) => {
 
     const key = "wallet"
-    const currentWallet  = await SecureStore.getItemAsync(key) ||  {}
-    currentWallet[pubKey] = privKey
-    SecureStore.setItemAsync(key, currentWallet)
+    let currentWallet  = await SecureStore.getItemAsync(key) ||  {}
+
+    currentWallet[type] = { ...currentWallet[type], pubKey: privKey }
+
+    const result = await SecureStore.setItemAsync(key, JSON.stringify(currentWallet));
+
+    return result
 }
 
 export const GenerateAddressFromMnemonic = async (mnemonic, index=0) => {
     try {
-        const path = 'm/44’/60’/0’/0/${index}'
+        const path = `m/44'/60'/0'/0/${index}`
         const wallet = Wallet.fromMnemonic(mnemonic, path);
         return { 'address': wallet.address, 'privateKey': wallet.privateKey};
     } catch(err){
+        console.log(err)
         return false
     }
 

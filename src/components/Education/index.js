@@ -53,6 +53,9 @@ const styles = StyleSheet.create({
 const Content = {
   "ADD_ADDRESS": {
     images: [ require('../../../assets/education/scanning_address.png') ]
+  },
+  "ADD_WALLET_ADDRESS": {
+      images: [ require('../../../assets/education/scanning_address.png') ]
   }
 }
 
