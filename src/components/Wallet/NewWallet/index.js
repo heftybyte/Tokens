@@ -1,6 +1,3 @@
-/**
- * Created by Samparsky on 19/03/2018.
- */
 import React, { Component } from 'react';
 import { WebView, StyleSheet, Alert } from 'react-native';
 import QRScanner from './../../Common/QRScanner';
@@ -39,15 +36,13 @@ class NewWallet extends Component {
             "mnemonic": event.nativeEvent.data
         })
 
-        SecureStore.setItemAsync(constants.wallet.mnemonic,
-            JSON.stringify(event.nativeEvent.data)).then(function(result){})
-
     }
 
     render() {
         const {
             goToConfirmPhrasePage
         } = this.props
+        const { mnemonic } = this.state
         return (
             <Container>
                 <Content>
@@ -67,7 +62,7 @@ class NewWallet extends Component {
 
                     <View style={{marginTop: 20,marginBottom: 100}}>
                     {
-                        (this.state.mnemonic) ?
+                        (mnemonic) ?
                             <Text
                                 style={styles.mnemonic}
                             >{this.state.mnemonic}</Text>
@@ -78,7 +73,7 @@ class NewWallet extends Component {
                     }
                     </View>
 
-                <Button title={"continue"} block primary onPress={() => { goToConfirmPhrasePage() }}>
+                <Button title={"continue"} block primary onPress={() => { goToConfirmPhrasePage(mnemonic) }}>
                     <Text>Continue</Text>
                 </Button>
                 </Content>
@@ -95,7 +90,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
-        goToConfirmPhrasePage: () => dispatch(NavigationActions.navigate({ routeName: 'Confirm Phrase' })),
+        goToConfirmPhrasePage: (mnemonic) => dispatch(NavigationActions.navigate({ routeName: 'Confirm Phrase', mnemonic})),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(NewWallet));

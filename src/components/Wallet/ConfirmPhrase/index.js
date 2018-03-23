@@ -1,6 +1,3 @@
-/**
- * Created by Samparsky on 19/03/2018.
- */
 import React, { Component } from 'react';
 import { WebView, StyleSheet, Alert } from 'react-native';
 import { NavigationActions } from 'react-navigation';
@@ -33,48 +30,37 @@ class ConfirmPhrase extends Component {
 		mnemonic: ""
 	}
 
-    createWallet = async(mnemonic) => {
+    createWallet = async(mnemonic, type='ethereum') => {
 
         const { addWalletAddress } = this.props
-        const type = 'ethereum'
 
         const wallet = await GenerateAddressFromMnemonic(mnemonic);
 
         if(wallet){
-            const address = wallet.address
-            const privateKey = wallet.privateKey
-
+            const { address, privateKey } = wallet
             const result = await StoreWallet(type, privateKey, address)
-
             const err = await addWalletAddress(address);
+
+            if (err){
+                console.log(err)
+            }
         }
 
     }
 
-	getMnemonic = (fn) => {
-        SecureStore.getItemAsync(constants.wallet.mnemonic).then((data) => {
-        	data = JSON.parse(data)
-            // Alert.alert(data)
-            fn(data);
-        }).catch(function(e){
+    onContinue = (mnemonic) => {
+		if(mnemonic == this.state.mnemonic){
+			Alert.alert('Correct')
+			this.createWallet(mnemonic)
+            return
+		}
 
-        })
-        
-    }
-
-    onContinue = () => {
-    	this.getMnemonic( (mnemonic) => {
-    		if(mnemonic == this.state.mnemonic){
-    			Alert.alert('Correct')
-				this.createWallet(mnemonic)
-                return
-    		}
-    		Alert.alert('Incorrect')
-    	})
+		Alert.alert('Incorrect')
     }
 
 
 	render() {
+        const { mnemonic } = this.props
 		return (
 			<Container>
 				<Content>
@@ -94,7 +80,7 @@ class ConfirmPhrase extends Component {
 						</Form>
 					</View>
 
-					<Button block primary onPress={() => { this.onContinue() }}>
+					<Button block primary onPress={() => { this.onContinue(mnemonic) }}>
                     	<Text>Confirm</Text>
                 	</Button>
 
