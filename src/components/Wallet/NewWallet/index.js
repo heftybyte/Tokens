@@ -4,7 +4,7 @@ import QRScanner from './../../Common/QRScanner';
 import { NavigationActions } from 'react-navigation';
 import { View, Container, Header, Content, ListItem, Input,Text,
     Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form } from 'native-base';
-import { GenerateAddressFromMnemonic, StoreWallet } from '../../../helpers/wallet';
+import { generateAddressFromMnemonic, storeWallet } from '../../../helpers/wallet';
 import { withDrawer } from '../../../helpers/drawer';
 import { SecureStore} from 'expo'
 import { constants } from '../../../constants';

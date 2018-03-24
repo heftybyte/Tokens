@@ -9,7 +9,7 @@ import { withDrawer } from '../../../helpers/drawer';
 import { addWalletAddress } from '../../../reducers/account';
 import { SecureStore} from 'expo'
 import { constants } from '../../../constants';
-import { GenerateAddressFromMnemonic, StoreWallet } from '../../../helpers/wallet';
+import { generateAddressFromMnemonic, storeWallet } from '../../../helpers/wallet';
 
 const styles = StyleSheet.create({
     input: {
@@ -34,11 +34,11 @@ class ConfirmPhrase extends Component {
 
         const { addWalletAddress } = this.props
 
-        const wallet = await GenerateAddressFromMnemonic(mnemonic);
+        const wallet = await generateAddressFromMnemonic(mnemonic);
 
         if(wallet){
             const { address, privateKey } = wallet
-            const result = await StoreWallet(type, privateKey, address)
+            const result = await storeWallet(type, privateKey, address)
             const err = await addWalletAddress(address);
 
             if (err){
