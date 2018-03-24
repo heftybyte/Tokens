@@ -1,7 +1,7 @@
 import { Wallet } from 'ethers';
 import { SecureStore } from 'expo'
 
-export const StoreWallet = async(type, privKey, pubKey) => {
+export const storeWallet = async(type, privKey, pubKey) => {
     const key = "wallet"
 
     let currentWallet  = await SecureStore.getItemAsync(key) ||  {}
@@ -13,7 +13,7 @@ export const StoreWallet = async(type, privKey, pubKey) => {
     return result
 }
 
-export const GenerateAddressFromMnemonic = async (mnemonic, index=0) => {
+export const generateAddressFromMnemonic = async (mnemonic, index=0) => {
     try {
         const path = `m/44'/60'/0'/0/${index}`
         const wallet = Wallet.fromMnemonic(mnemonic, path);
@@ -25,7 +25,7 @@ export const GenerateAddressFromMnemonic = async (mnemonic, index=0) => {
 
 }
 
-export const GenerateAddressFromPrivateKey = async (privateKey) => {
+export const generateAddressFromPrivateKey = async (privateKey) => {
     try {
         if (privateKey.substring(0, 2) !== '0x') { privateKey = '0x' + privateKey; }
         const wallet = new Wallet(privateKey);

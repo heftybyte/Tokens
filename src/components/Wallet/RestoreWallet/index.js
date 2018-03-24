@@ -9,9 +9,9 @@ import WalletInput from './WalletInput';
 import { addWalletAddress } from '../../../reducers/account';
 import { withDrawer } from '../../../helpers/drawer';
 import { trackAddress } from '../../../helpers/analytics'
-import { GenerateAddressFromPrivateKey, 
-        GenerateAddressFromMnemonic, 
-        StoreWallet, 
+import { generateAddressFromPrivateKey,
+        generateAddressFromMnemonic,
+        storeWallet,
         isValidMnemonic, 
         isValidPrivateKey } from '../../../helpers/wallet';
 
@@ -78,13 +78,13 @@ class RestoreWallet extends Component {
       let privateKey = ""
 
       if(this.isValidMnemonic(text)){
-          wallet = await GenerateAddressFromMnemonic(text)
+          wallet = await generateAddressFromMnemonic(text)
           if(wallet){
               address = wallet.address
               privateKey = wallet.privateKey
           }
       } else if(this.isValidPrivateKey(text)){
-          address = await GenerateAddressFromPrivateKey(text)
+          address = await generateAddressFromPrivateKey(text)
           if(address){
               privateKey = text
           }
@@ -95,7 +95,7 @@ class RestoreWallet extends Component {
 
       const { addWalletAddress } = this.props
 
-      const result = await StoreWallet(type, privateKey, address)
+      const result = await storeWallet(type, privateKey, address)
 
       const err = await addWalletAddress(address);
 
