@@ -1,7 +1,3 @@
-/**
- * for local testing
-const Web3 = require('web3');
-**/
 import { ENVIRONMENT } from 'react-native-dotenv';
 
 const Web3 = require('web3');
