@@ -154,6 +154,12 @@ export const getHistoricalPrices = async ({fsyms,tsyms='USD',start=0,end=0,forma
     return res.data
 }
 
+export const getGasPrices = async () => {
+  const url = "https://ethgasstation.info/json/ethgasAPI.json";
+  const res = await instance.get(url)
+  return res.data
+}
+
 const log = (level) => (message, data) => {
     console.log({ message, data, level })
     instance.post('/client-logs', { message, data, level })
