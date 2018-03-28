@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react"
 import { View, TouchableHighlight, Text, Platform, Alert, Image, Dimensions } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons, Entypo  } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
 import { observer } from "mobx-react/native"
 import { Button, Header as NBHeader, Left, Body, Right, Content } from "native-base"
@@ -33,7 +33,13 @@ const Items = [
 		route: "ICO List",
 		Component: MaterialCommunityIcons,
 		color: '#ff0000'
-	},/*,
+	},
+    {
+        name: "My Wallet",
+        icon: "wallet",
+        route: "Wallet",
+        Component: Entypo,
+    },/*,
     {
         name: "Bookmarks",
         icon: "bookmark",
@@ -71,7 +77,11 @@ export const withDrawer = (WrappedComponent) => {
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = [
                 'Token Details', 'Search', 'Price Alert', 'Add Address',
-                'ICO List', 'ICODetail', 'Education'
+                'ICO List', 'ICODetail', 'Education', 'Restore Wallet', 'New Wallet', 'Confirm Phrase'
+            ].indexOf(navState.routeName) > -1
+
+            const noSearchButton = [
+                'Restore Wallet', 'New Wallet', 'Confirm Phrase'
             ].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X
@@ -188,18 +198,21 @@ export const withDrawer = (WrappedComponent) => {
                                     <Ionicons name="ios-share" size={28} color="white" />
                                 </TouchableHighlight>
                                 :
-                                <Button
-                                style={{ justifyContent: "center", alignItems: "center", width: 60 }}
-                                transparent
-                                onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
-                            >
-                                <Ionicons name="ios-search-outline" size={28} color="white" />
-                            </Button>
+                                (!noSearchButton) ?
+                                    <Button
+                                        style={{ justifyContent: "center", alignItems: "center", width: 60 }}
+                                        transparent
+                                        onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
+                                    >
+                                        <Ionicons name="ios-search-outline" size={28} color="white" />
+                                    </Button>
+                                :
+                                    false
                             }
                             </Right>
                         </NBHeader>
                         <Spinner
-                            visible={this.props.isLoading}
+                            visible={false}
                             textContent={this.props.loadText||''}
                             textStyle={{color: '#FFF', fontSize: 16}}
                             overlayColor='rgba(0,0,0,.9)'

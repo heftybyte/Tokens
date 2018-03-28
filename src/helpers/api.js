@@ -73,6 +73,15 @@ export const addAccountAddress = async (id, address) => {
   return res.data
 }
 
+export const addAccountWalletAddress = async (id, address) => {
+  const res = await instance.post(`/accounts/${id}/wallets`, { address })
+  return res.data
+}
+
+export const deleteAccountWalletAddress = async(id, address) => {
+    const res = await instance.delete(`/accounts/${id}/wallets/${address}`)
+    return res.data
+}
 
 export const refreshAccountAddress = async (id, address) => {
   const res = await instance.post(`/accounts/${id}/address/${address}/refresh`)
@@ -143,6 +152,12 @@ export const getHistoricalPrices = async ({fsyms,tsyms='USD',start=0,end=0,forma
     const queryString = getQueryString({fsyms,tsyms,start,end,format,period,interval})
     const res = await instance.get(`/ticker/prices/historical?${queryString}`)
     return res.data
+}
+
+export const getGasPrices = async () => {
+  const url = "https://ethgasstation.info/json/ethgasAPI.json";
+  const res = await instance.get(url)
+  return res.data
 }
 
 const log = (level) => (message, data) => {

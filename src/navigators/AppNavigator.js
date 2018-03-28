@@ -16,6 +16,11 @@ import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 import PriceAlert from '../components/PriceAlert';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
+// Wallet
+import Wallet from '../components/Wallet';
+import RestoreWallet from '../components/Wallet/RestoreWallet';
+import NewWallet from '../components/Wallet/NewWallet';
+import ConfirmPhrase from '../components/Wallet/ConfirmPhrase';
 
 import {
   createReduxBoundAddListener,
@@ -41,6 +46,10 @@ export const AppNavigator = StackNavigator({
   Bookmarks: { screen: BookMarks },
   Register: { screen: Register },
   'Token Details': { screen: TokenDetails },
+  'Wallet': { screen: Wallet},
+    'New Wallet': {screen: NewWallet},
+    'Restore Wallet': {screen: RestoreWallet},
+    'Confirm Phrase': {screen: ConfirmPhrase},
   'Price Alert': { screen: PriceAlert },
   'ICO List': {
   	screen: ICOs
@@ -49,7 +58,7 @@ export const AppNavigator = StackNavigator({
   	screen: ICODetail
 	}
 }, {
-	initialRouteName: "ICOList",
+	initialRouteName: "NewWallet",
   headerMode: "none",
   cardStyle: {
     backgroundColor: '#000'
