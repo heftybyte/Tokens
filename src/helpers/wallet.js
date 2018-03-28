@@ -1,7 +1,6 @@
 import { Wallet, utils, providers, Contract } from 'ethers';
 import { ENVIRONMENT } from 'react-native-dotenv';
 import { SecureStore } from 'expo'
-import web3 from './web3';
 
 export const storeWallet = async(type, privKey, pubKey) => {
     const key = "wallet"
@@ -58,8 +57,7 @@ const _sendTokens = async(wallet, recipient, amount, contractAddress) => {
     let err = null
     const abi = require('human-standard-token-abi')
     wallet.provider = _getEtherProvider()
-    const token = new web3.eth.Contract(abi, contractAddress)
-    const contract = new Contract(contractAddress, token._jsonInterface, wallet);
+    const contract = new Contract(contractAddress, abi, wallet);
 
     const transaction = await contract.transfer(recipient, amount).catch(e=>err=e)
     if(err)throw err
@@ -69,7 +67,6 @@ const _sendTokens = async(wallet, recipient, amount, contractAddress) => {
 const _createEtherWallet = async(publicKey) => {
     const storedWallet = await SecureStore.getItemAsync("wallet");
     const privateKey = storedWallet['ethereum'][publicKey]
-
     const wallet = new Wallet(privateKey)
     return wallet
 }
