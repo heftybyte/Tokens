@@ -14,6 +14,7 @@ import {
     // wallet
     addAccountWalletAddress,
     deleteAccountWalletAddress,
+    refreshAccountWallet,
     getAccount,
     getTokenDetailsForAccount,
     logoutAccount,
@@ -380,6 +381,21 @@ export const addWalletAddress = (address) => async (dispatch, getState) => {
     // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
 }
 
+export const refreshWalletAccount = (address) => async (dispatch, getState) => {
+    let err = null
+    const { id } = getState().account
+    dispatch(setLoading(true, `Refreshing Wallet`))
+    const account = await refreshAccountWallet(id, address).catch(e=>err=e)
+    dispatch(setLoading(false))
+    if (err) {
+        dispatch(showToast(getError(err)))
+        return
+    }
+    dispatch(showToast('Wallet Updated'))
+    dispatch(getPortfolio())
+    dispatch(getPortfolioChart())
+    // dispatch(NavigationActions.navigate({ routeName: 'Dashboard' }))
+}
 
 export const deleteWalletAddress = (address) => async (dispatch, getState) => {
     const ok = async () => {
