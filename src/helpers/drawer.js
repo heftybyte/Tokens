@@ -40,7 +40,7 @@ const Items = [
 		color: '#ff0000'
 	},
     {
-        name: "My Wallet",
+        name: "Wallets",
         icon: "wallet",
         route: "Wallet",
         Component: Entypo,

@@ -65,6 +65,7 @@ class NewWallet extends Component {
                         (mnemonic) ?
                             <Text
                                 style={styles.mnemonic}
+                                selectable
                             >{this.state.mnemonic}</Text>
                         :
                         <Text
@@ -90,7 +91,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
-        goToConfirmPhrasePage: (mnemonic) => dispatch(NavigationActions.navigate({ routeName: 'Confirm Phrase', mnemonic})),
+        goToConfirmPhrasePage: (mnemonic) => dispatch(NavigationActions.navigate({ routeName: 'Confirm Phrase', params: { mnemonic }}))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(NewWallet));
