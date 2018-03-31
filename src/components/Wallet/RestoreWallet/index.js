@@ -9,11 +9,13 @@ import WalletInput from './WalletInput';
 import { addWalletAddress } from '../../../reducers/account';
 import { withDrawer } from '../../../helpers/drawer';
 import { trackAddress } from '../../../helpers/analytics'
-import { generateAddressFromPrivateKey,
-        generateAddressFromMnemonic,
-        storeWallet,
-        isValidMnemonic, 
-        isValidPrivateKey } from '../../../helpers/wallet';
+import {
+  generateAddressFromPrivateKey,
+  generateAddressFromMnemonic,
+  storeWallet,
+  isValidMnemonic, 
+  isValidPrivateKey
+} from '../../../helpers/wallet';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -68,7 +70,6 @@ class RestoreWallet extends Component {
 
   restoreWallet = async (data, type = 'ethereum') => {
       const text = (typeof data === 'string') && data || this.state.inputValue;
-
       if(!text || !text.length) {
           Alert.alert('Enter an correct mnemonic or private key to save');
           return;
@@ -77,13 +78,13 @@ class RestoreWallet extends Component {
       let address = ""
       let privateKey = ""
 
-      if(this.isValidMnemonic(text)){
+      if(isValidMnemonic(text)){
           wallet = await generateAddressFromMnemonic(text)
           if(wallet){
               address = wallet.address
               privateKey = wallet.privateKey
           }
-      } else if(this.isValidPrivateKey(text)){
+      } else if(isValidPrivateKey(text)){
           address = await generateAddressFromPrivateKey(text)
           if(address){
               privateKey = text
@@ -92,7 +93,6 @@ class RestoreWallet extends Component {
           Alert.alert('Enter an correct mnemonic or private key to save');
           return;
       }
-
       const { addWalletAddress } = this.props
 
       const result = await storeWallet(type, privateKey, address)
