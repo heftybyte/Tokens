@@ -3,7 +3,7 @@ import { ActivityIndicator, Dimensions, StyleSheet, ScrollView, TouchableOpacity
 import { Button } from 'native-base';
 import { VictoryGroup, VictoryLine } from "victory-native";
 import Svg, { Line } from 'react-native-svg'
-import { gainColor, lossColor } from '../../config'
+import { baseColor, gainColor, lossColor } from '../../config'
 import { mapAxis } from '../../helpers/functions'
 
 const { width: deviceWidth } = Dimensions.get("window")
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     chart: {
         flex: 1,
         height: 300,
-        backgroundColor: '#000',
+        backgroundColor: baseColor,
         paddingBottom: 10
     },
     spinner: {

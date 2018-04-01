@@ -9,7 +9,6 @@ import {
   TouchableHighlight,
   AsyncStorage,
   Alert,
-  StatusBar,
   Button,
   RefreshControl
 } from 'react-native';
@@ -30,7 +29,7 @@ import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer'
 import { trackRefresh, trackTap } from '../../helpers/analytics'
-import { lossColor, brandColor } from '../../config'
+import { baseColor, lossColor, brandColor } from '../../config'
 
 const qs = require('qs');
 
@@ -45,15 +44,15 @@ const currencyFormatOptions =  {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   container: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   header: {
-    backgroundColor: '#f00',
+    backgroundColor: baseColor,
     height: 80,
   },
   addBtn: {
@@ -164,10 +163,6 @@ class Dashboard extends Component {
           />
         }
       >
-        <StatusBar
-          backgroundColor="#000"
-          barStyle="light-content"
-        />
         { !addresses.length  ?
           <TouchableHighlight
             onPress={()=>{goToAddressPage({type: 'Accounts'})}}

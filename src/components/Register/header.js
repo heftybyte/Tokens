@@ -5,18 +5,19 @@ import { Header, Left, Button, Body, Right } from "native-base"
 import { NavigationActions } from 'react-navigation'
 import { Constants } from 'expo'
 import reduxStore from '../../store'
+import { baseColor } from '../../config'
 
 export default (props) => (
 	<Header
 		style={{
-			backgroundColor: "#000",
+			backgroundColor: baseColor,
 			borderBottomWidth: 0,
 			shadowOffset: { height: 0, width: 0 },
 			shadowOpacity: 0,
 			paddingTop: Platform.OS  === 'ios' ? 0 : Constants.statusBarHeight ,
 			height: 80
 		}}
-		androidStatusBarColor="#000"
+		androidStatusBarColor={baseColor}
 		noShadow
 	>
 		<Left>

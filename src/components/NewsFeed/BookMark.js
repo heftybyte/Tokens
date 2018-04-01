@@ -4,13 +4,13 @@ import {styles} from './Style'
 import { connect } from 'react-redux';
 import Format from './Format'
 import { withDrawer } from '../../helpers/drawer';
-
+import { baseColor } from '../../config'
 
 class BookMarks extends React.Component {
 
     static navigationOptions = ({ navigation }) => ({
         title: 'Bookmarks',
-        headerStyle: {backgroundColor: '#000'},
+        headerStyle: {backgroundColor: baseColor},
     })
 
     renderItem = ({ item })=>

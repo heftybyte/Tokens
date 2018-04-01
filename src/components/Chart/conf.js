@@ -1,9 +1,11 @@
+import { baseColor } from '../../config'
+
 export function ChartConfig (data, color){
 
         this.conf={ 
                 chart: {
                     marginTop: 0,
-                    backgroundColor: '#000',
+                    backgroundColor: baseColor,
                 },
                 tooltip: {
                     enabled: false
