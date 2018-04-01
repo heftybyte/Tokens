@@ -7,7 +7,7 @@ import { observer } from "mobx-react"
 import { Field } from "../lib/Field"
 import Header from './header'
 import Footer from './footer'
-import { invitesEnabled } from '../../config'
+import { baseColor, invitesEnabled } from '../../config'
 
 export const Guest = observer(
 	(navigation)=> (
@@ -22,7 +22,7 @@ export const Guest = observer(
 			<View
 				style={{
 					flex: 1,
-					backgroundColor: '#000',
+					backgroundColor: baseColor,
 					paddingHorizontal: 20,
 				}}
 			>

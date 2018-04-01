@@ -8,14 +8,14 @@ import { store } from './store'
 import { Field } from "../lib/Field"
 import Header from './header'
 import Footer from './footer'
-import { invitesEnabled } from '../../config'
+import { baseColor, invitesEnabled } from '../../config'
 
 export const Normal = observer(
 	(navigation) => (
 		<View
 			style={{
 				flex: 1,
-				backgroundColor: '#000'
+				backgroundColor: baseColor
 			}}
 		>
 			<Header title={store.type === 'normal' ? "Register" : "Login"} />

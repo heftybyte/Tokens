@@ -5,6 +5,7 @@ import React from "react"
 import { observer } from "mobx-react"
 import Footer from './footer'
 import { store } from "./store"
+import { baseColor } from "../../config"
 
 const radioStyles = {
 	outer: (size, outerColor) => ({
@@ -40,7 +41,7 @@ const Register = observer(
 		<View
 			style={{
 				flex: 1,
-				backgroundColor: '#000'
+				backgroundColor: baseColor
 			}}
 		>
 			<View

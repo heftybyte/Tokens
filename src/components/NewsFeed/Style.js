@@ -1,15 +1,15 @@
-import { lossColor, brandColor } from '../../config'
+import { baseAccent, baseColor, lossColor, brandColor } from '../../config'
 
 export const styles = {
     container: {
-        backgroundColor: '#000',
+        backgroundColor: baseColor,
         height: 130,
         borderTopWidth: 1,
         borderBottomWidth: 1,
-        borderColor: '#111'
+        borderColor: baseAccent
     },
     slide: {
-        backgroundColor: '#000',
+        backgroundColor: baseColor,
         borderColor: 'transparent',
         height:130,
         maxHeight:130,
@@ -31,7 +31,7 @@ export const styles = {
         color: '#fff'
     },
     action: {
-        color: "#000"
+        color: baseColor
     },
     center: {
         alignItems: 'center',

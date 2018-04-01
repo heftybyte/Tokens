@@ -12,7 +12,7 @@ import {
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { formatPrice, formatCurrencyChange, getTokenImage } from '../../helpers/functions'
-import { baseURL, gainColor, lossColor, brandColor } from '../../config'
+import { baseAccent, baseColor, baseURL, gainColor, lossColor, brandColor } from '../../config'
 import { showToast } from '../../reducers/ui'
 import { trackAddress, trackTap } from '../../helpers/analytics'
 import {
@@ -52,7 +52,7 @@ const WatchListItem = ({ item, showChange, onPress, showTokenInfo, index }) => {
   )
 }
 
-const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
+const TokenItem = ({ item, index, onPress, showTokenInfo, showChange, priceContainerExtended}) => {
   const changeStyle = item.change > 0 ? styles.gain : styles.loss
   const changeTextStyle = !item.change && styles.neutralColor || (parseInt(item.change) > -1 ? styles.gainColor : styles.lossColor)
   const isLongPrice = (`${item.balance * item.price}`).length >= 11
@@ -84,6 +84,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange}) => {
           onPress={onPress}
           style={[
               styles.priceContainer,
+              priceContainerExtended ? { width: priceContainerExtended } : {},
               changeStyle,
               !item.price ? styles.noPrice : {}
               // isLongPrice ? styles.longerPriceContainer : {}
@@ -138,7 +139,8 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
 class TokenList extends Component {
 
   state = {
-    showChange: false
+    showChange: false,
+    priceContainerExtended: false
   }
 
   static defaultProps = {
@@ -172,6 +174,7 @@ class TokenList extends Component {
       index={index}
       showChange={this.state.showChange}
       watchList={this.props.watchList}
+      priceContainerExtended={this.state.priceContainerExtended}
       showTokenInfo={() => {
         trackTap('TokenInfo:TokenItem')
         this.props.goToTokenDetailsPage(item);
@@ -189,6 +192,30 @@ class TokenList extends Component {
       }}
     />
   )
+
+  adjustPriceContainerWidth = (props) => {
+    const tokens = props.tokens || []
+    tokens.sort((a,b)=>Number(a.price * a.balance) < Number(b.price * b.balance) ? 1 : -1)
+    let priceContainerExtended = false
+    const token = tokens[0]
+    if (token && token.balance) {
+      const sum = token.price * token.balance
+      if (sum >= 1000000) {
+        priceContainerExtended = 100
+      } else if (sum >= 100000) {
+        priceContainerExtended = 90
+      }  
+      this.setState({priceContainerExtended})
+    }
+  }
+
+  componentDidMount = () => {
+    this.adjustPriceContainerWidth(this.props)
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.adjustPriceContainerWidth(nextProps)
+  }
 
   renderSearchListItem = ({item, index}) => (
     <SearchItem
@@ -220,7 +247,6 @@ class TokenList extends Component {
       search: this.renderSearchListItem
     }
     const dataTokens = (this.props.tokens || []).map((token, i)=>({...token, key: token.symbol}))
-
     if (type === 'tokens') {
       if (!showChange) {
         dataTokens.sort((a,b)=>Number(a.price * a.balance) < Number(b.price * b.balance) ? 1 : -1)
@@ -257,7 +283,7 @@ const mapDispatchToProps = (dispatch) => ({
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     paddingBottom: 20
   },
   symbol: {
@@ -266,35 +292,35 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito-Light'
   },
   balance: {
-    color: '#666',
+    color: '#999',
     fontSize: 12,
     fontFamily: 'Nunito'
   },
   symbolContainer: {
-    flex: .65
+    flex: .9
   },
   priceContainer: {
-    width: 96,
-    height: 40,
+    width: 80,
+    height: 33.33,
     backgroundColor: lossColor,
-    borderRadius: 8,
+    borderRadius: 4,
     borderWidth: 2,
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 12,
-    paddingHorizontal: 13
+    alignItems: 'center'
   },
   noPrice: {
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     borderColor: '#fff'
   },
   noPriceText: {
     color: '#fff'
   },
   watchText: {
+    fontSize: 11,
     color: '#fff'
   },
   unwatchText: {
+    fontSize: 11,
     color: brandColor
   },
   unwatchContainer: {
@@ -309,28 +335,28 @@ const styles = StyleSheet.create({
     width: 105
   },
   price: {
-    color: '#000',
-    textAlign: 'center',
-    width: 85,
+    color: '#fff',
+    fontSize: 12,
     fontFamily: 'Nunito'
   },
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginLeft: 15,
+    marginHorizontal: 20,
     padding: 10,
     paddingTop: 15,
     paddingBottom: 15,
-    borderColor: '#111',
-    borderTopWidth: 1
+    borderColor: baseAccent,
+    borderTopWidth: 1,
+    backgroundColor: baseColor
   },
   noBorderTop: {
     borderTopWidth: 0
   },
   sectionHeader: {
     color: "#fff",
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     textAlign: 'center',
     padding: 10,
     fontFamily: 'Nunito'

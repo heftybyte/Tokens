@@ -17,6 +17,7 @@ import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 import PriceAlert from '../components/PriceAlert';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
+import { baseColor } from '../config'
 // Wallet
 import Wallet from '../components/Wallet';
 import RestoreWallet from '../components/Wallet/RestoreWallet';
@@ -65,7 +66,7 @@ export const AppNavigator = StackNavigator({
 	initialRouteName: "Entry",
   headerMode: "none",
   cardStyle: {
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   transitionConfig: customAnimationFunc
 });

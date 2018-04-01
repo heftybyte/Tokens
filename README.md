@@ -41,12 +41,12 @@ This requires an `app.json` file in your project's root directory. Below is a te
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#000"
+      "backgroundColor": "#0f1214"
     },
     "loading": {
-      "backgroundColor": "#000"
+      "backgroundColor": "#0f1214"
     },
-    "primaryColor": "#000",
+    "primaryColor": "#0f1214",
     "hooks": {
       "postPublish": [
         {
@@ -83,12 +83,12 @@ This requires an `app.json` file in your project's root directory. Below is a te
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#000"
+      "backgroundColor": "#0f1214"
     },
     "loading": {
-      "backgroundColor": "#000"
+      "backgroundColor": "#0f1214"
     },
-    "primaryColor": "#000",
+    "primaryColor": "#0f1214",
     "hooks": {
       "postPublish": [
         {

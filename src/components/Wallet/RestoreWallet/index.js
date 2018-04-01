@@ -16,10 +16,11 @@ import {
   isValidMnemonic, 
   isValidPrivateKey
 } from '../../../helpers/wallet';
+import { baseColor } from '../../../config'
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     height: '100%',
     padding: 10,
   },
@@ -27,13 +28,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     borderWidth: 5,
     borderStyle: 'solid',
     borderColor: '#f00'
   },
   header: {
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
 });
 

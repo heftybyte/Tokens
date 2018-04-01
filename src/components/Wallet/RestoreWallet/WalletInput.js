@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, Button, View, TouchableHighlight, Touchabl
 import PropTypes from 'prop-types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { trackAddress, trackTap } from '../../../helpers/analytics'
-import { lossColor, brandColor } from '../../../config'
+import { baseColor, lossColor, brandColor } from '../../../config'
 
 const styles = StyleSheet.create({
     topContainer:{
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
       marginHorizontal: 10,
     },
     noPrice: {
-      backgroundColor: '#000',
+      backgroundColor: baseColor,
       borderColor: '#fff'
     },
     noPriceText: {

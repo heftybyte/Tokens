@@ -6,10 +6,11 @@ import { withDrawer } from '../../helpers/drawer';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { deleteWalletAddress } from '../../reducers/account';
 import { connect } from 'react-redux';
+import { baseColor } from '../../config'
 
 const styles = StyleSheet.create({
     scrollContainer: {
-        backgroundColor: '#000',
+        backgroundColor: baseColor,
         height: '100%',
         padding: 10,
     },
@@ -17,13 +18,13 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        backgroundColor: '#000',
+        backgroundColor: baseColor,
         borderWidth: 5,
         borderStyle: 'solid',
         borderColor: '#f00'
     },
     header: {
-        backgroundColor: '#000',
+        backgroundColor: baseColor,
         color:'#fff',
         textAlign: 'center',
         fontSize: 20

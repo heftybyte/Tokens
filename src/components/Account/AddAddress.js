@@ -8,11 +8,12 @@ import QRScanner from './QRScanner';
 import AccountInput from './AccountInput';
 import { addAddress } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
+import { baseColor } from '../../config'
 import { trackAddress } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     height: '100%',
     padding: 10,
   },
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     borderWidth: 5,
     borderStyle: 'solid',
     borderColor: '#f00'

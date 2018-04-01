@@ -11,6 +11,7 @@ import AppWithNavigationState from './src/navigators/AppNavigator';
 import './src/helpers/polyfill'
 import { logger, logLocalData } from './src/helpers/api'
 import { visitDeepLink } from './src/helpers/functions'
+import { baseColor } from './src/config'
 import './src/helpers/notifications'
 
 const ENVIRONMENT = Constants.isDevice ? 'production' : 'development'
@@ -94,7 +95,7 @@ class Tokens extends React.Component {
         const { isReady, reload } = this.state
 
         return isReady && (
-                <Provider style={{backgroundColor: '#000'}} store={store}>
+                <Provider style={{backgroundColor: baseColor}} store={store}>
                     { <AppWithNavigationState /> }
                 </Provider>
             )
