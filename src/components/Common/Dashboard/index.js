@@ -10,7 +10,8 @@ import {
   AsyncStorage,
   Alert,
   Button,
-  RefreshControl
+  RefreshControl,
+  Image
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
@@ -155,6 +156,46 @@ class Dashboard extends Component {
           />
         }
       >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 20
+            }}
+          >
+            <View
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: 100,
+                overflow: 'hidden'
+              }}
+              >
+              <Image
+                source={{uri: 'https://facebook.github.io/react/logo-og.png'}}
+                style={{width: 150, height: 150}}
+              />
+            </View>
+
+            <View
+              style={{
+                flexBasis: '50%',
+                marginLeft: 'auto'
+              }}
+            >
+              <Text style={{color: '#fff', marginBottom: 20, fontSize: 20, fontWeight: 'bold'}}>@hello_world</Text>
+              <Text style={{color: '#fff'}}>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Voluptas, eligendi ini
+              </Text>
+            </View>
+          </View>
+        <StatusBar
+          backgroundColor="#000"
+          barStyle="light-content"
+        />
         { !addresses.length  ?
           <TouchableHighlight
             onPress={()=>{goToAddressPage({type: 'Accounts'})}}
