@@ -45,6 +45,11 @@ const Items = [
         icon: "bookmark",
         route: "Bookmarks"
     }*/
+    {
+      name: "Edit Profile",
+      icon: "edit",
+      route: "Edit Profile"
+    }
 ]
 
 export const withDrawer = (WrappedComponent) => {

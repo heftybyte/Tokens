@@ -15,6 +15,7 @@ import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 import PriceAlert from '../components/PriceAlert';
+import EditProfile from '../components/EditProfile';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 // Wallet
 import Wallet from '../components/Wallet';
@@ -56,7 +57,10 @@ export const AppNavigator = StackNavigator({
   },
 	ICODetail: {
   	screen: ICODetail
-	}
+	},
+  'Edit Profile': {
+    screen: EditProfile
+  }
 }, {
 	initialRouteName: "NewWallet",
   headerMode: "none",
