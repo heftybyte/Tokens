@@ -104,7 +104,7 @@ class Header extends Component {
           <Text style={[styles.portfolioValue, smallerFont]}>{valueParts[0]}</Text>
           <Text style={styles.portfolioValueCents}>.{valueParts[1]||'00'}</Text>
         </Text>
-          {!!totalChange && 
+          {!!totalChange &&
             <View style={styles.changeContainer}>
               <Text style={[styles.portfolioDelta, gain ? styles.gain : styles.loss]}>
                   {formatCurrencyChange((totalChange||0))} ({(totalChangePct||0).toFixed(2)}%)
