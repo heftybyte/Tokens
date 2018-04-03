@@ -19,6 +19,7 @@ import { NavigationActions } from 'react-navigation';
 
 import TokenList from '../TokenList';
 import Header from './Header';
+import Profile from './Profile'
 import News from '../NewsFeed';
 import Chart from '../Chart/Chart';
 import RangeSelector from '../Chart/RangeSelector';
@@ -149,6 +150,7 @@ class Dashboard extends Component {
     } = this.props
     const { chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
+    const username = null
 
     return (
       <ScrollView
@@ -165,42 +167,7 @@ class Dashboard extends Component {
           />
         }
       >
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 20
-          }}
-        >
-            <View
-              style={{
-                width: 150,
-                height: 150,
-                borderRadius: 100,
-                overflow: 'hidden'
-              }}
-              >
-              <Image
-                source={{uri: 'https://facebook.github.io/react/logo-og.png'}}
-                style={{width: 150, height: 150}}
-              />
-            </View>
-
-            <View
-              style={{
-                flexBasis: '50%',
-                marginLeft: 'auto'
-              }}
-            >
-              <Text style={{color: '#fff', marginBottom: 20, fontSize: 20, fontWeight: 'bold'}}>@hello_world</Text>
-              <Text style={{color: '#fff'}}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Voluptas, eligendi ini
-              </Text>
-            </View>
-          </View>
+        {username && <Profile username={username} />}
         <StatusBar
           backgroundColor="#000"
           barStyle="light-content"
