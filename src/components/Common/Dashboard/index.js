@@ -18,9 +18,10 @@ import { NavigationActions } from 'react-navigation';
 
 import TokenList from '../../TokenList';
 import Header from './Header';
-import News from '../../NewsFeed';
-import Chart from '../../Chart/Chart';
-import RangeSelector from '../../Chart/RangeSelector';
+import Profile from './Profile'
+import News from '../NewsFeed';
+import Chart from '../Chart/Chart';
+import RangeSelector from '../Chart/RangeSelector';
 import {
   getPortfolio,
   getPortfolioChart,
@@ -140,6 +141,7 @@ class Dashboard extends Component {
     } = this.props
     const { chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
+    const username = null
 
     return (
       <ScrollView
@@ -192,6 +194,7 @@ class Dashboard extends Component {
               </Text>
             </View>
           </View>
+        {username && <Profile username={username} />}
         <StatusBar
           backgroundColor="#000"
           barStyle="light-content"
