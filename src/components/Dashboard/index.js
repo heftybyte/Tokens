@@ -92,10 +92,8 @@ class Dashboard extends Component {
   }
 
   componentDidMount = async () => {
-    if (this.state.stale) {
-      this.props.getPortfolio()
-      this.props.getPortfolioChart()
-    }
+    this.props.getPortfolio()
+    this.props.getPortfolioChart()
   }
 
   componentWillMount = async () => {
