@@ -8,6 +8,7 @@ import AccountsNavigator from '../components/Account';
 import Education from '../components/Education';
 import Entry from '../components/Entry';
 import Dashboard from '../components/Dashboard';
+import AccountDashboard from '../components/Account/AccountDashboard'
 import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
@@ -45,6 +46,7 @@ export const AppNavigator = StackNavigator({
   GuestRegistration: { screen: GuestRegistration },
   Login: { screen: NormalRegistration },
   Dashboard: { screen: Dashboard },
+  AccountDashboard: { screen: AccountDashboard },
   Accounts : { screen: ViewAccounts },
   'Add Address': { screen: AddAddress },
   Search: { screen: Search },

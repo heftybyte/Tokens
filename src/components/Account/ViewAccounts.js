@@ -121,6 +121,7 @@ class ViewAddresses extends Component {
                   style={{color: '#fff', fontSize: 12, flex: .8, paddingVertical: 20 }}
                   numberOfLines={1}
                   onLongPress={() => { this.copyToClipboard(address.id) }}
+                  onPress={()=>goToRoute('AccountDashboard')}
                 >
                   {address.id}
                 </Text>
