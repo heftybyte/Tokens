@@ -27,6 +27,9 @@ import Wallet from '../components/Wallet';
 import RestoreWallet from '../components/Wallet/RestoreWallet';
 import NewWallet from '../components/Wallet/NewWallet';
 import ConfirmPhrase from '../components/Wallet/ConfirmPhrase';
+import Settings from '../components/Settings';
+import SecuritySettings from '../components/Settings/SecuritySettings'
+import SetPin from '../components/Settings/SecuritySettings/setpin';
 
 import {
   createReduxBoundAddListener,
@@ -63,6 +66,9 @@ export const AppNavigator = StackNavigator(
     'Confirm Phrase': {screen: ConfirmPhrase},
     'Price Alert': { screen: PriceAlert },
     'Profile': Profile,
+    'Settings': {screen: Settings},
+    'SecuritySettings': {screen: SecuritySettings},
+    'SetPin': {screen: SetPin},
     'ICO List': {
       screen: ICOs
     },
@@ -82,7 +88,7 @@ export const AppNavigator = StackNavigator(
    transitionConfig: customAnimationFunc
   }
 );
-  
+
 export const navMiddleWare = createReactNavigationReduxMiddleware(
   "root",
   state => state.nav,
