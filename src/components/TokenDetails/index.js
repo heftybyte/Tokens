@@ -9,7 +9,7 @@ import { withDrawer } from '../../helpers/drawer';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import Chart from '../Chart/Chart';
 import RangeSelector from '../Chart/RangeSelector';
-import Header from '../Dashboard/Header';
+import Header from '../Common/Dashboard/Header';
 import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
 import { baseColor, baseURL, lossColor, brandColor } from '../../config'
 import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'

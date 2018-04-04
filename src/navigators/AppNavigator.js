@@ -7,12 +7,15 @@ import { ICOs, ICODetail } from "../components/Ico"
 import AccountsNavigator from '../components/Account';
 import Education from '../components/Education';
 import Entry from '../components/Entry';
-import Dashboard from '../components/Dashboard';
+import Dashboard from '../components/Common/Dashboard';
 import AccountDashboard from '../components/Account/AccountDashboard'
+import AccountType from '../components/Account/AccountType'
+import AccountPicker from '../components/Account/AccountPicker'
 import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import { Chat } from "../components/Chat"
+import Profile from '../components/Profile';
 import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
@@ -36,43 +39,50 @@ const customAnimationFunc = () => ({
   },
 });
 
-export const AppNavigator = StackNavigator({
-	Chat: {
-		screen: Chat
-	},
-  Education: { screen: Education },
-  Entry: { screen: Entry },
-  NormalRegistration: { screen: NormalRegistration },
-  GuestRegistration: { screen: GuestRegistration },
-  Login: { screen: NormalRegistration },
-  Dashboard: { screen: Dashboard },
-  AccountDashboard: { screen: AccountDashboard },
-  Accounts : { screen: ViewAccounts },
-  'Add Address': { screen: AddAddress },
-  Search: { screen: Search },
-  Bookmarks: { screen: BookMarks },
-  Register: { screen: Register },
-  'Token Details': { screen: TokenDetails },
-  'Wallet': { screen: Wallet},
+export const AppNavigator = StackNavigator(
+  {
+    Chat: {
+      screen: Chat
+    },
+    Education: { screen: Education },
+    Entry: { screen: Entry },
+    NormalRegistration: { screen: NormalRegistration },
+    GuestRegistration: { screen: GuestRegistration },
+    Login: { screen: NormalRegistration },
+    'Account View': { screen: AccountDashboard },
+    'Select Account': { screen: AccountPicker },
+    Accounts : { screen: ViewAccounts },
+    'Add Address': { screen: AddAddress },
+    Search: { screen: Search },
+    Bookmarks: { screen: BookMarks },
+    Register: { screen: Register },
+    'Token Details': { screen: TokenDetails },
+    'Wallet': { screen: Wallet},
     'New Wallet': {screen: NewWallet},
     'Restore Wallet': {screen: RestoreWallet},
     'Confirm Phrase': {screen: ConfirmPhrase},
-  'Price Alert': { screen: PriceAlert },
-  'ICO List': {
-  	screen: ICOs
-  },
-	ICODetail: {
-  	screen: ICODetail
-	}
-}, {
-	initialRouteName: "Entry",
-  headerMode: "none",
-  cardStyle: {
-    backgroundColor: baseColor
-  },
-  transitionConfig: customAnimationFunc
-});
-
+    'Price Alert': { screen: PriceAlert },
+    'Dashboard': Profile,
+    'ICO List': {
+      screen: ICOs
+    },
+    'AccountType': {
+      screen: AccountType
+    },
+    ICODetail: {
+      screen: ICODetail
+    }
+  }, 
+  {
+    initialRouteName: "Entry",
+    headerMode: "none",
+    cardStyle: {
+      backgroundColor: baseColor
+    },
+   transitionConfig: customAnimationFunc
+  }
+);
+  
 export const navMiddleWare = createReactNavigationReduxMiddleware(
   "root",
   state => state.nav,
