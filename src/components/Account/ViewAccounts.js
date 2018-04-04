@@ -118,10 +118,10 @@ class ViewAddresses extends Component {
               (address, index) =>
               <View style={{flex: 1, flexDirection: 'row'}} key={index}>
                 <Text
-                  style={{color: '#fff', fontSize: 12, flex: .8, paddingVertical: 20 }}
+                  style={{color: '#fff', fontSize: 12, flex: .8, paddingVertical: 20}}
                   numberOfLines={1}
                   onLongPress={() => { this.copyToClipboard(address.id) }}
-                  onPress={()=>goToRoute('AccountDashboard')}
+                  onPress={()=>goToRoute('Account View', { accountType: 'ethereum', accountId: address.id })}
                 >
                   {address.id}
                 </Text>
@@ -229,7 +229,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         deleteAddress: (address) => dispatch(deleteAddress(address)),
         refreshAddress: (address) => dispatch(refreshAddress(address)),
-        goToRoute: (routeName) => dispatch(NavigationActions.navigate({ routeName })),
+        goToRoute: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         logout: () => { dispatch(logout()) }
     }
 }

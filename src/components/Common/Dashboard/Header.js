@@ -1,8 +1,8 @@
 import React, { Component }  from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import currencyFormatter from 'currency-formatter';
-import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
-import { baseColor, gainColor, lossColor } from '../../config'
+import { formatPrice, formatCurrencyChange } from '../../../helpers/functions'
+import { baseColor, gainColor, lossColor } from '../../../config'
 import moment from 'moment'
 
 const styles = StyleSheet.create({

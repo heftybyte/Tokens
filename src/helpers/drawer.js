@@ -9,16 +9,16 @@ import { Constants } from 'expo'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { getTokenImage } from '../helpers/functions'
 import { trackTap } from '../helpers/analytics'
-import Header from "../components/Dashboard/Header"
 import Toast, { DURATION } from 'react-native-easy-toast'
 import store from '../store'
 import { NavigationActions } from "react-navigation";
 import { baseAccent, baseColor, brandColor, baseURL } from '../config'
 import { shareTokenDetails } from './functions'
+import { Menu } from '../components/Common/Menu'
 
 const Items = [
     {
-        name: "Dashboard",
+        name: "Portfolio",
         icon: "pie-chart",
         route: "Dashboard",
         Component: SimpleLineIcons
@@ -26,19 +26,22 @@ const Items = [
     {
         name: "Wallets",
         icon: "wallet",
-        route: "Wallet",
-        Component: SimpleLineIcons,
+        route: "AccountType",
+        params: { type: 'wallet' },
+        Component: SimpleLineIcons
     },
     {
         name: "Exchanges",
         icon: "chart",
-        route: "Exchanges",
+        route: "AccountType",
+        params: { type: 'exchange' },
         Component: SimpleLineIcons
     },
     {
         name: "Addresses",
         icon: "notebook",
-        route: "Accounts",
+        params: { type: 'address' },
+        route: "AccountType",
         Component: SimpleLineIcons
     },
 	/*
@@ -78,7 +81,6 @@ export const withDrawer = (WrappedComponent) => {
         }
         render() {
             const { navigation, portfolio } = this.props
-            const totalValue = portfolio.totalValue || 0
             const { state: navState } = navigation
             const headerText = navState &&
                 navState.params && navState.params.overrideHeaderText ||
@@ -108,7 +110,17 @@ export const withDrawer = (WrappedComponent) => {
                     ref={d => (this.drawer = d)}
                     type="overlay"
                     openDrawerOffset={100}
-                    content={<DashboardMenu navigation={navigation} totalValue={totalValue} />}
+                    content={
+                        <Menu
+                            navigation={navigation}
+                            items={Items}
+                            showStatusBar={true}
+                            baseAccent={baseAccent}
+                            brandColor={brandColor}
+                            baseColor={baseColor}
+                            hideBorder={true}
+                        />
+                    }
                     tapToClose
                 >
                     <View
@@ -243,55 +255,3 @@ export const withDrawer = (WrappedComponent) => {
         }
     }
 }
-
-const DashboardMenu = ({ navigation, totalValue }) => (
-    <View style={{
-        flex: 1,
-        backgroundColor: baseColor,
-        paddingTop: 40,
-        shadowColor: '#000',
-        shadowOpacity: 0.8,
-        shadowOffset: {width: 2, height: 1},
-        shadowRadius: 20
-    }}>
-        <StatusBar barStyle="light-content" />
-        <View style={{ borderBottomWidth: 2, borderColor: baseAccent, alignItems: 'center', paddingVertical: 20 }}>
-            <Text style={{color: '#fff', fontSize: 15, fontWeight: 'bold'}}>Menu</Text>
-        </View>
-        {Items.map(ListItem(navigation))}
-    </View>
-)
-
-const ListItem = (navigation) => ({ name, route, icon, Component, color }) => (
-    <TouchableHighlight
-        key={route}
-        onPress={() => navigation.navigate(route)}
-    >
-        <View
-            style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                paddingHorizontal: 10,
-                alignItems: "center",
-                paddingLeft: 25,
-                height: 75,
-            }}
-        >
-            <View style={{ width: 60 }}>
-	            {
-		            Component ? (
-		            	<Component name={icon} size={20} color={color || brandColor} />
-		            ) : (
-			            <Icon name={icon} size={20} color={color || brandColor} />
-		            )
-	            }
-            </View>
-            <View style={{ flex: .9 }}>
-                <Text style={{ color: "#fff" }}>{name}</Text>
-            </View>
-            <View style={{ flex: .1 }}>
-                <SimpleLineIcons name={'arrow-right'} color="#fff" size={14} />
-            </View>
-        </View>
-    </TouchableHighlight>
-)

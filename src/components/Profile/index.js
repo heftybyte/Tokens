@@ -7,7 +7,7 @@ import {
   getPortfolioChart
 } from '../../reducers/account';
 
-class AccountDashboard extends Component {
+class Profile extends Component {
 
   componentDidMount = async () => {
     this.props.getPortfolio()
@@ -23,17 +23,13 @@ class AccountDashboard extends Component {
 
   render() {
     const { navigation, portfolio, portfolioChart } = this.props
-    const { accountId, accountType } = navigation.state.params
-
     return (
-      <Dashboard
-        type={accountType}
-        id={accountId}
-        navigation={this.props.navigation}
-        portfolio={portfolio}
-        portfolioChart={portfolioChart}
-        onRefresh={this.onRefresh}
-      />
+       <Dashboard
+          navigation={navigation}
+          portfolio={portfolio}
+          portfolioChart={portfolioChart}
+          onRefresh={this.onRefresh}
+       />
     )
   }
 
@@ -43,6 +39,7 @@ const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio,
   chartLoading: state.account.chartLoading,
   portfolioChart: state.account.portfolioChart,
+  watchListSymbols: state.account.watchList,
   newsFeed: state.feed,
   stale: state.account.stale,
   period: '1d',
@@ -56,5 +53,4 @@ const mapDispatchToProps = (dispatch) => ({
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
 })
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(AccountDashboard));
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Profile));

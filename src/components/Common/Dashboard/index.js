@@ -15,21 +15,20 @@ import {
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
-import TokenList from '../TokenList';
+import TokenList from '../../TokenList';
 import Header from './Header';
-import News from '../NewsFeed';
-import Chart from '../Chart/Chart';
-import RangeSelector from '../Chart/RangeSelector';
+import News from '../../NewsFeed';
+import Chart from '../../Chart/Chart';
+import RangeSelector from '../../Chart/RangeSelector';
 import {
   getPortfolio,
   getPortfolioChart,
   getTokenDetails
-} from '../../reducers/account';
-import { showToast } from '../../reducers/ui';
-import {fetchFeed} from '../../reducers/feed'
-import { withDrawer } from '../../helpers/drawer'
-import { trackRefresh, trackTap } from '../../helpers/analytics'
-import { baseColor, lossColor, brandColor } from '../../config'
+} from '../../../reducers/account';
+import { showToast } from '../../../reducers/ui';
+import {fetchFeed} from '../../../reducers/feed'
+import { trackRefresh, trackTap } from '../../../helpers/analytics'
+import { baseColor, lossColor, brandColor } from '../../../config'
 
 const qs = require('qs');
 
@@ -91,11 +90,6 @@ class Dashboard extends Component {
     totalPriceChangePct: 0
   }
 
-  componentDidMount = async () => {
-    this.props.getPortfolio()
-    this.props.getPortfolioChart()
-  }
-
   componentWillMount = async () => {
     this.props.fetchFeed()
   }
@@ -121,25 +115,24 @@ class Dashboard extends Component {
 
   _onRefresh = async () => {
     this.setState({refreshing: true})
-    await Promise.all([
-      this.props.getPortfolio(false),
-      this.props.getPortfolioChart()
-    ])
+    if (this.props.onRefresh) {
+      await this.props.onRefresh()
+    }
     this.setState({refreshing: false})
     trackRefresh('Dashboard')
   }
 
   render = () => {
     const {
+      accountId,
+      accountType,
       portfolio,
       portfolioChart,
       chartLoading,
       goToAddressPage,
       goToSearchPage,
-      loggedIn,
       addresses,
       updateToken,
-      headerData,
       period,
       watchListSymbols
     } = this.props
@@ -246,10 +239,8 @@ const mapStateToProps = (state) => ({
   portfolioChart: state.account.portfolioChart,
   addresses: state.account.addresses,
   watchListSymbols: state.account.watchList,
-  loggedIn: !!state.account.token,
   newsFeed: state.feed,
   stale: state.account.stale,
-  headerData: state.token,
   period: '1d',
   ...state.ui
 })
@@ -265,4 +256,4 @@ const mapDispatchToProps = (dispatch) => ({
     goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} }))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Dashboard));
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
