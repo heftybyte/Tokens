@@ -126,7 +126,7 @@ class SetPin extends Component {
                                 name="newPin"
                                 style={styles.input}
                                 value={this.state.newPin}
-                                onChangeText={(text)=>{this.onInputChange({name:'newPin',value:text})}}
+                                onChangeText={(text)=>{this.setState({newPin: text})}}
                                 contextMenuHidden
                                 secureTextEntry
                             />
@@ -147,7 +147,7 @@ class SetPin extends Component {
                                 contextMenuHidden
                                 secureTextEntry
                                 style={styles.input}
-                                onChangeText={(text)=>{this.onInputChange({name:'confirmPin', value:text})}}
+                                onChangeText={(text)=>{this.setState({confirmPin: text})}}
                                 value={this.state.confirmPin}
                                 autoCapitalize={'characters'}
                             />
