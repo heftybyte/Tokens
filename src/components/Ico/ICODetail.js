@@ -9,6 +9,7 @@ import { formatMoney } from "accounting"
 import { withDrawer } from "../../helpers/drawer"
 import { formatPrice } from '../../helpers/functions'
 import VideoPlayer from '../Video';
+import { baseColor } from '../../config'
 
 const window = Dimensions.get('window');
 const viewWidth = window.width - 40;
@@ -249,13 +250,13 @@ const styles = StyleSheet.create({
 	image: {
 		width: viewWidth,
 		height: viewWidth/(16/9),
-		backgroundColor: '#000',
+		backgroundColor: baseColor,
 		marginBottom: 10
 	},
 	video: {
 		width: viewWidth,
 		height: viewWidth/(16/9),
-		backgroundColor: '#000',
+		backgroundColor: baseColor,
 		marginBottom: 10
 	},
 	description: {

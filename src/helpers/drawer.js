@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react"
-import { View, TouchableHighlight, Text, Platform, Alert, Image, Dimensions } from "react-native"
+import { View, TouchableHighlight, Text, Platform, Alert, Image, Dimensions, StatusBar } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
-import { Ionicons, MaterialCommunityIcons, Entypo  } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons, Entypo, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
 import { observer } from "mobx-react/native"
 import { Button, Header as NBHeader, Left, Body, Right, Content } from "native-base"
@@ -13,33 +13,47 @@ import Header from "../components/Dashboard/Header"
 import Toast, { DURATION } from 'react-native-easy-toast'
 import store from '../store'
 import { NavigationActions } from "react-navigation";
-import { baseURL } from '../config'
+import { baseAccent, baseColor, brandColor, baseURL } from '../config'
 import { shareTokenDetails } from './functions'
 
 const Items = [
     {
         name: "Dashboard",
-        icon: "apps",
-        route: "Dashboard"
+        icon: "pie-chart",
+        route: "Dashboard",
+        Component: SimpleLineIcons
     },
     {
-        name: "Accounts",
-        icon: "account-circle",
-        route: "Accounts"
+        name: "Wallets",
+        icon: "wallet",
+        route: "Wallet",
+        Component: SimpleLineIcons,
     },
-	{
+    {
+        name: "Exchanges",
+        icon: "chart",
+        route: "Exchanges",
+        Component: SimpleLineIcons
+    },
+    {
+        name: "Addresses",
+        icon: "notebook",
+        route: "Accounts",
+        Component: SimpleLineIcons
+    },
+	/*
+    {
+        name: "Chat",
+        icon: "account-circle",
+        route: "Chat"
+    },
+    {
 		name: "ICO List",
 		icon: "fire",
 		route: "ICO List",
 		Component: MaterialCommunityIcons,
 		color: '#ff0000'
 	},
-    {
-        name: "My Wallet",
-        icon: "wallet",
-        route: "Wallet",
-        Component: Entypo,
-    },/*,
     {
         name: "Bookmarks",
         icon: "bookmark",
@@ -105,19 +119,19 @@ export const withDrawer = (WrappedComponent) => {
                     <View
                         style={{
                             flex: 1,
-                            backgroundColor: '#000'
+                            backgroundColor: baseColor
                         }}
                     >
                         <NBHeader
                         style={{
-                            backgroundColor: "#000",
+                            backgroundColor: baseColor,
                             borderBottomWidth: 0,
                             shadowOffset: { height: 0, width: 0 },
                             shadowOpacity: 0,
                             paddingTop: Platform.OS  === 'ios' ? iphoneHeaderHeight : Constants.statusBarHeight ,
                             height: 80
                         }}
-                        androidStatusBarColor="#000"
+                        androidStatusBarColor={baseColor}
                         noShadow
                         >
                             <Left style={
@@ -236,8 +250,19 @@ export const withDrawer = (WrappedComponent) => {
 }
 
 const DashboardMenu = ({ navigation, totalValue }) => (
-    <View style={{flex: 1, backgroundColor: "#111", paddingTop: 40}}>
-        <Header style={{paddingTop: 40}} totalValue={totalValue} />
+    <View style={{
+        flex: 1,
+        backgroundColor: baseColor,
+        paddingTop: 40,
+        shadowColor: '#000',
+        shadowOpacity: 0.8,
+        shadowOffset: {width: 2, height: 1},
+        shadowRadius: 20
+    }}>
+        <StatusBar barStyle="light-content" />
+        <View style={{ borderBottomWidth: 2, borderColor: baseAccent, alignItems: 'center', paddingVertical: 20 }}>
+            <Text style={{color: '#fff', fontSize: 15, fontWeight: 'bold'}}>Menu</Text>
+        </View>
         {Items.map(ListItem(navigation))}
     </View>
 )
@@ -253,20 +278,24 @@ const ListItem = (navigation) => ({ name, route, icon, Component, color }) => (
                 justifyContent: "space-between",
                 paddingHorizontal: 10,
                 alignItems: "center",
-                height: 80,
+                paddingLeft: 25,
+                height: 75,
             }}
         >
             <View style={{ width: 60 }}>
 	            {
 		            Component ? (
-		            	<Component name={icon} size={25} color={color || "#fff"} />
+		            	<Component name={icon} size={20} color={color || brandColor} />
 		            ) : (
-			            <Icon name={icon} size={25} color={color || "#fff"} />
+			            <Icon name={icon} size={20} color={color || brandColor} />
 		            )
 	            }
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: .9 }}>
                 <Text style={{ color: "#fff" }}>{name}</Text>
+            </View>
+            <View style={{ flex: .1 }}>
+                <SimpleLineIcons name={'arrow-right'} color="#fff" size={14} />
             </View>
         </View>
     </TouchableHighlight>

@@ -20,21 +20,21 @@ import { deleteAddress, refreshAddress } from '../../reducers/account';
 import { logout } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 import { trackAddress, trackTap } from '../../helpers/analytics'
-import { brandColor, invitesEnabled } from '../../config'
+import { baseColor, brandColor, invitesEnabled } from '../../config'
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     padding: 10,
   },
   container: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     position: 'relative'
   },
   header: {
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     color:'#fff',
     textAlign: 'center',
     fontSize: 20
@@ -112,7 +112,7 @@ class ViewAddresses extends Component {
     } = this.props
     return (
       <ScrollView style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <View style={{borderColor: '#000'}}>
+        <View style={{borderColor: baseColor}}>
           <Text style={styles.header}>Your Ethereum Addresses</Text>
           {addresses.map(
               (address, index) =>
@@ -121,6 +121,7 @@ class ViewAddresses extends Component {
                   style={{color: '#fff', fontSize: 12, flex: .8, paddingVertical: 20 }}
                   numberOfLines={1}
                   onLongPress={() => { this.copyToClipboard(address.id) }}
+                  onPress={()=>goToRoute('AccountDashboard')}
                 >
                   {address.id}
                 </Text>

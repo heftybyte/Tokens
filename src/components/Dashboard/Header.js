@@ -2,12 +2,12 @@ import React, { Component }  from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import currencyFormatter from 'currency-formatter';
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
-import { gainColor, lossColor } from '../../config'
+import { baseColor, gainColor, lossColor } from '../../config'
 import moment from 'moment'
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     alignItems: 'center'
   },
   portfolioValueCurrencySymbol: {

@@ -8,15 +8,18 @@ import AccountsNavigator from '../components/Account';
 import Education from '../components/Education';
 import Entry from '../components/Entry';
 import Dashboard from '../components/Dashboard';
+import AccountDashboard from '../components/Account/AccountDashboard'
 import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
+import { Chat } from "../components/Chat"
 import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';
 import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
 import PriceAlert from '../components/PriceAlert';
 import EditProfile from '../components/Profile/EditProfile';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
+import { baseColor } from '../config'
 // Wallet
 import Wallet from '../components/Wallet';
 import RestoreWallet from '../components/Wallet/RestoreWallet';
@@ -35,12 +38,16 @@ const customAnimationFunc = () => ({
 });
 
 export const AppNavigator = StackNavigator({
+	Chat: {
+		screen: Chat
+	},
   Education: { screen: Education },
   Entry: { screen: Entry },
   NormalRegistration: { screen: NormalRegistration },
   GuestRegistration: { screen: GuestRegistration },
   Login: { screen: NormalRegistration },
   Dashboard: { screen: Dashboard },
+  AccountDashboard: { screen: AccountDashboard },
   Accounts : { screen: ViewAccounts },
   'Add Address': { screen: AddAddress },
   Search: { screen: Search },
@@ -62,10 +69,10 @@ export const AppNavigator = StackNavigator({
     screen: EditProfile
   }
 }, {
-	initialRouteName: "NewWallet",
+	initialRouteName: "Entry",
   headerMode: "none",
   cardStyle: {
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   transitionConfig: customAnimationFunc
 });

@@ -500,6 +500,7 @@ export const removeBookmark = (news) => async (dispatch, getState) => {
 const initialState = {
     addresses : [],
     wallets: [],
+    exchangeAccounts: [],
     watchList: [],
     id: null,
     token: null,

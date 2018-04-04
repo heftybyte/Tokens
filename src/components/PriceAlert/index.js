@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View, Text, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-import { lossColor, brandColor } from '../../config'
+import { baseColor, lossColor, brandColor } from '../../config'
 
 import { withDrawer } from '../../helpers/drawer';
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   container: {
     display: 'flex',
     borderColor: '#fff',
     justifyContent: 'space-between',
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     marginBottom: 10,
     flexDirection: 'row',
     paddingLeft: 20

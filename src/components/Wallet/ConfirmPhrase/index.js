@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { WebView, StyleSheet, Alert } from 'react-native';
+import { Alert, WebView, StyleSheet } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { View, Container, Header, Content, ListItem, Input,Text,
     Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form } from 'native-base';
@@ -67,19 +67,18 @@ class ConfirmPhrase extends Component {
 					<Text style={styles.title}>Confirm Seed Phrase</Text>
 					<View style={{marginTop: 20,marginBottom: 50}}>
 						<Form>
-						<Item>
-						<Input
-							style={styles.input}
-							placeholder="Enter Seed Phrase"
-							multiline
-							numberOfLines={4}
-							onChangeText={(text)=>{this.setState({mnemonic: text})}}
-							bordered
-						/>
-						</Item>
+    						<Item>
+        						<Input
+        							style={styles.input}
+        							placeholder="Enter Seed Phrase"
+        							multiline
+        							numberOfLines={4}
+        							onChangeText={(text)=>{this.setState({mnemonic: text})}}
+        							bordered
+        						/>
+    						</Item>
 						</Form>
 					</View>
-
 					<Button block primary onPress={() => { this.onContinue(mnemonic) }}>
                     	<Text>Confirm</Text>
                 	</Button>
@@ -90,8 +89,9 @@ class ConfirmPhrase extends Component {
 	}
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, props) => ({
     portfolio: state.account.portfolio,
+    ...props.navigation.state.params,
     ...state.ui
 })
 

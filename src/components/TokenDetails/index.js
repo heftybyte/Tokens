@@ -11,7 +11,7 @@ import Chart from '../Chart/Chart';
 import RangeSelector from '../Chart/RangeSelector';
 import Header from '../Dashboard/Header';
 import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
-import { baseURL, lossColor, brandColor } from '../../config'
+import { baseColor, baseURL, lossColor, brandColor } from '../../config'
 import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
 import VideoPlayer from '../Video';
 
@@ -20,7 +20,7 @@ const viewWidth = window.width - 40;
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   header: {
     marginBottom: 20
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     borderColor: '#fff',
     justifyContent: 'space-between',
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     marginBottom: 10,
     flexDirection: 'row',
     paddingLeft: 20
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13
   },
   noPrice: {
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     borderColor: '#fff'
   },
   noPriceText: {
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   videoCover: {
     width: viewWidth,
     height: viewWidth/(16/9),
-    backgroundColor: '#000',
+    backgroundColor: baseColor,
     position: 'absolute',
     zIndex: 99,
     flex: 1,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   video: {
     width: viewWidth,
     height: viewWidth/(16/9),
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   externalLink: {
     marginRight: 20

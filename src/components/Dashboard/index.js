@@ -9,7 +9,6 @@ import {
   TouchableHighlight,
   AsyncStorage,
   Alert,
-  StatusBar,
   Button,
   RefreshControl,
   Image
@@ -32,7 +31,7 @@ import { showToast } from '../../reducers/ui';
 import {fetchFeed} from '../../reducers/feed'
 import { withDrawer } from '../../helpers/drawer'
 import { trackRefresh, trackTap } from '../../helpers/analytics'
-import { lossColor, brandColor } from '../../config'
+import { baseColor, lossColor, brandColor } from '../../config'
 
 const qs = require('qs');
 
@@ -47,15 +46,15 @@ const currencyFormatOptions =  {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   container: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   header: {
-    backgroundColor: '#f00',
+    backgroundColor: baseColor,
     height: 80,
   },
   addBtn: {
@@ -95,10 +94,8 @@ class Dashboard extends Component {
   }
 
   componentDidMount = async () => {
-    if (this.state.stale) {
-      this.props.getPortfolio()
-      this.props.getPortfolioChart()
-    }
+    this.props.getPortfolio()
+    this.props.getPortfolioChart()
   }
 
   componentWillMount = async () => {
@@ -172,6 +169,7 @@ class Dashboard extends Component {
           backgroundColor="#000"
           barStyle="light-content"
         />
+
         { !addresses.length  ?
           <TouchableHighlight
             onPress={()=>{goToAddressPage({type: 'Accounts'})}}
