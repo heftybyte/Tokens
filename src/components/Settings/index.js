@@ -8,6 +8,9 @@ import { Container, Header, Content, ListItem, Text, Radio, Footer, Button, Chec
 const styles = StyleSheet.create({
     white: {
         color: '#fff',
+    },
+    grey: {
+        color: '#4c4c4c'
     }
 })
 
@@ -35,17 +38,18 @@ class Settings extends Component {
                 <Content>
                     <List>
                         <ListItem itemHeader first>
-                            <Text style={styles.white}>Security settings</Text>
+                            <Text style={styles.white}>Device settings</Text>
                         </ListItem>
-                        <ListItem onPress={()=>{this.onChange('security')}}>
+                        <ListItem onPress={()=>{this.onChange('security')}} noBorder>
                             <Body>
-                                <Text style={styles.white}>Two-factor authentication</Text>
-                                <Text style={styles.white}>FINGERPRINT</Text>
+                                <Text style={styles.white}>Security Settings</Text>
+                                <Text style={styles.grey}>Fingerprint</Text>
                             </Body>
                         </ListItem>
-                        <ListItem>
+                        <ListItem noBorder>
                             <Body>
-                                <Text style={styles.white}>Notifications</Text>
+                                <Text style={styles.white}>Two-factor authentication</Text>
+                                <Text style={styles.grey}>Disabled</Text>
                             </Body>
                         </ListItem>
                     </List>

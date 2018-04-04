@@ -11,3 +11,8 @@ export const getPin = async() => {
     const result = await  SecureStore.getItemAsync(key)
     return result
 }
+
+export const deletePin = async() => {
+    const result = await SecureStore.deleteItemAsync(key)
+    return result
+}

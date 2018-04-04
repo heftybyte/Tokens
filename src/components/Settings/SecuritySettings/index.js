@@ -5,13 +5,16 @@ import { NavigationActions } from 'react-navigation';
 import { StyleSheet, View, AsyncStorage, Alert, TouchableHighlight, Platform } from 'react-native';
 import { Container, Header, Content, ListItem, Text, Radio, Footer, Button, CheckBox, Body, Right, List} from 'native-base';
 import { Fingerprint } from 'expo'
-import { getPin } from '../../../helpers/security'
+import { getPin, deletePin } from '../../../helpers/security'
 import { enableFingerprint, enablePin, disablePin } from '../../../actions/security';
 
 const styles = StyleSheet.create({
     white: {
         color :'#fff',
     },
+    grey: {
+        color: '#4c4c4c'
+    }
 })
 
 class SecuritySettings extends Component {
@@ -30,13 +33,13 @@ class SecuritySettings extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.props.hasFingerprintEnabled)
+        console.log(this.props.hasFingerprint)
         const hasFingerprint = await Fingerprint.hasHardwareAsync();
         const isEnrolled = await Fingerprint.isEnrolledAsync();
 
         if(hasFingerprint && isEnrolled){
             this.setState({
-                'hasFingerprintEnabled': true
+                'hasFingerprint': true
             })
         }
     }
@@ -72,7 +75,11 @@ class SecuritySettings extends Component {
                 'Will you like to disable pin?',
                 [
                     {text: 'Cancel', onPress: () => {}},
-                    {text: 'OK', onPress: () => {disablePin();Alert.alert('Pin disabled')}, style: 'cancel'},
+                    {text: 'OK', onPress: () => {
+                        disablePin();
+                        Alert.alert('Pin disabled');
+                        deletePin();
+                    }},
                 ],
                 { cancelable: true }
             )
@@ -93,7 +100,8 @@ class SecuritySettings extends Component {
     render () {
         const {
             hasFingerprintEnabled,
-            hasPinEnabled
+            hasPinEnabled,
+            goToSetPinPage
         } = this.props
 
         return(
@@ -103,7 +111,7 @@ class SecuritySettings extends Component {
                         <ListItem itemHeader first>
                             <Text style={styles.white}>Fingerprint</Text>
                         </ListItem>
-                        <ListItem onPress={this.enableFingerprint.bind(this)}>
+                        <ListItem onPress={this.enableFingerprint.bind(this)} noBorder>
                             <Body>
                             <Text style={styles.white}>Enable Fingerprint authentication</Text>
                             </Body>
@@ -116,10 +124,10 @@ class SecuritySettings extends Component {
                         <ListItem itemHeader first>
                             <Text style={styles.white}>PIN Code</Text>
                         </ListItem>
-                        <ListItem onPress={this.enablePin.bind(this)}>
+                        <ListItem onPress={this.enablePin.bind(this)} noBorder>
                             <Body>
                             <Text style={styles.white}>Enable PIN</Text>
-                            <Text style={styles.white}>PIN is used as the backup authentication method for fingerprint</Text>
+                            <Text style={styles.grey}>PIN is used as the backup authentication method for fingerprint</Text>
                             </Body>
                             <Right>
                                 <CheckBox
@@ -127,10 +135,10 @@ class SecuritySettings extends Component {
                                 />
                             </Right>
                         </ListItem>
-                        <ListItem>
+                        <ListItem onPress={goToSetPinPage} noBorder>
                             <Body>
                             <Text style={styles.white}>Set PIN</Text>
-                            <Text style={styles.white}>You will be automatically signed out of your account after 3 consecutive failed PIN code attempts</Text>
+                            <Text style={styles.grey}>You will be automatically signed out of your account after 3 consecutive failed PIN code attempts</Text>
                             </Body>
                         </ListItem>
                     </List>
