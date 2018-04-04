@@ -11,15 +11,24 @@ const styles = StyleSheet.create({
   },
   labelText: {
     color: '#fff',
-    marginBottom: 15
+    marginBottom: 15,
+    marginTop: 15
   },
   inputWrapper: {
     height: 40,
     width: '100%',
     backgroundColor: "#161616",
   },
+  input: {
+    borderBottomWidth: 0,
+    paddingHorizontal: 5,
+    color: '#fff',
+    borderRadius: 5,
+    height: 40,
+    fontSize: 14
+  },
   saveBtn: {
-    width: 110,
+    width: '100%',
     height: 40,
     backgroundColor: brandColor,
     borderRadius: 8,
