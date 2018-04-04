@@ -130,36 +130,16 @@ class SetPin extends Component {
                                 contextMenuHidden
                                 secureTextEntry
                             />
-                            {/*<Input*/}
-                                {/*style={styles.white}*/}
-                                {/*name="newPin"*/}
-                                {/*maxLength={4}*/}
-                                {/*keyboardType = 'numeric'*/}
-                                {/*contextMenuHidden*/}
-                                {/*secureTextEntry*/}
-                                {/*onChange={this.handleChange}*/}
-                            {/*/>*/}
                         </Item>
                         <Item floatingLabel>
                             <Label>Confirm Pin</Label>
                             <TextInput
-                                name="confirmPin"
                                 contextMenuHidden
                                 secureTextEntry
                                 style={styles.input}
                                 onChangeText={(text)=>{this.setState({confirmPin: text})}}
                                 value={this.state.confirmPin}
-                                autoCapitalize={'characters'}
                             />
-                            {/*<Input*/}
-                                {/*style={styles.white}*/}
-                                {/*name="confirmPin"*/}
-                                {/*maxLength={4}*/}
-                                {/*keyboardType = 'numeric'*/}
-                                {/*contextMenuHidden*/}
-                                {/*secureTextEntry*/}
-                                {/*onChange={this.handleChange}*/}
-                            {/*/>*/}
                         </Item>
                     </Form>
                     {
