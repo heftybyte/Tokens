@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-start'
     },
     accountLabel: {
-        color: '#fff'
+      color: '#fff'
     },
     accountInput: {
       borderBottomWidth: 0,

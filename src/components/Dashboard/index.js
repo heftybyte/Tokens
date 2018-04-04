@@ -10,13 +10,15 @@ import {
   AsyncStorage,
   Alert,
   Button,
-  RefreshControl
+  RefreshControl,
+  Image
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
 import TokenList from '../TokenList';
 import Header from './Header';
+import Profile from '../Profile'
 import News from '../NewsFeed';
 import Chart from '../Chart/Chart';
 import RangeSelector from '../Chart/RangeSelector';
@@ -145,6 +147,7 @@ class Dashboard extends Component {
     } = this.props
     const { chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
+    const username = null
 
     return (
       <ScrollView
@@ -161,6 +164,12 @@ class Dashboard extends Component {
           />
         }
       >
+        {username && <Profile username={username} />}
+        <StatusBar
+          backgroundColor="#000"
+          barStyle="light-content"
+        />
+
         { !addresses.length  ?
           <TouchableHighlight
             onPress={()=>{goToAddressPage({type: 'Accounts'})}}
