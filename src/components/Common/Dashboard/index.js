@@ -18,7 +18,7 @@ import { NavigationActions } from 'react-navigation';
 
 import TokenList from '../../TokenList';
 import Header from './Header';
-import Profile from './Profile'
+import Profile from '../Profile'
 import News from '../NewsFeed';
 import Chart from '../Chart/Chart';
 import RangeSelector from '../Chart/RangeSelector';
