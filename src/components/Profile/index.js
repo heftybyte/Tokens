@@ -1,58 +1,62 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withDrawer } from '../../helpers/drawer'
-import Dashboard from '../Common/Dashboard'
-import {
-  getPortfolio,
-  getPortfolioChart
-} from '../../reducers/account';
+import React from 'react'
+import { Image, Text, View, StyleSheet } from 'react-native'
+import md5 from 'crypto-js/md5'
+import Identicon from 'identicon.js/identicon'
 
-class Profile extends Component {
-
-  componentDidMount = async () => {
-    await Promise.all([
-      this.props.getPortfolio(true),
-      this.props.getPortfolioChart()
-    ])
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  imageContainer: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    overflow: 'hidden'
+  },
+  image: {
+    width: 150,
+    height: 150
+  },
+  userMetadata: {
+    flexBasis: '50%',
+    marginLeft: 'auto'
+  },
+  username: {
+    color: '#fff',
+    marginBottom: 20,
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  userDescription: {
+    color: '#fff'
   }
+})
 
-  onRefresh = () => {
-    return Promise.all([
-      this.props.getPortfolio(false),
-      this.props.getPortfolioChart()
-    ])
-  }
+const identicon = (str) => {
+  const strHash = md5(str).toString();
+  const data = new Identicon(strHash, 150).toString()
 
-  render() {
-    const { navigation, portfolio, portfolioChart } = this.props
-    return (
-       <Dashboard
-          navigation={navigation}
-          portfolio={portfolio}
-          portfolioChart={portfolioChart}
-          onRefresh={this.onRefresh}
-       />
-    )
-  }
-
+  return `data:image/png;base64,${data}`;
 }
 
-const mapStateToProps = (state) => ({
-  portfolio: state.account.portfolio,
-  chartLoading: state.account.chartLoading,
-  portfolioChart: state.account.portfolioChart,
-  watchListSymbols: state.account.watchList,
-  newsFeed: state.feed,
-  stale: state.account.stale,
-  period: '1d',
-  ...state.ui
-})
+const Profile = ({username}) => (
+  <View style={styles.mainContainer}>
+    <View style={styles.imageContainer}>
+      <Image source={{uri: identicon(username)}} style={styles.image} />
+    </View>
 
-const mapDispatchToProps = (dispatch) => ({
-    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
-    getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
-    showToast: (text) => dispatch(showToast(text)),
-    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
-})
+      <View style={styles.userMetadata}>
+        <Text style={styles.username}>@{username.toLowerCase()}</Text>
+        <Text style={styles.userDescription}>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+          Voluptas, eligendi ini
+        </Text>
+      </View>
+  </View>
+)
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Profile));
+export default Profile
