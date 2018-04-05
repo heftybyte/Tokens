@@ -1,62 +1,237 @@
-import React from 'react'
-import { Image, Text, View, StyleSheet } from 'react-native'
+import React, { Component } from 'react';
+import { Image, Text, ScrollView, View, StyleSheet, TouchableHighlight } from 'react-native'
+import { connect } from 'react-redux';
+import { withDrawer } from '../../helpers/drawer'
+import Dashboard from '../Common/Dashboard'
+import {
+  getPortfolio,
+  getPortfolioChart
+} from '../../reducers/account';
 import md5 from 'crypto-js/md5'
 import Identicon from 'identicon.js/identicon'
+import { baseAccent, brandColor } from '../../config'
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20
+    padding: 20,
+    marginBottom: 10
   },
   imageContainer: {
-    width: 150,
-    height: 150,
-    borderRadius: 100,
-    overflow: 'hidden'
+    flexDirection: 'row',
+    flex: .4,
+    justifyContent: 'center'
   },
   image: {
-    width: 150,
-    height: 150
+    width: 90,
+    height: 90,
+    borderRadius: 45
   },
   userMetadata: {
-    flexBasis: '50%',
+    flex: .60,
     marginLeft: 'auto'
   },
   username: {
     color: '#fff',
-    marginBottom: 20,
-    fontSize: 20,
+    marginBottom: 10,
+    fontSize: 16,
     fontWeight: 'bold'
   },
   userDescription: {
-    color: '#fff'
+    color: '#fff',
+    fontSize: 12
+  },
+  headerBtnContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20
+  },
+  headerBtn: {
+    flex: .5,
+    paddingVertical: 10,
+    marginHorizontal: 15,
+    borderColor: brandColor,
+    borderWidth: 1,
+    borderRadius: 2
+  },
+  headerBtnText: {
+    color: brandColor,
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  metaContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    borderColor: '#333',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    marginHorizontal: 10
+  },
+  metaItem: {
+    flex: .33,
+    padding: 5,
+    marginVertical: 10,
+    alignItems: 'center'
+  },
+  metaLabel: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 'bold',
+    paddingBottom: 5
+  },
+  metaMid: {
+    borderRightWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: '#333'
+  },
+  metaValue: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20
   }
 })
 
 const identicon = (str) => {
   const strHash = md5(str).toString();
   const data = new Identicon(strHash, 150).toString()
-
   return `data:image/png;base64,${data}`;
 }
 
-const Profile = ({username}) => (
-  <View style={styles.mainContainer}>
-    <View style={styles.imageContainer}>
-      <Image source={{uri: identicon(username)}} style={styles.image} />
+const ProfileHeader = ({username, submissions, followers, following, style}) => (
+    <View>
+      <View style={[styles.mainContainer, style||{}]}>
+        <View style={styles.imageContainer}>
+          <Image source={{uri: identicon(username)}} style={styles.image} />
+        </View>
+
+        <View style={styles.userMetadata}>
+          <Text style={styles.username}>@{username}</Text>
+          <Text style={styles.userDescription}>
+            Cryptocurrency investor, advisor and evangelist. Let's make some magic internet money.
+          </Text>
+        </View>
     </View>
 
-      <View style={styles.userMetadata}>
-        <Text style={styles.username}>@{username.toLowerCase()}</Text>
-        <Text style={styles.userDescription}>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          Voluptas, eligendi ini
-        </Text>
-      </View>
+    <View style={styles.headerBtnContainer}>
+      <TouchableHighlight  style={styles.headerBtn} onPress={()=>{}}>
+        <View>
+          <Text style={styles.headerBtnText}>Message</Text>
+        </View>
+      </TouchableHighlight>
+      <TouchableHighlight style={styles.headerBtn} onPress={()=>{}}>
+        <View>
+          <Text style={styles.headerBtnText}>Follow</Text>
+        </View>
+      </TouchableHighlight>
+    </View>
+
+    <View style={styles.metaContainer}>
+      <TouchableHighlight style={styles.metaItem}>
+        <View>
+          <Text style={styles.metaLabel}>
+            SUBMISSIONS
+          </Text>
+          <Text style={styles.metaValue}>
+          {submissions}
+          </Text>
+        </View>
+      </TouchableHighlight>
+
+      <TouchableHighlight style={[styles.metaItem, styles.metaMid]}>
+        <View>
+          <Text style={styles.metaLabel}>
+            FOLLOWERS
+          </Text>
+          <Text style={styles.metaValue}>
+          {followers}
+          </Text>
+        </View>
+      </TouchableHighlight>
+
+      <TouchableHighlight style={styles.metaItem}>
+        <View>
+          <Text style={styles.metaLabel}>
+            FOLLOWING
+          </Text>
+          <Text style={styles.metaValue}>
+          {following}
+          </Text>
+        </View>
+      </TouchableHighlight>
+    </View>
   </View>
 )
 
-export default Profile
+class Profile extends Component {
+
+  componentDidMount = async () => {
+    await Promise.all([
+      this.props.getPortfolio(true),
+      this.props.getPortfolioChart()
+    ])
+  }
+
+  onRefresh = () => {
+    return Promise.all([
+      this.props.getPortfolio(false),
+      this.props.getPortfolioChart()
+    ])
+  }
+
+  render() {
+    const {
+      navigation,
+      portfolio,
+      portfolioChart,
+      username,
+      submissions,
+      following,
+      followers
+    } = this.props
+    return (
+      <ScrollView style={{flex: 1}}>
+          <ProfileHeader
+            style={{flex: .1}}
+            submissions={submissions}
+            username={username}
+            followers={followers}
+            following={following}
+          />
+          <Dashboard
+            navigation={navigation}
+            portfolio={portfolio}
+            portfolioChart={portfolioChart}
+            onRefresh={this.onRefresh}
+          />
+      </ScrollView>
+    )
+  }
+
+}
+
+const mapStateToProps = (state) => ({
+  username: state.account.username,
+  submissions: state.account.submissions,
+  followers: state.account.followers,
+  following: state.account.following,
+  portfolio: state.account.portfolio,
+  chartLoading: state.account.chartLoading,
+  portfolioChart: state.account.portfolioChart,
+  watchListSymbols: state.account.watchList,
+  newsFeed: state.feed,
+  stale: state.account.stale,
+  period: '1d',
+  ...state.ui
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
+    getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
+    showToast: (text) => dispatch(showToast(text)),
+    fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Profile));
