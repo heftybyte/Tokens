@@ -121,7 +121,7 @@ class ViewAddresses extends Component {
                   style={{color: '#fff', fontSize: 12, flex: .8, paddingVertical: 20}}
                   numberOfLines={1}
                   onLongPress={() => { this.copyToClipboard(address.id) }}
-                  onPress={()=>goToRoute('Account View', { accountType: 'ethereum', accountId: address.id })}
+                  onPress={()=>goToRoute('Account View', { type: 'address', platform: 'ethereum', id: address.id })}
                 >
                   {address.id}
                 </Text>

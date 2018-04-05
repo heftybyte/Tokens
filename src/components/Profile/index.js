@@ -10,8 +10,10 @@ import {
 class Profile extends Component {
 
   componentDidMount = async () => {
-    this.props.getPortfolio()
-    this.props.getPortfolioChart()
+    await Promise.all([
+      this.props.getPortfolio(true),
+      this.props.getPortfolioChart()
+    ])
   }
 
   onRefresh = () => {

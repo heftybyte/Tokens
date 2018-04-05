@@ -27,66 +27,17 @@
              * @param error - error callback
              */
             send: function() {
-                // var msgObj = {
-                //     targetFunc: targetFunc,
-                //     data: data || {}
-                // };
-
-                // if (success || error) {
-                //     msgObj.msgId = guid();
-                // }
-
-                // var msg = JSON.stringify(msgObj);
-
-                // promiseChain = promiseChain.then(function () {
-                //     return new Promise(function (resolve, reject) {
-                        // console.log("sending message " + msgObj.targetFunc);
-
-                        // if (msgObj.msgId) {
-                        //     callbacks[msgObj.msgId] = {
-                        //         onsuccess: success,
-                        //         onerror: error
-                        //     };
-                        // }
-                        var mnemonic = bip39.generateMnemonic()
-                        setTimeout(function() {
-                          window.postMessage(mnemonic);
-                        }, 1000);
-
-                //         resolve();
-                //     })
-                // }).catch(function (e) {
-                //     console.error('rnBridge send failed ' + e.message);
-                // });
+              const mnemonic = bip39.generateMnemonic()
+              setTimeout(function() {
+                window.postMessage(mnemonic);
+              }, 1000);
             },
 
 
         };
 
         window.document.addEventListener('message', function(e) {
-            console.log("message received from react native");
-
             window.webViewBridge.send()
-            // var message;
-            // try {
-            //     message = JSON.parse(e.data)
-            // }
-            // catch(err) {
-            //     console.error("failed to parse message from react-native " + err);
-            //     return;
-            // }
-
-            // //trigger callback
-            // if (message.args && callbacks[message.msgId]) {
-            //     if (message.isSuccessfull) {
-            //         callbacks[message.msgId].onsuccess.apply(null, message.args);
-            //     }
-            //     else {
-            //         callbacks[message.msgId].onerror.apply(null, message.args);
-            //     }
-            //     delete callbacks[message.msgId];
-            // }
-
         });
     };
 

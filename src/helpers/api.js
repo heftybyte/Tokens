@@ -73,8 +73,8 @@ export const addAccountAddress = async (id, address) => {
   return res.data
 }
 
-export const addAccountWalletAddress = async (id, address) => {
-  const res = await instance.post(`/accounts/${id}/wallets`, { address })
+export const addAccountWalletAddress = async (id, address, platform) => {
+  const res = await instance.post(`/accounts/${id}/wallets`, { address, platform })
   return res.data
 }
 

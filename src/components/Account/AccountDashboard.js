@@ -1,17 +1,80 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Animated, TouchableHighlight, StatusBar, Text, View } from 'react-native'
 import { withDrawer } from '../../helpers/drawer'
+import { SimpleLineIcons } from '@expo/vector-icons';
+import { deleteAddress, refreshAddress } from '../../reducers/account';
+import { baseAccent, baseColor, brandColor } from '../../config'
 import Dashboard from '../Common/Dashboard'
+import { Menu } from '../Common/Menu'
 import {
   getPortfolio,
   getPortfolioChart
-} from '../../reducers/account';
+} from '../../reducers/account'
 
 class AccountDashboard extends Component {
 
-  componentDidMount = async () => {
-    this.props.getPortfolio()
-    this.props.getPortfolioChart()
+  state = {
+    menuHeight: new Animated.Value(1),
+    menuOpen: false
+  }
+
+  updateHeader = () => {
+    const { navigation } = this.props
+    const { id } = navigation.state.params
+    const { menuOpen } = this.state
+
+    navigation.setParams({ overrideHeaderText:
+      <TouchableHighlight onPress={this.toggleMenu} style={{width:'100%', height:40}}> 
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingTop: 10
+        }}>
+          <Text style={{color:'#fff', paddingRight: 10}}>{`${id.substr(0, 5)}...${id.substr(39, 42)}`}</Text> 
+          <SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />
+        </View>
+      </TouchableHighlight>
+    })
+  }
+
+  componentWillMount = async () => {
+    const { navigation } = this.props
+    const { id } = navigation.state.params
+    const { refreshAddress, deleteAddress } = this.props
+
+    this.menuItems = [
+      {
+        name: "Refresh Balances",
+        params: { platform: "ethereum" },
+        icon: 'refresh',
+        Component: SimpleLineIcons,
+        route: "Select Account",
+        onPress: ()=>{refreshAddress(id)}
+      },
+      {
+        name: "Remove",
+        params: { platform: "ethereum" },
+        icon: 'close',
+        Component: SimpleLineIcons,
+        route: "Select Account",
+        onPress: ()=>{deleteAddress(id)}
+      },
+      {
+        name: "Make Public",
+        params: { platform: "ethereum" },
+        icon: 'feed',
+        Component: SimpleLineIcons,
+        route: "Select Account"
+      }
+    ]
+
+    this.updateHeader()
+    await Promise.all([
+      this.props.getPortfolio(true),
+      this.props.getPortfolioChart()
+    ])
   }
 
   onRefresh = () => {
@@ -21,19 +84,49 @@ class AccountDashboard extends Component {
     ])
   }
 
+  toggleMenu = () => {
+    const { menuOpen, menuHeight } = this.state
+    Animated.timing(
+      menuHeight,
+      {
+        duration: 350,
+        toValue: menuOpen ? 1 : this.menuItems.length * 75
+      }
+    ).start()
+    this.setState({
+      menuOpen: !menuOpen
+    })
+    this.updateHeader()
+  }
+
   render() {
     const { navigation, portfolio, portfolioChart } = this.props
-    const { accountId, accountType } = navigation.state.params
+    const { id, type } = navigation.state.params
+    const { menuHeight } = this.state
 
     return (
-      <Dashboard
-        type={accountType}
-        id={accountId}
-        navigation={this.props.navigation}
-        portfolio={portfolio}
-        portfolioChart={portfolioChart}
-        onRefresh={this.onRefresh}
-      />
+      <View>
+        <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
+          <Menu
+            navigation={navigation}
+            items={this.menuItems}
+            baseColor={baseColor}
+            brandColor={brandColor}
+            baseAccent={baseAccent}
+            style={{flex: 1}}
+            listMargin={20}
+          />
+        </Animated.View>
+        <Dashboard
+          id={id}
+          type={type}
+          navigation={this.props.navigation}
+          portfolio={portfolio}
+          portfolioChart={portfolioChart}
+          onRefresh={this.onRefresh}
+          onScroll={()=>{}}
+        />
+      </View>
     )
   }
 
@@ -52,6 +145,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
     getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
+    deleteAddress: (address) => dispatch(deleteAddress(address)),
+    refreshAddress: (address) => dispatch(refreshAddress(address)),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
 })

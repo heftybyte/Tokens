@@ -20,7 +20,7 @@ const Items = [
     {
         name: "Portfolio",
         icon: "pie-chart",
-        route: "Dashboard",
+        route: "Profile",
         Component: SimpleLineIcons
     },
     {
@@ -34,7 +34,7 @@ const Items = [
         name: "Exchanges",
         icon: "chart",
         route: "AccountType",
-        params: { type: 'exchange' },
+        params: { type: 'exchange_account' },
         Component: SimpleLineIcons
     },
     {
@@ -171,23 +171,7 @@ export const withDrawer = (WrappedComponent) => {
                                 </Button>
                             </Left>
                             <Body>
-                                {isTokenDetails ? (
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
-                                        alignItems: 'center',
-                                        flex:1
-                                    }}>
-                                        <Image
-	                                        key={tokenDetails.symbol}
-	                                        source={{ uri: getTokenImage(tokenDetails.id) }}
-	                                        style={{width: 20, height: 20, borderRadius: 5}}
-                                        />
-                                        <Text style={{color: '#fff', paddingLeft: 10}}>
-                                            {tokenDetails.name||tokenDetails.symbol}
-                                        </Text>
-                                    </View>
-	                                ) : isICOdetails ? (
+                                {isICOdetails ? (
 	                                <View style={{
 		                                flexDirection: 'row',
 		                                alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',

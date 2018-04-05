@@ -1,22 +1,56 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, View } from "react-native"
+import { ScrollView, Text, View, TouchableHighlight } from "react-native"
+import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer'
 import { baseAccent, baseColor, brandColor } from '../../config'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Menu } from '../Common/Menu'
 
+const Icons = {
+  'wallet': 'wallet',
+  'address': 'notebook',
+  'exchange_account': 'chart'
+}
+
+const AddScreens = {
+  'address': 'Add Address',
+  'wallet': 'New Wallet'
+}
+
+const AccountSources = {
+  'address': 'addresses',
+  'wallet': 'wallets',
+  'exchange_account': 'exchangeAccounts'
+}
+
 class AccountPicker extends Component {
 
-  render() {
-    const { navigation, addresses } = this.props
-    const { type } =  navigation.state.params
+  componentWillMount = () => {
+    // const { navigation, goToRoute } = this.props
+    // const { type, platform } =  navigation.state.params
+    // const accounts = this.getAccounts(type, platform)
+    // const addScreen = AddScreens[type]
+    // if (accounts.length === 0) {
+    //   goToRoute(addScreen, { type, platform })
+    // }
+  }
 
-    const items = addresses.map((addr)=>({
-      name: `${addr.id.substr(0, 20)}...${addr.id.substr(38,42)}`,
-      params: { id: addr.id, type },
+  getAccounts = (type, platform) => {
+    const stateField = AccountSources[type]
+    const accounts = (this.props[stateField] || []).filter(acc=>acc.platform===platform)
+    return accounts
+  }
+
+  render() {
+    const { navigation, addresses, goToRoute } = this.props
+    const { type, platform } =  navigation.state.params
+
+    const items = this.getAccounts(type, platform).map((acc)=>({
+      name: `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
+      params: { id: acc.id, type, platform },
       route: 'Account View',
-      icon: 'wallet',
+      icon: Icons[type],
       Component: SimpleLineIcons   
     }))
 
@@ -31,10 +65,12 @@ class AccountPicker extends Component {
           style={{flex: 1}}
           listMargin={20}
         />
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}>
-          <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
-          <Text style={{ color: brandColor}}>add new {type}</Text>
-        </View>
+        <TouchableHighlight onPress={()=>goToRoute(AddScreens[type])}>
+          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}>
+            <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
+            <Text style={{ color: brandColor}}>add new {platform} {type.replace('_', ' ')}</Text>
+          </View>
+        </TouchableHighlight>
       </ScrollView>
     )
   }
@@ -42,8 +78,16 @@ class AccountPicker extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  addresses: state.account.addresses
+  addresses: state.account.addresses,
+  wallets: state.account.wallets,
+  exchangeAccounts: state.account.exchangeAccounts
 })
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    goToRoute: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
+  }
+}
 
-export default connect(mapStateToProps)(withDrawer(AccountPicker));
+
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(AccountPicker));

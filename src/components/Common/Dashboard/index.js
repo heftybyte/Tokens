@@ -124,8 +124,8 @@ class Dashboard extends Component {
 
   render = () => {
     const {
-      accountId,
-      accountType,
+      id,
+      type,
       portfolio,
       portfolioChart,
       chartLoading,
@@ -134,7 +134,8 @@ class Dashboard extends Component {
       addresses,
       updateToken,
       period,
-      watchListSymbols
+      watchListSymbols,
+      onScroll
     } = this.props
     const { chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
@@ -144,8 +145,8 @@ class Dashboard extends Component {
         scrollEnabled={!chartIsTouched}
         style={styles.scrollContainer}
         containerStyleContent={styles.container}
-        onScroll={this.handleScroll}
-        onScrollEndDrag={this.handleScroll}
+        onScroll={onScroll || this.handleScroll}
+        onScrollEndDrag={onScroll || this.handleScroll}
         scrollEventThrottle={16}
         refreshControl={
           <RefreshControl
