@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import Dimensions from 'Dimensions';
-import { Animated, Easing, StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
+import { Animated, Easing, Image, Platform, StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import { throttle } from 'lodash'
 import { withDrawer } from '../../helpers/drawer';
+import { getTokenImage } from '../../helpers/functions'
 import { formatPrice, formatCurrencyChange } from '../../helpers/functions'
 import Chart from '../Chart/Chart';
 import RangeSelector from '../Chart/RangeSelector';
 import Header from '../Common/Dashboard/Header';
 import { getTokenDetails, addToWatchlist, removeFromWatchList } from '../../reducers/account';
-import { baseColor, baseURL, lossColor, brandColor } from '../../config'
+import { baseAccent, baseColor, baseURL, lossColor, brandColor } from '../../config'
 import { getHistoricalPrices as _getHistoricalPrices } from '../../reducers/ticker'
 import VideoPlayer from '../Video';
+import { SimpleLineIcons } from '@expo/vector-icons';
+import { Menu } from '../Common/Menu'
 
 const window = Dimensions.get('window');
 const viewWidth = window.width - 40;
@@ -147,16 +150,23 @@ class TokenDetails extends Component {
     displayPrice: 0,
     portfolioTimestamp: 0,
     totalPriceChange: 0,
-    totalPriceChangePct: 0
+    totalPriceChangePct: 0,
+    menuHeight: new Animated.Value(1),
+    menuOpen: false
   }
 
-  componentDidMount() {
+  componentWillReceiveProps = (nextProps) => {
+    this.updateHeader(nextProps)  
+  }
+
+  componentWillMount() {
     const { navigation, getTokenDetails, getHistoricalPrices } = this.props
     const { token } = navigation.state.params
     getHistoricalPrices({fsyms: token.symbol, tsyms: 'USD'})
     if (!token.marketCap) {
       getTokenDetails(token.symbol)
     }
+    this.updateHeader()
   }
 
   _onRefresh = async () => {
@@ -173,13 +183,109 @@ class TokenDetails extends Component {
     this.setState({refreshing: false})
   }
 
-  render() {
+  updateHeader = (props) => {
     const {
+      navigation,
+      isWatching,
+      token,
+      token: { symbol },
       addToWatchlist,
       removeFromWatchList,
+    } = props || this.props
+    const { id } = navigation.state.params
+    const { menuOpen } = this.state
+    const tokenDetails = navigation.state.params && navigation.state.params.token || {} 
+
+    if (props && props.isWatching === this.props.isWatching) {
+      return
+    }
+
+    this.menuItems = [
+      {
+        name: "Buy",
+        params: { platform: "ethereum" },
+        icon: 'credit-card',
+        Component: SimpleLineIcons,
+        params: { type: 'exchange_account' },
+        route: "Select Account"
+      },
+      {
+        name: "Sell",
+        params: { platform: "ethereum" },
+        icon: 'cursor',
+        params: { type: 'exchange_account' },
+        Component: SimpleLineIcons,
+        route: "Select Account"
+      },
+      {
+        name: "Send",
+        params: { platform: "ethereum" },
+        icon: 'arrow-right-circle',
+        params: { type: 'address' },
+        Component: SimpleLineIcons,
+        route: "Select Account"
+      },
+      {
+        name: "Recieve",
+        params: { platform: "ethereum" },
+        icon: 'arrow-left-circle',
+        params: { type: 'address' },
+        Component: SimpleLineIcons,
+        route: "Select Account"
+      },
+      {
+        name: isWatching ? "Unwatch" : "Watch",
+        params: { platform: "ethereum" },
+        icon: 'eye',
+        Component: SimpleLineIcons,
+        onPress: () =>{console.log('onPress watch', isWatching); isWatching ? removeFromWatchList(symbol, token) : addToWatchlist(symbol, token) }
+      }
+    ]
+
+    navigation.setParams({ overrideHeaderText:
+      <TouchableHighlight onPress={this.toggleMenu} style={{width:'100%', height:40}}> 
+           <View style={{
+              flexDirection: 'row',
+              alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
+              alignItems: 'center',
+              flex:1,
+              paddingTop: 10
+          }}>
+              <Image
+                key={tokenDetails.symbol}
+                source={{ uri: getTokenImage(tokenDetails.id) }}
+                style={{width: 20, height: 20, borderRadius: 5}}
+              />
+              <Text style={{color: '#fff', paddingHorizontal: 10}}>
+                  {tokenDetails.name||tokenDetails.symbol}
+              </Text>
+              <SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />
+          </View>
+      </TouchableHighlight>
+    })
+  }
+
+  toggleMenu = () => {
+    const { menuOpen, menuHeight } = this.state
+    Animated.timing(
+      menuHeight,
+      {
+        duration: 350,
+        toValue: menuOpen ? 1 : this.menuItems.length * 75
+      }
+    ).start()
+    this.updateHeader()
+    this.setState({
+      menuOpen: !menuOpen
+    })
+  }
+
+  render() {
+    const {
       isWatching,
       goToPriceAlertPage,
       token,
+      navigation,
       token: {
         price,
         balance,
@@ -201,10 +307,16 @@ class TokenDetails extends Component {
       chartLoading,
       period
     } = this.props;
-    const { showVideoCover, chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
+    const {
+      showVideoCover,
+      chartIsTouched,
+      menuHeight,
+      portfolioTimestamp,
+      totalPriceChange,
+      totalPriceChangePct
+    } = this.state
     const maxDescDisplayLength = 180
     const displayPrice = chartIsTouched ? this.state.displayPrice : price
-
     return (
       <ScrollView
         scrollEnabled={!chartIsTouched}
@@ -217,6 +329,17 @@ class TokenDetails extends Component {
           />
         }
       >
+        <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
+          <Menu
+            navigation={navigation}
+            items={this.menuItems}
+            baseColor={baseColor}
+            brandColor={brandColor}
+            baseAccent={baseAccent}
+            style={{flex: 1}}
+            listMargin={20}
+          />
+        </Animated.View>
         <Header
           style={[styles.header]}
           totalValue={displayPrice}
@@ -288,22 +411,6 @@ class TokenDetails extends Component {
                   justifyContent: 'space-around'
                 },
             ]}>
-            <TouchableOpacity
-              onPress={() => isWatching ? removeFromWatchList(symbol, token) : addToWatchlist(symbol, token) }
-              style={[
-                  styles.priceContainer,
-                  styles.noPrice,
-                  isWatching ? styles.unwatchContainer : {}
-              ]}
-            >
-              {
-                isWatching ?
-                <Text style={[styles.unwatchText]}>UNWATCH</Text>
-                  :
-                <Text style={[styles.watchText]}>WATCH</Text>
-              }
-
-            </TouchableOpacity>
             {/*<TouchableOpacity
               onPress={() => { goToPriceAlertPage(this.props.token) } }
               style={[
@@ -420,7 +527,7 @@ const mapStateToProps = (state, props) => {
   }
   const symbol = token.symbol
   const { watchListMap } = state.account
-  const isWatching = watchListMap[symbol]
+  const isWatching = !!watchListMap[symbol]
   const { chart } = state.ticker.historicalPrices
   const priceData = (chart[symbol] && chart[symbol]['USD'] || [])
 

@@ -35,157 +35,158 @@ const blockchains = [
 const exchanges = [
   {
       name: "Bibox",
-      params: { platform: "exchange" },
+      params: { platform: "Bibox", type: "exchange_account"},
       image: require("../../../assets/bibox-icon.png"),
       route: "Select Account"
   },
   {
       name: "Binance",
-      params: { platform: "exchange" },
+      params: { platform: "Binance", type: "exchange_account" },
       image: require("../../../assets/binance-icon.png"),
       route: "Select Account"
   },
   {
       name: "Bit-Z",
-      params: { platform: "exchange" },
+      params: { platform: "Bit-Z", type: "exchange_account" },
       image: require("../../../assets/bitz-icon.png"),
       route: "Select Account"
   },
   {
       name: "Bitbank",
-      params: { platform: "exchange" },
+      params: { platform: "Bitbank", type: "exchange_account" },
       image: require("../../../assets/bitbank-icon.png"),
       route: "Select Account"
   },
   {
       name: "Bitfinex",
-      params: { platform: "exchange" },
+      params: { platform: "Bitfinex", type: "exchange_account" },
       image: require("../../../assets/bitfinex-icon.png"),
       route: "Select Account"
   },
   {
       name: "bitFlyer",
-      params: { platform: "exchange" },
+      params: { platform: "bitFlyer", type: "exchange_account" },
       image: require("../../../assets/bitflyer-icon.png"),
       route: "Select Account"
   },
   {
       name: "Bittrex",
-      params: { platform: "exchange" },
+      params: { platform: "Bittrex", type: "exchange_account" },
       image: require("../../../assets/bittrex-icon.png"),
       route: "Select Account"
   },
   {
       name: "Bitstamp",
-      params: { platform: "exchange" },
+      params: { platform: "Bitstamp", type: "exchange_account" },
       image: require("../../../assets/bitstamp-icon.png"),
       route: "Select Account"
   },
   {
       name: "Bithumb",
-      params: { platform: "exchange" },
+      params: { platform: "Bithumb", type: "exchange_account" },
       image: require("../../../assets/bithumb-icon.png"),
       route: "Select Account"
   },
   {
       name: "BTCBOX",
-      params: { platform: "exchange" },
+      params: { platform: "BTCBOX", type: "exchange_account" },
       image: require("../../../assets/btcbox-icon.png"),
       route: "Select Account"
   },
   {
       name: "BTCC",
-      params: { platform: "exchange" },
+      params: { platform: "BTCC", type: "exchange_account" },
       image: require("../../../assets/btcc-icon.png"),
       route: "Select Account"
   },
   {
       name: "Coinone",
-      params: { platform: "exchange" },
+      params: { platform: "Coinone", type: "exchange_account" },
       image: require("../../../assets/coinone-icon.png"),
       route: "Select Account"
   },
   {
       name: "EXMO",
-      params: { platform: "exchange" },
+      params: { platform: "EXMO", type: "exchange_account" },
       image: require("../../../assets/exmo-icon.png"),
       route: "Select Account"
   },
   {
       name: "EXX",
-      params: { platform: "exchange" },
+      params: { platform: "EXX", type: "exchange_account" },
       image: require("../../../assets/exx-icon.png"),
       route: "Select Account"
   },
   {
       name: "Gate.io",
-      params: { platform: "exchange" },
+      params: { platform: "Gate.io", type: "exchange_account" },
       image: require("../../../assets/gateio-icon.png"),
       route: "Select Account"
   },
   {
       name: "GDAX",
-      params: { platform: "exchange" },
+      params: { platform: "GDAX", type: "exchange_account" },
       image: require("../../../assets/gdax-icon.png"),
       route: "Select Account"
   },
   {
       name: "Gemini",
-      params: { platform: "exchange" },
+      params: { platform: "Gemini", type: "exchange_account" },
       image: require("../../../assets/gemini-icon.png"),
       route: "Select Account"
   },
   {
       name: "HitBTC",
-      params: { platform: "exchange" },
+      params: { platform: "HitBTC", type: "exchange_account" },
       image: require("../../../assets/hitbtc-icon.png"),
       route: "Select Account"
   },
   {
       name: "Huobi",
-      params: { platform: "exchange" },
+      params: { platform: "Huobi", type: "exchange_account" },
       image: require("../../../assets/huobi-icon.png"),
       route: "Select Account"
   },
   {
       name: "Kraken",
-      params: { platform: "exchange" },
+      params: { platform: "Kraken", type: "exchange_account" },
       image: require("../../../assets/kraken-icon.png"),
       route: "Select Account"
   },
   {
       name: "Kucoin",
-      params: { platform: "exchange" },
+      params: { platform: "exchange", type: "exchange_account" },
       image: require("../../../assets/kucoin-icon.png"),
       route: "Select Account"
   },
   {
       name: "LBANK",
-      params: { platform: "exchange" },
+      name: "LBANK",
+      params: { platform: "exchange", type: "exchange_account" },
       image: require("../../../assets/lbank-icon.png"),
       route: "Select Account"
   },
   {
       name: "Liqui",
-      params: { platform: "exchange" },
+      params: { platform: "Liqui", type: "exchange_account" },
       image: require("../../../assets/liqui-icon.png"),
       route: "Select Account"
   },
   {
       name: "Poloniex",
-      params: { platform: "exchange" },
+      params: { platform: "Poloniex", type: "exchange_account" },
       image: require("../../../assets/poloniex-icon.png"),
       route: "Select Account"
   },
   {
       name: "Wex",
-      params: { platform: "exchange" },
+      params: { platform: "Wex", type: "exchange_account" },
       image: require("../../../assets/wex-icon.png"),
       route: "Select Account"
   },
   {
       name: "ZB",
-      params: { platform: "exchange" },
+      params: { platform: "ZB", type: "exchange_account" },
       image: require("../../../assets/zb-icon.png"),
       route: "Select Account"
   }
@@ -210,12 +211,12 @@ const MenuItems = {
       }
     })
   ),
-  'exchange': exchanges.map(e=>
+  'exchange_account': exchanges.map(e=>
     ({
       ...e,
       params: {
         ...(e.params),
-        type: 'exchange'
+        type: 'exchange_account'
       }
     })
   )
@@ -224,7 +225,7 @@ const MenuItems = {
 const HeaderText = {
   'wallet': 'Wallets',
   'address': 'Addresses',
-  'exchange': 'Exchanges'
+  'exchange_account': 'Exchanges'
 }
 
 class AccountType extends Component {

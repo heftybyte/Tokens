@@ -1,28 +1,18 @@
 import React, { Component } from 'react';
-import { WebView, StyleSheet, Alert } from 'react-native';
+import { WebView, Alert } from 'react-native';
 import QRScanner from './../../Common/QRScanner';
 import { NavigationActions } from 'react-navigation';
+import { baseAccent, baseColor, brandColor, lossColor } from '../../../config'
 import { View, Container, Header, Content, ListItem, Input,Text,
-    Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form } from 'native-base';
+    Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form, StyleProvider } from 'native-base';
 import { generateAddressFromMnemonic, storeWallet } from '../../../helpers/wallet';
 import { withDrawer } from '../../../helpers/drawer';
 import { SecureStore} from 'expo'
 import { constants } from '../../../constants';
 import { connect } from 'react-redux';
-
-const styles = StyleSheet.create({
-    input: {
-        color: '#fff',
-    },
-    mnemonic: {
-        color: "#f3f3f3",
-        fontSize: 24,
-    },
-    title: {
-        fontSize: 36,
-        color: "#f3f3f3"
-    }
-});
+import getTheme from '../../../../native-base-theme/components';
+import platform from '../../../../native-base-theme/variables/platform';
+import styles from '../styles'
 
 class NewWallet extends Component {
 
@@ -31,11 +21,9 @@ class NewWallet extends Component {
     }
 
     onWebViewMessage = (event) => {
-
         this.setState({
             "mnemonic": event.nativeEvent.data
         })
-
     }
 
     render() {
@@ -44,41 +32,54 @@ class NewWallet extends Component {
         } = this.props
         const { mnemonic } = this.state
         return (
-            <Container>
-                <Content>
-                <View style={{backgroundColor: "#fefefe", flex: 4}}>
-                    <WebView
-                            ref={webview => { this.webView = webview; }}
-                            source={require("./../../../resources/index.html")}
-                            javaScriptEnabled={true}
-                            style={{}}
-                            onMessage={(event) => {this.onWebViewMessage(event)} }
-                    />
-                    </View>
-                    <Text style={styles.title}>Seed Phrase</Text>
-                    
-                    <Text style={styles.input}>Confirm your 12-word backup phrase. Keep a written copy
-                    saved and secured. This is a key that is private to you and shouldn't be shared with anyone</Text>
+            <StyleProvider style={getTheme(platform)}>
+                <Container>
+                    <Content>
+                            <WebView
+                                ref={webview => { this.webView = webview; }}
+                                source={require("./../../../resources/index.html")}
+                                javaScriptEnabled={true}
+                                style={{}}
+                                onMessage={(event) => {this.onWebViewMessage(event)} }
+                            />
+                        
+                        <View style={styles.header}>
+                            <Text style={styles.heading}>Confirm Backup Phrase</Text>
+                            
+                            <Text style={styles.subHeading}>
+                                Confirm your 12-word backup phrase. Keep a written copy saved and secured. This is a key that is private to you and shouldn't be shared with anyone.
+                            </Text>
+                        </View>
 
-                    <View style={{marginTop: 20,marginBottom: 100}}>
-                    {
-                        (mnemonic) ?
+                        <View style={styles.mnemonicContainer}>
+                        {
+                            (mnemonic) ?
+                                <Text
+                                    style={styles.mnemonic}
+                                    selectable
+                                >{this.state.mnemonic}</Text>
+                            :
                             <Text
                                 style={styles.mnemonic}
-                                selectable
-                            >{this.state.mnemonic}</Text>
-                        :
-                        <Text
-                            style={styles.mnemonic}
-                        >loading...</Text>
-                    }
-                    </View>
-
-                <Button title={"continue"} block primary onPress={() => { goToConfirmPhrasePage(mnemonic) }}>
-                    <Text>Continue</Text>
-                </Button>
-                </Content>
-            </Container>
+                            >generating backup phrase...</Text>
+                        }
+                        </View>
+                        {/*<Text style={styles.warningText}>
+                            Write this phrase down now. You will never be able to recover your funds without it.
+                        </Text>*/}
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                            <Button
+                                style={{flex: .8}}
+                                primary
+                                title={"continue"}
+                                block
+                                onPress={() => { goToConfirmPhrasePage(mnemonic) }}>
+                                <Text style={{color: '#000'}}>Continue</Text>
+                            </Button>
+                        </View>
+                    </Content>
+                </Container>
+            </StyleProvider>
         )
     }
 }

@@ -123,7 +123,7 @@ class Education extends Component {
               style={styles.button}
               onPress={registerForPushNotificationsAsync}
               >
-            <Text>Enable Push Notifications</Text>
+            <Text style={{color:'#000'}}>Enable Push Notifications</Text>
           </Button>}
         </View>
       </View>

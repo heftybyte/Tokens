@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Image, StatusBar, Text, TouchableHighlight, View } from "react-native"
+import { Animated, Image, StatusBar, Text, TouchableWithoutFeedback, View } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-export const ListItem = (navigation, brandColor, baseAccent, margin) => ({ name, route, icon, image, Component, color, params }) => (
-  <TouchableHighlight
+export const ListItem = (navigation, brandColor, baseAccent, margin) => ({ name, route, icon, image, Component, color, params, onPress }) => (
+  <TouchableWithoutFeedback
       key={name}
-      onPress={() => navigation.navigate(route, params)}
+      onPress={() =>{onPress ? onPress() : navigation.navigate(route, params)}}
   >
       <View
           style={{
@@ -21,7 +21,8 @@ export const ListItem = (navigation, brandColor, baseAccent, margin) => ({ name,
               borderColor: baseAccent
           }}
       >
-          <View style={{ width: 60 }}>
+          {(image || icon || Component) && 
+            <View style={{ width: 60 }}>
             {
               Component ? (
                 <Component name={icon} size={20} color={color || brandColor} />
@@ -29,7 +30,7 @@ export const ListItem = (navigation, brandColor, baseAccent, margin) => ({ name,
                 <Image source={image} style={{width: 30, height: 30}} />
               ) : <Icon name={icon} size={20} color={color || brandColor} />
             }
-          </View>
+          </View>}
           <View style={{ flex: .9 }}>
               <Text style={{ color: "#fff" }}>{name}</Text>
           </View>
@@ -37,11 +38,11 @@ export const ListItem = (navigation, brandColor, baseAccent, margin) => ({ name,
               <SimpleLineIcons name={'arrow-right'} color="#fff" size={14} />
           </View>
       </View>
-  </TouchableHighlight>
+  </TouchableWithoutFeedback>
 )
 
 export const Menu = ({ navigation, items, baseColor, brandColor, baseAccent, showStatusBar, hideBorder, listMargin, style }) => (
-  <View style={style || {
+  <Animated.View style={style || {
       flex: 1,
       backgroundColor: baseColor,
       paddingTop: 40,
@@ -59,5 +60,5 @@ export const Menu = ({ navigation, items, baseColor, brandColor, baseAccent, sho
       </View>
     }
     {items.map(ListItem(navigation, brandColor, !hideBorder ? baseAccent : null, listMargin))}
-  </View>
+  </Animated.View>
 )

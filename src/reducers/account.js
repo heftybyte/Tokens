@@ -196,7 +196,7 @@ export const login = (params) => async (dispatch, getState) => {
     dispatch(NavigationActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Dashboard' })
+        NavigationActions.navigate({ routeName: 'Profile' })
       ]
     }))
 }
@@ -336,16 +336,13 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
 }
 
 // wallet
-export const addWalletAddress = (address) => async (dispatch, getState) => {
-    console.log('in add wallet address');
+export const addWalletAddress = (address, platform) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
     console.log('id', id)
     dispatch(setLoading(true, 'Saving Address'))
-    console.log('loading true')
     console.log(id, address)
-    const account = await addAccountWalletAddress(id, address).catch(e=>err=e)
-    console.log('accoutn address')
+    const account = await addAccountWalletAddress(id, address, platform).catch(e=>err=e)
 
     dispatch(setLoading(false))
     if (err) {
@@ -358,7 +355,7 @@ export const addWalletAddress = (address) => async (dispatch, getState) => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
     const pushEnabled = status === 'granted'
     const params = { type: 'ADD_WALLET_ADDRESS', meta: { pushEnabled } }
-    dispatch(NavigationActions.navigate({ routeName: 'Wallet', params }))
+    dispatch(NavigationActions.navigate({ routeName: 'Select Account', params: { type: 'wallet', platform} }))
 }
 
 

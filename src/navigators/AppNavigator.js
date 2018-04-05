@@ -62,7 +62,7 @@ export const AppNavigator = StackNavigator(
     'Restore Wallet': {screen: RestoreWallet},
     'Confirm Phrase': {screen: ConfirmPhrase},
     'Price Alert': { screen: PriceAlert },
-    'Dashboard': Profile,
+    'Profile': Profile,
     'ICO List': {
       screen: ICOs
     },

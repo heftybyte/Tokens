@@ -88,7 +88,6 @@ export const send = async (type='ether', publicKey, recipient, amount, contractA
             return transaction
             break;
         default:
-            console.log('Waving Flag')
 
     }
 

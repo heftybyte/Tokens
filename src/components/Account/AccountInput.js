@@ -126,7 +126,7 @@ const AccountInput = ({
     );
 };
 
-AccountInput.PropTypes = {
+AccountInput.propTypes = {
     toggleQRScanner: PropTypes.func.isRequired,
     scannerOpen: PropTypes.bool,
     inputValue: PropTypes.string.isRequired,
