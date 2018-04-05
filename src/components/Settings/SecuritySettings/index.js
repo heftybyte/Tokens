@@ -7,13 +7,18 @@ import { Container, Header, Content, ListItem, Text, Radio, Footer, Button, Chec
 import { Fingerprint } from 'expo'
 import { getPin, deletePin } from '../../../helpers/security'
 import { enableFingerprint, enablePin, disablePin } from '../../../actions/security';
+import { brandColor } from '../../../config'
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({  
     white: {
         color :'#fff',
     },
     grey: {
         color: '#4c4c4c'
+    },
+    title: {
+        color: brandColor,
+        fontSize: 18
     }
 })
 
@@ -77,7 +82,7 @@ class SecuritySettings extends Component {
                     {text: 'Cancel', onPress: () => {}},
                     {text: 'OK', onPress: () => {
                         disablePin();
-                        Alert.alert('Pin disabled');
+                        Alert.alert('Pin Disabled');
                         deletePin();
                     }},
                 ],
@@ -109,36 +114,40 @@ class SecuritySettings extends Component {
                 <Content>
                     <List>
                         <ListItem itemHeader first>
-                            <Text style={styles.white}>Fingerprint</Text>
+                            <Text style={styles.title}>Fingerprint</Text>
                         </ListItem>
                         <ListItem onPress={this.enableFingerprint.bind(this)} noBorder>
                             <Body>
-                            <Text style={styles.white}>Enable Fingerprint authentication</Text>
+                                <Text style={styles.white}>Enable Fingerprint authentication</Text>
                             </Body>
-                            <Right>
+                            <Right style={{paddingRight: 10}}>
                                 <CheckBox
                                     checked={hasFingerprintEnabled}
                                 />
                             </Right>
                         </ListItem>
                         <ListItem itemHeader first>
-                            <Text style={styles.white}>PIN Code</Text>
+                            <Text style={styles.title}>PIN Code</Text>
                         </ListItem>
                         <ListItem onPress={this.enablePin.bind(this)} noBorder>
-                            <Body>
-                            <Text style={styles.white}>Enable PIN</Text>
-                            <Text style={styles.grey}>PIN is used as the backup authentication method for fingerprint</Text>
+                            <Body style={{flex:.9}}>
+                                <Text style={styles.white}>Enable PIN</Text>
+                                <Text style={styles.grey}>
+                                    PIN is used as the backup authentication method for fingerprint
+                                </Text>
                             </Body>
-                            <Right>
+                            <Right style={{flex:.1, paddingRight: 10}}>
                                 <CheckBox
                                     checked={hasPinEnabled}
                                 />
                             </Right>
                         </ListItem>
                         <ListItem onPress={()=>{goToSetPinPage()}} noBorder>
-                            <Body>
-                            <Text style={styles.white}>Set PIN</Text>
-                            <Text style={styles.grey}>You will be automatically signed out of your account after 3 consecutive failed PIN code attempts</Text>
+                            <Body style={{flex:1}}>
+                                <Text style={styles.white}>Set PIN</Text>
+                                <Text style={styles.grey}>
+                                    You will be automatically signed out of your account after 3 consecutive failed PIN code attempts
+                                </Text>
                             </Body>
                         </ListItem>
                     </List>
