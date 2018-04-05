@@ -12,6 +12,11 @@ export const getPin = async() => {
     return result
 }
 
+export const isPinCorrect = async(pin) => {
+	const result = await  SecureStore.getItemAsync(key)
+	return pin == result;
+}
+
 export const deletePin = async() => {
     const result = await SecureStore.deleteItemAsync(key)
     return result

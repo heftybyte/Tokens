@@ -135,7 +135,7 @@ class SecuritySettings extends Component {
                                 />
                             </Right>
                         </ListItem>
-                        <ListItem onPress={goToSetPinPage} noBorder>
+                        <ListItem onPress={()=>{goToSetPinPage()}} noBorder>
                             <Body>
                             <Text style={styles.white}>Set PIN</Text>
                             <Text style={styles.grey}>You will be automatically signed out of your account after 3 consecutive failed PIN code attempts</Text>
