@@ -45,7 +45,7 @@ class SetPin extends Component {
         }
     }
 
-    onInputChange (event){
+    handleChange (event){
         Alert.alert('change')
         console.log('event')
         console.log(event)
@@ -60,7 +60,9 @@ class SetPin extends Component {
         const storedPin = await getPin()
         if(storedPin == this.state.oldPin){
             await this.setPin()
+            return
         }
+        
         Alert.alert('wrong previous pin')
     }
 
@@ -97,50 +99,37 @@ class SetPin extends Component {
                     <Form>
                         {
                             (this.state.pinExists) ?
-                                <Item floatingLabel>
+                                <View>
                                     <Label>Old Pin</Label>
                                     <TextInput
                                         contextMenuHidden
                                         secureTextEntry
                                         style={styles.input}
-                                        onEndEditing={this.handleChange.bind(this)}
+                                        onChangeText={(text) => { this.setState({oldPin: text}); }}
                                         placeholderTextColor={'#333'}
                                         autoCapitalize={'characters'}
                                     />
-                                    {/*<Input*/}
-                                        {/*style={styles.white}*/}
-                                        {/*name="oldPin"*/}
-                                        {/*maxLength={4}*/}
-                                        {/*keyboardType = 'numeric'*/}
-                                        {/*contextMenuHidden*/}
-                                        {/*secureTextEntry*/}
-                                        {/*onChange={this.handleChange}*/}
-                                    {/*/>*/}
-                                </Item>
+                                </View>
                                 : <View />
                         }
 
-                        <Item floatingLabel>
                             <Label>New Pin</Label>
                             <TextInput
                                 name="newPin"
                                 style={styles.input}
                                 value={this.state.newPin}
-                                onChangeText={(text)=>{this.setState({newPin: text})}}
+                                onChangeText={(text)=>{ this.setState({newPin: text}); }}
                                 contextMenuHidden
                                 secureTextEntry
                             />
-                        </Item>
-                        <Item floatingLabel>
                             <Label>Confirm Pin</Label>
                             <TextInput
                                 contextMenuHidden
                                 secureTextEntry
                                 style={styles.input}
-                                onChangeText={(text)=>{this.setState({confirmPin: text})}}
+                                onChangeText={(text)=>{  this.setState({confirmPin: text}); }}
                                 value={this.state.confirmPin}
                             />
-                        </Item>
                     </Form>
                     {
                         this.state.pinExists ?
