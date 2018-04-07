@@ -262,7 +262,7 @@ export const withDrawer = (WrappedComponent) => {
                             </Right>
                         </NBHeader>
                         <Spinner
-                            visible={false}
+                            visible={this.props.isLoading}
                             textContent={this.props.loadText||''}
                             textStyle={{color: '#FFF', fontSize: 16}}
                             overlayColor='rgba(0,0,0,.9)'
