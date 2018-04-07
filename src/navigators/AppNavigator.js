@@ -43,46 +43,48 @@ const customAnimationFunc = () => ({
   },
 });
 
+export const Routes = {
+  Chat: {
+    screen: Chat
+  },
+  Education: { screen: Education },
+  Entry: { screen: Entry },
+  NormalRegistration: { screen: NormalRegistration },
+  GuestRegistration: { screen: GuestRegistration },
+  Login: { screen: NormalRegistration },
+  'Account View': { screen: AccountDashboard },
+  'Select Account': { screen: AccountPicker },
+  Accounts : { screen: ViewAccounts },
+  'Add Address': { screen: AddAddress },
+  Search: { screen: Search },
+  Bookmarks: { screen: BookMarks },
+  Register: { screen: Register },
+  'Token Details': { screen: TokenDetails },
+  'Wallet': { screen: Wallet},
+  'New Wallet': {screen: NewWallet},
+  'Restore Wallet': {screen: RestoreWallet},
+  'Confirm Phrase': {screen: ConfirmPhrase},
+  'Price Alert': { screen: PriceAlert },
+  'Profile': Profile,
+  'Settings': {screen: Settings},
+  'SecuritySettings': {screen: SecuritySettings},
+  'SetPin': {screen: SetPin},
+  'ICO List': {
+    screen: ICOs
+  },
+  'AccountType': {
+    screen: AccountType
+  },
+  ICODetail: {
+    screen: ICODetail
+  },
+  'Edit Profile': {
+    screen: EditProfile
+  }
+}
+
 export const AppNavigator = StackNavigator(
-  {
-    Chat: {
-      screen: Chat
-    },
-    Education: { screen: Education },
-    Entry: { screen: Entry },
-    NormalRegistration: { screen: NormalRegistration },
-    GuestRegistration: { screen: GuestRegistration },
-    Login: { screen: NormalRegistration },
-    'Account View': { screen: AccountDashboard },
-    'Select Account': { screen: AccountPicker },
-    Accounts : { screen: ViewAccounts },
-    'Add Address': { screen: AddAddress },
-    Search: { screen: Search },
-    Bookmarks: { screen: BookMarks },
-    Register: { screen: Register },
-    'Token Details': { screen: TokenDetails },
-    'Wallet': { screen: Wallet},
-    'New Wallet': {screen: NewWallet},
-    'Restore Wallet': {screen: RestoreWallet},
-    'Confirm Phrase': {screen: ConfirmPhrase},
-    'Price Alert': { screen: PriceAlert },
-    'Profile': Profile,
-    'Settings': {screen: Settings},
-    'SecuritySettings': {screen: SecuritySettings},
-    'SetPin': {screen: SetPin},
-    'ICO List': {
-      screen: ICOs
-    },
-    'AccountType': {
-      screen: AccountType
-    },
-    ICODetail: {
-      screen: ICODetail
-    },
-    'Edit Profile': {
-      screen: EditProfile
-    }
-  }, 
+  Routes, 
   {
     initialRouteName: "Entry",
     headerMode: "none",
@@ -96,8 +98,7 @@ export const AppNavigator = StackNavigator(
 export const navMiddleWare = createReactNavigationReduxMiddleware(
   "root",
   state => state.nav,
-);
-const addListener = createReduxBoundAddListener("root");
+);const addListener = createReduxBoundAddListener("root");
 
 
 const AppWithNavigationState = ({ dispatch, nav }) => (

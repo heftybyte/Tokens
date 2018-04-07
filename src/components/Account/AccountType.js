@@ -230,10 +230,8 @@ const HeaderText = {
 
 class AccountType extends Component {
 
-  componentWillMount = () => {
-    const { navigation } = this.props
-    const { type } = navigation.state.params
-    navigation.setParams({ overrideHeaderText: HeaderText[type] });
+  static getHeaderText = (navState) => {
+    return HeaderText[navState.params.type]
   }
 
   render() {

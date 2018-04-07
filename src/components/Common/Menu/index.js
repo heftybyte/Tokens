@@ -3,10 +3,13 @@ import { Animated, Image, StatusBar, Text, TouchableWithoutFeedback, View } from
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-export const ListItem = (navigation, brandColor, baseAccent, margin) => ({ name, route, icon, image, Component, color, params, onPress }) => (
+export const ListItem = (navigation, brandColor, baseAccent, margin, globalOnPress) => ({ name, route, icon, image, Component, color, params, onPress }) => (
   <TouchableWithoutFeedback
       key={name}
-      onPress={() =>{onPress ? onPress() : navigation.navigate(route, params)}}
+      onPress={() =>{
+        onPress ? onPress() : navigation.navigate(route, params)
+        globalOnPress && globalOnPress()
+      }}
   >
       <View
           style={{
@@ -41,8 +44,9 @@ export const ListItem = (navigation, brandColor, baseAccent, margin) => ({ name,
   </TouchableWithoutFeedback>
 )
 
-export const Menu = ({ navigation, items, baseColor, brandColor, baseAccent, showStatusBar, hideBorder, listMargin, style }) => (
-  <Animated.View style={style || {
+export const Menu = ({ onPress, navigation, items, baseColor, brandColor, baseAccent, showStatusBar, hideBorder, listMargin, style }) => (
+  <Animated.View
+    style={style || {
       flex: 1,
       backgroundColor: baseColor,
       paddingTop: 40,
@@ -59,6 +63,6 @@ export const Menu = ({ navigation, items, baseColor, brandColor, baseAccent, sho
         </View>
       </View>
     }
-    {items.map(ListItem(navigation, brandColor, !hideBorder ? baseAccent : null, listMargin))}
+    {items.map(ListItem(navigation, brandColor, !hideBorder ? baseAccent : null, listMargin, onPress))}
   </Animated.View>
 )

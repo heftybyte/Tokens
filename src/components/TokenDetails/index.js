@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Dimensions from 'Dimensions';
-import { Animated, Easing, Image, Platform, StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableOpacity, RefreshControl } from 'react-native';
+import { Animated, Easing, Image, Platform, StyleSheet, ScrollView, View, Text, Linking, TouchableHighlight, TouchableWithoutFeedback, TouchableOpacity, RefreshControl } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
@@ -142,6 +142,30 @@ const styles = StyleSheet.create({
 const tokenValueStyle = (v) =>  v && v.toString().length > 8 ? styles.tokenValueWrapped : styles.tokenValue
 
 class TokenDetails extends Component {
+
+  static getHeader = (navState) => {
+    const { token: tokenDetails } = navState.params
+    return (
+      <View style={{
+          flexDirection: 'row',
+          alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
+          alignItems: 'center',
+          flex:1,
+          paddingTop: 10
+      }}>
+          <Image
+            key={tokenDetails.symbol}
+            source={{ uri: getTokenImage(tokenDetails.id) }}
+            style={{width: 20, height: 20, borderRadius: 5}}
+          />
+          <Text style={{color: '#fff', paddingHorizontal: 10}}>
+              {tokenDetails.name||tokenDetails.symbol}
+          </Text>
+          <SimpleLineIcons name={'arrow-down'} color={'#fff'} />
+      </View>
+    )
+  }
+
   state = {
     readMore: false,
     refreshing: false,
@@ -242,9 +266,9 @@ class TokenDetails extends Component {
       }
     ]
 
-    navigation.setParams({ overrideHeaderText:
-      <TouchableHighlight onPress={this.toggleMenu} style={{width:'100%', height:40}}> 
-           <View style={{
+    navigation.setParams({ overrideHeader:
+      <TouchableWithoutFeedback onPress={this.toggleMenu} style={{width:'100%', height:40}}> 
+          <View style={{
               flexDirection: 'row',
               alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
               alignItems: 'center',
@@ -261,7 +285,7 @@ class TokenDetails extends Component {
               </Text>
               <SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />
           </View>
-      </TouchableHighlight>
+      </TouchableWithoutFeedback>
     })
   }
 
@@ -331,6 +355,7 @@ class TokenDetails extends Component {
       >
         <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
           <Menu
+            onPress={this.toggleMenu}
             navigation={navigation}
             items={this.menuItems}
             baseColor={baseColor}
@@ -431,7 +456,7 @@ class TokenDetails extends Component {
                 style={[styles.tokenValue, {fontSize: 15,textAlign: 'left', paddingTop: 5}]}>
                   {description}
                   </Text>
-                {description.length > maxDescDisplayLength && (<TouchableHighlight
+                {description.length > maxDescDisplayLength && (<TouchableWithoutFeedback
                     onPress={() => this.setState({readMore: !this.state.readMore})}
                     style={{marginTop: 7}}>
                   <Text
@@ -439,14 +464,14 @@ class TokenDetails extends Component {
                   >
                       { this.state.readMore?'Close':'Read more' }
                   </Text>
-                </TouchableHighlight>)
+                </TouchableWithoutFeedback>)
                 }
           </View>:null}
         </View>
 
         <View style={[styles.container, styles.linkContainer]}>
           <View style={{flexDirection: 'row'}}>
-            {!!website && <TouchableHighlight
+            {!!website && <TouchableWithoutFeedback
                   onPress={()=>{
                     Linking.openURL(website).catch(
                       err => console.error('An error occurred', err));
@@ -459,8 +484,8 @@ class TokenDetails extends Component {
                     color="white"
                     backgroundColor="black"
                   />
-                </TouchableHighlight>}
-            {!!twitter && <TouchableHighlight
+                </TouchableWithoutFeedback>}
+            {!!twitter && <TouchableWithoutFeedback
                   onPress={()=>{
                     Linking.openURL(twitter).catch(
                       err => console.error('An error occurred', err));
@@ -473,8 +498,8 @@ class TokenDetails extends Component {
                     color="white"
                     backgroundColor="black"
                   />
-                </TouchableHighlight>}
-            {!!reddit && <TouchableHighlight
+                </TouchableWithoutFeedback>}
+            {!!reddit && <TouchableWithoutFeedback
                   onPress={()=>{
                     Linking.openURL(reddit).catch(
                       err => console.error('An error occurred', err));
@@ -487,7 +512,7 @@ class TokenDetails extends Component {
                     color="white"
                     backgroundColor="black"
                   />
-                </TouchableHighlight>}
+                </TouchableWithoutFeedback>}
           </View>
         {!!videoUrl && <View style={[styles.container, {paddingLeft:0,paddingRight:20,paddingBottom:10, marginTop: 20}]}>
               {showVideoCover && <TouchableHighlight

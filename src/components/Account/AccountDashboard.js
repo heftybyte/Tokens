@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Animated, TouchableHighlight, StatusBar, Text, View } from 'react-native'
+import { Animated, TouchableWithoutFeedback, StatusBar, Text, View } from 'react-native'
 import { withDrawer } from '../../helpers/drawer'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { deleteAddress, refreshAddress } from '../../reducers/account';
@@ -14,6 +14,21 @@ import {
 
 class AccountDashboard extends Component {
 
+  static getHeader = (navState) => {
+    const { id } = navState.params;
+    return (
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 10
+      }}>
+        <Text style={{color:'#fff', paddingRight: 10}}>{`${id.substr(0, 5)}...${id.substr(39, 42)}`}</Text> 
+        <SimpleLineIcons name={'arrow-down'} color={'#fff'} />
+      </View>  
+    ) 
+  }
+  
   state = {
     menuHeight: new Animated.Value(1),
     menuOpen: false
@@ -24,8 +39,8 @@ class AccountDashboard extends Component {
     const { id } = navigation.state.params
     const { menuOpen } = this.state
 
-    navigation.setParams({ overrideHeaderText:
-      <TouchableHighlight onPress={this.toggleMenu} style={{width:'100%', height:40}}> 
+    navigation.setParams({ overrideHeader:
+      <TouchableWithoutFeedback onPress={this.toggleMenu} style={{width:'100%', height:40}}> 
         <View style={{
           flex: 1,
           flexDirection: 'row',
@@ -35,7 +50,7 @@ class AccountDashboard extends Component {
           <Text style={{color:'#fff', paddingRight: 10}}>{`${id.substr(0, 5)}...${id.substr(39, 42)}`}</Text> 
           <SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />
         </View>
-      </TouchableHighlight>
+      </TouchableWithoutFeedback>
     })
   }
 
@@ -108,6 +123,7 @@ class AccountDashboard extends Component {
       <View>
         <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
           <Menu
+            onPress={this.toggleMenu}
             navigation={navigation}
             items={this.menuItems}
             baseColor={baseColor}
