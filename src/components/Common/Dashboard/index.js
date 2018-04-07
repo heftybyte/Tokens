@@ -135,7 +135,8 @@ class Dashboard extends Component {
       updateToken,
       period,
       watchListSymbols,
-      onScroll
+      onScroll,
+      onChartTouch
     } = this.props
     const { chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
@@ -191,7 +192,10 @@ class Dashboard extends Component {
               })
             }}
             loading={chartLoading}
-            onTouch={(isTouched)=>this.setState({chartIsTouched: isTouched})}
+            onTouch={(isTouched)=>{
+              this.setState({chartIsTouched: isTouched})
+              onChartTouch && onChartTouch(isTouched)
+            }}
           />
         }
         {/* !! addresses.length &&

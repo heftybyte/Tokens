@@ -56,10 +56,10 @@ class ConfirmPhrase extends Component {
 						<View style={styles.header}>
 							<Text style={styles.heading}>Confirm Backup Phrase</Text>
 							<Text style={styles.subHeading}>
-                                Confirm your 12-word backup phrase. Keep a written copy saved and secured. This is a key that is private to you and shouldn't be shared with anyone.
+                                Confirm your 12-word backup phrase. Keep a written copy saved and secured. This phrase gives access to your wallet funds and as such it shouldn't be shared with anyone.
                             </Text>
 							<Text style={[styles.subHeading, {color: '#ff0000'}]}>
-								WARNING: You will not be able to recover your funds if you lose this phrase. Losing this phrase means losing access to your funds forever. Write your phrase down before continuing.
+								WARNING: Your passphrase is automatically generated and stored on this device. We will never have access to it. If you lose it, we will not be able to recover it for you and you will lose access to your funds. Keep it safe.
 							</Text>
 						</View>
 						<View style={{marginTop: 20,marginBottom: 50, paddingHorizontal:20}}>

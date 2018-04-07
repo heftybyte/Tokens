@@ -12,29 +12,29 @@ const styles = StyleSheet.create({
   },
   portfolioValueCurrencySymbol: {
     color: '#fff',
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'Nunito-ExtraLight'
   },
   portfolioValue: {
     color: '#fff',
-    fontSize: 60,
+    fontSize: 50,
     fontFamily: 'Nunito-ExtraLight'
   },
   portfolioValueCents: {
     color: '#fff',
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'Nunito-ExtraLight'
   },
   changeContainer: {
-    paddingBottom: 10
+    paddingBottom: 8
   },
   portfolioDelta: {
     color: '#fff',
-    fontSize: 10,
+    fontSize: 8,
     fontFamily: 'Nunito'
   },
   portfolioDeltaPeriod: {
-    fontSize: 10,
+    fontSize: 8,
     color: '#fff',
     fontFamily: 'Nunito'
   },
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     color: lossColor
   },
   smallHeaderFont: {
-    fontSize: 50
+    fontSize: 40
   }
 });
 

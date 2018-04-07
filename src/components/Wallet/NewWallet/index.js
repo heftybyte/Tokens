@@ -47,7 +47,7 @@ class NewWallet extends Component {
                             <Text style={styles.heading}>Confirm Backup Phrase</Text>
                             
                             <Text style={styles.subHeading}>
-                                Confirm your 12-word backup phrase. Keep a written copy saved and secured. This is a key that is private to you and shouldn't be shared with anyone.
+                                This phrase gives access to your wallet funds and as such should not be shared with anyone. It will be encrypted and stored on your physical device. This never gets sent to our servers. We will not be able to recover it for you if you lose it.
                             </Text>
                         </View>
 

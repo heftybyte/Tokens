@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, ScrollView, View, StyleSheet, TouchableHighlight } from 'react-native'
+import { Image, Text, ScrollView, View, RefreshControl, StyleSheet, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer'
 import Dashboard from '../Common/Dashboard'
@@ -10,13 +10,15 @@ import {
 import md5 from 'crypto-js/md5'
 import Identicon from 'identicon.js/identicon'
 import { baseAccent, brandColor } from '../../config'
+import { trackRefresh } from '../../helpers/analytics'
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     flexDirection: 'row',
-    padding: 20,
-    marginBottom: 10
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    paddingTop: 5
   },
   imageContainer: {
     flexDirection: 'row',
@@ -46,7 +48,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 20
   },
   headerBtn: {
     flex: .5,
@@ -68,12 +69,14 @@ const styles = StyleSheet.create({
     borderColor: '#333',
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    marginHorizontal: 10
+    marginTop: 15,
+    marginBottom: 20,
+    marginHorizontal: 20
   },
   metaItem: {
     flex: .33,
     padding: 5,
-    marginVertical: 10,
+    marginVertical: 5,
     alignItems: 'center'
   },
   metaLabel: {
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
   metaValue: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 18
   }
 })
 
@@ -100,7 +103,7 @@ const identicon = (str) => {
   return `data:image/png;base64,${data}`;
 }
 
-const ProfileHeader = ({username, submissions, followers, following, style}) => (
+const ProfileHeader = ({username, reputation, followers, following, style}) => (
     <View>
       <View style={[styles.mainContainer, style||{}]}>
         <View style={styles.imageContainer}>
@@ -132,10 +135,10 @@ const ProfileHeader = ({username, submissions, followers, following, style}) => 
       <TouchableHighlight style={styles.metaItem}>
         <View>
           <Text style={styles.metaLabel}>
-            SUBMISSIONS
+            REPUTATION
           </Text>
           <Text style={styles.metaValue}>
-          {submissions}
+          {reputation}
           </Text>
         </View>
       </TouchableHighlight>
@@ -167,6 +170,12 @@ const ProfileHeader = ({username, submissions, followers, following, style}) => 
 
 class Profile extends Component {
 
+  static headerText = 'Portfolio'
+
+  state = {
+    refreshing: false
+  }
+
   componentDidMount = async () => {
     await Promise.all([
       this.props.getPortfolio(true),
@@ -174,11 +183,14 @@ class Profile extends Component {
     ])
   }
 
-  onRefresh = () => {
-    return Promise.all([
+  onRefresh = async () => {
+    this.setState({refreshing: true})
+    await Promise.all([
       this.props.getPortfolio(false),
       this.props.getPortfolioChart()
     ])
+    this.setState({refreshing: false})
+    trackRefresh('Dashboard')
   }
 
   render() {
@@ -187,15 +199,26 @@ class Profile extends Component {
       portfolio,
       portfolioChart,
       username,
-      submissions,
+      reputation,
       following,
       followers
     } = this.props
+    const { chartIsTouched } = this.state
     return (
-      <ScrollView style={{flex: 1}}>
+      <ScrollView
+        scrollEnabled={!chartIsTouched}
+        style={{flex: 1}}
+        scrollEventThrottle={16}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
+      >
           <ProfileHeader
             style={{flex: .1}}
-            submissions={submissions}
+            reputation={reputation}
             username={username}
             followers={followers}
             following={following}
@@ -204,7 +227,11 @@ class Profile extends Component {
             navigation={navigation}
             portfolio={portfolio}
             portfolioChart={portfolioChart}
-            onRefresh={this.onRefresh}
+            onChartTouch={(isTouched)=>{
+              this.setState({
+                chartIsTouched: isTouched
+              })
+            }}
           />
       </ScrollView>
     )
@@ -214,7 +241,7 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => ({
   username: state.account.username,
-  submissions: state.account.submissions,
+  reputation: state.account.reputation,
   followers: state.account.followers,
   following: state.account.following,
   portfolio: state.account.portfolio,

@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react"
-import { View, TouchableHighlight, Text, Platform, Alert, Image, Dimensions, StatusBar } from "react-native"
+import { View, TouchableWithoutFeedback, Text, Platform, Alert, Image, Dimensions, StatusBar } from "react-native"
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { Ionicons, MaterialCommunityIcons, Entypo, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
@@ -90,17 +90,71 @@ export const withDrawer = (WrappedComponent) => {
                 this.refs.toast.show(toast, toastDuration)
             }
         }
+
+        getHeaderBody = () => {
+            const { navigation } = this.props
+            const { state: navState } = navigation
+
+            if (navState.params && navState.params.overrideHeader) {
+                return navState.params.overrideHeader
+            }
+
+            switch(navState.routeName) {
+                case 'ICODetail':
+                    const icoDetails = navState.params && navState.params.ico || {}
+                    return (
+                        <View style={{
+                            flexDirection: 'row',
+                            alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
+                            alignItems: 'center',
+                            flex:1
+                        }}>
+                            <Image
+                                key={icoDetails.symbol}
+                                source={{ uri: getTokenImage(icoDetails.tokenId) }}
+                                style={{width: 20, height: 20, borderRadius: 5}}
+                            />
+                            <Text style={{color: '#fff', paddingLeft: 10}}>
+                                {icoDetails.name.split(" ")[0]}
+                            </Text>
+                        </View>
+                    )
+                case 'Token Details':
+                case 'Price Alert':
+                default:
+                    let headerText
+                    if (navState.params && navState.params.overrideHeaderText) {
+                        headerText = navState.params.overrideHeaderText
+                    } else if (WrappedComponent.getHeader) {
+                        return WrappedComponent.getHeader(navState)
+                    } else if (WrappedComponent.getHeaderText) {
+                        headerText = WrappedComponent.getHeaderText(navState)
+                    } else if (WrappedComponent.headerText) {
+                        headerText = WrappedComponent.headerText
+                    }else {
+                        headerText = navState.routeName
+                    }
+                    return (
+                        <Text
+                            style={{
+                                color: '#fff',
+                                fontSize: 16,
+                                fontFamily: 'Nunito-ExtraLight',
+                            }}
+                        >
+                            {headerText}
+                        </Text>
+                    )
+            }
+        }
+
         render() {
             const { navigation, portfolio } = this.props
             const { state: navState } = navigation
-            const headerText = navState &&
-                navState.params && navState.params.overrideHeaderText ||
-                navState.routeName
+            const headerBody = this.getHeaderBody()
             const toastProps = store && store.getState().ui.toastProps || {}
             const isTokenDetails = navState.routeName === 'Token Details' || navState.routeName === 'Price Alert'
             const tokenDetails = navState.params && navState.params.token || {}
-            const isICOdetails = navState.routeName === 'ICODetail'
-	        const icoDetails = navState.params && navState.params.ico || {}
             // Remove after: https://app.asana.com/0/425477633452716/477358357686745
             const showBackButton = [
                 'Token Details', 'Search', 'Price Alert', 'Add Address',
@@ -183,42 +237,16 @@ export const withDrawer = (WrappedComponent) => {
                                 </Button>
                             </Left>
                             <Body>
-                                {isICOdetails ? (
-	                                <View style={{
-		                                flexDirection: 'row',
-		                                alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
-		                                alignItems: 'center',
-		                                flex:1
-	                                }}>
-		                                <Image
-			                                key={icoDetails.symbol}
-			                                source={{ uri: getTokenImage(icoDetails.tokenId) }}
-			                                style={{width: 20, height: 20, borderRadius: 5}}
-		                                />
-		                                <Text style={{color: '#fff', paddingLeft: 10}}>
-			                                {icoDetails.name.split(" ")[0]}
-		                                </Text>
-	                                </View>
-	                                ) : (
-                                    <Text
-                                        style={{
-                                            color: '#fff',
-                                            fontSize: 16,
-                                            fontFamily: 'Nunito-ExtraLight',
-                                        }}
-                                    >
-                                        {headerText}
-                                    </Text>
-                                )}
+                                {headerBody}
                             </Body>
                             <Right>
                             {(false && isTokenDetails) ?
-                                <TouchableHighlight
+                                <TouchableWithoutFeedback
                                     style={{ justifyContent: "center", alignItems: "center", width: 60 }}
                                     onPress={()=>{shareTokenDetails(tokenDetails.symbol)}}
                                 >
                                     <Ionicons name="ios-share" size={28} color="white" />
-                                </TouchableHighlight>
+                                </TouchableWithoutFeedback>
                                 :
                                 (!noSearchButton) ?
                                     <Button

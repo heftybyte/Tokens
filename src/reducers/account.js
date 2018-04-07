@@ -477,7 +477,7 @@ export const removeBookmark = (news) => async (dispatch, getState) => {
 
 const initialState = {
     username: 'escobyte',
-    submissions: 20,
+    reputation: 20,
     followers: 200,
     following: 5,
     addresses : [],
