@@ -79,7 +79,7 @@ class News extends React.Component {
   }
 
   render() {
-    let { trackFeedItem, accountId, feed } = this.props
+    let { trackFeedItem, accountId, feed, style } = this.props
       feed = [...feed]
     if (feed && feed.length === 1) {
       feed.push(this.state.endCard)
@@ -98,7 +98,7 @@ class News extends React.Component {
       feed[0].id && trackFeedView(accountId, feed[0].id)
     }
     return feedCards.length && (
-      <Animated.View style={{height: this.state.heightAnim }}>
+      <Animated.View style={[{height: this.state.heightAnim }, style||{}]}>
         <Swiper
           loop={false}
           index={0}

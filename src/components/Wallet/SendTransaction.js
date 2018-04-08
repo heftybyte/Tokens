@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { WebView, Alert, TouchableHighlight } from 'react-native';
+import { Image, WebView, Alert, TouchableHighlight } from 'react-native';
 import QRButton from '../Common/QRButton'
 import { NavigationActions } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -58,12 +58,27 @@ const customStyles = {
         fontSize: 12,
         textAlign: 'center',
         marginBottom: 20
+    },
+    image: {
+        width: 20,
+        height: 20,
+        borderRadius: 5,
+        marginRight: 5
     }
 }
 
 class SendTransaction extends Component {
 
-    static getHeaderText = (navState) => `Send ${navState.params.currencyName}`
+    static getHeader = (navState) => {
+        const { currencyName, image } = navState.params
+        console.log({ currencyName, image })
+        return (
+            <View style={{flex:1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                <Image style={customStyles.image} source={{uri: image}}></Image>
+                <Text style={{color: '#fff'}}>{ currencyName }</Text>
+            </View>
+        )
+    }
 
     state = {
         showAdvanced: false,
@@ -72,19 +87,6 @@ class SendTransaction extends Component {
         quantity: 0,
         gas: 21000,
         data: null
-    }
-
-    onScanAddress = (address) => {
-        this.setState({
-            recipient: address
-        })
-    }
-
-    onSaveScan = (address) => {
-        console.log({address})
-        this.setState({
-            showScanner: false
-        })
     }
 
     send = () => {
@@ -106,22 +108,21 @@ class SendTransaction extends Component {
                 <Container>
                     <Content>    
                         <View style={customStyles.header}>
-                            <Text style={[styles.heading, customStyles.heading]}>Sending {currencyName} From</Text>
+                            <Text style={[styles.heading, customStyles.heading]}>Sending {currencySymbol} From</Text>
                             <Text style={customStyles.input}>{id}</Text>
                         </View>
 
                         <View style={[customStyles.header, {flex: 1, borderBottomWidth: 0}]}>
-                            <Text style={[styles.heading, customStyles.heading, { paddingBottom: 0}]}>Sending {currencyName} To</Text>
+                            <Text style={[styles.heading, customStyles.heading, { paddingBottom: 0}]}>Sending {currencySymbol} To</Text>
                             <Input
                                  style={customStyles.input}
-                                 placeholder="Enter Recipient Address"
+                                 placeholder="Enter or Scan Recipient Address"
                                  value={recipient}
-                                 onChangeText={(address)=>{this.setState({recipient: address})}}
+                                 onChangeText={recipient=>this.setState({ recipient })}
                              />
                             <QRButton
-                                style={{paddingTop: 10, alignSelf: 'flex-end'}}
-                                onChangeText={this.onScanAddress}
-                                saveAddress={this.onSaveScan}
+                                style={{alignSelf: 'flex-end'}}
+                                onScan={recipient=>this.setState({ recipient })}
                             />
                         </View>
                         <View style={[customStyles.header, {flex: 1}]}>

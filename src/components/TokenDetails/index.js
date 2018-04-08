@@ -219,7 +219,7 @@ class TokenDetails extends Component {
     const { id } = navigation.state.params
     const { menuOpen } = this.state
     const tokenDetails = navigation.state.params && navigation.state.params.token || {} 
-
+    const image = getTokenImage(tokenDetails.id)
     if (props && props.isWatching === this.props.isWatching) {
       return
     }
@@ -227,7 +227,6 @@ class TokenDetails extends Component {
     this.menuItems = [
       {
         name: "Buy",
-        params: { platform: "ethereum" },
         icon: 'credit-card',
         Component: SimpleLineIcons,
         params: { type: 'exchange_account' },
@@ -235,30 +234,44 @@ class TokenDetails extends Component {
       },
       {
         name: "Sell",
-        params: { platform: "ethereum" },
         icon: 'cursor',
-        params: { type: 'exchange_account' },
+        params: { type: 'exchange_account', image },
         Component: SimpleLineIcons,
         route: "Select Account"
       },
       {
         name: "Send",
         icon: 'arrow-right-circle',
-        params: { type: 'wallet', platform: 'ethereum', action: 'send', contractAddress: tokenDetails.address, currencyName: tokenDetails.name, currencySymbol: tokenDetails.symbol },
+        params: { 
+          type: 'wallet',
+          platform: 'ethereum',
+          action: 'send',
+          contractAddress: tokenDetails.address, 
+          currencyName: tokenDetails.name,
+          currencySymbol: tokenDetails.symbol,
+          image
+        },
         Component: SimpleLineIcons,
         route: "Select Account"
       },
       {
         name: "Recieve",
-        params: { platform: "ethereum", type: 'address', action: 'recieve' },
         icon: 'arrow-left-circle',
-        params: { type: 'wallet', platform: 'ethereum', action: 'recieve', contractAddress: tokenDetails.address, currencyName:tokenDetails.name, currencySymbol: tokenDetails.symbol },
+        params: {
+          type: 'wallet',
+          platform: 'ethereum',
+          action: 'recieve',
+          contractAddress: tokenDetails.address,
+          currencyName:tokenDetails.name,
+          currencySymbol: tokenDetails.symbol,
+          image
+        },
         Component: SimpleLineIcons,
         route: "Select Account"
       },
       {
         name: isWatching ? "Unwatch" : "Watch",
-        params: { platform: "ethereum" },
+        params: { platform: "ethereum", image },
         icon: 'eye',
         Component: SimpleLineIcons,
         onPress: () =>{console.log('onPress watch', isWatching); isWatching ? removeFromWatchList(symbol, token) : addToWatchlist(symbol, token) }
@@ -276,7 +289,7 @@ class TokenDetails extends Component {
           }}>
               <Image
                 key={tokenDetails.symbol}
-                source={{ uri: getTokenImage(tokenDetails.id) }}
+                source={{ uri: image }}
                 style={{width: 20, height: 20, borderRadius: 5}}
               />
               <Text style={{color: '#fff', paddingHorizontal: 10}}>
@@ -297,10 +310,10 @@ class TokenDetails extends Component {
         toValue: menuOpen ? 1 : this.menuItems.length * 75
       }
     ).start()
-    this.updateHeader()
     this.setState({
       menuOpen: !menuOpen
     })
+    this.updateHeader()
   }
 
   render() {
@@ -352,18 +365,20 @@ class TokenDetails extends Component {
           />
         }
       >
-        <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
-          <Menu
-            onPress={this.toggleMenu}
-            navigation={navigation}
-            items={this.menuItems}
-            baseColor={baseColor}
-            brandColor={brandColor}
-            baseAccent={baseAccent}
-            style={{flex: 1}}
-            listMargin={20}
-          />
-        </Animated.View>
+        <View style={{zIndex:1}}>
+          <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
+            <Menu
+              onPress={this.toggleMenu}
+              navigation={navigation}
+              items={this.menuItems}
+              baseColor={baseColor}
+              brandColor={brandColor}
+              baseAccent={baseAccent}
+              style={{flex: 1}}
+              listMargin={20}
+            />
+          </Animated.View>
+        </View>
         <Header
           style={[styles.header]}
           totalValue={displayPrice}
@@ -455,7 +470,7 @@ class TokenDetails extends Component {
                 style={[styles.tokenValue, {fontSize: 15,textAlign: 'left', paddingTop: 5}]}>
                   {description}
                   </Text>
-                {description.length > maxDescDisplayLength && (<TouchableWithoutFeedback
+                {description.length > maxDescDisplayLength && (<TouchableHighlight
                     onPress={() => this.setState({readMore: !this.state.readMore})}
                     style={{marginTop: 7}}>
                   <Text
@@ -463,14 +478,14 @@ class TokenDetails extends Component {
                   >
                       { this.state.readMore?'Close':'Read more' }
                   </Text>
-                </TouchableWithoutFeedback>)
+                </TouchableHighlight>)
                 }
           </View>:null}
         </View>
 
         <View style={[styles.container, styles.linkContainer]}>
           <View style={{flexDirection: 'row'}}>
-            {!!website && <TouchableWithoutFeedback
+            {!!website && <TouchableHighlight
                   onPress={()=>{
                     Linking.openURL(website).catch(
                       err => console.error('An error occurred', err));
@@ -483,8 +498,8 @@ class TokenDetails extends Component {
                     color="white"
                     backgroundColor="black"
                   />
-                </TouchableWithoutFeedback>}
-            {!!twitter && <TouchableWithoutFeedback
+                </TouchableHighlight>}
+            {!!twitter && <TouchableHighlight
                   onPress={()=>{
                     Linking.openURL(twitter).catch(
                       err => console.error('An error occurred', err));
@@ -497,8 +512,8 @@ class TokenDetails extends Component {
                     color="white"
                     backgroundColor="black"
                   />
-                </TouchableWithoutFeedback>}
-            {!!reddit && <TouchableWithoutFeedback
+                </TouchableHighlight>}
+            {!!reddit && <TouchableHighlight
                   onPress={()=>{
                     Linking.openURL(reddit).catch(
                       err => console.error('An error occurred', err));
@@ -511,7 +526,7 @@ class TokenDetails extends Component {
                     color="white"
                     backgroundColor="black"
                   />
-                </TouchableWithoutFeedback>}
+                </TouchableHighlight>}
           </View>
         {!!videoUrl && <View style={[styles.container, {paddingLeft:0,paddingRight:20,paddingBottom:10, marginTop: 20}]}>
               {showVideoCover && <TouchableHighlight

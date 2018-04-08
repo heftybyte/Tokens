@@ -9,6 +9,9 @@ const styles = StyleSheet.create({
   container: {
     width,
     height: 300,
+    flex: 1,
+    flexDirection: 'row',
+    alignSelf: 'center'
   },
   text: {
     color: '#fff',

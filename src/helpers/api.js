@@ -78,6 +78,11 @@ export const addAccountWalletAddress = async (id, address, platform) => {
   return res.data
 }
 
+export const addExchangeAccount = async ({ id, apiKey, secretKey, name, passphrase, platform }) => {
+  const res = await instance.post(`/accounts/${id}/exchangeAccounts`, { apiKey, secretKey, name, passphrase, platform })
+  return res.data
+}
+
 export const deleteAccountWalletAddress = async(id, address) => {
     const res = await instance.delete(`/accounts/${id}/wallets/${address}`)
     return res.data
