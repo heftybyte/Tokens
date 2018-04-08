@@ -20,7 +20,8 @@ class Settings extends Component {
     onChange(page='security') {
 
         const {
-            goToFingerprintPage
+            goToFingerprintPage,
+            navigate
         } = this.props
 
         switch (page){
@@ -29,6 +30,9 @@ class Settings extends Component {
                 break;
             case 'two-auth':
                 break;
+            case 'profile':
+                navigate('Edit Profile')
+                break;
         }
     }
 
@@ -36,6 +40,17 @@ class Settings extends Component {
         return(
             <Container>
                 <Content>
+                    <List>
+                        <ListItem itemHeader first>
+                            <Text style={styles.white}>Profile Settings</Text>
+                        </ListItem>
+                        <ListItem onPress={()=>{this.onChange('profile')}} noBorder>
+                            <Body>
+                                <Text style={styles.white}>Update Profile Info</Text>
+                                <Text style={styles.grey}>Image, Username, Password, Email..etc</Text>
+                            </Body>
+                        </ListItem>
+                    </List>
                     <List>
                         <ListItem itemHeader first>
                             <Text style={styles.white}>Device settings</Text>

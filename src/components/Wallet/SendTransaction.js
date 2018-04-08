@@ -134,7 +134,7 @@ class SendTransaction extends Component {
                              />
                         </View>
                         <TouchableHighlight onPress={()=>this.setState({ showAdvanced: !showAdvanced })}>
-                            <Text style={customStyles.showAdvanced}>Show Advanced</Text>
+                            <Text style={customStyles.showAdvanced}>{showAdvanced ? 'Hide' : 'Show'} Advanced</Text>
                         </TouchableHighlight>
                        {showAdvanced &&
                         <View style={[customStyles.header, {flex: 1}]}>

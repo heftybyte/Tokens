@@ -244,7 +244,7 @@ class TokenDetails extends Component {
       {
         name: "Send",
         icon: 'arrow-right-circle',
-        params: { type: 'address', platform: 'ethereum', action: 'send', contractAddress: tokenDetails.address, currencyName: tokenDetails.name, currencySymbol: tokenDetails.symbol },
+        params: { type: 'wallet', platform: 'ethereum', action: 'send', contractAddress: tokenDetails.address, currencyName: tokenDetails.name, currencySymbol: tokenDetails.symbol },
         Component: SimpleLineIcons,
         route: "Select Account"
       },
@@ -252,7 +252,7 @@ class TokenDetails extends Component {
         name: "Recieve",
         params: { platform: "ethereum", type: 'address', action: 'recieve' },
         icon: 'arrow-left-circle',
-        params: { type: 'address' },
+        params: { type: 'wallet', platform: 'ethereum', action: 'recieve', contractAddress: tokenDetails.address, currencyName:tokenDetails.name, currencySymbol: tokenDetails.symbol },
         Component: SimpleLineIcons,
         route: "Select Account"
       },
