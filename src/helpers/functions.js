@@ -111,6 +111,10 @@ export const getQueryString = (params) => {
 
 export const getTokenImage = (symbol) => `${baseURL}/img/tokens/${symbol}.png`
 
+export const getBlockchainImage = (name) => `${baseURL}/img/blockchains/${name.toLowerCase().replace(/\.|\-/g, '')}-icon.png`
+
+export const getExchangeImage = (name) => `${baseURL}/img/exchanges/${name.toLowerCase().replace(/\.|\-/g, '')}-icon.png`
+
 export const shareTokenDetails = (symbol) => {
     let link = `https://api.tokens.express/share/${symbol}`
     let content = { url: link, message: `${link}`}

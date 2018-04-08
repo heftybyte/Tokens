@@ -51,7 +51,7 @@ class QRScanner extends React.Component {
 
 }
 
-QRScanner.PropTypes = {
+QRScanner.propTypes = {
     scannerOpen: PropTypes.bool.isRequired,
     handleBarCodeRead: PropTypes.func.isRequired
 };

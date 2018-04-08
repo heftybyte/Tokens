@@ -29,7 +29,7 @@ const customStyles = {
     },
     input: {
         color: '#fff',
-        fontSize: 12,
+        fontSize: 16,
         borderColor: baseAccent,
         borderBottomWidth: 1,
         paddingLeft: 10
@@ -70,19 +70,18 @@ const customStyles = {
 class NewExchangeAccount extends Component {
 
     static getHeader = (navState) => {
-        const { platform, image } = navState.params
-        console.log({ platform, image })
+        const { name, image } = navState.params
         return (
             <View style={{flex:1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                <Image style={customStyles.image} source={image}></Image>
-                <Text style={{color: '#fff'}}>{ platform }</Text>
+                <Image style={customStyles.image} source={{uri: image}}></Image>
+                <Text style={{color: '#fff'}}>{ name }</Text>
             </View>
         )
     }
 
     state = {
-        apiKey: null,
-        secretKey: null,
+        key: null,
+        secret: null,
         name: null,
         passphrase: null,
         showScanner: false
@@ -90,11 +89,11 @@ class NewExchangeAccount extends Component {
 
     submit = () => {
         const { navigation, accountId } = this.props
-        const { platform } = navigation.state.params
-        const { apiKey, secretKey, name, passphrase } = this.state
+        const { platformId: exchangeId } = navigation.state.params
+        const { key, secret, name, passphrase } = this.state
 
-        console.log({ id: accountId, apiKey, secretKey, name, passphrase, platform })
-        addExchangeAccount({ id: accountId, apiKey, secretKey, name, passphrase, platform })
+        console.log({ id: accountId, key, secret, name, passphrase, exchangeId })
+        addExchangeAccount({ id: accountId, key, secret, name, passphrase, exchangeId })
     }
 
     render() {
@@ -117,11 +116,11 @@ class NewExchangeAccount extends Component {
                             <Input
                                  style={customStyles.input}
                                  placeholder="Enter or Scan API Key"
-                                 onChangeText={apiKey=>this.setState({ apiKey })}
+                                 onChangeText={key=>this.setState({ key })}
                              />
                             <QRButton
                                 style={{paddingTop: 10, alignSelf: 'flex-end'}}
-                                onScan={apiKey=>this.setState({ apiKey })}
+                                onScan={key=>this.setState({ key })}
                             />
                         </View>
 
@@ -130,7 +129,7 @@ class NewExchangeAccount extends Component {
                             <Input
                                  style={customStyles.input}
                                  placeholder="Enter Secret Key"
-                                 onChangeText={(secretKey)=>{this.setState({ secretKey })}}
+                                 onChangeText={(secret)=>{this.setState({ secret })}}
                              />
                         </View>
                         <View style={[customStyles.header, {flex: 1}]}>
