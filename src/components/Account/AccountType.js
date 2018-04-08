@@ -18,7 +18,7 @@ class AccountType extends Component {
   }
 
   render() {
-    const { navigation, exchangeList, blockchainMap } = this.props
+    const { navigation, exchangeList, blockchainList } = this.props
     const { type } = navigation.state.params
     const menuItems = {
       'wallet': blockchainList.map(b=>
