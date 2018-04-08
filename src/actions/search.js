@@ -22,7 +22,7 @@ export const fetchTokens = () => async(dispatch, getState) => {
     // if it's been fetched from AsyncStorage already don't try again.
     // if there's nothing in the storage fall back to redux store.
     const tokens = fetchedFromStorage ? stateTokens : await getTokensFromStorage(dispatch) || stateTokens;
-
+    
     // dispatch early so the user doesn't have to wait for the backend call.
     if(storedChecksum && storedChecksum !== stateChecksum) {
         dispatch(createFetchAllTokensAction(tokens, storedChecksum));

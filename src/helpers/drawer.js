@@ -123,7 +123,7 @@ export const withDrawer = (WrappedComponent) => {
                 case 'Token Details':
                 case 'Price Alert':
                 default:
-                    let headerText
+                    let headerText, fontSize = 16
                     if (navState.params && navState.params.overrideHeaderText) {
                         headerText = navState.params.overrideHeaderText
                     } else if (WrappedComponent.getHeader) {
@@ -135,11 +135,14 @@ export const withDrawer = (WrappedComponent) => {
                     }else {
                         headerText = navState.routeName
                     }
+                    if (headerText.length > 14) {
+                        fontSize = 14
+                    }
                     return (
                         <Text
                             style={{
                                 color: '#fff',
-                                fontSize: 16,
+                                fontSize: fontSize,
                                 fontFamily: 'Nunito-ExtraLight',
                             }}
                         >
@@ -160,7 +163,7 @@ export const withDrawer = (WrappedComponent) => {
             const showBackButton = [
                 'Token Details', 'Search', 'Price Alert', 'Add Address',
                 'ICO List', 'ICODetail', 'Education', 'Restore Wallet', 'New Wallet', 'Confirm Phrase', 'SetPin',
-                'SecuritySettings'
+                'SecuritySettings', 'Select Account', 'SendTransaction'
             ].indexOf(navState.routeName) > -1
 
             const noSearchButton = [
