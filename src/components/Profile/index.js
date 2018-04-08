@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
 
 const identicon = (str) => {
   const strHash = md5(str).toString();
-  const data = new Identicon(strHash, 150).toString()
+  const data = new Identicon(strHash, {size: 150,margin:.3, background: [51,51,51,100]}).toString()
   return `data:image/png;base64,${data}`;
 }
 

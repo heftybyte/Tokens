@@ -27,6 +27,7 @@ import { baseColor } from '../config'
 import Wallet from '../components/Wallet';
 import RestoreWallet from '../components/Wallet/RestoreWallet';
 import NewWallet from '../components/Wallet/NewWallet';
+import SendTransaction from '../components/Wallet/SendTransaction'
 import ConfirmPhrase from '../components/Wallet/ConfirmPhrase';
 import Settings from '../components/Settings';
 import SecuritySettings from '../components/Settings/SecuritySettings'
@@ -64,6 +65,7 @@ export const Routes = {
   'New Wallet': {screen: NewWallet},
   'Restore Wallet': {screen: RestoreWallet},
   'Confirm Phrase': {screen: ConfirmPhrase},
+  'SendTransaction': { screen: SendTransaction },
   'Price Alert': { screen: PriceAlert },
   'Profile': Profile,
   'Settings': {screen: Settings},

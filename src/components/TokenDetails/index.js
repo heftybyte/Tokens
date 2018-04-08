@@ -243,15 +243,14 @@ class TokenDetails extends Component {
       },
       {
         name: "Send",
-        params: { platform: "ethereum" },
         icon: 'arrow-right-circle',
-        params: { type: 'address' },
+        params: { type: 'address', platform: 'ethereum', action: 'send', contractAddress: tokenDetails.address, currencyName: tokenDetails.name, currencySymbol: tokenDetails.symbol },
         Component: SimpleLineIcons,
         route: "Select Account"
       },
       {
         name: "Recieve",
-        params: { platform: "ethereum" },
+        params: { platform: "ethereum", type: 'address', action: 'recieve' },
         icon: 'arrow-left-circle',
         params: { type: 'address' },
         Component: SimpleLineIcons,
