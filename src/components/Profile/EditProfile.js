@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     marginVertical: 20
   },
   btnText: {
-    color: '#fff'
+    color: '#000'
   }
 });
 

@@ -15,7 +15,8 @@ const Icons = {
 
 const AddScreens = {
   'address': 'Add Address',
-  'wallet': 'New Wallet'
+  'wallet': 'New Wallet',
+  'exchange_account': 'NewExchangeAccount'
 }
 
 const AccountSources = {
@@ -64,13 +65,20 @@ class AccountPicker extends Component {
     return accounts
   }
 
+  navigateToAddScreen = () => {
+    const { navigation, goToRoute } = this.props
+    const { type, platform, action } =  navigation.state.params
+    const routeName = platform ? AddScreens[type] : 'AccountType'
+    goToRoute(routeName, navigation.state.params)
+  }
+
   render() {
     const { navigation, addresses, goToRoute } = this.props
-    const { type, platform, action, contractAddress, currencyName, currencySymbol } =  navigation.state.params
+    const { type, platform, action, contractAddress, currencyName, currencySymbol, image } =  navigation.state.params
     const isTransaction = action === 'send' || action === 'recieve'
     const items = this.getAccounts(type, platform).map((acc)=>({
       name: `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
-      params: { id: acc.id, type, platform, contractAddress, currencyName, currencySymbol },
+      params: { id: acc.id, type, platform, contractAddress, currencyName, currencySymbol, image },
       route: isTransaction ? 'SendTransaction' : 'Account View',
       icon: Icons[type],
       Component: SimpleLineIcons   
@@ -93,7 +101,7 @@ class AccountPicker extends Component {
           style={{flex: 1}}
           listMargin={20}
         />
-        <TouchableHighlight onPress={()=>goToRoute(AddScreens[type])}>
+        <TouchableHighlight onPress={()=>this.navigateToAddScreen()}>
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}>
             <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
             <Text style={{ color: brandColor}}>add new {platform} {type.replace('_', ' ')}</Text>

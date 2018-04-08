@@ -216,6 +216,7 @@ const MenuItems = {
       ...e,
       params: {
         ...(e.params),
+        image: e.image,
         type: 'exchange_account'
       }
     })

@@ -10,8 +10,9 @@ import { lossColor, brandColor } from '../../config'
 const styles = StyleSheet.create({
     topContainer:{
       flex: 1,
-      alignItems: 'center',
-      justifyContent: 'flex-start'
+      width: '100%',
+      alignItems: 'flex-end',
+      justifyContent: 'flex-end'
     },
     accountLabel: {
       color: '#fff'
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
       borderColor: brandColor,
       justifyContent: 'center',
       alignItems: 'center',
+      alignSelf: 'flex-end',
       padding: 12,
       paddingHorizontal: 5,
       marginHorizontal: 10,
@@ -66,6 +68,7 @@ const styles = StyleSheet.create({
     },
     scanner: {
       flex: 1,
+      flexDirection: 'row',
       alignSelf: 'center'
     }
   });
@@ -75,12 +78,10 @@ class QRButton extends Component {
 
   state = {
     scannerOpen: false,
-    hasCameraPermission: false,
-    value: null
+    hasCameraPermission: false
   }
 
   async componentWillMount() {
-    const { value } = this.props
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({
       hasCameraPermission: status === 'granted'
@@ -95,27 +96,27 @@ class QRButton extends Component {
   }
 
   handleBarCodeRead = ({type, data}) => {
+    const { onScan } = this.props
+    onScan(data)
     this.toggleQRScanner();
-    this.setState({ value: data });
   }
 
   render() {
-    const { button, onChangeText, saveAddress, style } = this.props
+    const { button, style } = this.props
     const {
       scannerOpen,
-      value,
       hasCameraPermission
     } = this.state
     return (
       <View style={[styles.topContainer, style]}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginVertical: scannerOpen ? 20 : 10}}>
+          <View style={{flex: 1, flexDirection: 'row', alignSelf: 'center', alignItems: 'center', marginVertical: scannerOpen ? 20 : 10}}>
             <QRScanner 
               style={styles.scanner}
               scannerOpen={scannerOpen}
               handleBarCodeRead={this.handleBarCodeRead}
             />
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'stretch'}}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end'}}>
             <TouchableOpacity
               onPress={()=>{trackTap('ToggleQRScanner');this.toggleQRScanner()}}
               disabled={!hasCameraPermission}
@@ -123,8 +124,7 @@ class QRButton extends Component {
                   styles.buttonContainer
               ]}
             >
-              { 
-                <View style={{flex:1, alignItems: 'center', flexDirection: 'row', justifyContent: 'center'}}>
+                <View style={{flex:1, alignItems: 'center', flexDirection: 'row', justifyContent: 'flex-end'}}>
                   <MaterialCommunityIcons
                       name="qrcode-scan"
                       size={20}
@@ -133,7 +133,6 @@ class QRButton extends Component {
                     />
                   <Text style={[styles.buttonText]}>{scannerOpen ? 'CLOSE' :'SCAN'}</Text>
                 </View>
-              }
             </TouchableOpacity>
           </View>
       </View>
@@ -142,8 +141,7 @@ class QRButton extends Component {
 }
 
 QRButton.propTypes = {
-    onChangeText: PropTypes.func.isRequired,
-    saveAddress: PropTypes.func.isRequired,
+    onScan: PropTypes.func.isRequired
 }
 
 export default QRButton;

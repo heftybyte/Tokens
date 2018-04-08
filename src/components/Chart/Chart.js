@@ -59,7 +59,7 @@ class Chart extends Component {
     }
 
     render() {
-        const { data, totalChangePct, loading, onCursorChange } = this.props
+        const { data, totalChangePct, loading, onCursorChange, style } = this.props
         const opacity = loading ? .4 : 1
         const { pageX, isTouched } = this.state
         const cursorColor = isTouched ? '#555' : 'transparent'
@@ -68,7 +68,7 @@ class Chart extends Component {
             <View
                 onTouchMove={(e)=>this.onTouch(e, true)}
                 onTouchEnd={(e)=>this.onTouch(e, false)}
-                style={styles.container}
+                style={[styles.container, style || {}]}
             >
                 {loading && <ActivityIndicator style={styles.spinner} size="large" color="#fff" />}
                 {!loading && !data.length && <Text style={styles.msg}>- No Data -</Text>}

@@ -202,7 +202,7 @@ class Dashboard extends Component {
           <RangeSelector onChange={this.props.getPortfolioChart} />
         */}
 
-        <News feed={this.props.newsFeed} />
+        <News style={{marginHorizontal: 20}} feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
         <View>

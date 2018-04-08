@@ -16,27 +16,27 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     flexDirection: 'row',
-    paddingBottom: 20,
+    paddingBottom: 10,
     paddingHorizontal: 20,
     paddingTop: 5
   },
   imageContainer: {
-    flexDirection: 'row',
-    flex: .4,
-    justifyContent: 'center'
+    flex: .3,
+    justifyContent: 'center',
   },
   image: {
     width: 90,
     height: 90,
+    alignSelf: 'center',
     borderRadius: 45
   },
   userMetadata: {
-    flex: .60,
-    marginLeft: 'auto'
+    flex: .7,
+    paddingLeft: 10
   },
   username: {
     color: '#fff',
-    marginBottom: 10,
+    marginVertical: 10,
     fontSize: 16,
     fontWeight: 'bold'
   },
@@ -44,51 +44,53 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12
   },
+  userDescriptionContainer: {
+    marginHorizontal: 30,
+    paddingBottom: 10,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderColor: baseAccent
+  },
   headerBtnContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 15
   },
   headerBtn: {
     flex: .5,
-    paddingVertical: 10,
-    marginHorizontal: 15,
+    justifyContent: 'center',
+    paddingVertical: 5,
+    marginHorizontal: 5,
     borderColor: brandColor,
     borderWidth: 1,
-    borderRadius: 2
+    borderRadius: 2,
+    height: 30
   },
   headerBtnText: {
     color: brandColor,
-    fontSize: 14,
-    fontWeight: 'bold',
+    fontSize: 10,
     textAlign: 'center'
   },
   metaContainer: {
     flex: 1,
-    flexDirection: 'row',
-    borderColor: '#333',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    marginTop: 15,
-    marginBottom: 20,
-    marginHorizontal: 20
+    flexDirection: 'row'
   },
   metaItem: {
     flex: .33,
+    height: 50,
     padding: 5,
     marginVertical: 5,
     alignItems: 'center'
   },
   metaLabel: {
     color: '#fff',
-    fontSize: 10,
-    fontWeight: 'bold',
-    paddingBottom: 5
+    fontSize: 8
   },
   metaMid: {
-    borderRightWidth: 1,
-    borderLeftWidth: 1,
-    borderColor: '#333'
+    // borderLeftWidth: 1,
+    // borderRightWidth: 1,
+    // borderColor: "#444"
   },
   metaValue: {
     color: '#fff',
@@ -111,60 +113,59 @@ const ProfileHeader = ({username, reputation, followers, following, style}) => (
         </View>
 
         <View style={styles.userMetadata}>
-          <Text style={styles.username}>@{username}</Text>
-          <Text style={styles.userDescription}>
-            Cryptocurrency investor, advisor and evangelist. Let's make some magic internet money.
-          </Text>
+          <View style={styles.metaContainer}>
+            <TouchableHighlight style={styles.metaItem}>
+              <View>
+                <Text style={styles.metaValue}>
+                {reputation}
+                </Text>
+                <Text style={styles.metaLabel}>
+                  REPUTATION
+                </Text>
+              </View>
+            </TouchableHighlight>
+
+            <TouchableHighlight style={[styles.metaItem, styles.metaMid]}>
+              <View>
+                <Text style={styles.metaValue}>
+                {followers}
+                </Text>
+                <Text style={styles.metaLabel}>
+                  FOLLOWERS
+                </Text>
+              </View>
+            </TouchableHighlight>
+
+            <TouchableHighlight style={styles.metaItem}>
+              <View>
+                <Text style={styles.metaValue}>
+                {following}
+                </Text>
+                <Text style={styles.metaLabel}>
+                  FOLLOWING
+                </Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+          <View style={styles.headerBtnContainer}>
+            <TouchableHighlight  style={styles.headerBtn} onPress={()=>{}}>
+                <Text style={styles.headerBtnText}>Message</Text>
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.headerBtn} onPress={()=>{}}>
+                <Text style={styles.headerBtnText}>Follow</Text>
+            </TouchableHighlight>
+          </View>
         </View>
     </View>
 
-    <View style={styles.headerBtnContainer}>
-      <TouchableHighlight  style={styles.headerBtn} onPress={()=>{}}>
-        <View>
-          <Text style={styles.headerBtnText}>Message</Text>
-        </View>
-      </TouchableHighlight>
-      <TouchableHighlight style={styles.headerBtn} onPress={()=>{}}>
-        <View>
-          <Text style={styles.headerBtnText}>Follow</Text>
-        </View>
-      </TouchableHighlight>
+    <View style={styles.userDescriptionContainer}>
+      <Text style={styles.username}>@{username}</Text>
+      <Text style={styles.userDescription}>
+        Cryptocurrency investor, advisor and evangelist. Let's make some magic internet money.
+      </Text>
     </View>
 
-    <View style={styles.metaContainer}>
-      <TouchableHighlight style={styles.metaItem}>
-        <View>
-          <Text style={styles.metaLabel}>
-            REPUTATION
-          </Text>
-          <Text style={styles.metaValue}>
-          {reputation}
-          </Text>
-        </View>
-      </TouchableHighlight>
-
-      <TouchableHighlight style={[styles.metaItem, styles.metaMid]}>
-        <View>
-          <Text style={styles.metaLabel}>
-            FOLLOWERS
-          </Text>
-          <Text style={styles.metaValue}>
-          {followers}
-          </Text>
-        </View>
-      </TouchableHighlight>
-
-      <TouchableHighlight style={styles.metaItem}>
-        <View>
-          <Text style={styles.metaLabel}>
-            FOLLOWING
-          </Text>
-          <Text style={styles.metaValue}>
-          {following}
-          </Text>
-        </View>
-      </TouchableHighlight>
-    </View>
+    {}
   </View>
 )
 

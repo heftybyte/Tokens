@@ -29,6 +29,7 @@ import RestoreWallet from '../components/Wallet/RestoreWallet';
 import NewWallet from '../components/Wallet/NewWallet';
 import SendTransaction from '../components/Wallet/SendTransaction'
 import ConfirmPhrase from '../components/Wallet/ConfirmPhrase';
+import NewExchangeAccount from '../components/ExchangeAccount/NewExchangeAccount';
 import Settings from '../components/Settings';
 import SecuritySettings from '../components/Settings/SecuritySettings'
 import SetPin from '../components/Settings/SecuritySettings/setpin';
@@ -66,6 +67,7 @@ export const Routes = {
   'Restore Wallet': {screen: RestoreWallet},
   'Confirm Phrase': {screen: ConfirmPhrase},
   'SendTransaction': { screen: SendTransaction },
+  'NewExchangeAccount': { screen: NewExchangeAccount },
   'Price Alert': { screen: PriceAlert },
   'Profile': Profile,
   'Settings': {screen: Settings},
