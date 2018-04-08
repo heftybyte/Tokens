@@ -49,7 +49,7 @@ export const styles = {
         borderRadius: 25
     },
     textDefault: {
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: 'Raleway'
     },
     imageLeft: {
