@@ -30,7 +30,7 @@ export const ListItem = (navigation, brandColor, baseAccent, margin, globalOnPre
               Component ? (
                 <Component name={icon} size={20} color={color || brandColor} />
               ) : image ? (
-                <Image source={image} style={{width: 30, height: 30}} />
+                <Image source={{ uri: image}} style={{width: 30, height: 30}} />
               ) : <Icon name={icon} size={20} color={color || brandColor} />
             }
           </View>}

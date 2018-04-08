@@ -78,14 +78,19 @@ export const addAccountWalletAddress = async (id, address, platform) => {
   return res.data
 }
 
-export const addExchangeAccount = async ({ id, apiKey, secretKey, name, passphrase, platform }) => {
-  const res = await instance.post(`/accounts/${id}/exchangeAccounts`, { apiKey, secretKey, name, passphrase, platform })
-  return res.data
-}
-
 export const deleteAccountWalletAddress = async(id, address) => {
     const res = await instance.delete(`/accounts/${id}/wallets/${address}`)
     return res.data
+}
+
+export const addExchangeAccount = async ({ id, key, secret, name, passphrase, exchangeId }) => {
+  const res = await instance.post(`/accounts/${id}/exchangeAccounts`, { key, secret, name, passphrase, exchangeId })
+  return res.data
+}
+
+export const deleteExchangeAccount = async(id, exchangeAccountId) => {
+  const res = await instance.delete(`/accounts/${id}/exchangeAccounts/${exchangeAccountId}`)
+  return res.data
 }
 
 export const refreshAccountAddress = async (id, address) => {
@@ -163,6 +168,16 @@ export const getGasPrices = async () => {
   const url = "https://ethgasstation.info/json/ethgasAPI.json";
   const res = await instance.get(url)
   return res.data
+}
+
+export const getBlockchains = async () => {
+    const res = await instance.get(`/Blockchains`)
+    return res.data;
+}
+
+export const getExchanges = async () => {
+    const res = await instance.get(`/Exchanges`)
+    return res.data;
 }
 
 const log = (level) => (message, data) => {

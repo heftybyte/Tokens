@@ -3,7 +3,6 @@ import {showToast } from './ui'
 import {
     getError,
 } from '../helpers/functions'
-import { AsyncStorage } from 'react-native'
 
 export const types = {
     GET_NEWS_FEED: 'GET_NEWS_FEED',

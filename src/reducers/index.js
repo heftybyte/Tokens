@@ -7,6 +7,9 @@ import ui from './ui';
 import feed from './feed';
 import ticker from './ticker'
 import security from './security'
+import blockchains from './blockchains'
+import exchanges from './exchanges'
+
 import { AppNavigator } from '../navigators/AppNavigator';
 
 // Start with two routes: The Dashboard screen, with the Login screen on top.
@@ -53,7 +56,9 @@ const AppReducer = combineReducers({
   ui,
   feed,
   ticker,
-  security
+  security,
+  blockchains,
+  exchanges
 });
 
 export default AppReducer;

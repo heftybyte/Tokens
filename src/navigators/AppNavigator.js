@@ -30,6 +30,7 @@ import NewWallet from '../components/Wallet/NewWallet';
 import SendTransaction from '../components/Wallet/SendTransaction'
 import ConfirmPhrase from '../components/Wallet/ConfirmPhrase';
 import NewExchangeAccount from '../components/ExchangeAccount/NewExchangeAccount';
+import NewExchangeOrder from '../components/ExchangeAccount/NewExchangeOrder';
 import Settings from '../components/Settings';
 import SecuritySettings from '../components/Settings/SecuritySettings'
 import SetPin from '../components/Settings/SecuritySettings/setpin';
@@ -68,6 +69,7 @@ export const Routes = {
   'Confirm Phrase': {screen: ConfirmPhrase},
   'SendTransaction': { screen: SendTransaction },
   'NewExchangeAccount': { screen: NewExchangeAccount },
+  'NewExchangeOrder': { screen: NewExchangeOrder },
   'Price Alert': { screen: PriceAlert },
   'Profile': Profile,
   'Settings': {screen: Settings},

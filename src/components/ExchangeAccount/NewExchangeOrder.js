@@ -34,9 +34,6 @@ const customStyles = {
         borderBottomWidth: 1,
         paddingLeft: 10
     },
-    addressInput: {
-        fontSize: 12
-    },
     qrContainer: {
         flexDirection: 'row',
         alignSelf: 'flex-end',
@@ -70,7 +67,19 @@ const customStyles = {
     }
 }
 
-class SendTransaction extends Component {
+const OrderTypes = {
+    'MARKET': 'market',
+    'LIMIT': 'limit',
+    'STOP_LOSS': 'stop_loss',
+    'STOP_LIMIT': 'stop_limit'
+}
+
+const ActionText = {
+    'buy': 'Buying',
+    'sell': 'Selling'
+}
+
+class NewExchangeOrder extends Component {
 
     static getHeader = (navState) => {
         const { currencyName, image } = navState.params
@@ -85,11 +94,10 @@ class SendTransaction extends Component {
 
     state = {
         showAdvanced: false,
-        showScanner: false,
-        recipient: null,
         quantity: 0,
-        gas: 21000,
-        data: null
+        orderType: OrderTypes.MARKET,
+        limit: null,
+        stop: null
     }
 
     send = () => {
@@ -103,37 +111,54 @@ class SendTransaction extends Component {
 
     render() {
         const { navigation } = this.props
-        const { data, gas, quantity, recipient, showAdvanced, showScanner } = this.state
-        const { id, currencyName, currencySymbol } = navigation.state.params
-        console.log('re', recipient)
+        const { limit, stop, quantity, orderType, showAdvanced } = this.state
+        const {
+            name,
+            id,
+            currencyName,
+            currencySymbol,
+            action,
+            exchangeName,
+            exchangeImage,
+            price
+        } = navigation.state.params
+        const actionText = ActionText[action]
+        console.log({exchangeImage})
         return (
             <StyleProvider style={getTheme(platform)}>
                 <Container>
                     <Content>    
                         <View style={customStyles.header}>
-                            <Text style={[styles.heading, customStyles.heading]}>Sending {currencySymbol} From</Text>
-                            <Text style={[customStyles.input, customStyles.addressInput]}>{id}</Text>
+                            <Text style={[styles.heading, customStyles.heading]}>{actionText} {currencySymbol} From</Text>
+                            <View style={{flex: 1, flexDirection: 'row', paddingLeft: 10, alignItems: 'center'}}>
+                                <Image source={{ uri: exchangeImage}} style={customStyles.image} />
+                                <Text style={customStyles.input}>{ exchangeName }</Text>
+                                <Text style={customStyles.input, { paddingLeft: 5, fontSize: 14, color: '#999'}}>{name || id}</Text>
+                            </View>
                         </View>
 
-                        <View style={[customStyles.header, {flex: 1, borderBottomWidth: 0}]}>
-                            <Text style={[styles.heading, customStyles.heading, { paddingBottom: 0}]}>Sending {currencySymbol} To</Text>
+                        <View style={[customStyles.header, {flex: 1}]}>
+                            <Text style={[styles.heading, customStyles.heading, { paddingBottom: 0}]}>Market Price</Text>
                             <Input
-                                 style={[customStyles.input, customStyles.addressInput]}
-                                 placeholder="Enter or Scan Recipient Address"
-                                 value={recipient}
-                                 onChangeText={recipient=>this.setState({ recipient })}
+                                 style={customStyles.input}
+                                 value={`$${price}`}
+                                 onChangeText={(quantity)=>{this.setState({ quantity })}}
                              />
-                            <QRButton
-                                style={{alignSelf: 'flex-end'}}
-                                onScan={recipient=>this.setState({ recipient })}
-                            />
                         </View>
                         <View style={[customStyles.header, {flex: 1}]}>
                             <Text style={[styles.heading, customStyles.heading, { paddingBottom: 0}]}>Quantity ({currencySymbol})</Text>
                             <Input
                                  style={customStyles.input}
                                  placeholder="Enter Quantity"
-                                 value={quantity}
+                                 value={quantity.toString()}
+                                 onChangeText={(quantity)=>{this.setState({ quantity })}}
+                             />
+                        </View>
+                        <View style={[customStyles.header, {flex: 1}]}>
+                            <Text style={[styles.heading, customStyles.heading, { paddingBottom: 0}]}>Estimated Total</Text>
+                            <Input
+                                 style={customStyles.input}
+                                 value={`$${quantity*price}`}
                                  onChangeText={(quantity)=>{this.setState({ quantity })}}
                              />
                         </View>
@@ -167,7 +192,7 @@ class SendTransaction extends Component {
                                 title={"continue"}
                                 block
                                 onPress={() => { this.send() }}>
-                                <Text style={{color: '#000'}}>Send</Text>
+                                <Text style={{color: '#000'}}>Submit Order</Text>
                             </Button>
                         </View>
                     </Content>
@@ -187,4 +212,4 @@ const mapDispatchToProps = (dispatch) => {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(SendTransaction));
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(NewExchangeOrder));

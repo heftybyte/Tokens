@@ -30,6 +30,8 @@ import {
     safeAlert,
     removeArrItem
 } from '../helpers/functions'
+import { getBlockchains } from './blockchains'
+import { getExchanges } from './exchanges'
 import { setLoading, showToast } from './ui'
 export const REGISTER = 'account/REGISTER'
 export const LOGIN = 'account/LOGIN'
@@ -185,6 +187,8 @@ export const login = (params) => async (dispatch, getState) => {
     registerForPushNotificationsAsync()
     dispatch(getPortfolio())
     dispatch(getPortfolioChart())
+    dispatch(getBlockchains())
+    dispatch(getExchanges())
 
     // const url = Linking.getInitialURL().catch(e=>err=e)
     // if (err) {
