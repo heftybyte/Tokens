@@ -71,11 +71,12 @@ const _createEtherWallet = async(publicKey) => {
     return wallet
 }
 
-export const send = async (type='ether', publicKey, recipient, amount, contractAddress=null) => {
+const ETH_CONTRACT = '0x0000000000000000000000000000000000000000'
+export const send = async ({publicKey, recipient, amount, contractAddress=ETH_CONTRACT, gas=21000}) => {
     const wallet = await _createEtherWallet(publicKey);
     let transaction = null
     let err = null
-
+    const type = contractAddress === ETH_CONTRACT ? 'ether' : 'tokens'
     switch(type) {
         case 'ether':
             transaction = await _sendEther(wallet, recipient, amount).catch(e=>err=e)

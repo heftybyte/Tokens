@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, View, TouchableHighlight } from "react-native"
+import { ScrollView, StyleSheet, Text, View, TouchableHighlight } from "react-native"
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer'
@@ -24,6 +24,28 @@ const AccountSources = {
   'exchange_account': 'exchangeAccounts'
 }
 
+const styles = StyleSheet.create({
+  header: {
+      borderColor: baseAccent,
+      borderWidth: 1,
+      paddingHorizontal: 20,
+      paddingVertical: 10
+  },
+  heading: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: brandColor
+  },
+  subHeading: {
+      color: '#999',
+      fontSize: 12,
+      paddingVertical: 10
+  },
+  title: {
+      fontSize: 36,
+      color: brandColor
+  }
+})
 class AccountPicker extends Component {
 
   componentWillMount = () => {
@@ -44,18 +66,24 @@ class AccountPicker extends Component {
 
   render() {
     const { navigation, addresses, goToRoute } = this.props
-    const { type, platform } =  navigation.state.params
-
+    const { type, platform, action, contractAddress, currencyName, currencySymbol } =  navigation.state.params
+    const isTransaction = action === 'send' || action === 'recieve'
     const items = this.getAccounts(type, platform).map((acc)=>({
       name: `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
-      params: { id: acc.id, type, platform },
-      route: 'Account View',
+      params: { id: acc.id, type, platform, contractAddress, currencyName, currencySymbol },
+      route: isTransaction ? 'SendTransaction' : 'Account View',
       icon: Icons[type],
       Component: SimpleLineIcons   
     }))
 
     return (
       <ScrollView style={{flex:1}}>
+       {isTransaction && 
+          <View style={styles.header}>
+            <Text style={styles.heading}>Select Wallet</Text>
+            <Text style={styles.subHeading}>Choose one of your wallets for this transaction</Text>
+          </View>
+       }
         <Menu
           navigation={navigation}
           items={items}
