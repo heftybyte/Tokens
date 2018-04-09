@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   addBtnText: {
     textAlign: 'center',
-    color: '#fff'
+    color: '#000'
   },
   addBtnIcon: {
     marginRight: 10
@@ -165,7 +165,7 @@ class Dashboard extends Component {
                 style={styles.addBtnIcon}
                 name="plus-circle-outline"
                 size={22}
-                color="white"
+                color="black"
               />
               <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
             </View>
@@ -221,7 +221,7 @@ class Dashboard extends Component {
                   style={styles.addBtnIcon}
                   name="plus-circle-outline"
                   size={22}
-                  color="white"
+                  color="black"
                 />
                 <Text style={styles.addBtnText}>Add Tokens to Your Watchlist</Text>
               </View>

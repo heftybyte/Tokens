@@ -5,6 +5,9 @@ import { NavigationActions } from 'react-navigation';
 import { StyleSheet, View, AsyncStorage, Alert, TouchableHighlight, } from 'react-native';
 import { Container, Header, Content, ListItem, Text, Radio, Footer, Button, CheckBox, Body, Right, List} from 'native-base';
 
+import { trackTap } from '../../helpers/analytics'
+import { logout as _logout } from '../../reducers/account';
+
 const styles = StyleSheet.create({
     white: {
         color: '#fff',
@@ -37,6 +40,7 @@ class Settings extends Component {
     }
 
     render () {
+        const { logout } = this.props
         return(
             <Container>
                 <Content>
@@ -67,6 +71,11 @@ class Settings extends Component {
                                 <Text style={styles.grey}>Disabled</Text>
                             </Body>
                         </ListItem>
+                        <ListItem onPress={()=>{trackTap('Logout');logout()}} noBorder>
+                            <Body>
+                                <Text style={styles.white}>Logout</Text>
+                            </Body>
+                        </ListItem>
                     </List>
                 </Content>
             </Container>
@@ -84,6 +93,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         goToFingerprintPage: (params={}) => dispatch(NavigationActions.navigate({ routeName: 'SecuritySettings', params })),
+        logout: () => { dispatch(_logout()) }
     }
 }
 

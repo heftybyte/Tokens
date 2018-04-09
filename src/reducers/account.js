@@ -4,7 +4,7 @@ import { Amplitude, Permissions, SecureStore } from 'expo'
 import { Linking } from 'react-native'
 import {
     loginAccount,
-    registerAccount,
+    registerAccount as _registerAccount,
     setAuthHeader,
     getAccountPortfolio,
     getAccountPortfolioChart,
@@ -131,19 +131,18 @@ const addWalletAddressAction = (wallets) => ({
     data: {wallets}
 })
 
-export const createAccount = (params) => async (dispatch, getState) => {
+export const registerAccount = (params) => async (dispatch, getState) => {
     let err = null
-    const newAccount = await registerAccount(params).catch(e=>err=e)
+    const newAccount = await _registerAccount(params).catch(e=>err=e)
     if (err) {
-        console.log('createAccount', err)
+        console.log('registerAccount', err)
         dispatch(showToast(getError(err)))
         return
     }
     await SecureStore.setItemAsync('id', newAccount.id)
-    const pseudonymType = 'email'
+    const pseudonymType = 'username'
     await AsyncStorage.setItem('pseudonym', JSON.stringify({ type: pseudonymType, value: params[pseudonymType] }))
     dispatch(registerAction(newAccount.id))
-    dispatch(login(params))
 }
 
 export const login = (params) => async (dispatch, getState) => {

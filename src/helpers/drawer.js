@@ -3,7 +3,6 @@ import { View, TouchableWithoutFeedback, Text, Platform, Alert, Image, Dimension
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { Ionicons, MaterialCommunityIcons, Entypo, FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import Drawer from "react-native-drawer"
-import { observer } from "mobx-react/native"
 import { Button, Header as NBHeader, Left, Body, Right, Content } from "native-base"
 import { Constants } from 'expo'
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -155,7 +154,8 @@ export const withDrawer = (WrappedComponent) => {
         render() {
             const { navigation, portfolio } = this.props
             const { state: navState } = navigation
-            const headerBody = this.getHeaderBody()
+            const hideHeader = !!WrappedComponent.hideHeader
+            const headerBody = hideHeader ? null : this.getHeaderBody()
             const toastProps = store && store.getState().ui.toastProps || {}
             const isTokenDetails = navState.routeName === 'Token Details' || navState.routeName === 'Price Alert'
             const tokenDetails = navState.params && navState.params.token || {}
@@ -163,11 +163,12 @@ export const withDrawer = (WrappedComponent) => {
             const showBackButton = [
                 'Token Details', 'Search', 'Price Alert', 'Add Address',
                 'ICO List', 'ICODetail', 'Education', 'Restore Wallet', 'New Wallet', 'Confirm Phrase', 'SetPin',
-                'SecuritySettings', 'Select Account', 'SendTransaction', 'Edit Profile', 'NewExchangeAccount', 'NewExchangeOrder'
+                'SecuritySettings', 'Select Account', 'SendTransaction', 'Edit Profile', 'NewExchangeAccount', 'NewExchangeOrder',
+                'SignUp', 'Login'
             ].indexOf(navState.routeName) > -1
 
             const noSearchButton = [
-                'Restore Wallet', 'New Wallet', 'Confirm Phrase'
+                'Restore Wallet', 'New Wallet', 'Confirm Phrase', 'SignUp', 'Login'
             ].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X
@@ -196,75 +197,77 @@ export const withDrawer = (WrappedComponent) => {
                     <View
                         style={{
                             flex: 1,
-                            backgroundColor: baseColor
+                            backgroundColor: baseColor,
+                            paddingTop: hideHeader ? 40 : 0
                         }}
                     >
-                        <NBHeader
-                        style={{
-                            backgroundColor: baseColor,
-                            borderBottomWidth: 0,
-                            shadowOffset: { height: 0, width: 0 },
-                            shadowOpacity: 0,
-                            paddingTop: Platform.OS  === 'ios' ? iphoneHeaderHeight : Constants.statusBarHeight ,
-                            height: 80
-                        }}
-                        androidStatusBarColor={baseColor}
-                        noShadow
-                        >
-                            <Left style={
-                                Platform.OS === 'ios' ? {} : {flex: .4}
-                            }>
-                                <Button
-                                style={{
-                                    justifyContent: "center",
-                                    alignItems: Platform.OS === 'ios' ? "center" : "flex-start",
-                                    width: 60,
-                                }}
-                                transparent
-                                onPress={ showBackButton ?
-                                    ()=>{trackTap('Menu:Back'); store.dispatch(NavigationActions.back())} :
-                                    ()=>{trackTap('Menu'); this.openDrawer()}
+                        {!hideHeader && <NBHeader
+                            style={{
+                                backgroundColor: baseColor,
+                                borderBottomWidth: 0,
+                                shadowOffset: { height: 0, width: 0 },
+                                shadowOpacity: 0,
+                                paddingTop: Platform.OS  === 'ios' ? iphoneHeaderHeight : Constants.statusBarHeight ,
+                                height: 80
+                            }}
+                            androidStatusBarColor={baseColor}
+                            noShadow
+                            >
+                                <Left style={
+                                    Platform.OS === 'ios' ? {} : {flex: .4}
                                 }>
-                                    {showBackButton ?
-                                        <Ionicons
-                                            name={Platform.OS === 'ios' ? "ios-arrow-back" : "md-arrow-back"}
-                                            size={26}
-                                            color="white"
-                                            backgroundColor="black"
-                                            /> :
-                                        <MaterialCommunityIcons
-                                            name="menu"
-                                            size={26}
-                                            color="white"
-                                            backgroundColor="black"
-                                            />}
-                                </Button>
-                            </Left>
-                            <Body>
-                                {headerBody}
-                            </Body>
-                            <Right>
-                            {(false && isTokenDetails) ?
-                                <TouchableWithoutFeedback
-                                    style={{ justifyContent: "center", alignItems: "center", width: 60 }}
-                                    onPress={()=>{shareTokenDetails(tokenDetails.symbol)}}
-                                >
-                                    <Ionicons name="ios-share" size={28} color="white" />
-                                </TouchableWithoutFeedback>
-                                :
-                                (!noSearchButton) ?
                                     <Button
-                                        style={{ justifyContent: "center", alignItems: "center", width: 60 }}
-                                        transparent
-                                        onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
-                                    >
-                                        <Ionicons name="ios-search-outline" size={28} color="white" />
+                                    style={{
+                                        justifyContent: "center",
+                                        alignItems: Platform.OS === 'ios' ? "center" : "flex-start",
+                                        width: 60,
+                                    }}
+                                    transparent
+                                    onPress={ showBackButton ?
+                                        ()=>{trackTap('Menu:Back'); store.dispatch(NavigationActions.back())} :
+                                        ()=>{trackTap('Menu'); this.openDrawer()}
+                                    }>
+                                        {showBackButton ?
+                                            <Ionicons
+                                                name={Platform.OS === 'ios' ? "ios-arrow-back" : "md-arrow-back"}
+                                                size={26}
+                                                color="white"
+                                                backgroundColor="black"
+                                                /> :
+                                            <MaterialCommunityIcons
+                                                name="menu"
+                                                size={26}
+                                                color="white"
+                                                backgroundColor="black"
+                                                />}
                                     </Button>
-                                :
-                                    false
-                            }
-                            </Right>
-                        </NBHeader>
+                                </Left>
+                                <Body>
+                                    {headerBody}
+                                </Body>
+                                <Right>
+                                {(false && isTokenDetails) ?
+                                    <TouchableWithoutFeedback
+                                        style={{ justifyContent: "center", alignItems: "center", width: 60 }}
+                                        onPress={()=>{shareTokenDetails(tokenDetails.symbol)}}
+                                    >
+                                        <Ionicons name="ios-share" size={28} color="white" />
+                                    </TouchableWithoutFeedback>
+                                    :
+                                    (!noSearchButton) ?
+                                        <Button
+                                            style={{ justifyContent: "center", alignItems: "center", width: 60 }}
+                                            transparent
+                                            onPress={()=>{trackTap('Search');navigation.dispatch({type: 'Search'})}}
+                                        >
+                                            <Ionicons name="ios-search-outline" size={28} color="white" />
+                                        </Button>
+                                    :
+                                        false
+                                }
+                                </Right>
+                            </NBHeader>
+                        }
                         <Spinner
                             visible={this.props.isLoading}
                             textContent={this.props.loadText||''}

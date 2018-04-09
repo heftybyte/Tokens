@@ -18,7 +18,9 @@ import { Chat } from "../components/Chat"
 import Profile from '../components/Profile';
 import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';
-import Register, { NormalRegistration, GuestRegistration } from '../components/Register';
+import Register from '../components/Register';
+import SignUp from '../components/Register/SignUp';
+import Login from '../components/Register/Login';
 import PriceAlert from '../components/PriceAlert';
 import EditProfile from '../components/Profile/EditProfile';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
@@ -52,16 +54,15 @@ export const Routes = {
   },
   Education: { screen: Education },
   Entry: { screen: Entry },
-  NormalRegistration: { screen: NormalRegistration },
-  GuestRegistration: { screen: GuestRegistration },
-  Login: { screen: NormalRegistration },
   'Account View': { screen: AccountDashboard },
   'Select Account': { screen: AccountPicker },
   Accounts : { screen: ViewAccounts },
   'Add Address': { screen: AddAddress },
   Search: { screen: Search },
   Bookmarks: { screen: BookMarks },
-  Register: { screen: Register },
+  'Register': { screen: Register },
+  'SignUp': { screen: SignUp },
+  'Login': { screen: Login },
   'Token Details': { screen: TokenDetails },
   'Wallet': { screen: Wallet},
   'New Wallet': {screen: NewWallet},
