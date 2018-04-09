@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { Alert, Image, TouchableHighlight, TouchableWithoutFeedback, WebView } from 'react-native';
-import QRButton from '../Common/QRButton'
+import { Alert, Image, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
-import { baseAccent, baseColor, brandColor, lossColor } from '../../config'
-import { View, Container, Header, Content, ListItem, Input,Text,
-    Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form, StyleProvider } from 'native-base';
-import { addExchangeAccount } from '../../helpers/api';
+import { baseColor, brandColor } from '../../config'
+import { View, Container, Header, Content, Input, Text, Button, StyleProvider } from 'native-base';
 import { withDrawer } from '../../helpers/drawer';
-import { SecureStore} from 'expo'
-import { constants } from '../../constants';
 import { connect } from 'react-redux';
 import getTheme from '../../../native-base-theme/components';
 import _platform from '../../../native-base-theme/variables/platform';
