@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import { Alert, Image, TouchableHighlight, TouchableWithoutFeedback, WebView } from 'react-native';
-import QRButton from '../Common/QRButton'
 import { NavigationActions } from 'react-navigation';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { baseAccent, baseColor, brandColor, lossColor } from '../../config'
-import { View, Container, Header, Content, ListItem, Input,Text,
-    Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form, StyleProvider } from 'native-base';
-import { addExchangeAccount } from '../../helpers/api';
+import { baseAccent, brandColor } from '../../config'
+import { View, Container, Header, Content, Input, Text, Button, StyleProvider } from 'native-base';
 import { withDrawer } from '../../helpers/drawer';
-import { SecureStore} from 'expo'
-import { constants } from '../../constants';
 import { connect } from 'react-redux';
 import getTheme from '../../../native-base-theme/components';
 import _platform from '../../../native-base-theme/variables/platform';
@@ -34,31 +29,6 @@ const customStyles = {
         borderColor: baseAccent,
         borderBottomWidth: 1,
         paddingLeft: 10
-    },
-    qrContainer: {
-        flexDirection: 'row',
-        alignSelf: 'flex-end',
-        backgroundColor: 'transparent',
-        borderRadius: 5,
-        borderColor: brandColor,
-        borderWidth: 1,
-        paddingVertical: 10,
-        marginTop: 10
-    },
-    qrButton: {
-        flex: .3,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    qrButtonText: {
-        color: brandColor,
-    },
-    showAdvanced: {
-        color: brandColor,
-        fontSize: 12,
-        textAlign: 'center',
-        marginBottom: 20
     },
     image: {
         width: 20,
