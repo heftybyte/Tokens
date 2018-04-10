@@ -37,6 +37,9 @@ import NewExchangeOrder from '../components/ExchangeAccount/NewExchangeOrder';
 import Settings from '../components/Settings';
 import SecuritySettings from '../components/Settings/SecuritySettings'
 import SetPin from '../components/Settings/SecuritySettings/setpin';
+import TwoFactorAuth from '../components/Settings/TwoFactorAuth';
+import ConfirmTwoFactorAuth from '../components/Settings/TwoFactorAuth/ConfirmTwoFactorAuth';
+
 
 import {
   createReduxBoundAddListener,
@@ -77,6 +80,8 @@ export const Routes = {
   'Settings': {screen: Settings},
   'SecuritySettings': {screen: SecuritySettings},
   'SetPin': {screen: SetPin},
+  'Two Factor Authentication': {screen: TwoFactorAuth},
+  'Confirm Two Factor': {screen: ConfirmTwoFactorAuth},
   'ICO List': {
     screen: ICOs
   },

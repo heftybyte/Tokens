@@ -109,6 +109,7 @@ class SetPin extends Component {
                                             placeholderTextColor={'#333'}
                                             placeholder={'Enter Old Pin'}
                                             autoCapitalize={'characters'}
+                                            maxLength={4}
                                         />
                                     </View>
                                     : <View />
@@ -124,6 +125,7 @@ class SetPin extends Component {
                                     placeholderTextColor={'#333'}
                                     placeholder={'Enter New Pin'}
                                     secureTextEntry
+                                    maxLength={4}
                                 />
                                 <Label style={styles.white}>Confirm Pin</Label>
                                 <TextInput
@@ -134,6 +136,7 @@ class SetPin extends Component {
                                     style={styles.input}
                                     onChangeText={(text)=>{  this.setState({confirmPin: text}); }}
                                     value={this.state.confirmPin}
+                                    maxLength={4}
                                 />
                         </Form>
                         {

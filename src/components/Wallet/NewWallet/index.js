@@ -44,7 +44,7 @@ class NewWallet extends Component {
                             />
                         
                         <View style={styles.header}>
-                            <Text style={styles.heading}>Confirm Backup Phrase</Text>
+                            <Text style={styles.heading}>Backup Phrase</Text>
                             
                             <Text style={styles.subHeading}>
                                 This phrase gives access to your wallet funds and as such should not be shared with anyone. It will be encrypted and stored on your physical device. This never gets sent to our servers. We will not be able to recover it for you if you lose it.
