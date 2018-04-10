@@ -1,4 +1,5 @@
 app.json
+app.staging.json
 app.bak
 node_modules/
 .expo/

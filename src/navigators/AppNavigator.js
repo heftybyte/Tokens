@@ -14,7 +14,7 @@ import AccountPicker from '../components/Account/AccountPicker'
 import AddAddress from '../components/Account/AddAddress';
 import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
-import { Chat } from "../components/Chat"
+import Chat from "../components/Chat/Chat"
 import Profile from '../components/Profile';
 import Search from '../components/Search';
 import BookMarks from '../components/NewsFeed/BookMark';

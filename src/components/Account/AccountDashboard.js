@@ -121,18 +121,20 @@ class AccountDashboard extends Component {
 
     return (
       <View>
-        <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
-          <Menu
-            onPress={this.toggleMenu}
-            navigation={navigation}
-            items={this.menuItems}
-            baseColor={baseColor}
-            brandColor={brandColor}
-            baseAccent={baseAccent}
-            style={{flex: 1}}
-            listMargin={20}
-          />
-        </Animated.View>
+        <View style={{zIndex: 1}}>
+          <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
+            <Menu
+              onPress={this.toggleMenu}
+              navigation={navigation}
+              items={this.menuItems}
+              baseColor={baseColor}
+              brandColor={brandColor}
+              baseAccent={baseAccent}
+              style={{flex: 1}}
+              listMargin={20}
+            />
+          </Animated.View>
+        </View>
         <Dashboard
           id={id}
           type={type}
