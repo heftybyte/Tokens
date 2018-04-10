@@ -80,7 +80,7 @@ class Backend {
   }
 
   setRef = (name) => {
-    this.messagesRef = firebase.database().ref(`chats/${name}`);
+    this.messagesRef = firebase.database().ref(`chats/${name}/messages`);
     this.messagesRef.off();
   }
 

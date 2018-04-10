@@ -58,9 +58,11 @@ class Chat extends Component {
 		  navigation
 		} = props || this.props
 		token = token || defaultToken
-		const { id } = navigation.state.params
 		const { menuOpen } = this.state
-		let { token } = navigation.state.params || {} 
+		let { id, token } = navigation.state.params || {} 
+		if (!token) {
+			return
+		}
 		const image = getTokenImage(token.id)
 		const fontSize = (token.name || token.symbol).length >= 14 ?
 			14 : 16

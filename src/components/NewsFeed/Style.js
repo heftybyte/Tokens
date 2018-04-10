@@ -6,7 +6,8 @@ export const styles = {
         height: 130,
         borderTopWidth: 1,
         borderBottomWidth: 1,
-        borderColor: baseAccent
+        borderColor: baseAccent,
+        marginHorizontal: 10
     },
     slide: {
         backgroundColor: baseColor,
@@ -14,7 +15,6 @@ export const styles = {
         height:130,
         maxHeight:130,
         borderWidth: 0,
-        paddingHorizontal: 10,
         paddingVertical: 5,
         flex: 1
     },
