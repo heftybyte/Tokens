@@ -41,8 +41,8 @@ const customStyles = {
         marginVertical: 10
     },
     image: {
-        width: 192,
-        height: 169.6
+        width: 150,
+        height: 132.5
     },
     buttonContainer: {
         flex: .4,

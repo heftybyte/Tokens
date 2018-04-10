@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { Animated, Easing, Image, Platform, View, Text, TouchableHighlight, TouchableWithoutFeedback } from "react-native"
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { GiftedChat } from 'react-native-gifted-chat'
-import KeyboardSPacer from "react-native-keyboard-spacer"
+import KeyboardSpacer from "react-native-keyboard-spacer"
 import { Menu } from '../Common/Menu'
 import { baseAccent, baseColor, brandColor } from '../../config'
 import { withDrawer } from '../../helpers/drawer'
@@ -168,8 +168,8 @@ class Chat extends Component {
 					flex: 1
 				}}
 			>
-				<View style={{zIndex:1}}>
-				  <Animated.View style={{height: this.state.menuHeight, overflow: 'hidden'}}>
+				<View style={{zIndex:2}}>
+				  <Animated.View style={{height: this.state.menuHeight, overflow: 'hidden', position: 'absolute', width: '100%'}}>
 					<Menu
 					  onPress={this.toggleMenu}
 					  navigation={this.props.navigation}
@@ -190,7 +190,7 @@ class Chat extends Component {
 						name: this.props.username
 					}}
 				/>
-				<KeyboardSPacer />
+				<KeyboardSpacer />
 			</View>
 		)
 	}
