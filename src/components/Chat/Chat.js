@@ -19,6 +19,7 @@ const defaultToken = {
 	name: 'Tokens Express',
 	id: 'tke'
 }
+
 class Chat extends Component {
 
 	static getHeader = (navState) => {
@@ -53,23 +54,21 @@ class Chat extends Component {
 		menuOpen: false
 	}
 
-	updateHeader = (props) => {
+	updateHeader = () => {
 		const {
 		  navigation
-		} = props || this.props
+		} = this.props
+		let { id, token } = navigation.state.params || {} 
 		token = token || defaultToken
 		const { menuOpen } = this.state
-		let { id, token } = navigation.state.params || {} 
-		if (!token) {
-			return
-		}
 		const image = getTokenImage(token.id)
 		const fontSize = (token.name || token.symbol).length >= 14 ?
-			14 : 16
+			13 : 16
+
 		this.menuItems = [
 		  {
-			name: "Buy",
-			icon: 'credit-card',
+			name: "Join",
+			icon: 'plus',
 			Component: SimpleLineIcons,
 			params: {
 			  type: 'exchange_account',
@@ -80,11 +79,11 @@ class Chat extends Component {
 			  currencySymbol: token.symbol,
 			  price: token.price
 			},
-			route: "Select Account"
+			// route: "Select Account"
 		  },
 		  {
-			name: "Sell",
-			icon: 'cursor',
+			name: "Invite",
+			icon: 'people',
 			params: {
 			  type: 'exchange_account', image,
 			  action: 'sell',
@@ -94,37 +93,7 @@ class Chat extends Component {
 			  price: token.price
 			},
 			Component: SimpleLineIcons,
-			route: "Select Account"
-		  },
-		  {
-			name: "Send",
-			icon: 'arrow-right-circle',
-			params: { 
-			  type: 'wallet',
-			  platform: 'ethereum',
-			  action: 'send',
-			  contractAddress: token.address, 
-			  currencyName: token.name,
-			  currencySymbol: token.symbol,
-			  image
-			},
-			Component: SimpleLineIcons,
-			route: "Select Account"
-		  },
-		  {
-			name: "Recieve",
-			icon: 'arrow-left-circle',
-			params: {
-			  type: 'wallet',
-			  platform: 'ethereum',
-			  action: 'recieve',
-			  contractAddress: token.address,
-			  currencyName:token.name,
-			  currencySymbol: token.symbol,
-			  image
-			},
-			Component: SimpleLineIcons,
-			route: "Select Account"
+			// route: "Select Account"
 		  }
 		]
 
@@ -152,6 +121,7 @@ class Chat extends Component {
 	}
 
 	toggleMenu = () => {
+		this.updateHeader()  
 		// TODO Refactor into base or sub component 
 		const { menuOpen, menuHeight } = this.state
 		Animated.timing(
@@ -164,11 +134,6 @@ class Chat extends Component {
 		this.setState({
 		  menuOpen: !menuOpen
 		})
-		this.updateHeader()
-	}
-
-	componentWillReceiveProps = (nextProps) => {
-		this.updateHeader(nextProps)  
 	}
 
 	componentWillMount = async () => {
@@ -176,7 +141,6 @@ class Chat extends Component {
 		Backend.setRef(token && token.symbol || 'TKE')
 		await Backend.authenticate(userId)
 		this.updateHeader()
-		console.log('uid', Backend.getUid())
 	}
 
 	componentDidMount() {

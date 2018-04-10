@@ -92,7 +92,7 @@ class News extends React.Component {
           </View>
       )
     })
-    const paginationLeft = window.width - (125)
+    const paginationLeft = window.width - (175)
 
     if (feedCards.length) {
       feed[0].id && trackFeedView(accountId, feed[0].id)
