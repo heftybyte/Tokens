@@ -105,7 +105,7 @@ const identicon = (str) => {
   return `data:image/png;base64,${data}`;
 }
 
-const ProfileHeader = ({username, reputation, followers, following, style}) => (
+const ProfileHeader = ({username, description, reputation, followers, following, style}) => (
     <View>
       <View style={[styles.mainContainer, style||{}]}>
         <View style={styles.imageContainer}>
@@ -160,12 +160,11 @@ const ProfileHeader = ({username, reputation, followers, following, style}) => (
 
     <View style={styles.userDescriptionContainer}>
       <Text style={styles.username}>@{username}</Text>
-      <Text style={styles.userDescription}>
-        Cryptocurrency investor, advisor and evangelist. Let's make some magic internet money.
-      </Text>
+      {description &&
+        <Text style={styles.userDescription}>
+          {description}
+        </Text>}
     </View>
-
-    {}
   </View>
 )
 
@@ -200,6 +199,7 @@ class Profile extends Component {
       portfolio,
       portfolioChart,
       username,
+      description,
       reputation,
       following,
       followers
@@ -221,6 +221,7 @@ class Profile extends Component {
             style={{flex: .1}}
             reputation={reputation}
             username={username}
+            description={description}
             followers={followers}
             following={following}
           />
@@ -242,6 +243,7 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => ({
   username: state.account.username,
+  description: state.account.description,
   reputation: state.account.reputation,
   followers: state.account.followers,
   following: state.account.following,

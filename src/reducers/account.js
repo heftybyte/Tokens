@@ -1,6 +1,7 @@
 import { Alert, AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { Amplitude, Permissions, SecureStore } from 'expo'
+import firebase from 'firebase'
 import { Linking } from 'react-native'
 import {
     loginAccount,
@@ -223,6 +224,7 @@ export const logout = () => async(dispatch, getState) => {
     await SecureStore.deleteItemAsync('token')
     await SecureStore.deleteItemAsync('id')
     await AsyncStorage.removeItem('account')
+    await firebase.auth().signOut()
     dispatch(logoutAction())
     const resetAction = NavigationActions.reset({
         index: 0,
@@ -498,9 +500,10 @@ export const removeBookmark = (news) => async (dispatch, getState) => {
 
 const initialState = {
     username: 'escobyte',
-    reputation: 20,
-    followers: 200,
-    following: 5,
+    description: '',
+    reputation: 1,
+    followers: 0,
+    following: 0,
     addresses : [],
     wallets: [],
     exchangeAccounts: [],
