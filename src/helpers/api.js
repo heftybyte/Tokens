@@ -180,6 +180,11 @@ export const getExchanges = async () => {
     return res.data;
 }
 
+export const getFirebaseAuthToken = async (id) => {
+    const res = await instance.get(`/accounts/${id}/firebase-auth-token`)
+    return res.data;
+}
+
 const log = (level) => (message, data) => {
     console.log({ message, data, level })
     instance.post('/client-logs', { message, data, level })

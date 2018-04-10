@@ -23,6 +23,12 @@ const Items = [
         Component: SimpleLineIcons
     },
     {
+        name: "Chat",
+        icon: "bubbles",
+        route: "Chat",
+        Component: SimpleLineIcons
+    },
+    {
         name: "Wallets",
         icon: "wallet",
         route: "AccountType",
@@ -48,13 +54,7 @@ const Items = [
         icon: "settings",
         route: "Settings",
         Component: SimpleLineIcons
-    },
-	/*
-    {
-        name: "Chat",
-        icon: "account-circle",
-        route: "Chat"
-    },
+    }/*,
     {
 		name: "ICO List",
 		icon: "fire",
@@ -134,7 +134,9 @@ export const withDrawer = (WrappedComponent) => {
                     }else {
                         headerText = navState.routeName
                     }
-                    if (headerText.length > 14) {
+                    if (headerText.length >= 14) {
+                        fontSize = 13
+                    } else if (headerText.length >= 10) {
                         fontSize = 14
                     }
                     return (
