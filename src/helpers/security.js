@@ -21,3 +21,4 @@ export const deletePin = async() => {
     const result = await SecureStore.deleteItemAsync(key)
     return result
 }
+

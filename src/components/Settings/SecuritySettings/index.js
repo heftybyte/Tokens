@@ -170,7 +170,7 @@ const mapDispatchToProps = (dispatch) => {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         enableFingerprint: () => dispatch(enableFingerprint()),
         enablePin: () => dispatch(enablePin()),
-        disablePin: ()=>dispatch(disablePin()),
+        disablePin: () => dispatch(disablePin()),
         goToSetPinPage: (routeName='SetPin', params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
     }
 }

@@ -24,6 +24,7 @@ class Settings extends Component {
 
         const {
             goToFingerprintPage,
+            goToTwoFactorAuthPage,
             navigate
         } = this.props
 
@@ -32,6 +33,7 @@ class Settings extends Component {
                 goToFingerprintPage();
                 break;
             case 'two-auth':
+                goToTwoFactorAuthPage();
                 break;
             case 'profile':
                 navigate('Edit Profile')
@@ -44,6 +46,14 @@ class Settings extends Component {
 
     render () {
         const { logout, preference } = this.props
+        const {
+            logout,
+            preference,
+            hasPinEnabled,
+            hasFingerprintEnabled,
+            hasTwoFactorAuthEnabled,
+        } = this.props
+
         return(
             <Container>
                 <Content>
@@ -75,13 +85,26 @@ class Settings extends Component {
                         <ListItem onPress={()=>{this.onChange('security')}} noBorder>
                             <Body>
                                 <Text style={styles.white}>Security Settings</Text>
-                                <Text style={styles.grey}>Fingerprint</Text>
+                                {
+                                    (hasPinEnabled)?
+                                        <Text style={styles.grey}>Pin</Text>
+                                        :
+                                        (hasFingerprintEnabled) ?
+                                            <Text style={styles.grey}>Fingerprint</Text>
+                                            :
+                                            <Text style={styles.grey}>None</Text>
+                                }
                             </Body>
                         </ListItem>
-                        <ListItem noBorder>
+                        <ListItem onPress={()=>{this.onChange('two-auth')}} noBorder>
                             <Body>
                                 <Text style={styles.white}>Two-factor authentication</Text>
-                                <Text style={styles.grey}>Disabled</Text>
+                                {
+                                    (!hasTwoFactorAuthEnabled) ?
+                                    <Text style={styles.grey}>Disabled</Text>
+                                    :
+                                    <Text style={styles.grey}>Enabled</Text>
+                                }
                             </Body>
                         </ListItem>
                         <ListItem onPress={()=>{trackTap('Logout');logout()}} noBorder>
@@ -100,6 +123,9 @@ const mapStateToProps = (state) => ({
     portfolio: state.account.portfolio,
     preference: state.account.preference,
     wallets: state.account.wallets,
+    hasPinEnabled: state.account.hasPinEnabled,
+    hasFingerprintEnabled: state.account.hasFingerprintEnabled,
+    hasTwoFactorAuthEnabled: state.account.hasTwoFactorAuthEnabled,
     ...state.ui
 })
 
@@ -107,7 +133,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         goToFingerprintPage: (params={}) => dispatch(NavigationActions.navigate({ routeName: 'SecuritySettings', params })),
-        logout: () => { dispatch(_logout()) }
+        logout: () => { dispatch(_logout()) },
+        goToTwoFactorAuthPage:(params={}) => dispatch(NavigationActions.navigate({ routeName: 'Two Factor Authentication', params })),
     }
 }
 

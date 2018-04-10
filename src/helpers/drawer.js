@@ -177,6 +177,7 @@ export const withDrawer = (WrappedComponent) => {
 
             const noSearchButton = [
                 'Restore Wallet', 'New Wallet', 'Confirm Phrase', 'SignUp', 'Login'
+                'TwoFactorAuth', 'Confirm Two Factor'
             ].indexOf(navState.routeName) > -1
 
             // add top padding for iphone X

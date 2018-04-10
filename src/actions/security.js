@@ -16,3 +16,10 @@ export const disableFingerprint = () => ({
     type: types.DISABLE_FINGERPRINT
 })
 
+export const enableTwoFactorAuthAction = () => ({
+	type: types.ENABLE_TWO_FACTOR_AUTH
+})
+
+export const disableTwoFactorAuthAction = () => ({
+	type: types.DISABLE_TWO_FACTOR_AUTH
+})
