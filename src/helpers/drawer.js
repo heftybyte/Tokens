@@ -172,12 +172,11 @@ export const withDrawer = (WrappedComponent) => {
                 'Token Details', 'Search', 'Price Alert', 'Add Address',
                 'ICO List', 'ICODetail', 'Education', 'Restore Wallet', 'New Wallet', 'Confirm Phrase', 'SetPin',
                 'SecuritySettings', 'Select Account', 'SendTransaction', 'Edit Profile', 'NewExchangeAccount', 'NewExchangeOrder',
-                'SignUp', 'Login', 'Set Currency'
+                'Confirm 2FA', '2FA', 'Set Currency'
             ].indexOf(navState.routeName) > -1
 
             const noSearchButton = [
-                'Restore Wallet', 'New Wallet', 'Confirm Phrase', 'SignUp', 'Login'
-                'TwoFactorAuth', 'Confirm Two Factor',
+                'Restore Wallet', 'New Wallet', 'Confirm Phrase', 'SignUp', 'Login',
                 'SecuritySettings', 'Select Account', 'SendTransaction', 'Edit Profile', 'NewExchangeAccount',
                     'NewExchangeOrder', 'Confirm 2FA', '2FA'
             ].indexOf(navState.routeName) > -1
