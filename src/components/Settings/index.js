@@ -123,9 +123,9 @@ const mapStateToProps = (state) => ({
     portfolio: state.account.portfolio,
     preference: state.account.preference,
     wallets: state.account.wallets,
-    hasPinEnabled: state.account.hasPinEnabled,
-    hasFingerprintEnabled: state.account.hasFingerprintEnabled,
-    hasTwoFactorAuthEnabled: state.account.hasTwoFactorAuthEnabled,
+    hasPinEnabled: state.security.hasPinEnabled,
+    hasFingerprintEnabled: state.security.hasFingerprintEnabled,
+    hasTwoFactorAuthEnabled: state.security.hasTwoFactorAuthEnabled,
     ...state.ui
 })
 
@@ -133,8 +133,12 @@ const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         goToFingerprintPage: (params={}) => dispatch(NavigationActions.navigate({ routeName: 'SecuritySettings', params })),
+<<<<<<< HEAD
         logout: () => { dispatch(_logout()) },
         goToTwoFactorAuthPage:(params={}) => dispatch(NavigationActions.navigate({ routeName: 'Two Factor Authentication', params })),
+=======
+        goToTwoFactorAuthPage:(params={}) => dispatch(NavigationActions.navigate({ routeName: '2FA', params })),
+>>>>>>> updated ui
     }
 }
 

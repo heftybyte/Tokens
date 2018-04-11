@@ -4,10 +4,11 @@ import { withDrawer } from '../../../helpers/drawer';
 import { NavigationActions } from 'react-navigation';
 import { StyleSheet, View, AsyncStorage, Alert, TouchableHighlight, Platform } from 'react-native';
 import { Container, Header, Content, ListItem, Text, Radio, Footer, Button, CheckBox, Body, Right, List} from 'native-base';
-import { Fingerprint } from 'expo'
-import { getPin, deletePin } from '../../../helpers/security'
-import { enableFingerprint, enablePin, disablePin, disableFingerprint } from '../../../actions/security';
+import { disablePin, disableFingerprint } from '../../../actions/security';
 import { enableTwoFactorAuth } from '../../../reducers/security';
+import { disableTwoFactorAuthAction } from '../../../actions/security';
+
+
 import { brandColor } from '../../../config'
 
 const styles = StyleSheet.create({  
@@ -27,20 +28,16 @@ class TwoFactorAuth extends Component {
 
     disableTwoFactor = async() => {
         const {
-            disableFingerprint,
-            disablePin,
-            enableTwoFactorAuth
+            disableTwoFactorAuth
         } = this.props
 
         Alert.alert(
-            'Disable Two Factor Authentication',
-            'Will you like to disable pin?',
+            'Disable 2FA',
+            'Will you like to disable Two Factor Auth.?',
             [
                 {text: 'Cancel', onPress: () => {}},
                 {text: 'OK', onPress: () => {
-                    disablePin();
-                    Alert.alert('Pin Disabled');
-                    deletePin();
+                    disableTwoFactorAuth();
                 }},
             ],
             { cancelable: true }
@@ -53,8 +50,8 @@ class TwoFactorAuth extends Component {
         } = this.props
 
         Alert.alert(
-            'Enable Two Factor',
-            'Will you like to enable pin?',
+            'Enable 2FA',
+            'Will you like to enable Two factor Auth. ?',
             [
                 {text: 'Cancel', onPress: () => {}},
                 {text: 'OK', onPress: () => {
@@ -72,6 +69,7 @@ class TwoFactorAuth extends Component {
 
         if(hasTwoFactorAuthEnabled){
             await this.disableTwoFactor()
+            return
         }
         await this.enableTwoFactor()
     }
@@ -94,8 +92,7 @@ class TwoFactorAuth extends Component {
                                 <Text style={styles.white}>Enable two-factor authentication</Text>
                                 <Text style={styles.grey}>
                                     Two-factor authentication adds a layer of security to your account.
-                                    When signing in, you'll need to enter your password and a verification code we send
-                                    to your mobile device. 
+                                    When signing in, you'll need to enter your password and a verification code.
                                 </Text>
                                 <Text style={styles.grey}>Please ensure you have Google authenticator app installed from Appstore or Playstore. </Text>
                             </Body>
@@ -123,6 +120,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         enableTwoFactorAuth: () => dispatch(enableTwoFactorAuth()),
+        disableTwoFactorAuth: () => dispatch(disableTwoFactorAuthAction())
     }
 }
 

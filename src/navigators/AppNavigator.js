@@ -80,8 +80,8 @@ export const Routes = {
   'Settings': {screen: Settings},
   'SecuritySettings': {screen: SecuritySettings},
   'SetPin': {screen: SetPin},
-  'Two Factor Authentication': {screen: TwoFactorAuth},
-  'Confirm Two Factor': {screen: ConfirmTwoFactorAuth},
+  '2FA': {screen: TwoFactorAuth},
+  'Confirm 2FA': {screen: ConfirmTwoFactorAuth},
   'ICO List': {
     screen: ICOs
   },

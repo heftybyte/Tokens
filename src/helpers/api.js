@@ -197,7 +197,6 @@ export const getFirebaseAuthToken = async (id) => {
 
 export const enableTwoFactorAuth = async (id) => {
   const res = await instance.post(`/accounts/${id}/two-factor/enable`);
-    console.log(res.data)
   return res.data
 }
 
