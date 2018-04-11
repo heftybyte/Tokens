@@ -181,7 +181,7 @@ export const withDrawer = (WrappedComponent) => {
                 'SecuritySettings', 'Select Account', 'SendTransaction', 'Edit Profile', 'NewExchangeAccount',
                     'NewExchangeOrder', 'Confirm 2FA', '2FA'
             ].indexOf(navState.routeName) > -1
-            
+
             // add top padding for iphone X
             const isIos = Platform.OS === 'ios';
             const isIphoneX = isIos && Dimensions.get('window').height === 812;
