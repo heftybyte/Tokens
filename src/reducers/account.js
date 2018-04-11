@@ -21,7 +21,8 @@ import {
     bookMark,
     addToAccountWatchlist,
     removeFromAccountWatchlist,
-    logger
+    logger,
+    setCurrency
 } from '../helpers/api'
 import {
     genericError,
@@ -48,6 +49,7 @@ export const SAVE_BOOKMARK = 'account/SAVE_BOOKMARK'
 export const REMOVE_BOOKMARK = 'account/REMOVE_BOOKMARK'
 export const GET_PORTFOLIO_CHART = 'account/GET_PORTFOLIO_CHART'
 export const LOADING_CHART = 'account/LOADING_CHART'
+export const SET_DEFAULT_CURRENCY = 'accounts/SET_DEFAULT_CURRENCY'
 // wallet
 export const ADD_WALLET_ADDRESS = 'account/WALLET/ADD_ADDRESS'
 
@@ -123,6 +125,11 @@ const removeBookmarkAction = (newsItem) => ({
 const loadingChartAction = (chartLoading) => ({
     type: LOADING_CHART,
     data: { chartLoading }
+})
+
+const setCurrencyAction = (currency) => ({
+  type: SET_DEFAULT_CURRENCY,
+  data: { currency }
 })
 
 // wallet
@@ -392,6 +399,17 @@ export const deleteWalletAddress = (address) => async (dispatch, getState) => {
     )
 }
 
+export const setDefaultCurrency = (currency) => async (dispatch, getState) => {
+  let err = null
+  const { id } = getState().account
+  const account = await setCurrency(id, currency).catch(e=>err=e)
+
+  if (err) {
+      dispatch(showToast(getError(err)))
+      return err
+  }
+  dispatch(setCurrencyAction(account.preference.currency))
+}
 
 export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getState) => {
     let err = null
@@ -497,6 +515,9 @@ const initialState = {
         top: [],
         watchList: []
     },
+    preference: {
+      currency: 'USD'
+    },
     chartLoading: false,
     portfolioChart: [{x:0,y:0},{x:0,y:0}],
     tokenDetails: {
@@ -534,6 +555,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data
+            }
+        case SET_DEFAULT_CURRENCY:
+            return {
+              ...state,
+              preference: {
+                ...action.data
+              }
             }
         case LOGIN:{
             const watchListMap = {}

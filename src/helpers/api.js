@@ -83,6 +83,11 @@ export const deleteAccountWalletAddress = async(id, address) => {
     return res.data
 }
 
+export const setCurrency = async (id, currency) => {
+  const res = await instance.post(`/accounts/${id}/preferences/currency/${currency}`)
+  return res.data
+}
+
 export const addExchangeAccount = async ({ id, key, secret, name, passphrase, exchangeId }) => {
   const res = await instance.post(`/accounts/${id}/exchangeAccounts`, { key, secret, name, passphrase, exchangeId })
   return res.data

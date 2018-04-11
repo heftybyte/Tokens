@@ -164,7 +164,7 @@ export const withDrawer = (WrappedComponent) => {
                 'Token Details', 'Search', 'Price Alert', 'Add Address',
                 'ICO List', 'ICODetail', 'Education', 'Restore Wallet', 'New Wallet', 'Confirm Phrase', 'SetPin',
                 'SecuritySettings', 'Select Account', 'SendTransaction', 'Edit Profile', 'NewExchangeAccount', 'NewExchangeOrder',
-                'SignUp', 'Login'
+                'SignUp', 'Login', 'Set Currency'
             ].indexOf(navState.routeName) > -1
 
             const noSearchButton = [
