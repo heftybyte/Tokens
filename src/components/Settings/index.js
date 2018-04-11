@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
 import { NavigationActions } from 'react-navigation';
-import { StyleSheet, View, AsyncStorage, Alert, TouchableHighlight, } from 'react-native';
+import { StyleSheet, View, AsyncStorage, Alert, TouchableHighlight } from 'react-native';
 import { Container, Header, Content, ListItem, Text, Radio, Footer, Button, CheckBox, Body, Right, List} from 'native-base';
 
 import { trackTap } from '../../helpers/analytics'
@@ -36,11 +36,14 @@ class Settings extends Component {
             case 'profile':
                 navigate('Edit Profile')
                 break;
+            case 'currency':
+                navigate('Set Currency')
+                break;
         }
     }
 
     render () {
-        const { logout } = this.props
+        const { logout, preference } = this.props
         return(
             <Container>
                 <Content>
@@ -53,6 +56,16 @@ class Settings extends Component {
                                 <Text style={styles.white}>Update Profile Info</Text>
                                 <Text style={styles.grey}>Image, Username, Password, Email..etc</Text>
                             </Body>
+                        </ListItem>
+                        <ListItem onPress={()=>{this.onChange('currency')}} noBorder>
+                          <Body>
+                            <Text style={styles.white}>
+                              Set Currency
+                            </Text>
+                            <Text style={styles.grey}>
+                              {preference.currency}
+                            </Text>
+                          </Body>
                         </ListItem>
                     </List>
                     <List>
@@ -85,6 +98,7 @@ class Settings extends Component {
 
 const mapStateToProps = (state) => ({
     portfolio: state.account.portfolio,
+    preference: state.account.preference,
     wallets: state.account.wallets,
     ...state.ui
 })

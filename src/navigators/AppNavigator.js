@@ -23,6 +23,7 @@ import SignUp from '../components/Register/SignUp';
 import Login from '../components/Register/Login';
 import PriceAlert from '../components/PriceAlert';
 import EditProfile from '../components/Profile/EditProfile';
+import SetCurrency from '../components/Profile/SetCurrency';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 import { baseColor } from '../config'
 // Wallet
@@ -87,11 +88,14 @@ export const Routes = {
   },
   'Edit Profile': {
     screen: EditProfile
+  },
+  'Set Currency': {
+    screen: SetCurrency
   }
 }
 
 export const AppNavigator = StackNavigator(
-  Routes, 
+  Routes,
   {
     initialRouteName: "Entry",
     headerMode: "none",
