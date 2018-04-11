@@ -133,12 +133,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         goToFingerprintPage: (params={}) => dispatch(NavigationActions.navigate({ routeName: 'SecuritySettings', params })),
-<<<<<<< HEAD
         logout: () => { dispatch(_logout()) },
-        goToTwoFactorAuthPage:(params={}) => dispatch(NavigationActions.navigate({ routeName: 'Two Factor Authentication', params })),
-=======
         goToTwoFactorAuthPage:(params={}) => dispatch(NavigationActions.navigate({ routeName: '2FA', params })),
->>>>>>> updated ui
     }
 }
 
