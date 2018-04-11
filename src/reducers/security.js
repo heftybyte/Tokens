@@ -24,26 +24,20 @@ export const enableTwoFactorAuth = () => async (dispatch, getState) => {
 	dispatch(setLoading(true, 'Enabling Two Factor Authentication'))
 	const response = await enableTwoFactorAuthApi(id).catch(e=>err=e);
 	if(err){
-        console.log(err)
         dispatch(setLoading(false))
         dispatch(showToast(getError(err)))
         return
 	}
 	const secretKey = response.two_factor_secret
-	dispatch(enableTwoFactorAuthAction())
 	dispatch(setLoading(false))
-    dispatch(disableFingerprint());
-    dispatch(disablePin());
-    dispatch(NavigationActions.navigate({ routeName: 'Confirm Two Factor', params: {secretKey} }))
+    dispatch(NavigationActions.navigate({ routeName: 'Confirm 2FA', params: {secretKey} }))
 }
 
-export const verifyTwoFactorAuthToken = (token) => async( dispatch, getState) => {
+export const verifyTwoFactorAuthToken = (token, activate=false) => async( dispatch, getState) => {
     let err = null;
 	const {id} = getState().account
     dispatch(setLoading(true, 'Verifying two factor token'))
 	const response = await verifyTwoFactorAuth(id, token).catch(e=>err=e);
-    console.log('response')
-    console.log(response)
 	if(err){
         dispatch(setLoading(false))
         dispatch(showToast(getError(err)))
@@ -54,6 +48,9 @@ export const verifyTwoFactorAuthToken = (token) => async( dispatch, getState) =>
         dispatch(showToast('Token verification failed. Please try again'))
         return
     }
+    dispatch(enableTwoFactorAuthAction())
+    dispatch(disableFingerprint());
+    dispatch(disablePin());
     dispatch(showToast('Token successfully verified'))
     dispatch(NavigationActions.navigate({ routeName: 'Settings', params: {} }))
 }

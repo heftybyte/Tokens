@@ -9,32 +9,45 @@ import { StyleSheet, AsyncStorage, Alert, TouchableHighlight, Platform } from 'r
 import { View, Container, Header, Content, ListItem, Input,Text,
     Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form, StyleProvider } from 'native-base';
 import {  enableTwoFactorAuth, verifyTwoFactorAuthToken } from '../../../reducers/security';
-import { brandColor } from '../../../config'
-import { setLoading, showToast } from '../../../reducers/ui';
+import { showToast } from '../../../reducers/ui';
 import getTheme from '../../../../native-base-theme/components';
 import platform from '../../../../native-base-theme/variables/platform';
 import styles from '../styles'
 
 const ShowSecretKey = ({showToast, secretKey, copyToClipboard, confirmedTwoFactor}=props) => (
-    <View style={{flex: 1}}>
+    <Content style={{paddingHorizontal: 10}}>
         <Text style={styles.heading}>Manual Entry</Text>
-        <Text style={styles.subHeading}>Please kindly enter the secret key and label below into the google authenticator app via manual
+        <Text style={styles.subHeading}>Please enter the secret key and label below into the google authenticator app via manual
         entry.</Text>
-        <Text style={styles.subHeading}>Account</Text>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-
-            <Text style={styles.subHeading}>Tokens Express</Text>
-            <Button primary onPress={()=>{copyToClipboard('Tokens Express','Account copied to your Clipboard')}}><Text>Copy</Text></Button>
-        </View>
-        <Text style={styles.subHeading}>Secret Key</Text>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={styles.subHeading}>{secretKey}</Text>
-            <Button
-                primary
-                onPress={()=>{copyToClipboard(secretKey, 'Secret Key copied to your Clipboard')}}
+            <Item>
+                <Label style={styles.subHeading}>Account:</Label>
+                <Input
+                    style={styles.subHeading}
+                    bordered
+                    disabled
+                    value="Tokens Express"
+                />
+                <Button primary
+                        onPress={()=>{
+                            copyToClipboard('Tokens Express','Account copied to your Clipboard')
+                        }}>
+                    <Text>Copy</Text>
+                </Button>
+            </Item>
+            <Item style={{marginTop: 10}}>
+                <Label style={styles.subHeading}>Secret Key:</Label>
+                <Input
+                    style={styles.subHeading}
+                    bordered
+                    disabled
+                    value={secretKey}
+                />
+                <Button
+                    primary
+                    onPress={()=>{copyToClipboard(secretKey, 'Secret Key copied to your Clipboard')}}
                 ><Text>Copy</Text></Button>
-        </View>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+            </Item>
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingVertical: 30}}>
             <Button
                 primary
                 block
@@ -42,14 +55,15 @@ const ShowSecretKey = ({showToast, secretKey, copyToClipboard, confirmedTwoFacto
                 <Text>Continue</Text>
             </Button>
         </View>
-    </View>
+    </Content>
 )
 
 const ShowVerifyAuthToken = ({verifyAuthToken, setToken}=props) => (
-    <View style={{flex: 1}}>
+    <Content  style={{paddingHorizontal: 20}}>
         <Text style={styles.heading}>Verify Two Factor Auth</Text>
         <Form>
             <Item>
+                <Label style={styles.subHeading}>Code:</Label>
                 <Input
                     style={styles.mnemonic}
                     placeholder="Enter Two Factor Token"
@@ -58,7 +72,7 @@ const ShowVerifyAuthToken = ({verifyAuthToken, setToken}=props) => (
                     bordered
                 />
             </Item>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingVertical: 20}}>
                 <Button
                     primary
                     block
@@ -67,7 +81,7 @@ const ShowVerifyAuthToken = ({verifyAuthToken, setToken}=props) => (
                 </Button>
             </View>
         </Form>
-    </View>
+    </Content>
 )
 
 class ConfirmTwoFactorAuth extends Component {
@@ -116,7 +130,6 @@ class ConfirmTwoFactorAuth extends Component {
         return(
             <StyleProvider style={getTheme(platform)}>
                 <Container>
-                    <Content>
                     {
                         (!this.state.hasConfirmedTwoFactor) ?
                          <ShowSecretKey
@@ -131,8 +144,6 @@ class ConfirmTwoFactorAuth extends Component {
                             setToken={this.setToken}
                         />
                     }
-                       
-                    </Content>
                 </Container>
             </StyleProvider>
         )
@@ -156,7 +167,7 @@ const mapDispatchToProps = (dispatch) => {
         disablePin: ()=>dispatch(disablePin()),
         enableTwoFactorAuth: () => dispatch(enableTwoFactorAuth()),
         verifyTwoFactorAuthToken: (token) => dispatch(verifyTwoFactorAuthToken(token)),
-        goToValidateTwoFactorPage: (routeName='Confirm Two Factor', params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
+        goToValidateTwoFactorPage: (routeName='Confirm 2FA', params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         showToast: (message) => dispatch(showToast(message)),
     }
 }
