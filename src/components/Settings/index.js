@@ -45,7 +45,6 @@ class Settings extends Component {
     }
 
     render () {
-        const { logout, preference } = this.props
         const {
             logout,
             preference,
