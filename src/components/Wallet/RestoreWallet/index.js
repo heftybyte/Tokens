@@ -72,7 +72,7 @@ class RestoreWallet extends Component {
   restoreWallet = async (data, type = 'ethereum') => {
       const text = (typeof data === 'string') && data || this.state.inputValue;
       if(!text || !text.length) {
-          Alert.alert('Enter an correct mnemonic or private key to save');
+          Alert.alert('Please enter a correct mnemonic or private key to save');
           return;
       }
 

@@ -343,7 +343,7 @@ export const addWalletAddress = (address, platform) => async (dispatch, getState
     let err = null
     const { id } = getState().account
     console.log('id', id)
-    dispatch(setLoading(true, 'Saving Address'))
+    dispatch(setLoading(true, 'Creating Wallet'))
     console.log(id, address)
     const account = await addAccountWalletAddress(id, address, platform).catch(e=>err=e)
 
@@ -352,7 +352,7 @@ export const addWalletAddress = (address, platform) => async (dispatch, getState
         dispatch(showToast(getError(err)))
         return err
     }
-    dispatch(showToast('Wallet Address created'))
+    dispatch(showToast('Wallet created'))
     dispatch(addWalletAddressAction(account.wallets))
 
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
