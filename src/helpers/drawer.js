@@ -20,40 +20,46 @@ const Items = [
         name: "Portfolio",
         icon: "pie-chart",
         route: "Profile",
-        Component: SimpleLineIcons
+        Component: SimpleLineIcons,
+        enabled: true
     },
     {
         name: "Chat",
         icon: "bubbles",
         route: "Chat",
-        Component: SimpleLineIcons
+        Component: SimpleLineIcons,
+        enabled: false
     },
     {
         name: "Wallets",
         icon: "wallet",
         route: "AccountType",
         params: { type: 'wallet' },
-        Component: SimpleLineIcons
+        Component: SimpleLineIcons,
+        enabled: true
     },
     {
         name: "Exchanges",
         icon: "chart",
         route: "AccountType",
         params: { type: 'exchange_account' },
-        Component: SimpleLineIcons
+        Component: SimpleLineIcons,
+        enabled: true
     },
     {
         name: "Addresses",
         icon: "notebook",
         params: { type: 'address' },
         route: "AccountType",
-        Component: SimpleLineIcons
+        Component: SimpleLineIcons,
+        enabled: true
     },
     {
         name: "Settings",
         icon: "settings",
         route: "Settings",
-        Component: SimpleLineIcons
+        Component: SimpleLineIcons,
+        enabled: true
     }/*,
     {
 		name: "ICO List",
@@ -98,7 +104,6 @@ export const withDrawer = (WrappedComponent) => {
             if (navState.params && navState.params.overrideHeader) {
                 return navState.params.overrideHeader
             }
-
             switch(navState.routeName) {
                 case 'ICODetail':
                     const icoDetails = navState.params && navState.params.ico || {}
@@ -155,6 +160,7 @@ export const withDrawer = (WrappedComponent) => {
 
         render() {
             const { navigation, portfolio } = this.props
+            const { bountyHunter } = store.getState().account
             const { state: navState } = navigation
             const hideHeader = !!WrappedComponent.hideHeader
             const headerBody = hideHeader ? null : this.getHeaderBody()
@@ -177,7 +183,13 @@ export const withDrawer = (WrappedComponent) => {
             const isIos = Platform.OS === 'ios';
             const isIphoneX = isIos && Dimensions.get('window').height === 812;
             const iphoneHeaderHeight = isIphoneX ? 30 : 0;
-
+            const menuItems = Items.map(i=>{
+                const item = {...i}
+                if (!i.enabled && bountyHunter) {
+                    item.enabled = true
+                }
+                return item
+            }).filter(i=>i.enabled)
             return (
                 <Drawer
                     ref={d => (this.drawer = d)}
@@ -186,7 +198,7 @@ export const withDrawer = (WrappedComponent) => {
                     content={
                         <Menu
                             navigation={navigation}
-                            items={Items}
+                            items={menuItems}
                             showStatusBar={true}
                             baseAccent={baseAccent}
                             brandColor={brandColor}

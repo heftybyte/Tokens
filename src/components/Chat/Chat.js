@@ -43,7 +43,7 @@ class Chat extends Component {
 			 <Text style={{color: '#fff', paddingHorizontal: 10, fontSize}}>
 				{token.name||token.symbol}
 			 </Text>
-			 <SimpleLineIcons name={'arrow-down'} color={'#fff'} />
+			 {/*<SimpleLineIcons name={'arrow-down'} color={'#fff'} />*/}
 		  </View>
 		)
 	 }
@@ -98,7 +98,7 @@ class Chat extends Component {
 		]
 
 		navigation.setParams({ overrideHeader:
-		  <TouchableWithoutFeedback onPress={this.toggleMenu} style={{width:'100%', height:40}}> 
+		  <TouchableWithoutFeedback onPress={()=>{}/*this.toggleMenu*/} style={{width:'100%', height:40}}> 
 			  <View style={{
 				  flexDirection: 'row',
 				  alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
@@ -114,7 +114,7 @@ class Chat extends Component {
 				  <Text style={{color: '#fff', paddingHorizontal: 10, fontSize}}>
 					  {token.name||token.symbol}
 				  </Text>
-				  <SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />
+				  {/*<SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />*/}
 			  </View>
 		  </TouchableWithoutFeedback>
 		})
@@ -169,7 +169,15 @@ class Chat extends Component {
 				}}
 			>
 				<View style={{zIndex:2}}>
-				  <Animated.View style={{height: this.state.menuHeight, overflow: 'hidden', position: 'absolute', width: '100%'}}>
+				  <Animated.View style={{
+				  		height: this.state.menuHeight,
+				  		overflow: 'hidden',
+				  		position: 'absolute',
+				  		width: '100%',
+				  		zIndex: 2,
+				  		top: 0,
+				  		left: 0
+				  }}>
 					<Menu
 					  onPress={this.toggleMenu}
 					  navigation={this.props.navigation}
@@ -199,6 +207,7 @@ class Chat extends Component {
 const mapStateToProps = (state) => ({
   username: state.account.username,
   userId: state.account.id,
+  isBountyHunter: state.account.bountyHunter,
   ...state.ui
 })
 
