@@ -70,6 +70,11 @@ class AccountPicker extends Component {
     goToRoute(routeName, navigation.state.params)
   }
 
+  navigateToRestoreWalletScreen = () => {
+      const { navigation, goToRoute } = this.props
+      goToRoute('Restore Wallet', navigation.state.params)
+  }
+
   render() {
     const { navigation, addresses, goToRoute, exchangeMap } = this.props
     const {
@@ -132,16 +137,18 @@ class AccountPicker extends Component {
             <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
             <Text style={{ color: brandColor}}>add new {name} {type.replace('_', ' ')}</Text>
           </View>
+        </TouchableHighlight>
           {
-              (type !== 'exchange_account') ?
+            (type !== 'exchange_account') ?
+              <TouchableHighlight onPress={()=>this.navigateToRestoreWalletScreen()}>
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}>
                   <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
                   <Text style={{ color: brandColor}}>import existing {name} {type.replace('_', ' ')}</Text>
                 </View>
-                :
-                <View />
-            }
-        </TouchableHighlight>
+              </TouchableHighlight>
+              :
+              <View />
+          }
       </ScrollView>
     )
   }
