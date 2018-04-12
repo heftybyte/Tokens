@@ -115,6 +115,7 @@ class AccountPicker extends Component {
           <View style={styles.header}>
             <Text style={styles.heading}>Select Exchange</Text>
             <Text style={styles.subHeading}>Choose one of your linked exchange accounts for this trade.</Text>
+
           </View>
        }
         <Menu
@@ -131,6 +132,15 @@ class AccountPicker extends Component {
             <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
             <Text style={{ color: brandColor}}>add new {name} {type.replace('_', ' ')}</Text>
           </View>
+          {
+              (type !== 'exchange_account') ?
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}>
+                  <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
+                  <Text style={{ color: brandColor}}>import existing {name} {type.replace('_', ' ')}</Text>
+                </View>
+                :
+                <View />
+            }
         </TouchableHighlight>
       </ScrollView>
     )
