@@ -54,6 +54,11 @@ export const loginAccount = async (params) => {
   return res.data
 }
 
+export const googleLogin = async (params) => {
+  const res = await instance.post(`/accounts/google-signin`, { ...params })
+  return res.data
+}
+
 export const logoutAccount = async (notification_token) => {
 	await instance.post(`/accounts/logout`, { notification_token })
 }
@@ -109,8 +114,15 @@ export const deleteAccountAddress = async (id, address) => {
 }
 
 export const getAccount = async (id) => {
-  const res = await instance.get(`/accounts/${id}`)
-  return res.data
+  try {
+    console.log('inside getAccount', id)
+    const res = await instance.get(`/accounts/${id}`)
+    const res2 = await instance.get(`/accounts/${id}`)
+    console.log('inside getAccount', res, res2)
+    return res.data
+  } catch(e) {
+    console.log('inside getAccount error', e)
+  }
 }
 
 export const getAccountPortfolio = async (id) => {
@@ -200,8 +212,8 @@ export const logger = {
     debug: log('debug'),
     warning: log('warning'),
     notice: log('notice'),
-    err: log('err'),
-    crit: log('crit'),
+    error: log('error'),
+    critical: log('critical'),
     alert: log('alert'),
     emerg: log('emerg')
 }

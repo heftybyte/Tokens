@@ -11,6 +11,7 @@ import md5 from 'crypto-js/md5'
 import Identicon from 'identicon.js/identicon'
 import { baseAccent, brandColor } from '../../config'
 import { trackRefresh } from '../../helpers/analytics'
+import { logger } from '../../helpers/api'
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -177,6 +178,7 @@ class Profile extends Component {
   }
 
   componentDidMount = async () => {
+    logger.info('Profile mounted')
     await Promise.all([
       this.props.getPortfolio(true),
       this.props.getPortfolioChart()
@@ -219,11 +221,11 @@ class Profile extends Component {
       >
           <ProfileHeader
             style={{flex: .1}}
-            reputation={reputation}
+            reputation={45}
             username={username}
             description={description}
-            followers={followers}
-            following={following}
+            followers={200}
+            following={10}
           />
           <Dashboard
             navigation={navigation}
