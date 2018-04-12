@@ -5,6 +5,7 @@ import firebase from 'firebase'
 import { Linking } from 'react-native'
 import {
     loginAccount,
+    googleLogin,
     registerAccount as _registerAccount,
     setAuthHeader,
     getAccountPortfolio,
@@ -158,9 +159,12 @@ export const login = (params) => async (dispatch, getState) => {
     let account = null
     let id = await SecureStore.getItemAsync('id')
     let token = await SecureStore.getItemAsync('token')
-    logger.debug('login', {id,token})
+    logger.debug('login--', {id,token,params})
+    const loginFn = params.withGoogle ? googleLogin : loginAccount
+    console.log({loginFn})
+    logger.info('decided on loginFn')
     if (params) {
-        const res = await loginAccount(params).catch(e=>err=e)
+        const res = await loginFn(params).catch(e=>err=e)
         if (err) {
             const { error } = err.response.data;
             if(error && error.statusCode === 401) {
@@ -178,9 +182,20 @@ export const login = (params) => async (dispatch, getState) => {
     } else if (token && id) {
         console.log('login info log')
         logger.info('user login via SecureStore', { id })
+        logger.info('setting auth header', token)
         setAuthHeader(token)
-        account = await getAccount(id).catch(e=>err=e)
+        logger.info('getting account', id)
+        try {
+            console.log('before getAccount')
+            account = await getAccount(id)
+            console.log('after getAccount')
+        } catch(e) {
+            console.log('caught error', e)
+            logger.error('caught error', e)
+        }
+        logger.info('got account', account)
         if (err) {
+            logger.error('error', err)
             dispatch(showToast(getError(err)))
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
             return
@@ -204,6 +219,7 @@ export const login = (params) => async (dispatch, getState) => {
     //     visitDeepLink(url)
     //     return
     // }
+    logger.info('navigate to profile')
     dispatch(NavigationActions.reset({
       index: 0,
       actions: [
@@ -438,7 +454,7 @@ export const getPortfolioChart = (_period) => async (dispatch, getState) => {
     dispatch(loadingChartAction(true))
     let chart = await getAccountPortfolioChart(id, _period || period).catch(e=>err=e)
     if (err) {
-      logger.err('getPortfolioChart', err)
+      logger.error('getPortfolioChart', err)
         dispatch(loadingChartAction(false))
       return
     }
@@ -501,9 +517,10 @@ export const removeBookmark = (news) => async (dispatch, getState) => {
 const initialState = {
     username: 'escobyte',
     description: '',
-    reputation: 1,
-    followers: 0,
-    following: 0,
+    bountyHunter: false,
+    reputation: 45,
+    followers: 200,
+    following: 10,
     addresses : [],
     wallets: [],
     exchangeAccounts: [],
