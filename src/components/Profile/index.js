@@ -221,11 +221,11 @@ class Profile extends Component {
       >
           <ProfileHeader
             style={{flex: .1}}
-            reputation={45}
+            reputation={reputation}
             username={username}
             description={description}
-            followers={200}
-            following={10}
+            followers={followers}
+            following={following}
           />
           <Dashboard
             navigation={navigation}
