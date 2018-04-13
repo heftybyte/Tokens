@@ -13,7 +13,7 @@ import getTheme from '../../../native-base-theme/components';
 import _platform from '../../../native-base-theme/variables/platform';
 import styles from './styles'
 import { login as _login, registerAccount as _registerAccount } from '../../reducers/account'
-import { showToast as _showToast } from '../../reducers/ui'
+import { setLoading as _setLoading, showToast as _showToast } from '../../reducers/ui'
 import { getError } from '../../helpers/functions'
 
 const customStyles = {
@@ -73,6 +73,7 @@ class SignUp extends Component {
     static headerText = 'Sign Up'
 
     state = {
+        showForm: false,
         username: '',
         password: '',
         email: '',
@@ -84,7 +85,7 @@ class SignUp extends Component {
     }
 
     componentWillMount = async () => {
-        const { navigation, showToast } = this.props
+        const { navigation, showToast, setLoading, login } = this.props
         const { withGoogle } = navigation.state.params
 
         if (!withGoogle) {
@@ -92,8 +93,21 @@ class SignUp extends Component {
         }
 
         try {
-            const { accessToken, refreshToken, serverAuthCode, user: { email, photoUrl } } = await this.signInWithGoogle()
+            const {
+                accessToken,
+                refreshToken,
+                serverAuthCode,
+                user: { email, photoUrl }
+            } = await this.signInWithGoogle()
+            setLoading(true, 'Connecting To Google')
+            const success = await login({ accessToken, withGoogle }, true)
+            setLoading(false)
+            if (success) {
+                console.log('logged in with Google')
+                return
+            }
             this.setState({
+                showForm: true,
                 email,
                 photo: photoUrl, // TODO Render and ask if we should use this
                 accessToken,
@@ -101,6 +115,7 @@ class SignUp extends Component {
                 serverAuthCode
             })
         } catch (err) {
+            setLoading(false)
             logger.error('signInWithGoogle', err)
             showToast(getError(err))
         }
@@ -180,12 +195,12 @@ class SignUp extends Component {
     render() {
         const { navigation } = this.props
         const { withGoogle } = navigation.state.params
-        const { email, username } = this.state
+        const { email, username, showForm } = this.state
 
         return (
             <StyleProvider style={getTheme(_platform)}>
                 <Container>
-                    <Content>
+                    {showForm && <Content>
                         <View style={styles.header}>
                             <Text style={styles.heading}>Enter Profile Info</Text>
                             
@@ -246,7 +261,7 @@ class SignUp extends Component {
                                 <Text style={{color: '#000'}}>Create Account</Text>
                             </Button>
                         </View>
-                    </Content>
+                    </Content>}
                 </Container>
             </StyleProvider>
         )
@@ -260,6 +275,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         showToast: (params) => dispatch(_showToast(params)),
+        setLoading: (isLoading, msg) => dispatch(_setLoading(isLoading, msg)),
         login: (params) => dispatch(_login(params)),
         registerAccount: (params) => dispatch(_registerAccount(params)),
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))

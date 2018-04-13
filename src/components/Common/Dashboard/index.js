@@ -136,7 +136,8 @@ class Dashboard extends Component {
       period,
       watchListSymbols,
       onScroll,
-      onChartTouch
+      onChartTouch,
+      hasAccounts
     } = this.props
     const { chartIsTouched, portfolioTimestamp, totalPriceChange, totalPriceChangePct } = this.state
     const displayPrice = chartIsTouched ? this.state.displayPrice : portfolio.totalValue
@@ -156,21 +157,7 @@ class Dashboard extends Component {
           />
         }
       >
-        { !addresses.length  ?
-          <TouchableHighlight
-            onPress={()=>{goToAddressPage({type: 'Accounts'})}}
-          >
-            <View style={styles.addBtn}>
-              <MaterialCommunityIcons
-                style={styles.addBtnIcon}
-                name="plus-circle-outline"
-                size={22}
-                color="black"
-              />
-              <Text style={styles.addBtnText}>Add Your Ethereum Address</Text>
-            </View>
-          </TouchableHighlight>
-        : <Header
+        { hasAccounts && <Header
             totalValue={displayPrice}
             timestamp={chartIsTouched && portfolioTimestamp}
             totalChange={chartIsTouched && totalPriceChange || portfolio.totalPriceChange}
@@ -243,6 +230,11 @@ const mapStateToProps = (state) => ({
   chartLoading: state.account.chartLoading,
   portfolioChart: state.account.portfolioChart,
   addresses: state.account.addresses,
+  hasAccounts: !!(
+    state.account.addresses.length ||
+    state.account.exchangeAccounts.length ||
+    state.account.wallets.length
+  ),
   watchListSymbols: state.account.watchList,
   newsFeed: state.feed,
   stale: state.account.stale,

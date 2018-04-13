@@ -154,14 +154,13 @@ export const registerAccount = (params) => async (dispatch, getState) => {
     dispatch(registerAction(newAccount.id))
 }
 
-export const login = (params) => async (dispatch, getState) => {
+export const login = (params, supressToasts) => async (dispatch, getState) => {
     let err = null
     let account = null
     let id = await SecureStore.getItemAsync('id')
     let token = await SecureStore.getItemAsync('token')
     logger.debug('login--', {id,token,params})
-    const loginFn = params.withGoogle ? googleLogin : loginAccount
-    console.log({loginFn})
+    const loginFn = params && params.withGoogle ? googleLogin : loginAccount
     logger.info('decided on loginFn')
     if (params) {
         const res = await loginFn(params).catch(e=>err=e)
@@ -170,8 +169,8 @@ export const login = (params) => async (dispatch, getState) => {
             if(error && error.statusCode === 401) {
                 error.message = 'Incorrect email or password';
             }
-            dispatch(showToast(getError(err)))
-            return
+            !supressToasts && dispatch(showToast(getError(err)))
+            return false
         }
         token = res.id
         account = res.user
@@ -180,29 +179,26 @@ export const login = (params) => async (dispatch, getState) => {
         await SecureStore.setItemAsync('token', token)
         await SecureStore.setItemAsync('id', account.id)
     } else if (token && id) {
-        console.log('login info log')
         logger.info('user login via SecureStore', { id })
         logger.info('setting auth header', token)
         setAuthHeader(token)
         logger.info('getting account', id)
         try {
-            console.log('before getAccount')
             account = await getAccount(id)
-            console.log('after getAccount')
         } catch(e) {
-            console.log('caught error', e)
             logger.error('caught error', e)
+            return false
         }
         logger.info('got account', account)
         if (err) {
             logger.error('error', err)
-            dispatch(showToast(getError(err)))
+            !supressToasts && dispatch(showToast(getError(err)))
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
-            return
+            return false
         }
     } else {
         dispatch(NavigationActions.navigate({ routeName: 'Register' }))
-        return
+        return false
     }
     Amplitude.setUserId(account.id)
     dispatch(loginAction(token, account))
@@ -226,6 +222,7 @@ export const login = (params) => async (dispatch, getState) => {
         NavigationActions.navigate({ routeName: 'Profile' })
       ]
     }))
+    return true
 }
 
 export const logout = () => async(dispatch, getState) => {
@@ -518,9 +515,9 @@ const initialState = {
     username: 'escobyte',
     description: '',
     bountyHunter: false,
-    reputation: 45,
-    followers: 200,
-    following: 10,
+    reputation: 0,
+    followers: 0,
+    following: 0,
     addresses : [],
     wallets: [],
     exchangeAccounts: [],

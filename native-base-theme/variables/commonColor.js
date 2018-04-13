@@ -95,7 +95,7 @@ export default {
   checkboxTickColor: "#fff",
 
   // Color
-  brandPrimary: platform === "ios" ? "#007aff" : "#3F51B5",
+  brandPrimary: "#5EECF8",
   brandInfo: "#62B1F6",
   brandSuccess: "#5cb85c",
   brandDanger: "#d9534f",
@@ -180,7 +180,7 @@ export default {
   listBg: "transparent",
   listBorderColor: "#c9c9c9",
   listDividerBg: "#f4f4f4",
-  listBtnUnderlayColor: "#DDD",
+  listBtnUnderlayColor: "#333",
   listItemPadding: platform === "ios" ? 10 : 12,
   listNoteColor: "#808080",
   listNoteSize: 13,

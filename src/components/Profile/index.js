@@ -161,7 +161,7 @@ const ProfileHeader = ({username, description, reputation, followers, following,
 
     <View style={styles.userDescriptionContainer}>
       <Text style={styles.username}>@{username}</Text>
-      {description &&
+      {!!description &&
         <Text style={styles.userDescription}>
           {description}
         </Text>}
