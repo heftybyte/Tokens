@@ -159,7 +159,7 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
     let account = null
     let id = await SecureStore.getItemAsync('id')
     let token = await SecureStore.getItemAsync('token')
-    logger.debug('login--', {id,token,params})
+    logger.debug('login', {id,token,params})
     const loginFn = params && params.withGoogle ? googleLogin : loginAccount
     logger.info('decided on loginFn')
     if (params) {
