@@ -14,8 +14,8 @@ const customStyles = {
     container: {
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'flex-start',
     },
     header: {
         paddingHorizontal: 20,
@@ -84,7 +84,7 @@ class Register extends Component {
         return (
             <StyleProvider style={getTheme(_platform)}>
                 <Container>
-                    <Content style={customStyles.container}>
+                    <Content style={{flex: 1, flexDirection: 'row'}} containerStyleContent={customStyles.container}>
                         <View style={customStyles.imageContainer}>
                             <Image source={require('../../../assets/Tokens_Icon.png')} style={customStyles.image} />
                             <Text style={customStyles.title}>Tokens Express</Text>
