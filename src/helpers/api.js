@@ -13,28 +13,28 @@ const instance = axios.create({
   baseURL: `${baseURL}/api`
 });
 
-instance.interceptors.response.use(res => res, async (err) => {
-  const intercept = (
-    err && err.response && err.response.status === 401 &&
-    (
-      err.response.data && err.response.data.error &&
-      err.response.data.error.code !== 'LOGIN_FAILED'
-    )
-  )
+// instance.interceptors.response.use(res => res, async (err) => {
+//   const intercept = (
+//     err && err.response && err.response.status === 401 &&
+//     (
+//       err.response.data && err.response.data.error &&
+//       err.response.data.error.code !== 'LOGIN_FAILED'
+//     )
+//   )
 
-  if (intercept) {
-    // Back up guest account details for chance at recovery
-    const pseudonym = JSON.parse(await AsyncStorage.getItem('pseudonym') || null)
-    if (pseudonym && pseudonym.type === 'username') {
-      const guestAccounts = JSON.parse(await AsyncStorage.getItem('guestAccounts') || null) || []
-      guestAccounts.push(pseudonym)
-      await AsyncStorage.setItem('guestAccounts', JSON.stringify(guestAccounts))
-    }
-    store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
-  }
-  console.log({err})
-  return Promise.reject(err);
-});
+//   if (intercept) {
+//     // Back up guest account details for chance at recovery
+//     const pseudonym = JSON.parse(await AsyncStorage.getItem('pseudonym') || null)
+//     if (pseudonym && pseudonym.type === 'username') {
+//       const guestAccounts = JSON.parse(await AsyncStorage.getItem('guestAccounts') || null) || []
+//       guestAccounts.push(pseudonym)
+//       await AsyncStorage.setItem('guestAccounts', JSON.stringify(guestAccounts))
+//     }
+//     store.dispatch(NavigationActions.navigate({ routeName: 'Register' }))
+//   }
+//   console.log({err})
+//   return Promise.reject(err);
+// });
 
 export const setAuthHeader = (token) => {
   instance.defaults.headers.common['Authorization'] = token
