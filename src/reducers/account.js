@@ -24,7 +24,8 @@ import {
     addToAccountWatchlist,
     removeFromAccountWatchlist,
     logger,
-    setCurrency
+    setCurrency,
+    verifyTwoFactorAuth
 } from '../helpers/api'
 import {
     genericError,
@@ -163,7 +164,13 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
     const loginFn = params && params.withGoogle ? googleLogin : loginAccount
     logger.info('decided on loginFn')
     if (params) {
-        const res = await loginFn(params).catch(e=>err=e)
+        let res = await loginFn(params).catch(e=>err=e)
+        // TWO FACTOR
+        if (res.twoFactorRequired) {
+            logger.info('two factor required')
+            token = await Alert.prompt('Enter Google Auth Code')
+            res = await verifyTwoFactorAuth(res.user.id, {token, login: true})
+        }
         if (err) {
             const { error } = err.response.data;
             if(error && error.statusCode === 401) {
@@ -174,7 +181,7 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
         }
         token = res.id
         account = res.user
-        logger.info('user login via params', { id })
+        logger.info('user login via params', { id, token, account })
         setAuthHeader(token)
         await SecureStore.setItemAsync('token', token)
         await SecureStore.setItemAsync('id', account.id)

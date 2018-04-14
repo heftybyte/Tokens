@@ -195,13 +195,13 @@ export const getFirebaseAuthToken = async (id) => {
     return res.data;
 }
 
-export const enableTwoFactorAuth = async (id) => {
-  const res = await instance.post(`/accounts/${id}/two-factor/enable`);
+export const setTwoFactorAuthSecret = async (id) => {
+  const res = await instance.post(`/accounts/${id}/two-factor/set`);
   return res.data
 }
 
-export const verifyTwoFactorAuth = async (id, token) => {
-  const res = await instance.post(`/accounts/${id}/two-factor/verify`,{token})
+export const verifyTwoFactorAuth = async (id, {token, confirm,login}) => {
+  const res = await instance.post(`/accounts/${id}/two-factor/verify`,{token,confirm,login})
   return res.data
 }
 

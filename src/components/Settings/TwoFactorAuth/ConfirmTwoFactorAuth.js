@@ -116,7 +116,7 @@ class ConfirmTwoFactorAuth extends Component {
             verifyTwoFactorAuthToken
         } = this.props
         console.log(this.state.token)
-        verifyTwoFactorAuthToken(this.state.token)
+        verifyTwoFactorAuthToken({token: this.state.token, confirm:true})
     }
 
     render () {
@@ -166,7 +166,7 @@ const mapDispatchToProps = (dispatch) => {
         enablePin: () => dispatch(enablePin()),
         disablePin: ()=>dispatch(disablePin()),
         enableTwoFactorAuth: () => dispatch(enableTwoFactorAuth()),
-        verifyTwoFactorAuthToken: (token) => dispatch(verifyTwoFactorAuthToken(token)),
+        verifyTwoFactorAuthToken: ({token, confirm,login}) => dispatch(verifyTwoFactorAuthToken({token, confirm,login})),
         goToValidateTwoFactorPage: (routeName='Confirm 2FA', params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         showToast: (message) => dispatch(showToast(message)),
     }
