@@ -8,7 +8,6 @@ import { disablePin, disableFingerprint } from '../../../actions/security';
 import { setTwoFactorAuthSecret } from '../../../reducers/security';
 import { disableTwoFactorAuthAction } from '../../../actions/security';
 
-
 import { brandColor } from '../../../config'
 
 const styles = StyleSheet.create({  
@@ -26,6 +25,8 @@ const styles = StyleSheet.create({
 
 class TwoFactorAuth extends Component {
 
+    static headerText = 'Two Factor Auth'
+
     disableTwoFactor = async() => {
         const {
             disableTwoFactorAuth
@@ -33,7 +34,7 @@ class TwoFactorAuth extends Component {
 
         Alert.alert(
             'Disable 2FA',
-            'Will you like to disable Two Factor Auth.?',
+            'Will you like to disable Two-Factor Auth?',
             [
                 {text: 'Cancel', onPress: () => {}},
                 {text: 'OK', onPress: () => {
@@ -51,7 +52,7 @@ class TwoFactorAuth extends Component {
 
         Alert.alert(
             'Enable 2FA',
-            'Will you like to enable Two factor Auth. ?',
+            'Will you like to enable Two-Factor Auth?',
             [
                 {text: 'Cancel', onPress: () => {}},
                 {text: 'OK', onPress: () => {
@@ -87,16 +88,18 @@ class TwoFactorAuth extends Component {
                         <ListItem itemHeader first>
                             <Text style={styles.title}>Overview</Text>
                         </ListItem>
-                        <ListItem onPress={this.twoFactorAuth} noBorder>
+                        <ListItem onPress={this.twoFactorAuth} noBorder style={{width: '100%'}}>
                             <Body>
-                                <Text style={styles.white}>{`Enable two-factor authentication\n`}</Text>
+                                <Text style={styles.white}>{`${ hasTwoFactorAuthEnabled ? 'Disable' : 'Enable'}\n`}</Text>
                                 <Text style={styles.grey}>
-                                    {`Two-factor authentication adds a layer of security to your account.\nWhen signing in, you'll need to enter a verification code.
-                                    `}
+                                    { !hasTwoFactorAuthEnabled ? 
+                                        `When signing in, you'll need to enter a verification code from Google Authenticator.`
+                                        :
+                                        `This additional layer of security will be removed from your account.`
+                                    }
                                 </Text>
-                                <Text style={styles.grey}>Please ensure you have Google authenticator app installed from Appstore or Playstore.</Text>
                             </Body>
-                            <Right style={{paddingRight: 10}}>
+                            <Right style={{paddingRight: 20}}>
                                 <CheckBox
                                     checked={hasTwoFactorAuthEnabled}
                                 />
@@ -112,7 +115,7 @@ class TwoFactorAuth extends Component {
 const mapStateToProps = (state) => ({
     portfolio: state.account.portfolio,
     wallets: state.account.wallets,
-    hasTwoFactorAuthEnabled: state.security.hasTwoFactorAuthEnabled,
+    hasTwoFactorAuthEnabled: state.account.two_factor_enabled,
     ...state.ui
 })
 

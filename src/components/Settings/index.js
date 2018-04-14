@@ -97,7 +97,7 @@ class Settings extends Component {
                         </ListItem>
                         <ListItem onPress={()=>{this.onChange('two-auth')}} noBorder>
                             <Body>
-                                <Text style={styles.white}>Two-factor authentication</Text>
+                                <Text style={styles.white}>Two-Factor Authentication</Text>
                                 {
                                     (!hasTwoFactorAuthEnabled) ?
                                     <Text style={styles.grey}>Disabled</Text>
@@ -124,7 +124,7 @@ const mapStateToProps = (state) => ({
     wallets: state.account.wallets,
     hasPinEnabled: state.security.hasPinEnabled,
     hasFingerprintEnabled: state.security.hasFingerprintEnabled,
-    hasTwoFactorAuthEnabled: state.security.hasTwoFactorAuthEnabled,
+    hasTwoFactorAuthEnabled: state.account.two_factor_enabled,
     ...state.ui
 })
 

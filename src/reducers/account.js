@@ -155,73 +155,19 @@ export const registerAccount = (params) => async (dispatch, getState) => {
     dispatch(registerAction(newAccount.id))
 }
 
-export const login = (params, supressToasts) => async (dispatch, getState) => {
-    let err = null
-    let account = null
-    let id = await SecureStore.getItemAsync('id')
-    let token = await SecureStore.getItemAsync('token')
-    logger.debug('login', {id,token,params})
-    const loginFn = params && params.withGoogle ? googleLogin : loginAccount
-    logger.info('decided on loginFn')
-    if (params) {
-        let res = await loginFn(params).catch(e=>err=e)
-        // TWO FACTOR
-        if (res.twoFactorRequired) {
-            logger.info('two factor required')
-            token = await Alert.prompt('Enter Google Auth Code')
-            res = await verifyTwoFactorAuth(res.user.id, {token, login: true})
-        }
-        if (err) {
-            const { error } = err.response.data;
-            if(error && error.statusCode === 401) {
-                error.message = 'Incorrect email or password';
-            }
-            !supressToasts && dispatch(showToast(getError(err)))
-            return false
-        }
-        token = res.id
-        account = res.user
-        logger.info('user login via params', { id, token, account })
-        setAuthHeader(token)
-        await SecureStore.setItemAsync('token', token)
-        await SecureStore.setItemAsync('id', account.id)
-    } else if (token && id) {
-        logger.info('user login via SecureStore', { id })
-        logger.info('setting auth header', token)
-        setAuthHeader(token)
-        logger.info('getting account', id)
-        try {
-            account = await getAccount(id)
-        } catch(e) {
-            logger.error('caught error', e)
-            return false
-        }
-        logger.info('got account', account)
-        if (err) {
-            logger.error('error', err)
-            !supressToasts && dispatch(showToast(getError(err)))
-            dispatch(NavigationActions.navigate({ routeName: 'Register' }))
-            return false
-        }
-    } else {
-        dispatch(NavigationActions.navigate({ routeName: 'Register' }))
-        return false
-    }
-    Amplitude.setUserId(account.id)
-    dispatch(loginAction(token, account))
+async function postLogin(accessToken, userId, account) {
+    logger.info('user logged in', { userId, accessToken })
+    setAuthHeader(accessToken)
+    await SecureStore.setItemAsync('token', accessToken)
+    await SecureStore.setItemAsync('id', userId)
+    Amplitude.setUserId(userId)
+    dispatch(loginAction(accessToken, account))
     registerForPushNotificationsAsync()
     dispatch(getPortfolio())
     dispatch(getPortfolioChart())
     dispatch(getBlockchains())
     dispatch(getExchanges())
 
-    // const url = Linking.getInitialURL().catch(e=>err=e)
-    // if (err) {
-    //     logger.error('Linking.getInitialURL', err)
-    // } else {
-    //     visitDeepLink(url)
-    //     return
-    // }
     logger.info('navigate to profile')
     dispatch(NavigationActions.reset({
       index: 0,
@@ -229,7 +175,59 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
         NavigationActions.navigate({ routeName: 'Profile' })
       ]
     }))
-    return true
+}
+
+export const twoFactorLogin = (id, token) => async (dispatch, getState) => {
+    try {
+        const res = await verifyTwoFactorAuth(id, {token, login: true})
+        await postLogin(res)
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+function get2FA() {
+    logger.info('two factor required')
+    token = await Alert.prompt('Enter Google Auth Code')
+    res = await verifyTwoFactorAuth(res.id, {token, login: true})
+    // NAVIGATE 2Auth
+    return false
+}
+
+export const login = (params, supressToasts) => async (dispatch, getState) => {
+    try {
+        let account = null
+        let id = await SecureStore.getItemAsync('id')
+        let token = await SecureStore.getItemAsync('token')
+        const loginFn = params && params.withGoogle ? googleLogin : loginAccount
+        if (params) {
+            const res = await loginFn(params)
+            // TWO FACTOR
+            if (res.twoFactorRequired) {
+                return get2FA()
+            }
+            token = res.id
+            account = res.user
+            id = res.user.id
+        } else if (token && id) {
+            account = await getAccount(id)
+        } else {
+            dispatch(NavigationActions.navigate({ routeName: 'Register' }))
+            return false
+        }
+        await postLogin(token, id, account)
+        return true
+    } catch(err) {
+        const { error } = err.response.data;
+        if(error && error.statusCode === 401) {
+            error.message = 'Invalid cedentials';
+            !supressToasts && dispatch(showToast('Invalid Credentials'))
+        } else {
+            dispatch(NavigationActions.navigate({ routeName: 'Register' }))
+        }
+        !supressToasts && dispatch(showToast(getError(err)))
+        return false
+    }
 }
 
 export const logout = () => async(dispatch, getState) => {
