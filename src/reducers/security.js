@@ -4,7 +4,7 @@ import { setTwoFactorAuthSecret as setTwoFactorAuthSecretApi, verifyTwoFactorAut
 import { NavigationActions } from 'react-navigation'
 import {
     genericError,
-    getError,
+    getErrorMsg,
     registerForPushNotificationsAsync,
     safeAlert,
     removeArrItem
@@ -25,7 +25,7 @@ export const setTwoFactorAuthSecret = () => async (dispatch, getState) => {
 	const response = await setTwoFactorAuthSecretApi(id).catch(e=>err=e);
 	if(err){
         dispatch(setLoading(false))
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return
 	}
 	const secretKey = response.two_factor_secret
@@ -40,7 +40,7 @@ export const verifyTwoFactorAuthToken = ({token, confirm, login}) => async (disp
 	const response = await verifyTwoFactorAuth(id, {token, confirm, login}).catch(e=>err=e);
 	if(err){
         dispatch(setLoading(false))
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return
 	}
     dispatch(setLoading(false))    

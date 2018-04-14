@@ -2,7 +2,7 @@ import { getExchanges as _getExchanges } from '../helpers/api'
 import { getExchangeImage } from '../helpers/functions'
 import {showToast } from './ui'
 import {
-    getError,
+    getErrorMsg,
 } from '../helpers/functions'
 
 export const types = {
@@ -23,7 +23,7 @@ export const getExchanges = () => async (dispatch) => {
         }))
         dispatch(getExchangesAction(exchangeItems));
     } catch (err) {
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
     }   
 }
 

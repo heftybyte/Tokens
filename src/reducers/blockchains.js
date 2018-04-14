@@ -2,7 +2,7 @@ import { getBlockchains as _getBlockchains } from '../helpers/api'
 import { getBlockchainImage } from '../helpers/functions'
 import {showToast } from './ui'
 import {
-    getError,
+    getErrorMsg,
 } from '../helpers/functions'
 
 export const types = {
@@ -23,7 +23,7 @@ export const getBlockchains = () => async (dispatch) => {
         }))
         dispatch(getBlockchainsAction(blockchainItems));
     } catch (err) {
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
     }   
 }
 

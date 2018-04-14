@@ -1,7 +1,7 @@
 import { getNewsFeed } from '../helpers/api'
 import {showToast } from './ui'
 import {
-    getError,
+    getErrorMsg,
 } from '../helpers/functions'
 
 export const types = {
@@ -19,7 +19,7 @@ export const fetchFeed = () => async (dispatch, getState) => {
         const news = await getNewsFeed(accountId)
         dispatch(getFeed(news));
     } catch (err) {
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
     }   
 }
 

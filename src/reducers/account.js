@@ -29,7 +29,7 @@ import {
 } from '../helpers/api'
 import {
     genericError,
-    getError,
+    getErrorMsg,
     registerForPushNotificationsAsync,
     safeAlert,
     removeArrItem
@@ -146,7 +146,7 @@ export const registerAccount = (params) => async (dispatch, getState) => {
     const newAccount = await _registerAccount(params).catch(e=>err=e)
     if (err) {
         console.log('registerAccount', err)
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return
     }
     await SecureStore.setItemAsync('id', newAccount.id)
@@ -225,7 +225,7 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
         } else {
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         }
-        !supressToasts && dispatch(showToast(getError(err)))
+        !supressToasts && dispatch(showToast(getErrorMsg(err)))
         return false
     }
 }
@@ -265,7 +265,7 @@ export const addToWatchlist = (symbol, token) => async (dispatch, getState) => {
     if (err) {
         const { watchList } = getState().account
         const newWatchList = removeArrItem(watchList, 'symbol', symbol)
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         dispatch(addWatchListAction(newWatchList))
     }
 }
@@ -286,7 +286,7 @@ export const removeFromWatchList = (symbol, token) => async (dispatch, getState)
         const account = await removeFromAccountWatchlist(id, symbol).catch(e=>err=e)
         if (err) {
             newWatchList.splice(removeIndex, 0, symbol)
-            dispatch(showToast(getError(err)))
+            dispatch(showToast(getErrorMsg(err)))
             dispatch(removeFromWatchListAction(newWatchList))
         }
 	}
@@ -309,7 +309,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     const account = await addAccountAddress(id, address).catch(e=>err=e)
     dispatch(setLoading(false))
     if (err) {
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return err
     }
     dispatch(showToast('Address Added'))
@@ -328,7 +328,7 @@ export const refreshAddress = (address) => async (dispatch, getState) => {
     const account = await refreshAccountAddress(id, address).catch(e=>err=e)
     dispatch(setLoading(false))
     if (err) {
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return
     }
     dispatch(showToast('Tokens Updated'))
@@ -344,7 +344,7 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
         const account = await deleteAccountAddress(id, address).catch(e=>err=e)
         dispatch(setLoading(false))
         if (err) {
-            dispatch(showToast(getError(err)))
+            dispatch(showToast(getErrorMsg(err)))
             return
         }
         dispatch(showToast('Address Removed'))
@@ -376,7 +376,7 @@ export const addWalletAddress = (address, platform) => async (dispatch, getState
 
     dispatch(setLoading(false))
     if (err) {
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return err
     }
     dispatch(showToast('Wallet created'))
@@ -399,7 +399,7 @@ export const deleteWalletAddress = (address) => async (dispatch, getState) => {
 
         dispatch(setLoading(false))
         if (err) {
-            dispatch(showToast(getError(err)))
+            dispatch(showToast(getErrorMsg(err)))
             return
         }
         dispatch(showToast('Wallet Address Removed'))
@@ -425,7 +425,7 @@ export const setDefaultCurrency = (currency) => async (dispatch, getState) => {
   const account = await setCurrency(id, currency).catch(e=>err=e)
 
   if (err) {
-      dispatch(showToast(getError(err)))
+      dispatch(showToast(getErrorMsg(err)))
       return err
   }
   dispatch(setCurrencyAction(account.preference.currency))
@@ -444,7 +444,7 @@ export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getStat
     }
 
     if (err) {
-      dispatch(showToast(getError(err)))
+      dispatch(showToast(getErrorMsg(err)))
       return
     }
     dispatch(portfolioAction(portfolio))
@@ -472,7 +472,7 @@ export const getTokenDetails = (sym) => async (dispatch, getState) => {
     const tokenDetails = await getTokenDetailsForAccount(id, sym).catch(e=>err=e)
     // dispatch(setLoading(false))
     if (err) {
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return
     }
 

@@ -3,7 +3,7 @@ import {
     getPrices as _getPrices
 } from '../helpers/api'
 import {showToast } from './ui'
-import { getError } from '../helpers/functions'
+import { getErrorMsg } from '../helpers/functions'
 
 export const UPDATE_PERIOD = 'ticker/UPDATE_PERIOD'
 export const LOADING_HISTORICAL_PRICES = 'ticker/LOADING_HISTORICAL_PRICES'
@@ -32,7 +32,7 @@ export const getPrices = ({fsyms,tsyms,format='chart'}) => async(dispatch) => {
     let err = null
     let prices = await _getPrices({fsyms,tsyms,format}).catch(e=>err=e)
     if (err) {
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return
     }
     dispatch(priceAction(prices, format))
@@ -47,7 +47,7 @@ export const getHistoricalPrices = ({fsyms,tsyms,format='chart',start,end,period
     let prices = await getHistoricalPricesApi({fsyms,tsyms,start,end,format,period,interval}).catch(e=>err=e)
     if (err) {
         dispatch(loadingPricesAction(format, false, 'historical'))
-        dispatch(showToast(getError(err)))
+        dispatch(showToast(getErrorMsg(err)))
         return
     }
     dispatch(loadingPricesAction(format, false, 'historical'))
