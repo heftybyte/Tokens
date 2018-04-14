@@ -1,6 +1,6 @@
 import types from '../types/security';
 import {createReducer} from './common';
-import { enableTwoFactorAuth as enableTwoFactorAuthApi, verifyTwoFactorAuth } from '../helpers/api'
+import { setTwoFactorAuthSecret as setTwoFactorAuthSecretApi, verifyTwoFactorAuth } from '../helpers/api'
 import { NavigationActions } from 'react-navigation'
 import {
     genericError,
@@ -9,7 +9,7 @@ import {
     safeAlert,
     removeArrItem
 } from '../helpers/functions'
-import { enableTwoFactorAuthAction, disableTwoFactoAuthAction, disablePin, disableFingerprint } from '../actions/security';
+import { setTwoFactorAuthSecretAction, disableTwoFactoAuthAction, disablePin, disableFingerprint } from '../actions/security';
 import { setLoading, showToast } from './ui'
 
 const initialState = {
@@ -18,11 +18,11 @@ const initialState = {
     hasTwoFactorAuthEnabled: false,
 }
 
-export const enableTwoFactorAuth = () => async (dispatch, getState) => {
+export const setTwoFactorAuthSecret = () => async (dispatch, getState) => {
     let err = null;
 	const { id } = getState().account
-	dispatch(setLoading(true, 'Enabling Two Factor Authentication'))
-	const response = await enableTwoFactorAuthApi(id).catch(e=>err=e);
+	dispatch(setLoading(true, 'Generating Two-Factor Auth Key'))
+	const response = await setTwoFactorAuthSecretApi(id).catch(e=>err=e);
 	if(err){
         dispatch(setLoading(false))
         dispatch(showToast(getError(err)))
@@ -33,11 +33,11 @@ export const enableTwoFactorAuth = () => async (dispatch, getState) => {
     dispatch(NavigationActions.navigate({ routeName: 'Confirm 2FA', params: {secretKey} }))
 }
 
-export const verifyTwoFactorAuthToken = (token, activate=false) => async( dispatch, getState) => {
+export const verifyTwoFactorAuthToken = ({token, confirm, login}) => async (dispatch, getState) => {
     let err = null;
 	const {id} = getState().account
     dispatch(setLoading(true, 'Verifying two factor token'))
-	const response = await verifyTwoFactorAuth(id, token).catch(e=>err=e);
+	const response = await verifyTwoFactorAuth(id, {token, confirm, login}).catch(e=>err=e);
 	if(err){
         dispatch(setLoading(false))
         dispatch(showToast(getError(err)))
@@ -48,9 +48,10 @@ export const verifyTwoFactorAuthToken = (token, activate=false) => async( dispat
         dispatch(showToast('Token verification failed. Please try again'))
         return
     }
-    dispatch(enableTwoFactorAuthAction())
-    dispatch(disableFingerprint());
-    dispatch(disablePin());
+    if (confirm) {
+        dispatch(disableFingerprint());
+        dispatch(disablePin());
+    }
     dispatch(showToast('Token successfully verified'))
     dispatch(NavigationActions.navigate({ routeName: 'Settings', params: {} }))
 }

@@ -5,7 +5,7 @@ import { NavigationActions } from 'react-navigation';
 import { StyleSheet, View, AsyncStorage, Alert, TouchableHighlight, Platform } from 'react-native';
 import { Container, Header, Content, ListItem, Text, Radio, Footer, Button, CheckBox, Body, Right, List} from 'native-base';
 import { disablePin, disableFingerprint } from '../../../actions/security';
-import { enableTwoFactorAuth } from '../../../reducers/security';
+import { setTwoFactorAuthSecret } from '../../../reducers/security';
 import { disableTwoFactorAuthAction } from '../../../actions/security';
 
 
@@ -46,7 +46,7 @@ class TwoFactorAuth extends Component {
 
     enableTwoFactor = async() => {
         const {
-            enableTwoFactorAuth,
+            setTwoFactorAuthSecret,
         } = this.props
 
         Alert.alert(
@@ -55,7 +55,7 @@ class TwoFactorAuth extends Component {
             [
                 {text: 'Cancel', onPress: () => {}},
                 {text: 'OK', onPress: () => {
-                    enableTwoFactorAuth();
+                    setTwoFactorAuthSecret();
                 }},
             ],
             { cancelable: true }
@@ -89,12 +89,12 @@ class TwoFactorAuth extends Component {
                         </ListItem>
                         <ListItem onPress={this.twoFactorAuth} noBorder>
                             <Body>
-                                <Text style={styles.white}>Enable two-factor authentication</Text>
+                                <Text style={styles.white}>{`Enable two-factor authentication\n`}</Text>
                                 <Text style={styles.grey}>
-                                    Two-factor authentication adds a layer of security to your account.
-                                    When signing in, you'll need to enter your password and a verification code.
+                                    {`Two-factor authentication adds a layer of security to your account.\nWhen signing in, you'll need to enter a verification code.
+                                    `}
                                 </Text>
-                                <Text style={styles.grey}>Please ensure you have Google authenticator app installed from Appstore or Playstore. </Text>
+                                <Text style={styles.grey}>Please ensure you have Google authenticator app installed from Appstore or Playstore.</Text>
                             </Body>
                             <Right style={{paddingRight: 10}}>
                                 <CheckBox
@@ -119,7 +119,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
-        enableTwoFactorAuth: () => dispatch(enableTwoFactorAuth()),
+        setTwoFactorAuthSecret: () => dispatch(setTwoFactorAuthSecret()),
         disableTwoFactorAuth: () => dispatch(disableTwoFactorAuthAction())
     }
 }
