@@ -52,7 +52,7 @@ export const formatCurrencyChange = (change) => {
     return sign + change
 }
 
-export const getError = (err) =>
+export const getErrorMsg = (err) =>
   err.response &&
   err.response.data &&
   err.response.data.error &&

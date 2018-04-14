@@ -14,7 +14,7 @@ import _platform from '../../../native-base-theme/variables/platform';
 import styles from './styles'
 import { login as _login, registerAccount as _registerAccount } from '../../reducers/account'
 import { setLoading as _setLoading, showToast as _showToast } from '../../reducers/ui'
-import { getError } from '../../helpers/functions'
+import { getErrorMsg } from '../../helpers/functions'
 
 const customStyles = {
     header: {
@@ -117,7 +117,7 @@ class SignUp extends Component {
         } catch (err) {
             setLoading(false)
             logger.error('signInWithGoogle', err)
-            showToast(getError(err))
+            showToast(getErrorMsg(err))
         }
     }
 
@@ -160,14 +160,14 @@ class SignUp extends Component {
             showToast('Account Created')
         } catch (err) {
             logger.error('submit, registerAccount', err)
-            showToast(getError(err))
+            showToast(getErrorMsg(err))
         }
         if (withGoogle) {
             try {
                 await login({ username, accessToken, withGoogle })
             } catch (err) {
                 logger.error('SignUp withGoogle', err)
-                showToast(getError(err))
+                showToast(getErrorMsg(err))
             }
         } else {
             navigate('Login')
