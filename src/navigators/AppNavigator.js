@@ -39,7 +39,7 @@ import SecuritySettings from '../components/Settings/SecuritySettings'
 import SetPin from '../components/Settings/SecuritySettings/setpin';
 import TwoFactorAuth from '../components/Settings/TwoFactorAuth';
 import ConfirmTwoFactorAuth from '../components/Settings/TwoFactorAuth/ConfirmTwoFactorAuth';
-
+import VerifyTwoFactorAuth from '../components/Settings/TwoFactorAuth/VerifyTwoFactorAuth';
 
 import {
   createReduxBoundAddListener,
@@ -82,6 +82,7 @@ export const Routes = {
   'SetPin': {screen: SetPin},
   '2FA': {screen: TwoFactorAuth},
   'Confirm 2FA': {screen: ConfirmTwoFactorAuth},
+  'Verify 2FA': { screen: VerifyTwoFactorAuth },
   'ICO List': {
     screen: ICOs
   },

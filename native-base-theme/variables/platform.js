@@ -198,7 +198,7 @@ export default {
 
   // Segment
   segmentBackgroundColor: platform === "ios" ? "#F8F8F8" : "#3F51B5",
-  segmentActiveBackgroundColor: platform === "ios" ? "#007aff" : "#fff",
+  segmentActiveBackgroundColor: platform === "ios" ? "#007aff" : "#333",
   segmentTextColor: platform === "ios" ? "#007aff" : "#fff",
   segmentActiveTextColor: platform === "ios" ? "#fff" : "#3F51B5",
   segmentBorderColor: platform === "ios" ? "#007aff" : "#fff",

@@ -200,10 +200,18 @@ export const setTwoFactorAuthSecret = async (id) => {
   return res.data
 }
 
-export const verifyTwoFactorAuth = async (id, {token, confirm,login}) => {
-  const res = await instance.post(`/accounts/${id}/two-factor/verify`,{token,confirm,login})
+export const verifyTwoFactorAuth = async ({id, token, confirm,login}) => {
+  const res = await instance.post(`/accounts/two-factor/verify`,{id, token,confirm,login})
   return res.data
 }
+
+export const disableTwoFactorAuth = async (id) => {
+  const res = await instance.post(`/accounts/${id}/two-factor/disable`);
+  return res.data
+}
+
+
+
 
 const log = (level) => (message, data) => {
     console.log({ message, data, level })

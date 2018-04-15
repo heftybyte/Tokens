@@ -89,6 +89,9 @@ class SignUp extends Component {
         const { withGoogle } = navigation.state.params
 
         if (!withGoogle) {
+            this.setState({
+                showForm: true
+            })
             return
         }
 
