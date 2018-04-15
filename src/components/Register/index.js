@@ -83,7 +83,7 @@ class Register extends Component {
         const { navigate } = this.props
         return (
             <StyleProvider style={getTheme(_platform)}>
-                <Container>
+                <Container style={{flex: 1, alignItems: 'center'}}>
                     <Content style={{flex: 1, flexDirection: 'row'}} containerStyleContent={customStyles.container}>
                         <View style={customStyles.imageContainer}>
                             <Image source={require('../../../assets/Tokens_Icon.png')} style={customStyles.image} />
