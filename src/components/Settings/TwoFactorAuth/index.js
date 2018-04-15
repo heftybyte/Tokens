@@ -5,8 +5,7 @@ import { NavigationActions } from 'react-navigation';
 import { StyleSheet, View, AsyncStorage, Alert, TouchableHighlight, Platform } from 'react-native';
 import { Container, Header, Content, ListItem, Text, Radio, Footer, Button, CheckBox, Body, Right, List} from 'native-base';
 import { disablePin, disableFingerprint } from '../../../actions/security';
-import { setTwoFactorAuthSecret } from '../../../reducers/security';
-import { disableTwoFactorAuthAction } from '../../../actions/security';
+import { setTwoFactorAuthSecret, disableTwoFactorAuth } from '../../../reducers/security';
 
 import { brandColor } from '../../../config'
 
@@ -123,7 +122,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
         setTwoFactorAuthSecret: () => dispatch(setTwoFactorAuthSecret()),
-        disableTwoFactorAuth: () => dispatch(disableTwoFactorAuthAction())
+        disableTwoFactorAuth: () => dispatch(disableTwoFactorAuth())
     }
 }
 

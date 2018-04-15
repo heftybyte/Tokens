@@ -29,10 +29,12 @@ import {
 } from '../helpers/api'
 import {
     genericError,
+    getError,
     getErrorMsg,
     registerForPushNotificationsAsync,
     safeAlert,
-    removeArrItem
+    removeArrItem,
+    get2FA
 } from '../helpers/functions'
 import { getBlockchains } from './blockchains'
 import { getExchanges } from './exchanges'
@@ -155,8 +157,8 @@ export const registerAccount = (params) => async (dispatch, getState) => {
     dispatch(registerAction(newAccount.id))
 }
 
-async function postLogin(accessToken, userId, account) {
-    logger.info('user logged in', { userId, accessToken })
+async function configureSession(accessToken, userId, account, dispatch) {
+    logger.info('user logged in', { userId, accessToken, account: account.username })
     setAuthHeader(accessToken)
     await SecureStore.setItemAsync('token', accessToken)
     await SecureStore.setItemAsync('id', userId)
@@ -177,23 +179,6 @@ async function postLogin(accessToken, userId, account) {
     }))
 }
 
-export const twoFactorLogin = (id, token) => async (dispatch, getState) => {
-    try {
-        const res = await verifyTwoFactorAuth(id, {token, login: true})
-        await postLogin(res)
-    } catch (err) {
-        console.error(err)
-    }
-}
-
-function get2FA() {
-    logger.info('two factor required')
-    token = await Alert.prompt('Enter Google Auth Code')
-    res = await verifyTwoFactorAuth(res.id, {token, login: true})
-    // NAVIGATE 2Auth
-    return false
-}
-
 export const login = (params, supressToasts) => async (dispatch, getState) => {
     try {
         let account = null
@@ -201,27 +186,28 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
         let token = await SecureStore.getItemAsync('token')
         const loginFn = params && params.withGoogle ? googleLogin : loginAccount
         if (params) {
-            const res = await loginFn(params)
+            let res = await loginFn(params)
             // TWO FACTOR
             if (res.twoFactorRequired) {
-                return get2FA()
+                dispatch(setLoading(false))
+                res = await get2FA(res.userId, dispatch)
             }
-            token = res.id
             account = res.user
             id = res.user.id
+            token = res.id
         } else if (token && id) {
+            setAuthHeader(token)
             account = await getAccount(id)
         } else {
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
             return false
         }
-        await postLogin(token, id, account)
+        await configureSession(token, id, account, dispatch)
         return true
     } catch(err) {
-        const { error } = err.response.data;
+        const error = getError(err)
         if(error && error.statusCode === 401) {
             error.message = 'Invalid cedentials';
-            !supressToasts && dispatch(showToast('Invalid Credentials'))
         } else {
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         }
@@ -516,10 +502,15 @@ export const removeBookmark = (news) => async (dispatch, getState) => {
     )
 }
 
+export const updateAccount = (account) => async (dispatch, getState) => {
+    dispatch(updateAction(account))
+}
+
 const initialState = {
     username: 'escobyte',
     description: '',
     bountyHunter: false,
+    two_factor_enabled: false,
     reputation: 0,
     followers: 0,
     following: 0,
@@ -566,6 +557,13 @@ export const trackFeedItem = (feedItemId, type) => async (dispatch, getState) =>
 
 export default (state = initialState, action) => {
     switch(action.type) {
+        case UPDATE:
+            return {
+                ...state,
+                two_factor_enabled: action.data.account.two_factor_enabled,
+                username: action.data.account.username,
+                email: action.data.account.email
+            }
         case REGISTER:
         case GET_PORTFOLIO:
         case GET_TOKEN_DETAILS:

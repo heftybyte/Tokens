@@ -4,7 +4,8 @@ import { Permissions, Notifications, SecureStore, Constants } from 'expo';
 import { NavigationActions } from 'react-navigation';
 import {
     setAuthHeader,
-    registerUserForPushNotifications
+    registerUserForPushNotifications,
+    verifyTwoFactorAuth
 } from './api';
 import { setLoading } from '../reducers/ui'
 import { baseURL } from '../config'
@@ -52,12 +53,13 @@ export const formatCurrencyChange = (change) => {
     return sign + change
 }
 
-export const getErrorMsg = (err) =>
+export const getError = (err) =>
   err.response &&
   err.response.data &&
-  err.response.data.error &&
-  err.response.data.error.message ||
-  err.message
+  err.response.data.error
+
+export const getErrorMsg = (err) =>
+  (getErrorMsg(err) || {}).message || err.message
 
 export const registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
@@ -135,6 +137,26 @@ export const removeArrItem = function (inputArr, key, value) {
     return arr
 }
 
+export const get2FA = async function (id, dispatch) {
+    return new Promise((resolve, reject)=>{
+        dispatch(NavigationActions.navigate({
+            routeName: 'Verify 2FA',
+            params: {
+                callback: async (token, cb) => {
+                    try {
+                        const res = await verifyTwoFactorAuth({ id, token, login: true })
+                        resolve(res)
+                    } catch (err) {
+                        cb ? cb(false) : reject(err)
+                    }
+                },
+                cancel: () => {
+                    reject(null)
+                }
+            }
+        }))
+    }) 
+}
 
 const deepRoutes = {
     '/token/[a-zA-Z0-9]': {
