@@ -2,18 +2,24 @@ import { Wallet, utils, providers, Contract } from 'ethers';
 import { ENVIRONMENT } from 'react-native-dotenv';
 import { SecureStore } from 'expo'
 const abi = require('human-standard-token-abi')
+const WALLET_KEY = 'wallet'
 
 export const storeWallet = async(type, privKey, pubKey) => {
-    const key = "wallet"
     const address = utils.getAddress(pubKey)
-
-    let currentWallet  = await SecureStore.getItemAsync(key) ||  {}
-
+    const currentWallet  = await SecureStore.getItemAsync(WALLET_KEY) ||  {}
     currentWallet[type] = { ...currentWallet[type], [address]: privKey }
-
-    const result = await SecureStore.setItemAsync(key, JSON.stringify(currentWallet));
-
+    const result = await SecureStore.setItemAsync(WALLET_KEY, JSON.stringify(currentWallet));
     return result
+}
+
+export const removeWallet = async (type, pubKey) => {
+    const address = utils.getAddress(pubKey)
+    const currentWallet  = await SecureStore.getItemAsync(WALLET_KEY) ||  {}
+    if (currentWallet && currentWallet[type]) {
+        delete currentWallet[type][address]
+        const result = await SecureStore.setItemAsync(WALLET_KEY, JSON.stringify(currentWallet));
+    }
+    return false
 }
 
 export const generateAddressFromMnemonic = async (mnemonic, index=0) => {
