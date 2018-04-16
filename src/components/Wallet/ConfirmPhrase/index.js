@@ -23,25 +23,21 @@ class ConfirmPhrase extends Component {
 
 	createWallet = async(mnemonic, type='ethereum') => {
 
-		const { addWalletAddress, showLoading, showToast } = this.props
+		const { addWalletAddress, setLoading, showToast } = this.props
 
 		try {
-			showLoading(true, 'Generating Wallet')
+			setLoading(true, 'Generating Wallet')
 			const wallet = await generateAddressFromMnemonic(mnemonic);
-			showLoading(false)
+			setLoading(false)
 
 			if(wallet){
 				const { address, privateKey } = wallet
 				const result = await storeWallet(type, privateKey, address)
 				await addWalletAddress(address, 'ethereum');
-
-				if (err){
-					console.log(err)
-				}
 			}
 		} catch (err) {
-			showLoading(false)
-			console.log(err)
+			console.log('createWallet err', err)
+			setLoading(false)
 			showToast(getErrorMsg(err))
 		}
 
@@ -50,6 +46,7 @@ class ConfirmPhrase extends Component {
 	onContinue = (mnemonic) => {
 		if(mnemonic == this.state.mnemonic){
 			this.createWallet(mnemonic)
+			showToast('Correct')
 			return
 		}
 

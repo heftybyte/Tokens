@@ -6,10 +6,17 @@ const WALLET_KEY = 'wallet'
 
 export const storeWallet = async(type, privKey, pubKey) => {
     const address = utils.getAddress(pubKey)
-    const currentWallet  = await SecureStore.getItemAsync(WALLET_KEY) ||  {}
+    const currentWallet = JSON.parse(await SecureStore.getItemAsync(WALLET_KEY) ||  '{}')
     currentWallet[type] = { ...currentWallet[type], [address]: privKey }
     const result = await SecureStore.setItemAsync(WALLET_KEY, JSON.stringify(currentWallet));
     return result
+}
+
+export const hasWallet = async (type, pubKey) => {
+    const address = utils.getAddress(pubKey)
+    const currentWallet = JSON.parse(await SecureStore.getItemAsync(WALLET_KEY) ||  '{}')
+    console.log({currentWallet,type, address,['!!(currentWallet[type] && currentWallet[type][address])']:!!(currentWallet[type] && currentWallet[type][address])})
+    return !!(currentWallet[type] && currentWallet[type][address])
 }
 
 export const removeWallet = async (type, pubKey) => {
