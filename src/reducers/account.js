@@ -36,6 +36,7 @@ import {
     removeArrItem,
     get2FA
 } from '../helpers/functions'
+import { removeWallet } from '../helpers/wallet'
 import { getBlockchains } from './blockchains'
 import { getExchanges } from './exchanges'
 import { setLoading, showToast } from './ui'
@@ -382,16 +383,16 @@ export const deleteWalletAddress = (address) => async (dispatch, getState) => {
     const ok = async () => {
         let err = null
         const { id } = getState().account
-        dispatch(setLoading(true, 'Deleting Wallet Address'))
+        dispatch(setLoading(true, 'Deleting Wallet'))
 
         const account = await deleteAccountWalletAddress(id, address).catch(e=>err=e)
-
+        await removeWallet('ethereum', address).catch(e=>err=e)
         dispatch(setLoading(false))
         if (err) {
             dispatch(showToast(getErrorMsg(err)))
             return
         }
-        dispatch(showToast('Wallet Address Removed'))
+        dispatch(showToast('Wallet Removed'))
         dispatch(deleteWalletAddressAction(account.wallets))
         dispatch(getPortfolio())
         dispatch(getPortfolioChart())
