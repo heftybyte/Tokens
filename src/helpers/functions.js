@@ -54,12 +54,13 @@ export const formatCurrencyChange = (change) => {
 }
 
 export const getError = (err) =>
-  err.response &&
-  err.response.data &&
-  err.response.data.error
+  (err &&
+    err.response &&
+    err.response.data &&
+    err.response.data.error) || err
 
 export const getErrorMsg = (err) =>
-  (getErrorMsg(err) || {}).message || err.message
+  (getError(err) || {}).message
 
 export const registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(

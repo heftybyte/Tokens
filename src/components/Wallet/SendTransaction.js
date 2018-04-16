@@ -8,12 +8,15 @@ import { View, Container, Header, Content, ListItem, Input,Text,
     Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form, StyleProvider } from 'native-base';
 import { send } from '../../helpers/wallet';
 import { withDrawer } from '../../helpers/drawer';
+import { getErrorMsg, } from '../../helpers/functions';
+import { logger } from '../../helpers/api';
 import { SecureStore} from 'expo'
 import { constants } from '../../constants';
 import { connect } from 'react-redux';
 import getTheme from '../../../native-base-theme/components';
 import platform from '../../../native-base-theme/variables/platform';
 import styles from './styles'
+import { setLoading, showToast } from '../../reducers/ui'
 
 const customStyles = {
     header: {
@@ -74,7 +77,6 @@ class SendTransaction extends Component {
 
     static getHeader = (navState) => {
         const { currencyName, image } = navState.params
-        console.log({ currencyName, image })
         return (
             <View style={{flex:1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <Image style={customStyles.image} source={{uri: image}}></Image>
@@ -87,32 +89,45 @@ class SendTransaction extends Component {
         showAdvanced: false,
         showScanner: false,
         recipient: null,
-        quantity: 0,
+        amount: 0,
         gas: 21000,
         data: null
     }
 
-    send = () => {
-        const { navigation } = this.props
+    send = async () => {
+        const { navigation, setLoading, showToast } = this.props
         const { id, contractAddress } = navigation.state.params
-        const { data, gas, recipient, quantity } = this.state
-
-        console.log({ data, gas, recipient, quantity, contractAddress })
-        send({id, recipient, quantity, contractAddress, gas})
+        const { data, gas, recipient, amount } = this.state
+        setLoading(true, 'Sending Transaction')
+        try {
+            console.log({publicKey: id, recipient, amount, contractAddress, gas})
+            if (recipient === id) {
+                throw new Error('Recipient must be different')
+            }
+            const transaction = await send({publicKey: id, recipient, amount, contractAddress, gas})
+            this.setState({
+                transactionHash: transaction.hash
+            })
+            setLoading(false)
+            showToast('Transaction Sent')
+        } catch(err) {
+            logger.error('wallet send', err)
+            setLoading(false)
+            showToast(getErrorMsg(err))
+        }
     }
 
     render() {
         const { navigation } = this.props
-        const { data, gas, quantity, recipient, showAdvanced, showScanner } = this.state
+        const { data, gas, amount, recipient, showAdvanced, showScanner, transactionHash } = this.state
         const { id, currencyName, currencySymbol } = navigation.state.params
-        console.log('re', recipient)
         return (
             <StyleProvider style={getTheme(platform)}>
                 <Container>
                     <Content>    
                         <View style={customStyles.header}>
                             <Text style={[styles.heading, customStyles.heading]}>Sending {currencySymbol} From</Text>
-                            <Text style={[customStyles.input, customStyles.addressInput]}>{id}</Text>
+                            <Text selectable style={[customStyles.input, customStyles.addressInput]}>{id}</Text>
                         </View>
 
                         <View style={[customStyles.header, {flex: 1, borderBottomWidth: 0}]}>
@@ -133,8 +148,8 @@ class SendTransaction extends Component {
                             <Input
                                  style={customStyles.input}
                                  placeholder="Enter Quantity"
-                                 value={quantity}
-                                 onChangeText={(quantity)=>{this.setState({ quantity })}}
+                                 value={amount}
+                                 onChangeText={(amount)=>{this.setState({ amount })}}
                              />
                         </View>
                         <TouchableHighlight onPress={()=>this.setState({ showAdvanced: !showAdvanced })}>
@@ -170,6 +185,7 @@ class SendTransaction extends Component {
                                 <Text style={{color: '#000'}}>Send</Text>
                             </Button>
                         </View>
+                        {!!transactionHash && <Text selectable style={{color:'#fff', padding: 20, textAlign: 'center'}}>Transaction sent {transactionHash}</Text>}
                     </Content>
                 </Container>
             </StyleProvider>
@@ -184,7 +200,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
+        navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
+        setLoading: (isLoading, msg) => dispatch(setLoading(isLoading, msg)),
+        showToast: (msg) => dispatch(showToast(msg))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(SendTransaction));

@@ -1,13 +1,15 @@
 import { Wallet, utils, providers, Contract } from 'ethers';
 import { ENVIRONMENT } from 'react-native-dotenv';
 import { SecureStore } from 'expo'
+const abi = require('human-standard-token-abi')
 
 export const storeWallet = async(type, privKey, pubKey) => {
     const key = "wallet"
+    const address = utils.getAddress(pubKey)
 
     let currentWallet  = await SecureStore.getItemAsync(key) ||  {}
 
-    currentWallet[type] = { ...currentWallet[type], pubKey: privKey }
+    currentWallet[type] = { ...currentWallet[type], [address]: privKey }
 
     const result = await SecureStore.setItemAsync(key, JSON.stringify(currentWallet));
 
@@ -39,13 +41,13 @@ export const generateAddressFromPrivateKey = async (privateKey) => {
     }
 }
 
-
 const _getEtherProvider = () => ( ENVIRONMENT !== 'development'
     ? providers.getDefaultProvider() :
     new providers.JsonRpcProvider('http://localhost:7545', providers.networks.ropsten) )
 
-const _sendEther = async (wallet, recipient, amount) => {
+const _sendEther = async (wallet, to, amount) => {
     let err = null
+    const recipient = utils.getAddress(to)
     wallet.provider = _getEtherProvider()
     amount = utils.parseEther(amount.toString());
     const transaction = await wallet.send(recipient, amount).catch(e=>err=e);
@@ -53,9 +55,9 @@ const _sendEther = async (wallet, recipient, amount) => {
     return transaction;
 }
 
-const _sendTokens = async(wallet, recipient, amount, contractAddress) => {
+const _sendTokens = async(wallet, to, amount, contractAddress) => {
     let err = null
-    const abi = require('human-standard-token-abi')
+    const recipient = utils.getAddress(to)
     wallet.provider = _getEtherProvider()
     const contract = new Contract(contractAddress, abi, wallet);
 
@@ -65,17 +67,20 @@ const _sendTokens = async(wallet, recipient, amount, contractAddress) => {
 }
 
 const _createEtherWallet = async(publicKey) => {
+    const address = utils.getAddress(publicKey)
     const storedWallet = await SecureStore.getItemAsync("wallet");
-    const privateKey = storedWallet['ethereum'][publicKey]
+    if (!storedWallet) throw new Error('No wallets found')
+    const privateKey = storedWallet['ethereum'][address]
     const wallet = new Wallet(privateKey)
     return wallet
 }
 
 const ETH_CONTRACT = '0x0000000000000000000000000000000000000000'
-export const send = async ({publicKey, recipient, amount, contractAddress=ETH_CONTRACT, gas=21000}) => {
+export const send = async ({publicKey, to, amount, contractAddress=ETH_CONTRACT, gas=21000}) => {
     const wallet = await _createEtherWallet(publicKey);
     let transaction = null
     let err = null
+    const recipient = utils.getAddress(to)
     const type = contractAddress === ETH_CONTRACT ? 'ether' : 'tokens'
     switch(type) {
         case 'ether':
@@ -91,7 +96,6 @@ export const send = async ({publicKey, recipient, amount, contractAddress=ETH_CO
         default:
 
     }
-
 }
 
 export const isValidPrivateKey=(privKey) => (privKey.length == 64)
