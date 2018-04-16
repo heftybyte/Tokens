@@ -81,6 +81,7 @@ class AccountPicker extends Component {
       name,
       type,
       platformId,
+      platform,
       action,
       contractAddress,
       currencyName,
@@ -89,6 +90,7 @@ class AccountPicker extends Component {
     } =  navigation.state.params
     const isTransaction = action === 'send' || action === 'recieve'
     const isTrade = action === 'buy' || action === 'sell'
+    console.log({platformId})
     const items = this.getAccounts(type, platformId).map((acc)=>{
       const item = {
         name: acc.name || `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
@@ -113,7 +115,7 @@ class AccountPicker extends Component {
        {isTransaction && 
           <View style={styles.header}>
             <Text style={styles.heading}>Select Wallet</Text>
-            <Text style={styles.subHeading}>Choose one of your wallets for this transaction.</Text>
+            <Text style={styles.subHeading}>Choose one of your {platform} wallets for this transaction.</Text>
           </View>
        }
       {isTrade && 
@@ -132,23 +134,29 @@ class AccountPicker extends Component {
           style={{flex: 1}}
           listMargin={20}
         />
-        <TouchableHighlight onPress={()=>this.navigateToAddScreen()}>
-          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}>
-            <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
-            <Text style={{ color: brandColor}}>add new {name} {type.replace('_', ' ')}</Text>
-          </View>
-        </TouchableHighlight>
-          {
-            (type !== 'exchange_account') ?
-              <TouchableHighlight onPress={()=>this.navigateToRestoreWalletScreen()}>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}>
-                  <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
-                  <Text style={{ color: brandColor}}>import existing {name} {type.replace('_', ' ')}</Text>
-                </View>
-              </TouchableHighlight>
-              :
-              <View />
-          }
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableHighlight
+            style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}
+            onPress={()=>this.navigateToAddScreen()}
+          >
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+              <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
+              <Text style={{ color: brandColor }}>new {type.replace('_', ' ')}</Text>
+            </View>
+          </TouchableHighlight>
+      {
+        (type !== 'exchange_account') &&
+          <TouchableHighlight
+             style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}
+             onPress={()=>this.navigateToRestoreWalletScreen()}
+          >
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+              <SimpleLineIcons style={{paddingRight: 10}} name={'cloud-upload'} color={brandColor} size={14} />
+              <Text style={{ color: brandColor}}>import {name} {type.replace('_', ' ')}</Text>
+            </View>
+          </TouchableHighlight>
+      }
+        </View>
       </ScrollView>
     )
   }
