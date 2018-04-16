@@ -19,6 +19,7 @@ import BookMarks from '../components/NewsFeed/BookMark';
 import Register from '../components/Register';
 import SignUp from '../components/Register/SignUp';
 import Login from '../components/Register/Login';
+import CoinbaseConnect from '../components/Register/CoinbaseLogin'
 import PriceAlert from '../components/PriceAlert';
 import EditProfile from '../components/Profile/EditProfile';
 import SetCurrency from '../components/Profile/SetCurrency';
@@ -64,6 +65,7 @@ export const Routes = {
   'Register': { screen: Register },
   'SignUp': { screen: SignUp },
   'Login': { screen: Login },
+  'Coinbase Connect': { screen: CoinbaseConnect },
   'Token Details': { screen: TokenDetails },
   'Wallet': { screen: Wallet},
   'New Wallet': {screen: NewWallet},
