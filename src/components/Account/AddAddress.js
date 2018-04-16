@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
+import { utils } from 'ethers';
 import { Permissions } from 'expo';
 import { NavigationActions } from 'react-navigation';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -10,6 +11,8 @@ import { addAddress } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
 import { baseColor } from '../../config'
 import { trackAddress } from '../../helpers/analytics'
+import { getErrorMsg } from '../../helpers/functions'
+import { showToast } from '../../reducers/ui'
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -52,13 +55,7 @@ class AddAddress extends Component {
     this.toggleQRScanner();
     let processedAddress = data.substr(data.search("0x"), 42);
     this.setState({inputValue: processedAddress});
-   
     trackAddress('Save', 'QRScanner')
-    if (processedAddress.length !== 42 || processedAddress.substr(0,2) !== '0x') {
-      Alert.alert('This Ethereum Address is Invalid')
-      return
-    }
-
     this.saveAddress(processedAddress)
   }
 
@@ -68,12 +65,18 @@ class AddAddress extends Component {
 
   saveAddress = async (data) => {
     const text = (typeof data === 'string') && data || this.state.inputValue;
-    const { addAddress, navigate } = this.props
+    const { addAddress, navigate, showToast } = this.props
     if(!text || !text.length) {
       Alert.alert('Enter an address to save');
       return;
     }
-    const err = await addAddress(text);
+    try {
+      const address = utils.getAddress(text)
+      await addAddress(text);
+    } catch (err) {
+      console.error(err)
+      showToast(getErrorMsg(err))
+    }
     // Alert.alert('Allow up to 2 minutes for your address data to appear');
   }
 
@@ -108,7 +111,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     addAddress: (address) => dispatch(addAddress(address)),
-    navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
+    navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
+    showToast: (params) => dispatch(_showToast(params))
   }
 }
 
