@@ -186,6 +186,7 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
         let token = await SecureStore.getItemAsync('token')
         const loginFn = params && params.withGoogle ? googleLogin : loginAccount
         if (params) {
+            dispatch(setLoading('Logging In'))
             let res = await loginFn(params)
             // TWO FACTOR
             if (res.twoFactorRequired) {
@@ -202,9 +203,11 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
             return false
         }
+        dispatch(setLoading(false))
         await configureSession(token, id, account, dispatch)
         return true
     } catch(err) {
+        dispatch(setLoading(false))
         const error = getError(err)
         if(error && error.statusCode === 401) {
             error.message = 'Invalid cedentials';
