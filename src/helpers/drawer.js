@@ -112,6 +112,7 @@ export const withDrawer = (WrappedComponent) => {
                             flexDirection: 'row',
                             alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
                             alignItems: 'center',
+                            justifyContent: 'center',
                             flex:1
                         }}>
                             <Image

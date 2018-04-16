@@ -3,7 +3,8 @@ import { ScrollView, StyleSheet, Text, View, TouchableHighlight } from "react-na
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer'
-import { getExchangeImage } from '../../helpers/functions'
+import { hasWallet } from '../../helpers/wallet'
+import { getExchangeImage, asyncFilter } from '../../helpers/functions'
 import { baseAccent, baseColor, brandColor } from '../../config'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Menu } from '../Common/Menu'
@@ -55,11 +56,19 @@ const styles = StyleSheet.create({
   }
 })
 class AccountPicker extends Component {
+  state = {
+    items: []
+  }
 
-  getAccounts = (type, platformId) => {
+  getAccounts = async (type, platformId) => {
     const stateField = AccountSources[type]
     const idField = AccountSourceId[type]
-    const accounts = (this.props[stateField] || [])//.filter(acc=>acc[idField]===platformId)
+    let accounts = (this.props[stateField] || [])//.filter(acc=>acc[idField]===platformId)
+    if (type === 'wallet') {
+      console.log({accounts})
+      accounts = await asyncFilter(accounts, async acc=>await hasWallet(acc.platform, acc.id))
+      console.log({accounts})
+    }
     return accounts
   }
 
@@ -75,8 +84,21 @@ class AccountPicker extends Component {
       goToRoute('Restore Wallet', navigation.state.params)
   }
 
-  render() {
-    const { navigation, addresses, goToRoute, exchangeMap } = this.props
+  componentDidMount = () => {
+    this.updateMenu(this.props)
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.updateMenu({...this.props, ...(nextProps||{})})
+  }
+
+  updateMenu = async (props={}) => {
+    const {
+      navigation,
+      addresses,
+      goToRoute,
+      exchangeMap
+    } = props
     const {
       name,
       type,
@@ -91,7 +113,8 @@ class AccountPicker extends Component {
     const isTransaction = action === 'send' || action === 'recieve'
     const isTrade = action === 'buy' || action === 'sell'
     console.log({platformId})
-    const items = this.getAccounts(type, platformId).map((acc)=>{
+    const accounts = await this.getAccounts(type, platformId)
+    const items = (accounts||[]).map((acc)=>{
       const item = {
         name: acc.name || `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
         params: { ...navigation.state.params, name: acc.name, id: acc.id },
@@ -109,6 +132,48 @@ class AccountPicker extends Component {
       }
       return item
     })
+    this.setState({
+      items
+    })
+  }
+
+  render() {
+    const { navigation } = this.props
+    const {
+      name,
+      type,
+      // platformId,
+      platform,
+      action,
+      // contractAddress,
+      // currencyName,
+      // currencySymbol,
+      // image
+    } =  navigation.state.params
+    const isTransaction = action === 'send' || action === 'recieve'
+    const isTrade = action === 'buy' || action === 'sell'
+    // console.log({platformId})
+    // const accounts = await this.getAccounts(type, platformId)
+    const { items } = this.state
+
+    // (accounts||[]).map((acc)=>{
+    //   const item = {
+    //     name: acc.name || `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
+    //     params: { ...navigation.state.params, name: acc.name, id: acc.id },
+    //     route: isTransaction ? 'SendTransaction' 
+    //       : isTrade ? 'NewExchangeOrder' : 'Account View'
+    //   }
+    //   if (type === 'exchange_account') {
+    //     const exchange = exchangeMap[acc.exchangeId]
+    //     item.image =  getExchangeImage(exchange.name)
+    //     item.params.exchangeName = exchange.name
+    //     item.params.exchangeImage = exchange.image
+    //   } else {
+    //     item.icon = Icons[type]
+    //     item.Component = SimpleLineIcons
+    //   }
+    //   return item
+    // })
 
     return (
       <ScrollView style={{flex:1}}>

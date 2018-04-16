@@ -159,6 +159,18 @@ export const get2FA = async function (id, dispatch) {
     }) 
 }
 
+export const asyncFilter = async (items, iter) => {
+    const results = []
+    for(let i = 0; i < items.length; i++) {
+        const item = items[i]
+        const keep = await iter(item)
+        if (keep) {
+            results.push(item)
+        }
+    }
+    return results
+}
+
 const deepRoutes = {
     '/token/[a-zA-Z0-9]': {
         'screen': 'Token Details',

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Animated, TouchableWithoutFeedback, StatusBar, Text, View } from 'react-native'
 import { withDrawer } from '../../helpers/drawer'
 import { SimpleLineIcons } from '@expo/vector-icons';
-import { deleteAddress, refreshAddress } from '../../reducers/account';
+import { deleteAddress, refreshAddress, deleteWalletAddress } from '../../reducers/account';
 import { baseAccent, baseColor, brandColor } from '../../config'
 import Dashboard from '../Common/Dashboard'
 import { Menu } from '../Common/Menu'
@@ -57,7 +57,7 @@ class AccountDashboard extends Component {
   componentWillMount = async () => {
     const { navigation } = this.props
     const { id } = navigation.state.params
-    const { refreshAddress, deleteAddress } = this.props
+    const { refreshAddress, deleteAddress, deleteWalletAddress } = this.props
 
     this.menuItems = [
       {
@@ -74,7 +74,13 @@ class AccountDashboard extends Component {
         icon: 'close',
         Component: SimpleLineIcons,
         route: "Select Account",
-        onPress: ()=>{deleteAddress(id)}
+        onPress: ()=>{
+          if (type === 'address') {
+            deleteAddress(id)
+          } else if (type === 'wallet') {
+            deleteWalletAddress(id)
+          }
+        }
       },
       {
         name: "Make Public",
@@ -164,6 +170,7 @@ const mapDispatchToProps = (dispatch) => ({
     getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
     getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
     deleteAddress: (address) => dispatch(deleteAddress(address)),
+    deleteWalletAddress: (address) => dispatch(deleteWalletAddress(address)),
     refreshAddress: (address) => dispatch(refreshAddress(address)),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
