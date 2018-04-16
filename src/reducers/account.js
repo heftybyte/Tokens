@@ -299,7 +299,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     dispatch(setLoading(false))
     if (err) {
         dispatch(showToast(getErrorMsg(err)))
-        return err
+        throw err
     }
     dispatch(showToast('Address Added'))
     dispatch(addAddressAction(account.addresses))
@@ -359,7 +359,7 @@ export const addWalletAddress = (address, platform) => async (dispatch, getState
     let err = null
     const { id } = getState().account
     console.log('id', id)
-    dispatch(setLoading(true, 'Creating Wallet'))
+    dispatch(setLoading(true, 'Saving Wallet'))
     console.log(id, address)
     const account = await addAccountWalletAddress(id, address, platform).catch(e=>err=e)
 

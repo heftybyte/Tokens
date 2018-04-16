@@ -9,10 +9,12 @@ import { withDrawer } from '../../../helpers/drawer';
 import { addWalletAddress } from '../../../reducers/account';
 import { SecureStore} from 'expo'
 import { constants } from '../../../constants';
+import { getErrorMsg } from '../../../helpers/functions';
 import { generateAddressFromMnemonic, storeWallet } from '../../../helpers/wallet';
 import styles from '../styles'
 import getTheme from '../../../../native-base-theme/components';
 import platform from '../../../../native-base-theme/variables/platform';
+import { setLoading, showToast } from '../../../reducers/ui'
 
 class ConfirmPhrase extends Component {
 	state = {
@@ -21,18 +23,26 @@ class ConfirmPhrase extends Component {
 
 	createWallet = async(mnemonic, type='ethereum') => {
 
-		const { addWalletAddress } = this.props
+		const { addWalletAddress, showLoading, showToast } = this.props
 
-		const wallet = await generateAddressFromMnemonic(mnemonic);
+		try {
+			showLoading(true, 'Generating Wallet')
+			const wallet = await generateAddressFromMnemonic(mnemonic);
+			showLoading(false)
 
-		if(wallet){
-			const { address, privateKey } = wallet
-			const result = await storeWallet(type, privateKey, address)
-			const err = await addWalletAddress(address, 'ethereum');
+			if(wallet){
+				const { address, privateKey } = wallet
+				const result = await storeWallet(type, privateKey, address)
+				await addWalletAddress(address, 'ethereum');
 
-			if (err){
-				console.log(err)
+				if (err){
+					console.log(err)
+				}
 			}
+		} catch (err) {
+			showLoading(false)
+			console.log(err)
+			showToast(getErrorMsg(err))
 		}
 
 	}
@@ -98,6 +108,8 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
 		addWalletAddress: (address, platform) => dispatch(addWalletAddress(address, platform)),
+		showToast: (params) => dispatch(showToast(params)),
+        setLoading: (isLoading, msg) => dispatch(setLoading(isLoading, msg))
 	}
 }
 
