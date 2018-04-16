@@ -15,7 +15,6 @@ import platform from '../../../../native-base-theme/variables/platform';
 import styles from '../styles'
 
 class NewWallet extends Component {
-
     state = {
         "mnemonic": false,
     }

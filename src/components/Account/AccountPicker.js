@@ -65,8 +65,8 @@ class AccountPicker extends Component {
 
   navigateToAddScreen = () => {
     const { navigation, goToRoute } = this.props
-    const { type, platformId, action } =  navigation.state.params
-    const routeName = platformId ? AddScreens[type] : 'AccountType'
+    const { type, platformId, platform, action } =  navigation.state.params
+    const routeName = (platformId || platform) ? AddScreens[type] : 'AccountType'
     goToRoute(routeName, navigation.state.params)
   }
 
@@ -121,7 +121,7 @@ class AccountPicker extends Component {
       {isTrade && 
           <View style={styles.header}>
             <Text style={styles.heading}>Select Exchange</Text>
-            <Text style={styles.subHeading}>Choose one of your linked exchange accounts for this trade.</Text>
+            <Text style={styles.subHeading}>Choose one of your linked {name} exchange accounts for this trade.</Text>
 
           </View>
        }
@@ -152,7 +152,7 @@ class AccountPicker extends Component {
           >
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
               <SimpleLineIcons style={{paddingRight: 10}} name={'cloud-upload'} color={brandColor} size={14} />
-              <Text style={{ color: brandColor}}>import {name} {type.replace('_', ' ')}</Text>
+              <Text style={{ color: brandColor}}>import {type.replace('_', ' ')}</Text>
             </View>
           </TouchableHighlight>
       }
