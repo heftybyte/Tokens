@@ -14,8 +14,8 @@ const customStyles = {
     container: {
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'center'
+        // alignItems: 'flex-end',
+        // justifyContent: 'center'
     },
     header: {
         paddingHorizontal: 20,

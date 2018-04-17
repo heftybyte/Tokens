@@ -9,6 +9,10 @@ import { baseURL } from '../config'
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.headers.get['Accept'] = 'application/json';
 
+// const bitcore = require('bitcore-lib')
+const bitcoin = require('bitcoinjs-lib')
+
+
 const instance = axios.create({
   baseURL: `${baseURL}/api`
 });
