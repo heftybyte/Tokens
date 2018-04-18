@@ -38,7 +38,8 @@ const customStyles = {
         paddingLeft: 10
     },
     addressInput: {
-        fontSize: 12
+        fontSize: 12,
+        fontFamily: 'Nunito'
     },
     qrContainer: {
         flexDirection: 'row',
@@ -100,7 +101,6 @@ class SendTransaction extends Component {
         const { data, gas, recipient, amount } = this.state
         setLoading(true, 'Sending Transaction')
         try {
-            console.log({publicKey: id, recipient, amount, contractAddress, gas})
             if (recipient === id) {
                 throw new Error('Recipient must be different')
             }

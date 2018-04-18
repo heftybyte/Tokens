@@ -23,17 +23,18 @@ class ConfirmPhrase extends Component {
 
 	createWallet = async(mnemonic, type='ethereum') => {
 
-		const { addWalletAddress, setLoading, showToast } = this.props
-
+		const { addWalletAddress, setLoading, showToast, navigation } = this.props
+		const { params: navParams } = navigation.state
 		try {
-			setLoading(true, 'Generating Wallet')
 			const wallet = await generateAddressFromMnemonic(mnemonic);
 			setLoading(false)
 
 			if(wallet){
 				const { address, privateKey } = wallet
+				setLoading(true, 'Encrypting Wallet')
 				const result = await storeWallet(type, privateKey, address)
-				await addWalletAddress(address, 'ethereum');
+				setLoading(false)
+				await addWalletAddress(address, 'ethereum', navParams);
 			}
 		} catch (err) {
 			console.log('createWallet err', err)
@@ -43,19 +44,25 @@ class ConfirmPhrase extends Component {
 
 	}
 
-	onContinue = (mnemonic) => {
-		if(mnemonic == this.state.mnemonic){
-			this.createWallet(mnemonic)
-			showToast('Correct')
+	onContinue = async () => {
+		const { mnemonic, setLoading } = this.props
+		if (mnemonic !== this.state.mnemonic) {
+			setLoading(false)
+			Alert.alert('Incorrect, please secure the phrase carefully')
+			Alert.alert('We will not abe able to recover the phrase for you')
 			return
 		}
-
-		Alert.alert('Incorrect, Please Secure the Phrase Carefully')
+		try {
+			await this.createWallet(mnemonic)
+			setLoading(false)
+		} catch(err) {
+			console.log(err)
+			showToast(getErrorMsg(err))
+		}
 	}
 
-
 	render() {
-		const { mnemonic } = this.props
+		const { setLoading } = this.props
 		return (
 			<StyleProvider style={getTheme(platform)}>
 				<Container>
@@ -84,7 +91,12 @@ class ConfirmPhrase extends Component {
 							</Form>
 						</View>
 						<View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-	                        <Button style={{flex: .8}} block primary onPress={() => { this.onContinue(mnemonic) }}>
+	                        <Button style={{flex: .8}} block primary onPress={() => {
+	                        	setLoading(true, 'Generating Wallet');
+	                        	setTimeout(()=>{ // Avoid 4 second delay, this needs to be investigated, quick fix for now
+	                        		this.onContinue()
+	                        	}, 10)
+	                        }}>
 								<Text style={{color: '#000'}}>Confirm</Text>
 							</Button>
 						</View>

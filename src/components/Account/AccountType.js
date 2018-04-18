@@ -17,9 +17,21 @@ class AccountType extends Component {
     return HeaderText[navState.params.type]
   }
 
-  render() {
-    const { navigation, exchangeList, blockchainList } = this.props
-    const { type } = navigation.state.params
+  state = {
+    menuItems: {}
+  }
+
+  componentDidMount = () => {
+    this.updateMenuItems(this.props)
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    this.updateMenuItems(nextProps)
+  }
+
+  updateMenuItems = (_props={}) => {
+    const props = { ...(this.props||{}), ..._props }
+    const { navigation, exchangeList, blockchainList } = props
     const menuItems = {
       'wallet': blockchainList.map(b=>
         ({
@@ -58,12 +70,19 @@ class AccountType extends Component {
         })
       )
     }
+    this.setState({ menuItems })
+  }
+
+  render() {
+    const { navigation } = this.props
+    const { menuItems } = this.state
+    const { type } = navigation.state.params
 
     return (
       <ScrollView>
         <Menu
           navigation={navigation}
-          items={menuItems[type]}
+          items={menuItems[type] || []}
           baseColor={baseColor}
           brandColor={brandColor}
           baseAccent={baseAccent}
