@@ -356,7 +356,7 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
 }
 
 // wallet
-export const addWalletAddress = (address, platform) => async (dispatch, getState) => {
+export const addWalletAddress = (address, platform, navParams) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
     console.log('id', id)
@@ -374,8 +374,14 @@ export const addWalletAddress = (address, platform) => async (dispatch, getState
 
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
     const pushEnabled = status === 'granted'
-    const params = { type: 'ADD_WALLET_ADDRESS', meta: { pushEnabled } }
-    dispatch(NavigationActions.navigate({ routeName: 'Select Account', params: { type: 'wallet', platform} }))
+    dispatch(NavigationActions.navigate({ 
+        routeName: 'Select Account',
+        params: {
+            type: 'wallet',
+            platform,
+            ...navParams
+        } 
+    }))
 }
 
 

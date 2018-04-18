@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { WebView, Alert } from 'react-native';
+import { Alert, Clipboard, WebView } from 'react-native';
 import QRScanner from './../../Common/QRScanner';
 import { NavigationActions } from 'react-navigation';
 import { baseAccent, baseColor, brandColor, lossColor } from '../../../config'
@@ -14,9 +14,20 @@ import getTheme from '../../../../native-base-theme/components';
 import platform from '../../../../native-base-theme/variables/platform';
 import styles from '../styles'
 
+const customStyles = {
+    warningText: {
+        color: '#ff0000',
+        fontSize: 14,
+        paddingHorizontal: 20,
+        paddingBottom: 20,
+        fontWeight: 'bold'
+    }
+}
+
 class NewWallet extends Component {
     state = {
         "mnemonic": false,
+        copied: false
     }
 
     onWebViewMessage = (event) => {
@@ -29,7 +40,7 @@ class NewWallet extends Component {
         const {
             goToConfirmPhrasePage
         } = this.props
-        const { mnemonic } = this.state
+        const { copied, mnemonic } = this.state
         return (
             <StyleProvider style={getTheme(platform)}>
                 <Container>
@@ -46,16 +57,17 @@ class NewWallet extends Component {
                             <Text style={styles.heading}>Backup Phrase</Text>
                             
                             <Text style={styles.subHeading}>
-                                This phrase gives access to your wallet funds and as such should not be shared with anyone. It will be encrypted and stored on your physical device. This never gets sent to our servers. We will not be able to recover it for you if you lose it.
+                                This phrase is your wallet’s password. It will be encrypted and stored on your physical device to be used for transactions. This shouldn’t be shared with anyone. It never gets sent to our servers so we won’t be able to recover it for you. Write it down and keep it safe. If its lost, you will lose access to all funds in the wallet.
                             </Text>
                         </View>
 
-                        <View style={styles.mnemonicContainer}>
+                        <View style={[styles.mnemonicContainer, { marginBottom: 20 }]}>
                         {
                             (mnemonic) ?
                                 <Text
                                     style={styles.mnemonic}
                                     selectable
+                                    onPress={()=>this.setState({ copied: true })}
                                 >{this.state.mnemonic}</Text>
                             :
                             <Text
@@ -63,16 +75,16 @@ class NewWallet extends Component {
                             >generating backup phrase...</Text>
                         }
                         </View>
-                        {/*<Text style={styles.warningText}>
-                            Write this phrase down now. You will never be able to recover your funds without it.
-                        </Text>*/}
+                        {copied && <Text style={customStyles.warningText}>
+                            Don't just copy this phrase, write it down. It is the password for your wallet and the only way to recover your funds if your phone is lost or reset. We do not keep a copy on our servers and will not be able to recover it for you.
+                        </Text>}
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
                             <Button
                                 style={{flex: .8}}
                                 primary
                                 title={"continue"}
                                 block
-                                onPress={() => { goToConfirmPhrasePage(mnemonic) }}>
+                                onPress={()=>goToConfirmPhrasePage(mnemonic)}>
                                 <Text style={{color: '#000'}}>Continue</Text>
                             </Button>
                         </View>
