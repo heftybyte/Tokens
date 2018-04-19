@@ -208,7 +208,7 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
     } catch(err) {
         const error = getError(err)
         if(error && error.statusCode === 401) {
-            error.message = 'Invalid cedentials';
+            error.message = 'Invalid credentials';
         } else {
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         }
@@ -449,16 +449,6 @@ export const getPortfolioChart = (_period) => async (dispatch, getState) => {
     }
     dispatch(loadingChartAction(false))
     dispatch(portfolioChartAction(chart))
-}
-
-export const getPriceAlert = (data) => async(dispatch, getState)=> {
-    let err = null
-    const { account } = getState();
-
-    dispatch(setLoading(true, 'Creating Price Alert'))
-    let result = await
-
-    dispatch(setLoading(false))
 }
 
 export const getTokenDetails = (sym) => async (dispatch, getState) => {

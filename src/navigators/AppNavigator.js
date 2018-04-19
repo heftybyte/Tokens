@@ -22,6 +22,7 @@ import Register from '../components/Register';
 import SignUp from '../components/Register/SignUp';
 import Login from '../components/Register/Login';
 import PriceAlert from '../components/PriceAlert';
+import CreatePriceAlert from '../components/PriceAlert/create';
 import EditProfile from '../components/Profile/EditProfile';
 import SetCurrency from '../components/Profile/SetCurrency';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
@@ -76,6 +77,7 @@ export const Routes = {
   'NewExchangeAccount': { screen: NewExchangeAccount },
   'NewExchangeOrder': { screen: NewExchangeOrder },
   'Price Alert': { screen: PriceAlert },
+  'Create Price Alert': { screen: CreatePriceAlert },
   'Profile': Profile,
   'Settings': {screen: Settings},
   'SecuritySettings': {screen: SecuritySettings},

@@ -295,13 +295,11 @@ class TokenDetails extends Component {
         name: "Price Alert",
         icon: 'bell',
         params: {
-           type: 'wallet',
-           platform: 'ethereum',
-           action: 'recieve',
            contractAddress: tokenDetails.address,
            currencyName: tokenDetails.name,
            currencySymbol: tokenDetails.symbol,
-                image
+           price: tokenDetails.price,
+            image
         },
         Component: SimpleLineIcons,
         route: "Price Alert"
