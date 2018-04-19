@@ -25,7 +25,8 @@ import {
     removeFromAccountWatchlist,
     logger,
     setCurrency,
-    verifyTwoFactorAuth
+    verifyTwoFactorAuth,
+
 } from '../helpers/api'
 import {
     genericError,
@@ -448,6 +449,16 @@ export const getPortfolioChart = (_period) => async (dispatch, getState) => {
     }
     dispatch(loadingChartAction(false))
     dispatch(portfolioChartAction(chart))
+}
+
+export const getPriceAlert = (data) => async(dispatch, getState)=> {
+    let err = null
+    const { account } = getState();
+
+    dispatch(setLoading(true, 'Creating Price Alert'))
+    let result = await
+
+    dispatch(setLoading(false))
 }
 
 export const getTokenDetails = (sym) => async (dispatch, getState) => {

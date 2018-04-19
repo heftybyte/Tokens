@@ -3,7 +3,9 @@ import { ScrollView, StyleSheet, View, Text, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import { baseColor, lossColor, brandColor } from '../../config'
-
+import { Button, StyleProvider } from 'native-base';
+import getTheme from '../../../native-base-theme/components';
+import _platform from '../../../native-base-theme/variables/platform';
 import { withDrawer } from '../../helpers/drawer';
 
 const styles = StyleSheet.create({
@@ -50,14 +52,29 @@ const radioProps = [
 
 class PriceAlert extends Component {
   state = {
-    radioValue: 0
+    radioValue: 0,
+     gt: 0,
+     lt: 0,
+     frequency: 0
+  }
+
+  submit = () => {
+    if(this.state.gt != 0){
+
+    }
+
+    if(this.state.lt != 0){
+
+    }
+
   }
 
   render() {
     const { tokenDetails } = this.props
 
     return (
-      <ScrollView
+        <StyleProvider style={getTheme(_platform)}>
+        <ScrollView
         style={styles.scrollContainer}
         containerStyleContent={styles.container}
         >
@@ -69,7 +86,7 @@ class PriceAlert extends Component {
             <Text style={{color: '#fff'}}>Above</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={(text) => this.setState({text})}
+              onChangeText={(gt) => this.setState({gt})}
               keyboardType='numeric'
               placeholder={'Enter numeric value'}
               placeholderTextColor='#444'
@@ -91,7 +108,7 @@ class PriceAlert extends Component {
             <Text style={{color: '#fff'}}>Below</Text>
             <TextInput
               style={styles.textInput}
-              onChangeText={(text) => this.setState({text})}
+              onChangeText={(lt) => this.setState({lt})}
               keyboardType='numeric'
               placeholder={'Enter Numeric value'}
               placeholderTextColor='#444'
@@ -127,8 +144,20 @@ class PriceAlert extends Component {
               onPress={(value) => {this.setState({radioValue: value})}}
             />
           </View>
+          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+            <Button
+                style={{flex: .8}}
+                primary
+                title={"Create Alert"}
+                block
+                onPress={() => { this.submit() }}>
+              <Text style={{color: '#000'}}>Create Alert</Text>
+            </Button>
+          </View>
 
       </ScrollView>
+        </StyleProvider>
+
     )
   }
 }

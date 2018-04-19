@@ -210,6 +210,10 @@ export const disableTwoFactorAuth = async (id) => {
   return res.data
 }
 
+export const priceAlert = async({fsym, tsym, price , type, frequency}) => {
+    const res = await instance.post(`/Alerts`, {fsym, tsym, price , type, frequency})
+    return res.data
+}
 
 
 

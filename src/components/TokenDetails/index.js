@@ -277,7 +277,7 @@ class TokenDetails extends Component {
           platform: 'ethereum',
           action: 'recieve',
           contractAddress: tokenDetails.address,
-          currencyName:tokenDetails.name,
+          currencyName: tokenDetails.name,
           currencySymbol: tokenDetails.symbol,
           image
         },
@@ -290,6 +290,21 @@ class TokenDetails extends Component {
         icon: 'eye',
         Component: SimpleLineIcons,
         onPress: () =>{console.log('onPress watch', isWatching); isWatching ? removeFromWatchList(symbol, token) : addToWatchlist(symbol, token) }
+      },
+      {
+        name: "Price Alert",
+        icon: 'bell',
+        params: {
+           type: 'wallet',
+           platform: 'ethereum',
+           action: 'recieve',
+           contractAddress: tokenDetails.address,
+           currencyName: tokenDetails.name,
+           currencySymbol: tokenDetails.symbol,
+                image
+        },
+        Component: SimpleLineIcons,
+        route: "Price Alert"
       }
     ]
 
