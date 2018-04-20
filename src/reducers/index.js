@@ -9,6 +9,7 @@ import ticker from './ticker'
 import security from './security'
 import blockchains from './blockchains'
 import exchanges from './exchanges'
+import alert from './alert'
 
 import { AppNavigator } from '../navigators/AppNavigator';
 
@@ -58,7 +59,8 @@ const AppReducer = combineReducers({
   ticker,
   security,
   blockchains,
-  exchanges
+  exchanges,
+  alert,
 });
 
 export default AppReducer;

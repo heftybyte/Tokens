@@ -25,7 +25,8 @@ import {
     removeFromAccountWatchlist,
     logger,
     setCurrency,
-    verifyTwoFactorAuth
+    verifyTwoFactorAuth,
+
 } from '../helpers/api'
 import {
     genericError,
@@ -207,7 +208,7 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
     } catch(err) {
         const error = getError(err)
         if(error && error.statusCode === 401) {
-            error.message = 'Invalid cedentials';
+            error.message = 'Invalid credentials';
         } else {
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         }

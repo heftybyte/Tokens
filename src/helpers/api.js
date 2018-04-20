@@ -210,8 +210,30 @@ export const disableTwoFactorAuth = async (id) => {
   return res.data
 }
 
+export const setPriceAlert = async({fsym, tsym, price , type, frequency}) => {
+    const res = await instance.post(`/Alerts`, {fsym, tsym, price , type, frequency})
+    return res.data
+}
 
+export const getPriceAlert = async() => {
+    const res = await instance.get(`/Alerts`)
+    return res.data
+}
 
+export const enablePriceAlert = async(alertId) => {
+    const res = await instance.post(`/Alerts/enable`,{alertId})
+    return res.data
+}
+
+export const disablePriceAlert = async(alertId) => {
+    const res = await instance.post(`/Alerts/disable`,{alertId})
+    return res.data
+}
+
+export const deletePriceAlert = async(alertId) => {
+    const res = await instance.delete(`/Alerts/${alertId}`)
+    return res.data
+}
 
 const log = (level) => (message, data) => {
     console.log({ message, data, level })
