@@ -63,11 +63,9 @@ class AccountPicker extends Component {
   getAccounts = async (type, platformId) => {
     const stateField = AccountSources[type]
     const idField = AccountSourceId[type]
-    let accounts = (this.props[stateField] || [])//.filter(acc=>acc[idField]===platformId)
+    let accounts = (this.props[stateField] || [])
     if (type === 'wallet') {
-      console.log({accounts})
       accounts = await asyncFilter(accounts, async acc=>await hasWallet(acc.platform, acc.id))
-      console.log({accounts})
     }
     return accounts
   }
