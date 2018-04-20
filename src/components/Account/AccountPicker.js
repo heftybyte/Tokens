@@ -142,38 +142,12 @@ class AccountPicker extends Component {
     const {
       name,
       type,
-      // platformId,
       platform,
-      action,
-      // contractAddress,
-      // currencyName,
-      // currencySymbol,
-      // image
+      action
     } =  navigation.state.params
     const isTransaction = action === 'send' || action === 'recieve'
     const isTrade = action === 'buy' || action === 'sell'
-    // console.log({platformId})
-    // const accounts = await this.getAccounts(type, platformId)
     const { items } = this.state
-
-    // (accounts||[]).map((acc)=>{
-    //   const item = {
-    //     name: acc.name || `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
-    //     params: { ...navigation.state.params, name: acc.name, id: acc.id },
-    //     route: isTransaction ? 'SendTransaction' 
-    //       : isTrade ? 'NewExchangeOrder' : 'Account View'
-    //   }
-    //   if (type === 'exchange_account') {
-    //     const exchange = exchangeMap[acc.exchangeId]
-    //     item.image =  getExchangeImage(exchange.name)
-    //     item.params.exchangeName = exchange.name
-    //     item.params.exchangeImage = exchange.image
-    //   } else {
-    //     item.icon = Icons[type]
-    //     item.Component = SimpleLineIcons
-    //   }
-    //   return item
-    // })
 
     return (
       <ScrollView style={{flex:1}}>
