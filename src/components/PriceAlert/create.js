@@ -70,13 +70,7 @@ class CreatePriceAlert extends Component {
             Alert.alert('Please enter a correct price value');
             return
         }
-        console.log({
-            fsym : currencySymbol,
-            tsym: currency,
-            price: this.state.price,
-            type: this.state.type,
-            frequency: this.state.frequency
-        })
+        
         createPriceAlert({
             fsym : currencySymbol,
             tsym: currency,

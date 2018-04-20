@@ -54,7 +54,7 @@ const radioProps = [
   {label: 'Continuous', value: 1 }
 ]
 
-const showPriceAlerts = ({alert, goToCreatePriceAlertPage, currencyName, price, currencySymbol, deletePriceAlert, switchAlert}) => (
+const ShowPriceAlerts = ({alert, goToCreatePriceAlertPage, currencyName, price, currencySymbol, deletePriceAlert, switchAlert}) => (
   <View style={{flex: 1}}>
     <ListItem itemHeader first>
             <Text style={{color:'#fefefe'}}>{currencyName} Alerts</Text>
@@ -112,7 +112,7 @@ const showPriceAlerts = ({alert, goToCreatePriceAlertPage, currencyName, price, 
   </View>
 )
 
-const showCreateAlerts = ({goToCreatePriceAlertPage, currencyName, price, currencySymbol}) => (
+const ShowCreateAlerts = ({goToCreatePriceAlertPage, currencyName, price, currencySymbol}) => (
   <View style={{justifyContent: 'center', alignItems: 'center', flex:1}}>
     <Entypo name={"bell"} color={"#fff"}  style={{fontSize: 100}}/>
     <Text style={{color:'#fefefe'}}>You haven't created any Bitcoin price alerts</Text>
@@ -135,12 +135,13 @@ class PriceAlert extends Component {
     radioValue: 0,
      gt: 0,
      lt: 0,
-     frequency: 0
+     frequency: 0,
+     alerts: [],
   }
 
 
   componentWillMount = async() => {
-    const { getPriceAlert } = this.props;
+    const { getPriceAlert, alert } = this.props;
     getPriceAlert();
   }
 
@@ -168,14 +169,16 @@ class PriceAlert extends Component {
     )
   }
 
-  filterArray = () => {
-      return this.props.alert.filter( (item) => item.fsym == this.props.currencySymbol)
+  componentWillReceiveProps = (nextProps) => {
+      console.log('getDerivedStatefromprops')
+      console.log(nextProps)
+      const alerts = nextProps.alert.filter((item) => item.fsym == this.props.currencySymbol)
+      this.setState({alerts})
   }
 
-
   render() {
-    let { goToCreatePriceAlertPage, alert, currencyName, price, currencySymbol } = this.props
-      
+    let { goToCreatePriceAlertPage, currencyName, price, currencySymbol } = this.props
+
       return (
         <StyleProvider style={getTheme(_platform)}>
         <ScrollView
@@ -184,16 +187,16 @@ class PriceAlert extends Component {
         >
         
         {
-          (alerts.length == 0 ) ?
-            <showCreateAlerts 
+          (this.state.alerts.length == 0 ) ?
+            <ShowCreateAlerts 
               goToCreatePriceAlertPage={goToCreatePriceAlertPage}
               currencyName={currencyName}
               price={price}
               currencySymbol={currencySymbol}
             />
             :
-            <showPriceAlerts
-              alert={alerts}
+            <ShowPriceAlerts
+              alert={this.state.alerts}
               goToCreatePriceAlertPage={goToCreatePriceAlertPage}
               currencyName={currencyName}
               price={price}
