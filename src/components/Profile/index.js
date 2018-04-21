@@ -178,9 +178,10 @@ class Profile extends Component {
   }
 
   componentDidMount = async () => {
+    const { navigation } = this.props
     logger.info('Profile mounted')
     await Promise.all([
-      this.props.getPortfolio(true),
+      this.props.getPortfolio({ showLoading: true }),
       this.props.getPortfolioChart()
     ])
   }
@@ -188,7 +189,7 @@ class Profile extends Component {
   onRefresh = async () => {
     this.setState({refreshing: true})
     await Promise.all([
-      this.props.getPortfolio(false),
+      this.props.getPortfolio({ showLoading: false }),
       this.props.getPortfolioChart()
     ])
     this.setState({refreshing: false})
@@ -260,8 +261,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
-    getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
+    getPortfolio: ({showUILoader}) => dispatch(getPortfolio({showUILoader})),
+    getPortfolioChart: () => dispatch(getPortfolioChart({period: '1d'})),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
 })

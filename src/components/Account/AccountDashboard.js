@@ -56,7 +56,7 @@ class AccountDashboard extends Component {
 
   componentWillMount = async () => {
     const { navigation } = this.props
-    const { id } = navigation.state.params
+    const { id: accountId, type } = navigation.state.params
     const { refreshAddress, deleteAddress, deleteWalletAddress } = this.props
 
     this.menuItems = [
@@ -66,7 +66,7 @@ class AccountDashboard extends Component {
         icon: 'refresh',
         Component: SimpleLineIcons,
         route: "Select Account",
-        onPress: ()=>{refreshAddress(id)}
+        onPress: ()=>{refreshAddress(accountId)}
       },
       {
         name: "Remove",
@@ -78,7 +78,7 @@ class AccountDashboard extends Component {
           if (type === 'address') {
             deleteAddress(id)
           } else if (type === 'wallet') {
-            deleteWalletAddress(id)
+            deleteWalletAddress(accountId)
           }
         }
       },
@@ -93,15 +93,17 @@ class AccountDashboard extends Component {
 
     this.updateHeader()
     await Promise.all([
-      this.props.getPortfolio(true),
-      this.props.getPortfolioChart()
+      this.props.getPortfolio({ accountId, showLoading: true, type }),
+      this.props.getPortfolioChart({ accountId, type })
     ])
   }
 
   onRefresh = () => {
+    const { navigation } = this.props
+    const { id: accountId, type } = navigation.state.params
     return Promise.all([
-      this.props.getPortfolio(false),
-      this.props.getPortfolioChart()
+      this.props.getPortfolio({ accountId, type, showLoading: false }),
+      this.props.getPortfolioChart({ accountId, type })
     ])
   }
 
@@ -126,7 +128,7 @@ class AccountDashboard extends Component {
     const { menuHeight } = this.state
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         <View style={{zIndex: 1}}>
           <Animated.View style={{height: menuHeight, overflow: 'hidden'}}>
             <Menu
@@ -167,8 +169,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
-    getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
+    getPortfolio: ({accountId, type, showUILoader}) => dispatch(getPortfolio({accountId, type, showUILoader})),
+    getPortfolioChart: ({accountId, type}) => dispatch(getPortfolioChart({accountId, type, period: '1d'})),
     deleteAddress: (address) => dispatch(deleteAddress(address)),
     deleteWalletAddress: (address) => dispatch(deleteWalletAddress(address)),
     refreshAddress: (address) => dispatch(refreshAddress(address)),
