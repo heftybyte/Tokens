@@ -60,10 +60,10 @@ class AccountPicker extends Component {
     items: []
   }
 
-  getAccounts = async (type, platformId) => {
+  getAccounts = async (type, platform) => {
     const stateField = AccountSources[type]
     const idField = AccountSourceId[type]
-    let accounts = (this.props[stateField] || [])
+    let accounts = (this.props[stateField] || []).filter(a=>a.platform===platform)
     if (type === 'wallet') {
       accounts = await asyncFilter(accounts, async acc=>await hasWallet(acc.platform, acc.id))
     }
@@ -72,8 +72,8 @@ class AccountPicker extends Component {
 
   navigateToAddScreen = () => {
     const { navigation, goToRoute } = this.props
-    const { type, platformId, platform, action } =  navigation.state.params
-    const routeName = (platformId || platform) ? AddScreens[type] : 'AccountType'
+    const { type, platform, action } = navigation.state.params
+    const routeName = platform ? AddScreens[type] : 'AccountType'
     goToRoute(routeName, navigation.state.params)
   }
 
@@ -100,39 +100,49 @@ class AccountPicker extends Component {
     const {
       name,
       type,
-      platformId,
       platform,
       action,
       contractAddress,
       currencyName,
       currencySymbol,
       image
-    } =  navigation.state.params
+    } = navigation.state.params
     const isTransaction = action === 'send' || action === 'recieve'
     const isTrade = action === 'buy' || action === 'sell'
-    console.log({platformId})
-    const accounts = await this.getAccounts(type, platformId)
-    const items = (accounts||[]).map((acc)=>{
-      const item = {
-        name: acc.name || `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
-        params: { ...navigation.state.params, name: acc.name, id: acc.id },
-        route: isTransaction ? 'SendTransaction' 
-          : isTrade ? 'NewExchangeOrder' : 'Account View'
-      }
-      if (type === 'exchange_account') {
-        const exchange = exchangeMap[acc.exchangeId]
-        item.image =  getExchangeImage(exchange.name)
-        item.params.exchangeName = exchange.name
-        item.params.exchangeImage = exchange.image
-      } else {
-        item.icon = Icons[type]
-        item.Component = SimpleLineIcons
-      }
-      return item
-    })
-    this.setState({
-      items
-    })
+
+    try {
+      const accounts = await this.getAccounts(type, platform)
+      const items = (accounts||[]).map((acc)=>{
+        const item = {
+          name: acc.name || `${acc.id.substr(0, 20)}...${acc.id.substr(38,42)}`,
+          params: { 
+            ...navigation.state.params,
+            name: acc.name,
+            id: acc.id,
+            platform
+          },
+          route: isTransaction ? 'SendTransaction' 
+            : isTrade ? 'NewExchangeOrder' : 'Account View'
+        }
+        if (type === 'exchange_account') {
+          console.log({acc, exchangeMap})
+          const exchange = exchangeMap[acc.platform]
+          item.image =  getExchangeImage(exchange.name)
+          item.params.exchangeName = exchange.name
+          item.params.exchangeImage = exchange.image
+        } else {
+          item.icon = Icons[type]
+          item.Component = SimpleLineIcons
+        }
+        return item
+      })
+      console.log({accounts,items})
+      this.setState({
+        items
+      })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   render() {
