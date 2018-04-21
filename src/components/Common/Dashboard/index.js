@@ -190,18 +190,18 @@ class Dashboard extends Component {
         <News style={{marginHorizontal: 20}} feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
-        {!watchListSymbols.length &&
         <View>
+        {!!portfolio.watchList.length &&
           <TokenList
             title="Watchlist"
             tokens={portfolio.watchList}
             type="watchList"
-          />
-            <TouchableHighlight
+          />}
+            {!!!watchListSymbols && <TouchableHighlight
               style={{marginBottom: 20, marginTop: -20}}
               onPress={()=>{trackTap('Search');goToSearchPage()}}
             >
-              <View style={styles.addBtn}>
+            <View style={styles.addBtn}>
                 <MaterialCommunityIcons
                   style={styles.addBtnIcon}
                   name="plus-circle-outline"
@@ -210,9 +210,8 @@ class Dashboard extends Component {
                 />
                 <Text style={styles.addBtnText}>Add Tokens to Your Watchlist</Text>
               </View>
-            </TouchableHighlight>
+            </TouchableHighlight>}
         </View>
-          }
         { !!portfolio.top.length &&
         <TokenList
           title="Top 100 Tokens By Market Cap"
@@ -225,7 +224,10 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  portfolio: state.account.portfolio,
+  portfolio: {
+    ...state.account.portfolio,
+    watchList: (state.account.portfolio||{}).watchList || []
+  },
   chartLoading: state.account.chartLoading,
   portfolioChart: state.account.portfolioChart,
   addresses: state.account.addresses,

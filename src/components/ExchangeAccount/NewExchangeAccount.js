@@ -7,6 +7,7 @@ import { baseAccent, baseColor, brandColor, lossColor } from '../../config'
 import { View, Container, Header, Content, ListItem, Input,Text,
     Radio, Footer, Button, CheckBox, Body, Right, List, Label, Item, Form, StyleProvider } from 'native-base';
 import { addExchangeAccount } from '../../helpers/api';
+import { getErrorMsg } from '../../helpers/functions';
 import { withDrawer } from '../../helpers/drawer';
 import { SecureStore} from 'expo'
 import { constants } from '../../constants';
@@ -14,6 +15,7 @@ import { connect } from 'react-redux';
 import getTheme from '../../../native-base-theme/components';
 import _platform from '../../../native-base-theme/variables/platform';
 import styles from './styles'
+import { setLoading, showToast } from '../../reducers/ui'
 
 const customStyles = {
     header: {
@@ -87,13 +89,21 @@ class NewExchangeAccount extends Component {
         showScanner: false
     }
 
-    submit = () => {
-        const { navigation, accountId } = this.props
-        const { platformId: exchangeId } = navigation.state.params
+    submit =  async () => {
+        const { navigation, accountId, setLoading, showToast } = this.props
+        const { platform: exchangeId } = navigation.state.params
         const { key, secret, name, passphrase } = this.state
 
         console.log({ id: accountId, key, secret, name, passphrase, exchangeId })
-        addExchangeAccount({ id: accountId, key, secret, name, passphrase, exchangeId })
+        try {
+            setLoading(true, 'Linking Exchange Account')
+            await addExchangeAccount({ id: accountId, key, secret, name, passphrase, exchangeId })
+            setLoading(false)
+        } catch (err) {
+            setLoading(false)
+            console.error(err)
+            showToast(getErrorMsg(err))
+        }
     }
 
     render() {
@@ -175,7 +185,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
+        navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
+        setLoading: (isLoading, msg) => dispatch(setLoading(isLoading, msg)),
+        showToast: (msg) => dispatch(showToast(msg))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(NewExchangeAccount));

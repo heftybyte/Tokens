@@ -32,6 +32,7 @@ class AccountType extends Component {
   updateMenuItems = (_props={}) => {
     const props = { ...(this.props||{}), ..._props }
     const { navigation, exchangeList, blockchainList } = props
+
     const menuItems = {
       'wallet': blockchainList.map(b=>
         ({
@@ -41,7 +42,7 @@ class AccountType extends Component {
             image: b.image,
             name: b.name,
             type: 'wallet',
-            platformId: b.id
+            platform: b.id
           }
         })
       ),
@@ -53,7 +54,7 @@ class AccountType extends Component {
             image: b.image,
             name: b.name,
             type: 'address',
-            platformId: b.id
+            platform: b.id
           }
         })
       ),
@@ -65,7 +66,7 @@ class AccountType extends Component {
             image: e.image,
             name: e.name,
             type: 'exchange_account',
-            platformId: e.id
+            platform: e.id
           }
         })
       )
