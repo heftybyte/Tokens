@@ -311,7 +311,7 @@ export const addAddress = (address) => async (dispatch, getState) => {
     dispatch(NavigationActions.navigate({ routeName: 'Education', params }))
 }
 
-export const refreshAddress = (address) => async (dispatch, getState) => {
+export const refreshAddress = (address, type) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
     dispatch(setLoading(true, `Refreshing Tokens`))
@@ -322,8 +322,8 @@ export const refreshAddress = (address) => async (dispatch, getState) => {
         return
     }
     dispatch(showToast('Tokens Updated'))
-    dispatch(getPortfolio())
-    dispatch(getPortfolioChart())
+    dispatch(getPortfolio({accountId: address, type}))
+    dispatch(getPortfolioChart({accountId: address, type}))
 }
 
 export const deleteAddress = (address) => async (dispatch, getState) => {
@@ -339,8 +339,7 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
         }
         dispatch(showToast('Address Removed'))
         dispatch(deleteAddressAction(account.addresses))
-        dispatch(getPortfolio())
-        dispatch(getPortfolioChart())
+        dispatch(NavigationActions.navigate({ routeName: 'Profile' }))
     }
 
     safeAlert(
@@ -432,7 +431,7 @@ export const getPortfolio = ({accountId, type, showUILoader=true, msg}={}) => as
     const { id } = getState().account
 
     if (showUILoader) {
-        dispatch(setLoading(true, msg || 'Loading Portfolio'))
+        dispatch(setLoading(true, msg || accountId ? 'Loading Account' : 'Loading Portfolio'))
     }
     let portfolio = await getAccountPortfolio(id, {accountId,type}).catch(e=>err=e)
     if (showUILoader) {

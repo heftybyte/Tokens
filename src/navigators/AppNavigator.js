@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 import { ICOs, ICODetail } from "../components/Ico"
 
-import AccountsNavigator from '../components/Account';
 import Education from '../components/Education';
 import Entry from '../components/Entry';
 import Dashboard from '../components/Common/Dashboard';
@@ -12,7 +11,6 @@ import AccountDashboard from '../components/Account/AccountDashboard'
 import AccountType from '../components/Account/AccountType'
 import AccountPicker from '../components/Account/AccountPicker'
 import AddAddress from '../components/Account/AddAddress';
-import ViewAccounts from '../components/Account/ViewAccounts';
 import TokenDetails from '../components/TokenDetails';
 import Chat from "../components/Chat/Chat"
 import Profile from '../components/Profile';
@@ -60,7 +58,6 @@ export const Routes = {
   Entry: { screen: Entry },
   'Account View': { screen: AccountDashboard },
   'Select Account': { screen: AccountPicker },
-  Accounts : { screen: ViewAccounts },
   'Add Address': { screen: AddAddress },
   Search: { screen: Search },
   Bookmarks: { screen: BookMarks },

@@ -105,14 +105,14 @@ class SendTransaction extends Component {
                 throw new Error('Recipient must be different')
             }
             const transaction = await send({publicKey: id, recipient, amount, contractAddress, gas})
+            setLoading(false)
             this.setState({
                 transactionHash: transaction.hash
             })
-            setLoading(false)
             showToast('Transaction Sent')
         } catch(err) {
-            logger.error('wallet send', err)
             setLoading(false)
+            logger.error('wallet send', err)
             showToast(getErrorMsg(err))
         }
     }

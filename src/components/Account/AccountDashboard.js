@@ -11,6 +11,7 @@ import {
   getPortfolio,
   getPortfolioChart
 } from '../../reducers/account'
+import { trackAddress, trackTap } from '../../helpers/analytics'
 
 class AccountDashboard extends Component {
 
@@ -66,7 +67,10 @@ class AccountDashboard extends Component {
         icon: 'refresh',
         Component: SimpleLineIcons,
         route: "Select Account",
-        onPress: ()=>{refreshAddress(accountId)}
+        onPress: ()=>{
+          refreshAddress(accountId, type);
+          trackAddress('Refresh', 'Button');
+        }
       },
       {
         name: "Remove",
@@ -76,9 +80,11 @@ class AccountDashboard extends Component {
         route: "Select Account",
         onPress: ()=>{
           if (type === 'address') {
-            deleteAddress(id)
+            deleteAddress(accountId)
+            trackAddress('Delete', 'Button');
           } else if (type === 'wallet') {
             deleteWalletAddress(accountId)
+            trackAddress('Delete', 'Button');
           }
         }
       },
@@ -173,7 +179,7 @@ const mapDispatchToProps = (dispatch) => ({
     getPortfolioChart: ({accountId, type}) => dispatch(getPortfolioChart({accountId, type, period: '1d'})),
     deleteAddress: (address) => dispatch(deleteAddress(address)),
     deleteWalletAddress: (address) => dispatch(deleteWalletAddress(address)),
-    refreshAddress: (address) => dispatch(refreshAddress(address)),
+    refreshAddress: (address, type) => dispatch(refreshAddress(address, type)),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
 })
