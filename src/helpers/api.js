@@ -118,13 +118,20 @@ export const getAccount = async (id) => {
     return res.data
 }
 
-export const getAccountPortfolio = async (id) => {
-  const res = await instance.get(`/accounts/${id}/portfolio`)
+export const getAccountPortfolio = async (id,{type,accountId}) => {
+  const res = await instance.get(
+    `/accounts/${id}/portfolio` +
+    (accountId ? `/${type}/${accountId}` : '')
+  )
   return res.data
 }
 
-export const getAccountPortfolioChart = async (id, period) => {
-  const res = await instance.get(`/accounts/${id}/portfolio-chart?period=${period}`)
+export const getAccountPortfolioChart = async (id, period, {type,accountId}) => {
+  const res = await instance.get(
+    `/accounts/${id}/portfolio-chart` + 
+    (accountId ? `/${type}/${accountId}` : '') + 
+    `?period=${period}`
+  )
   return res.data
 }
 

@@ -21,8 +21,6 @@ import News from '../../NewsFeed';
 import Chart from '../../Chart/Chart';
 import RangeSelector from '../../Chart/RangeSelector';
 import {
-  getPortfolio,
-  getPortfolioChart,
   getTokenDetails
 } from '../../../reducers/account';
 import { showToast } from '../../../reducers/ui';
@@ -192,13 +190,13 @@ class Dashboard extends Component {
         <News style={{marginHorizontal: 20}} feed={this.props.newsFeed} />
         { !!portfolio.tokens.length &&
         <TokenList tokens={portfolio.tokens} />}
+        {!watchListSymbols.length &&
         <View>
           <TokenList
             title="Watchlist"
             tokens={portfolio.watchList}
             type="watchList"
           />
-          {!watchListSymbols.length &&
             <TouchableHighlight
               style={{marginBottom: 20, marginTop: -20}}
               onPress={()=>{trackTap('Search');goToSearchPage()}}
@@ -212,8 +210,9 @@ class Dashboard extends Component {
                 />
                 <Text style={styles.addBtnText}>Add Tokens to Your Watchlist</Text>
               </View>
-            </TouchableHighlight>}
+            </TouchableHighlight>
         </View>
+          }
         { !!portfolio.top.length &&
         <TokenList
           title="Top 100 Tokens By Market Cap"
@@ -245,8 +244,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     goToAddressPage: () => dispatch(NavigationActions.navigate({ routeName: 'Add Address' })),
     goToSearchPage: () => dispatch(NavigationActions.navigate({ routeName: 'Search' })),
-    getPortfolio: (showUILoader) => dispatch(getPortfolio(showUILoader)),
-    getPortfolioChart: () => dispatch(getPortfolioChart('1d')),
     showToast: (text) => dispatch(showToast(text)),
     fetchFeed: (timestamp) => dispatch(fetchFeed(timestamp)),
     getTokenDetails: (sym) => dispatch(getTokenDetails(sym)),

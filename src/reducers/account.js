@@ -427,14 +427,14 @@ export const setDefaultCurrency = (currency) => async (dispatch, getState) => {
   dispatch(setCurrencyAction(account.preference.currency))
 }
 
-export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getState) => {
+export const getPortfolio = ({accountId, type, showUILoader=true, msg}={}) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
 
     if (showUILoader) {
         dispatch(setLoading(true, msg || 'Loading Portfolio'))
     }
-    let portfolio = await getAccountPortfolio(id).catch(e=>err=e)
+    let portfolio = await getAccountPortfolio(id, {accountId,type}).catch(e=>err=e)
     if (showUILoader) {
         dispatch(setLoading(false))
     }
@@ -446,11 +446,11 @@ export const getPortfolio = (showUILoader=true, msg) => async (dispatch, getStat
     dispatch(portfolioAction(portfolio))
 }
 
-export const getPortfolioChart = (_period) => async (dispatch, getState) => {
+export const getPortfolioChart = ({accountId, type, _period}={}) => async (dispatch, getState) => {
     let err = null
     const { account: { id }, ticker: { period } } = getState()
     dispatch(loadingChartAction(true))
-    let chart = await getAccountPortfolioChart(id, _period || period).catch(e=>err=e)
+    let chart = await getAccountPortfolioChart(id, _period || period, {accountId,type}).catch(e=>err=e)
     if (err) {
       logger.error('getPortfolioChart', err)
         dispatch(loadingChartAction(false))
@@ -459,6 +459,7 @@ export const getPortfolioChart = (_period) => async (dispatch, getState) => {
     dispatch(loadingChartAction(false))
     dispatch(portfolioChartAction(chart))
 }
+
 
 export const getTokenDetails = (sym) => async (dispatch, getState) => {
     let err = null

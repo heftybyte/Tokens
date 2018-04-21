@@ -225,35 +225,35 @@ class TokenDetails extends Component {
     }
 
     this.menuItems = [
-      {
-        name: "Buy",
-        icon: 'credit-card',
-        Component: SimpleLineIcons,
-        params: {
-          type: 'exchange_account',
-          image,
-          action: 'buy',
-          contractAddress: tokenDetails.address, 
-          currencyName: tokenDetails.name,
-          currencySymbol: tokenDetails.symbol,
-          price: tokenDetails.price
-        },
-        route: "Select Account"
-      },
-      {
-        name: "Sell",
-        icon: 'cursor',
-        params: {
-          type: 'exchange_account', image,
-          action: 'sell',
-          contractAddress: tokenDetails.address, 
-          currencyName: tokenDetails.name,
-          currencySymbol: tokenDetails.symbol,
-          price: tokenDetails.price
-        },
-        Component: SimpleLineIcons,
-        route: "Select Account"
-      },
+      // {
+      //   name: "Buy",
+      //   icon: 'credit-card',
+      //   Component: SimpleLineIcons,
+      //   params: {
+      //     type: 'exchange_account',
+      //     image,
+      //     action: 'buy',
+      //     contractAddress: tokenDetails.address, 
+      //     currencyName: tokenDetails.name,
+      //     currencySymbol: tokenDetails.symbol,
+      //     price: tokenDetails.price
+      //   },
+      //   route: "Select Account"
+      // },
+      // {
+      //   name: "Sell",
+      //   icon: 'cursor',
+      //   params: {
+      //     type: 'exchange_account', image,
+      //     action: 'sell',
+      //     contractAddress: tokenDetails.address, 
+      //     currencyName: tokenDetails.name,
+      //     currencySymbol: tokenDetails.symbol,
+      //     price: tokenDetails.price
+      //   },
+      //   Component: SimpleLineIcons,
+      //   route: "Select Account"
+      // },
       {
         name: "Send",
         icon: 'arrow-right-circle',
