@@ -181,7 +181,7 @@ class Profile extends Component {
     const { navigation } = this.props
     logger.info('Profile mounted')
     await Promise.all([
-      this.props.getPortfolio({ showLoading: true }),
+      this.props.getPortfolio({ showUILoader: true }),
       this.props.getPortfolioChart()
     ])
   }
@@ -189,7 +189,7 @@ class Profile extends Component {
   onRefresh = async () => {
     this.setState({refreshing: true})
     await Promise.all([
-      this.props.getPortfolio({ showLoading: false }),
+      this.props.getPortfolio({ showUILoader: false }),
       this.props.getPortfolioChart()
     ])
     this.setState({refreshing: false})

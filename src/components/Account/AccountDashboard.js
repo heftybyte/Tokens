@@ -111,7 +111,7 @@ class AccountDashboard extends Component {
 
     this.updateHeader()
     await Promise.all([
-      this.props.getPortfolio({ accountId, showLoading: true, type }),
+      this.props.getPortfolio({ accountId, showUILoader: true, type }),
       this.props.getPortfolioChart({ accountId, type })
     ])
   }
@@ -120,7 +120,7 @@ class AccountDashboard extends Component {
     const { navigation } = this.props
     const { id: accountId, type } = navigation.state.params
     return Promise.all([
-      this.props.getPortfolio({ accountId, type, showLoading: false }),
+      this.props.getPortfolio({ accountId, type, showUILoader: false }),
       this.props.getPortfolioChart({ accountId, type })
     ])
   }
