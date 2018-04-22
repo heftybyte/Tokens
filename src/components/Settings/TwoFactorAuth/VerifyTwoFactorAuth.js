@@ -43,24 +43,26 @@ class VerifyTwoFactorAuth extends Component {
         const { code, invalid } = this.state
         return (
             <StyleProvider style={getTheme(platform)}>
-                <Content style={{paddingHorizontal: 10}}>
-                    <Text style={styles.heading}>Verify Two Factor Auth</Text>
-                    <Text style={styles.subHeading}>Please Enter a Two-Factor Auth Code</Text>
-                        <Item style={{marginTop: 10}}>
-                            <Label style={styles.subHeading}>Code:</Label>
-                            <Input
-                                style={styles.subHeading}
-                                bordered
-                                value={code}
-                                onChangeText={(code)=>this.setState({ code })}
-                            />
-                            <Button
-                                primary
-                                onPress={this.submit}
-                            ><Text>Submit</Text></Button>
-                        </Item>
-                        {invalid && <Text style={{color: '#fff'}}>Invalid code, please try again.</Text>}
-                </Content>
+                <Container>
+                    <Content style={{paddingHorizontal: 10}}>
+                        <Text style={styles.heading}>Verify Two Factor Auth</Text>
+                        <Text style={styles.subHeading}>Please Enter a Two-Factor Auth Code</Text>
+                            <Item style={{marginTop: 10}}>
+                                <Label style={styles.subHeading}>Code:</Label>
+                                <Input
+                                    style={styles.subHeading}
+                                    bordered
+                                    value={code}
+                                    onChangeText={(code)=>this.setState({ code })}
+                                />
+                                <Button
+                                    primary
+                                    onPress={this.submit}
+                                ><Text>Submit</Text></Button>
+                            </Item>
+                            {invalid && <Text style={{color: '#fff'}}>Invalid code, please try again.</Text>}
+                    </Content>
+                </Container>
             </StyleProvider>
         )
     }

@@ -16,7 +16,7 @@ import { trackAddress, trackTap } from '../../helpers/analytics'
 class AccountDashboard extends Component {
 
   static getHeader = (navState) => {
-    const { id } = navState.params;
+    const { id, name } = navState.params;
     return (
       <View style={{
         flex: 1,
@@ -24,7 +24,13 @@ class AccountDashboard extends Component {
         alignItems: 'center',
         paddingTop: 10
       }}>
-        <Text style={{color:'#fff', paddingRight: 10}}>{`${id.substr(0, 5)}...${id.substr(39, 42)}`}</Text> 
+        <Text style={{color:'#fff', paddingRight: 10}}>
+         {
+            name ?
+              name.substr(0, 11) + (name.length >= 10 ? '...' : '') :
+              (`${id.substr(0, 5)}...${id.substr(39, 42)}`)
+          }
+        </Text> 
         <SimpleLineIcons name={'arrow-down'} color={'#fff'} />
       </View>  
     ) 
@@ -37,7 +43,7 @@ class AccountDashboard extends Component {
 
   updateHeader = () => {
     const { navigation } = this.props
-    const { id } = navigation.state.params
+    const { id, name } = navigation.state.params
     const { menuOpen } = this.state
 
     navigation.setParams({ overrideHeader:
@@ -48,7 +54,13 @@ class AccountDashboard extends Component {
           alignItems: 'center',
           paddingTop: 10
         }}>
-          <Text style={{color:'#fff', paddingRight: 10}}>{`${id.substr(0, 5)}...${id.substr(39, 42)}`}</Text> 
+          <Text style={{color:'#fff', paddingRight: 10}}>
+          {
+            name ?
+              name.substr(0, 11) + (name.length >= 10 ? '...' : '') :
+              (`${id.substr(0, 5)}...${id.substr(39, 42)}`)
+          }
+          </Text> 
           <SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />
         </View>
       </TouchableWithoutFeedback>

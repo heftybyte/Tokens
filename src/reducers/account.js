@@ -16,6 +16,7 @@ import {
     // wallet
     addAccountWalletAddress,
     deleteAccountWalletAddress,
+    addExchangeAccount as addExchangeAccountApi,
     getAccount,
     getTokenDetailsForAccount,
     logoutAccount,
@@ -58,6 +59,7 @@ export const LOADING_CHART = 'account/LOADING_CHART'
 export const SET_DEFAULT_CURRENCY = 'accounts/SET_DEFAULT_CURRENCY'
 // wallet
 export const ADD_WALLET_ADDRESS = 'account/WALLET/ADD_ADDRESS'
+export const ADD_EXCHANGE_ACCOUNT = 'account/ADD_EXCHANGE_ACCOUNT'
 
 const registerAction = (id) => ({
     type: REGISTER,
@@ -142,6 +144,11 @@ const setCurrencyAction = (currency) => ({
 const addWalletAddressAction = (wallets) => ({
     type: ADD_WALLET_ADDRESS,
     data: {wallets}
+})
+
+const addExchangeAccountAction = (exchangeAccounts) => ({
+    type: ADD_EXCHANGE_ACCOUNT,
+    data: {exchangeAccounts}
 })
 
 export const registerAccount = (params) => async (dispatch, getState) => {
@@ -355,13 +362,13 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
 }
 
 // wallet
-export const addWalletAddress = (address, platform, navParams) => async (dispatch, getState) => {
+export const addWalletAddress = ({address, name, platform}, navParams) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
     console.log('id', id)
     dispatch(setLoading(true, 'Saving Wallet'))
     console.log(id, address)
-    const account = await addAccountWalletAddress(id, address, platform).catch(e=>err=e)
+    const account = await addAccountWalletAddress({id, address, name, platform}).catch(e=>err=e)
 
     dispatch(setLoading(false))
     if (err) {
@@ -370,13 +377,32 @@ export const addWalletAddress = (address, platform, navParams) => async (dispatc
     }
     dispatch(showToast('Wallet created'))
     dispatch(addWalletAddressAction(account.wallets))
-
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-    const pushEnabled = status === 'granted'
     dispatch(NavigationActions.navigate({ 
         routeName: 'Select Account',
         params: {
             type: 'wallet',
+            platform,
+            ...navParams
+        } 
+    }))
+}
+
+export const addExchangeAccount = ({ key, secret, name, passphrase, platform }, navParams) => async (dispatch, getState) => {
+    let err = null
+    const { id } = getState().account
+    dispatch(setLoading(true, 'Linking Exchange Account'))
+    const account = await addExchangeAccountApi({ id, key, secret, name, passphrase, platform }).catch(e=>err=e)
+    dispatch(setLoading(false))
+    if (err) {
+        dispatch(showToast(getErrorMsg(err)))
+        return err
+    }
+    dispatch(showToast('Exchange Account Linked'))
+    dispatch(addExchangeAccountAction(account.exchangeAccounts))
+    dispatch(NavigationActions.navigate({ 
+        routeName: 'Select Account',
+        params: {
+            type: 'exchange_account',
             platform,
             ...navParams
         } 
@@ -582,6 +608,7 @@ export default (state = initialState, action) => {
         case DELETE_ADDRESS:
         case LOADING_CHART:
         case ADD_WALLET_ADDRESS:
+        case ADD_EXCHANGE_ACCOUNT:
             return {
                 ...state,
                 ...action.data

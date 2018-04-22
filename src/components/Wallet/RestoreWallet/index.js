@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
+import { StyleSheet, View, AsyncStorage, Alert, Text } from 'react-native';
+import { Button, Container, Content, Form, Item, Input, StyleProvider } from 'native-base';
 import { Permissions } from 'expo';
 import { NavigationActions } from 'react-navigation';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import QRScanner from '../../Common/QRScanner';
-import WalletInput from './WalletInput';
+import QRButton from '../../Common/QRButton'
 import { addWalletAddress } from '../../../reducers/account';
 import { withDrawer } from '../../../helpers/drawer';
 import { trackAddress } from '../../../helpers/analytics'
@@ -16,9 +16,13 @@ import {
   isValidMnemonic, 
   isValidPrivateKey
 } from '../../../helpers/wallet';
-import { baseColor } from '../../../config'
+import { baseAccent, baseColor } from '../../../config'
+import getTheme from '../../../../native-base-theme/components';
+import platform from '../../../../native-base-theme/variables/platform';
+import styles from '../styles'
+import { setLoading, showToast } from '../../../reducers/ui'
 
-const styles = StyleSheet.create({
+const customStyles = StyleSheet.create({
   scrollContainer: {
     backgroundColor: baseColor,
     height: '100%',
@@ -34,97 +38,128 @@ const styles = StyleSheet.create({
     borderColor: '#f00'
   },
   header: {
-    backgroundColor: baseColor
+      paddingHorizontal: 20,
+      paddingVertical: 10
   },
+  heading: {
+      fontSize: 16,
+      paddingBottom: 10,
+      paddingLeft: 10,
+      borderTopWidth: 0,
+      borderWidth: 0
+  },
+  inputRow: {
+    flex: 1,
+    marginBottom: 20
+  },
+  input: {
+    color: '#fff',
+    fontSize: 16,
+    borderColor: baseAccent,
+    borderBottomWidth: 1,
+    paddingLeft: 10
+  }
 });
 
 class RestoreWallet extends Component {
 
+  static headerText = 'Import Wallet'
+
   state = {
-    hasCameraPermission: null,
-    scannerOpen: false,
-    inputValue: ''
+    showScanner: false,
+    name: null,
+    secret: ''
   }
 
-
-  async componentWillMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({hasCameraPermission: status === 'granted'});
-  }
-
-  toggleQRScanner = () => {
-    this.setState({ scannerOpen: !this.state.scannerOpen });
-  }
-
-  handleBarCodeRead = ({type, data}) => {
-
-    this.toggleQRScanner();
-    this.setState({inputValue: data});
-
-    this.restoreWallet(data)
-
-  }
-
-  onChangeText = (text) => {
-    this.setState({ inputValue: text });
-  }
-
-  restoreWallet = async (data, type = 'ethereum') => {
-      const text = (typeof data === 'string') && data || this.state.inputValue;
-      if(!text || !text.length) {
-          Alert.alert('Please enter a correct mnemonic or private key to save');
+  restoreWallet = async (platform='ethereum') => {
+      const { name, secret } = this.state
+      if(!secret || !secret.length) {
+          Alert.alert('Please enter a correct mnemonic or private key');
           return;
       }
 
       let address = ""
       let privateKey = ""
 
-      if(isValidMnemonic(text)){
-          wallet = await generateAddressFromMnemonic(text)
-          if(wallet){
-              address = wallet.address
-              privateKey = wallet.privateKey
-          }
-      } else if(isValidPrivateKey(text)){
-          address = await generateAddressFromPrivateKey(text)
-          if(address){
-              privateKey = text
-          }
-      } else {
-          Alert.alert('Enter an correct mnemonic or private key to save');
-          return;
-      }
-      const { addWalletAddress } = this.props
+      try {
+        if(isValidMnemonic(secret)){
+            wallet = await generateAddressFromMnemonic(secret)
+            if(wallet){
+                address = wallet.address
+                privateKey = wallet.privateKey
+            }
+        } else if(isValidPrivateKey(secret)){
+            address = await generateAddressFromPrivateKey(secret)
+            if(address){
+                privateKey = secret
+            }
+        } else {
+            Alert.alert('Enter an correct mnemonic or private key');
+            return;
+        }
 
-      const result = await storeWallet(type, privateKey, address)
-
-      const err = await addWalletAddress(address);
-
-      if (err){
+        if (!address || !privateKey) {
+          throw new Error('Invaid input given')
+        }
+        const { addWalletAddress, navigation } = this.props
+        const { params } = navigation.state
+        await storeWallet(platform, privateKey, address)
+        await addWalletAddress({address, name, platform}, params)
+      } catch (err) {
         console.log(err)
-        Alert.alert('An error occured try again')
+        showToast(getErrorMsg(err))
       }
   }
 
   render(){
+    const { name, secret } = this.state
     return (
-      <View style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <WalletInput
-          toggleQRScanner={this.toggleQRScanner}
-          scannerOpen={this.state.scannerOpen}
-          inputValue={this.state.inputValue}
-          hasCameraPermission={this.state.hasCameraPermission}
-          onChangeText={this.onChangeText}
-          restoreWallet={this.restoreWallet}
-          children={
-            <QRScanner 
-              style={styles.scanner}
-              scannerOpen={this.state.scannerOpen}
-              handleBarCodeRead={this.handleBarCodeRead}
-            />
-          }
-        />
-      </View>
+      <StyleProvider style={getTheme(platform)}>
+        <Container>
+          <Content>
+            <View style={styles.header}>
+              <Text style={styles.heading}>Import Existing Wallet</Text>
+              <Text style={styles.subHeading}>
+                  You can link your existing wallet by entering your private key or mnemonic. This will be encrypted and stored on your physical device. It never gets sent to our servers so we won’t be able to recover it for you.
+              </Text>
+            </View>
+            <View style={customStyles.scrollContainer} containerStyleContent={customStyles.container}>
+                <View style={customStyles.inputRow}>
+                  <Input
+                       style={styles.input}
+                       placeholder="Enter or Scan Private Key / Mnemonic"
+                       value={secret}
+                       bordered
+                       onChangeText={secret=>this.setState({ secret })}
+                   />
+                  <QRButton
+                      style={{alignSelf: 'flex-end'}}
+                      onScan={secret=>this.setState({ secret })}
+                  />
+                </View>
+                <View style={customStyles.inputRow}>
+                  <Input
+                       style={styles.input}
+                       placeholder="Optional Name"
+                       value={name}
+                       bordered
+                       onChangeText={name=>this.setState({ name })}
+                   />
+                </View>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                    <Button
+                        style={{flex: .8}}
+                        primary
+                        title={"import"}
+                        block
+                        onPress={() => { this.restoreWallet() }}>
+                        <Text style={{color: '#000'}}>Import</Text>
+                    </Button>
+                </View>
+            </View>
+          </Content>
+      </Container>
+    </StyleProvider>
     );
   }
 }
@@ -137,7 +172,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     addWalletAddress: (address) => dispatch(addWalletAddress(address)),
-    navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
+    navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
+    showToast: (params) => dispatch(showToast(params)),
+    setLoading: (isLoading, msg) => dispatch(setLoading(isLoading, msg))
   }
 }
 

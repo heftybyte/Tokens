@@ -125,7 +125,6 @@ class AccountPicker extends Component {
             : isTrade ? 'NewExchangeOrder' : 'Account View'
         }
         if (type === 'exchange_account') {
-          console.log({acc, exchangeMap})
           const exchange = exchangeMap[acc.platform]
           item.image =  getExchangeImage(exchange.name)
           item.params.exchangeName = exchange.name

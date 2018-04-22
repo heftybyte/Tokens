@@ -18,10 +18,11 @@ import { setLoading, showToast } from '../../../reducers/ui'
 
 class ConfirmPhrase extends Component {
 	state = {
-		mnemonic: ""
+		mnemonic: "",
+		name: null
 	}
 
-	createWallet = async(mnemonic, type='ethereum') => {
+	createWallet = async(mnemonic, name, platform='ethereum') => {
 
 		const { addWalletAddress, setLoading, showToast, navigation } = this.props
 		const { params: navParams } = navigation.state
@@ -32,9 +33,9 @@ class ConfirmPhrase extends Component {
 			if(wallet){
 				const { address, privateKey } = wallet
 				setLoading(true, 'Encrypting Wallet')
-				const result = await storeWallet(type, privateKey, address)
+				await storeWallet(platform, privateKey, address)
 				setLoading(false)
-				await addWalletAddress(address, 'ethereum', navParams);
+				await addWalletAddress({address, platform, name}, navParams);
 			}
 		} catch (err) {
 			console.log('createWallet err', err)
@@ -46,6 +47,8 @@ class ConfirmPhrase extends Component {
 
 	onContinue = async () => {
 		const { mnemonic, setLoading } = this.props
+		const { name } = this.state
+
 		if (mnemonic !== this.state.mnemonic) {
 			setLoading(false)
 			Alert.alert('Incorrect, please secure the phrase carefully')
@@ -53,7 +56,7 @@ class ConfirmPhrase extends Component {
 			return
 		}
 		try {
-			await this.createWallet(mnemonic)
+			await this.createWallet(mnemonic, name)
 			setLoading(false)
 		} catch(err) {
 			console.log(err)
@@ -84,7 +87,16 @@ class ConfirmPhrase extends Component {
 										placeholder="Enter Backup Phrase"
 										multiline
 										numberOfLines={4}
-										onChangeText={(text)=>{this.setState({mnemonic: text})}}
+										onChangeText={(mnemonic)=>{this.setState({mnemonic})}}
+										bordered
+									/>
+								</Item>
+								<Item>
+									<Input
+										style={styles.mnemonic}
+										placeholder="Optional Name"
+										numberOfLines={1}
+										onChangeText={(name)=>{this.setState({name})}}
 										bordered
 									/>
 								</Item>

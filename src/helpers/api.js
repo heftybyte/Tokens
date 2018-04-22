@@ -78,8 +78,8 @@ export const addAccountAddress = async (id, address) => {
   return res.data
 }
 
-export const addAccountWalletAddress = async (id, address, platform) => {
-  const res = await instance.post(`/accounts/${id}/wallets`, { address, platform })
+export const addAccountWalletAddress = async ({id, address, name, platform}) => {
+  const res = await instance.post(`/accounts/${id}/wallets`, { address, platform, name })
   return res.data
 }
 
@@ -93,8 +93,8 @@ export const setCurrency = async (id, currency) => {
   return res.data
 }
 
-export const addExchangeAccount = async ({ id, key, secret, name, passphrase, exchangeId }) => {
-  const res = await instance.post(`/accounts/${id}/exchangeAccounts`, { key, secret, name, passphrase, exchangeId })
+export const addExchangeAccount = async ({ id, key, secret, name, passphrase, platform }) => {
+  const res = await instance.post(`/accounts/${id}/exchangeAccounts`, { key, secret, name, passphrase, platform })
   return res.data
 }
 
