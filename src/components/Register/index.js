@@ -108,7 +108,7 @@ class Register extends Component {
                                     title={"Continue With Coinbase"}
                                     block
                                     onPress={() => navigate('Coinbase Connect')}>
-                                    <FontAwesome style={{flex: .1, padding: 10, paddingRight: 0}} color={baseColor} name={'google'} size={30} />
+                                    <FontAwesome style={{flex: .1, padding: 10, paddingRight: 0}} color={baseColor} name={'shield'} size={30} />
                                     <Text style={customStyles.buttonText}>CONTINUE WITH COINBASE</Text>
                                 </Button>
                             </View>

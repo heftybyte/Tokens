@@ -14,7 +14,7 @@ import _platform from '../../../native-base-theme/variables/platform';
 import styles from './styles'
 import { login as _login, registerAccount as _registerAccount } from '../../reducers/account'
 import { setLoading as _setLoading, showToast as _showToast } from '../../reducers/ui'
-import { getErrorMsg } from '../../helpers/functions'
+import { getErrorMsg, exchangeCoinbaseCodeForCredentials } from '../../helpers/functions'
 
 const customStyles = {
     header: {
@@ -155,9 +155,33 @@ class SignUp extends Component {
       })
     }
 
+    async useCoinbaseAuth(indicateLoading, loginFn, oauth, oauthProvider, code) {
+      const {
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        email
+      } = await exchangeCoinbaseCodeForCredentials(code)
+      indicateLoading(true, 'Connecting To Coinbase')
+      const success = await loginFn(
+        { email, oauth, oauthProvider },
+        { failureRedirect: false, suppressToast: true }
+      )
+      indicateLoading(false)
+      if (success) {
+          console.log('logged in with Coinbase')
+          return
+      }
+      this.setState({
+          showForm: true,
+          email,
+          accessToken,
+          refreshToken
+      })
+    }
+
     submit = async () => {
         const { registerAccount, navigate, navigation, login, showToast } = this.props
-        const { withGoogle } = navigation.state.params
+        const { oauth, oauthProvider } = navigation.state.params
         const {
             username,
             email,
@@ -173,10 +197,10 @@ class SignUp extends Component {
         } else if (!email) {
             Alert.alert('Email is required')
             return
-        } else if (!withGoogle && !password) {
+        } else if (!oauth && !password) {
             Alert.alert('Password is required')
             return
-        } else if (!withGoogle && password.length < 6) {
+        } else if (!oauth && password.length < 6) {
             Alert.alert('Password must be 6 char min')
             return
         }
@@ -188,7 +212,8 @@ class SignUp extends Component {
                 accessToken,
                 refreshToken,
                 serverAuthCode,
-                withGoogle,
+                oauth,
+                oauth_provider: oauthProvider,
                 invite_code: inviteCode
             })
             showToast('Account Created')
@@ -196,11 +221,11 @@ class SignUp extends Component {
             logger.error('submit, registerAccount', err)
             showToast(getErrorMsg(err))
         }
-        if (withGoogle) {
+        if (oauth) {
             try {
-                await login({ username, accessToken, withGoogle })
+                await login({ email, username, accessToken, oauth, oauthProvider })
             } catch (err) {
-                logger.error('SignUp withGoogle', err)
+                logger.error(`SignUp with oauth provider: ${oauthProvider}`, err)
                 showToast(getErrorMsg(err))
             }
         } else {

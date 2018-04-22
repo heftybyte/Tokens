@@ -59,6 +59,16 @@ export const googleLogin = async (params) => {
   return res.data
 }
 
+export const coinbaseLogin = async (params) => {
+  const res = await instance.post(`/accounts/coinbase-signin`, { ...params })
+  return res.data
+}
+
+export const fetchCoinbaseCredentials = async (code) => {
+  const res = await instance.get(`/accounts/fetch-coinbase-credentials?code=${code}`)
+  return res.data
+}
+
 export const logoutAccount = async (notification_token) => {
 	await instance.post(`/accounts/logout`, { notification_token })
 }
