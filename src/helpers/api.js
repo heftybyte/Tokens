@@ -114,8 +114,8 @@ export const deleteAccountAddress = async (id, address) => {
 }
 
 export const getAccount = async (id) => {
-    const res = await instance.get(`/accounts/${id}`)
-    return res.data
+  const res = await instance.get(`/accounts/${id}`)
+  return res.data
 }
 
 export const getAccountPortfolio = async (id,{type,accountId}) => {

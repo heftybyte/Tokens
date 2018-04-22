@@ -92,9 +92,13 @@ class SignUp extends Component {
             this.setState({
                 showForm: true
             })
-            return
+        } else {
+            this.attemptGoogleLogin()
         }
+    }
 
+    attemptGoogleLogin = async () => {
+        const { login, navigate, navigation, showToast, setLoading } = this.props
         try {
             const {
                 accessToken,
@@ -103,7 +107,10 @@ class SignUp extends Component {
                 user: { email, photoUrl }
             } = await this.signInWithGoogle()
             setLoading(true, 'Connecting To Google')
-            const success = await login({ accessToken, withGoogle }, true)
+            const success = await login(
+                { accessToken, withGoogle: true },
+                { failureRedirect: false, suppressToast: true }
+            )
             setLoading(false)
             if (success) {
                 console.log('logged in with Google')
@@ -120,7 +127,16 @@ class SignUp extends Component {
         } catch (err) {
             setLoading(false)
             logger.error('signInWithGoogle', err)
-            showToast(getErrorMsg(err))
+            switch(err.message) {
+                case 'Google sign in error': 
+                    navigate('Register')
+                    break;
+                case 'Account not found':
+                    showToast('Continue Registration')
+                    break;
+                default:
+                    showToast(getErrorMsg(err))
+            }
         }
     }
 
@@ -178,21 +194,11 @@ class SignUp extends Component {
     }
 
     signInWithGoogle = async () => {
-      try {
-        const result = await Google.logInAsync({
-          androidClientId: GOOGLE_CLIENT_ID_ANDROID,
-          iosClientId: GOOGLE_CLIENT_ID_IOS,
-          scopes: ['profile', 'email'],
+        return await Google.logInAsync({
+            androidClientId: GOOGLE_CLIENT_ID_ANDROID,
+            iosClientId: GOOGLE_CLIENT_ID_IOS,
+            scopes: ['profile', 'email'],
         });
-
-        if (result.type === 'success') {
-          return result;
-        } else {
-          return {cancelled: true};
-        }
-      } catch(e) {
-        return {error: true};
-      }
     }
 
     render() {
@@ -279,7 +285,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         showToast: (params) => dispatch(_showToast(params)),
         setLoading: (isLoading, msg) => dispatch(_setLoading(isLoading, msg)),
-        login: (params) => dispatch(_login(params)),
+        login: (params, options) => dispatch(_login(params, options)),
         registerAccount: (params) => dispatch(_registerAccount(params)),
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
     }

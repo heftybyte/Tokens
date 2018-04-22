@@ -187,14 +187,16 @@ async function configureSession(accessToken, userId, account, dispatch) {
     }))
 }
 
-export const login = (params, supressToasts) => async (dispatch, getState) => {
+export const login = (params, options={}) => async (dispatch, getState) => {
+    const { suppressToast, failureRedirect=true } = options
+    const withGoogle = params && params.withGoogle
     try {
         let account = null
         let id = await SecureStore.getItemAsync('id')
         let token = await SecureStore.getItemAsync('token')
-        const loginFn = params && params.withGoogle ? googleLogin : loginAccount
+        const loginFn = withGoogle ? googleLogin : loginAccount
         if (params) {
-            dispatch(setLoading('Logging In'))
+            dispatch(setLoading(true, 'Authorizing'))
             let res = await loginFn(params)
             // TWO FACTOR
             if (res.twoFactorRequired) {
@@ -215,14 +217,16 @@ export const login = (params, supressToasts) => async (dispatch, getState) => {
         await configureSession(token, id, account, dispatch)
         return true
     } catch(err) {
+        console.log('login catch', {err})
         dispatch(setLoading(false))
         const error = getError(err)
+        logger.error('user login', { id,token,params,err })
         if(error && error.statusCode === 401) {
             error.message = 'Invalid cedentials';
-        } else {
+        } else if(failureRedirect) {
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         }
-        !supressToasts && dispatch(showToast(getErrorMsg(err)))
+        !suppressToast && dispatch(showToast(getErrorMsg(err)))
         return false
     }
 }
@@ -453,22 +457,21 @@ export const setDefaultCurrency = (currency) => async (dispatch, getState) => {
 }
 
 export const getPortfolio = ({accountId, type, showUILoader=true, msg}={}) => async (dispatch, getState) => {
-    let err = null
-    const { id } = getState().account
-
-    if (showUILoader) {
-        dispatch(setLoading(true, msg || accountId ? 'Loading Account' : 'Loading Portfolio'))
-    }
-    let portfolio = await getAccountPortfolio(id, {accountId,type}).catch(e=>err=e)
-    if (showUILoader) {
+    try {
+        const { id } = getState().account
+        if (showUILoader) {
+            dispatch(setLoading(true, msg || accountId ? 'Loading Account' : 'Loading Portfolio'))
+        }
+        let portfolio = await getAccountPortfolio(id, {accountId,type})
+        if (showUILoader) {
+            dispatch(setLoading(false))
+        }
+        dispatch(portfolioAction(portfolio))
+    } catch (err) {
+        console.log('getPortfolio catch', {err})
         dispatch(setLoading(false))
+        dispatch(showToast(getErrorMsg(err)))
     }
-
-    if (err) {
-      dispatch(showToast(getErrorMsg(err)))
-      return
-    }
-    dispatch(portfolioAction(portfolio))
 }
 
 export const getPortfolioChart = ({accountId, type, _period}={}) => async (dispatch, getState) => {

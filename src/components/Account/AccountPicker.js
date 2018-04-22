@@ -135,7 +135,6 @@ class AccountPicker extends Component {
         }
         return item
       })
-      console.log({accounts,items})
       this.setState({
         items
       })
