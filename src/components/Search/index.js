@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class SearchPage extends Component {
+class Search extends Component {
     state = {
       tokens: [],
       query: ''
@@ -46,9 +46,12 @@ class SearchPage extends Component {
       nextProps.tokens && this.setState({tokens: nextProps.tokens});
     }
 
-    handleSearch = (searchTerm) => {
-      searchTerm = searchTerm.toUpperCase();
-      trackSearch(searchTerm)
+    handleSearch = (searchTerm='') => {
+      if (searchTerm && searchTerm.length < 3) {
+        searchTerm = null
+      } else if (searchTerm) {
+         trackSearch(searchTerm)
+      } 
       this.setState({
         query: searchTerm
       })
@@ -62,16 +65,20 @@ class SearchPage extends Component {
               style={styles.input}
               ref={ref => this.searchBar = ref}
               onChangeText={this.handleSearch}
-              placeholder={'Enter a token symbol ...'}
+              placeholder={'Search name or symbol...'}
               placeholderTextColor={'#333'}
-              autoCapitalize={'characters'}
           />
           <ScrollView
             containerStyleContent={styles.container}
           >
             <TokenList
               style={styles.list}
-              tokens={tokens.filter(token=>token.symbol.indexOf(query) > -1)}
+              tokens={
+                tokens.filter(token=>(
+                  (token.symbol.search(new RegExp(query, 'i')) > -1) ||
+                  (token.name||'').search(new RegExp(query, 'i')) > -1
+                ))
+              }
               type="search"
             />
           </ScrollView>
@@ -90,4 +97,4 @@ const mapStateToProps = (state) => ({
     portfolio: state.account.portfolio,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(SearchPage));
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(Search));

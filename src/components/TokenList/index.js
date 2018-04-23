@@ -113,19 +113,17 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, chatEnabled }) => {
 
         <View style={styles.symbolContainer}>
           <Text style={styles.symbol}>{item.symbol}</Text>
+          <Text style={styles.name}>{item.name}</Text>
         </View>
-        <TouchableHighlight
+        {chatEnabled && <TouchableHighlight
           onPress={() => onPress(item) }
           style={[
               styles.priceContainer,
               styles.noPrice
           ]}
         >
-          {chatEnabled &&
-            <Text style={[styles.watchText]}>CHAT</Text>
-          }
-
-        </TouchableHighlight>
+          <Text style={styles.watchText}>CHAT</Text>
+        </TouchableHighlight>}
       </View>
     </TouchableHighlight>
   )
@@ -282,6 +280,11 @@ const styles = StyleSheet.create({
   },
   symbol: {
     color: '#fff',
+    fontSize: 16,
+    fontFamily: 'Nunito-Light'
+  },
+  name: {
+    color: '#555',
     fontSize: 16,
     fontFamily: 'Nunito-Light'
   },
