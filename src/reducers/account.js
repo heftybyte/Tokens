@@ -190,10 +190,12 @@ async function configureSession(accessToken, userId, account, dispatch) {
 export const login = (params, options={}) => async (dispatch, getState) => {
     const { suppressToast, failureRedirect=true } = options
     const withGoogle = params && params.withGoogle
+    let id
+    let token
+    let account = null
     try {
-        let account = null
-        let id = await SecureStore.getItemAsync('id')
-        let token = await SecureStore.getItemAsync('token')
+        id = await SecureStore.getItemAsync('id')
+        token = await SecureStore.getItemAsync('token')
         const loginFn = withGoogle ? googleLogin : loginAccount
         if (params) {
             dispatch(setLoading(true, 'Authorizing'))
