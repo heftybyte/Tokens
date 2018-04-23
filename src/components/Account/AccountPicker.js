@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableHighlight } from "react-native"
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import _ from "lodash";
 import { withDrawer } from '../../helpers/drawer'
-import { hasWallet } from '../../helpers/wallet'
+import { hasWalletOnDisk } from '../../helpers/wallet'
 import { getExchangeImage, asyncFilter } from '../../helpers/functions'
 import { baseAccent, baseColor, brandColor } from '../../config'
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Menu } from '../Common/Menu'
-
 const Icons = {
   'wallet': 'wallet',
   'address': 'notebook',
@@ -33,6 +33,12 @@ const AccountSourceId = {
   'exchange_account': 'exchangeId'
 }
 
+const AccountTypeHeader = {
+  'address': 'Addresses',
+  'wallet': 'Wallets',
+  'exchange_account': 'Exchange Accounts'
+}
+
 const styles = StyleSheet.create({
   header: {
       borderColor: baseAccent,
@@ -55,9 +61,21 @@ const styles = StyleSheet.create({
       color: brandColor
   }
 })
+
+const populateOnDisk = async (acc) =>
+  ({...acc, onDisk: await hasWalletOnDisk(acc.platform, acc.id) })
+
 class AccountPicker extends Component {
+
+  static getHeaderText = (navState) => {
+    const { type, platform } = navState.params
+    return `${_.capitalize(platform)} ${AccountTypeHeader[type]}`
+  }
+
   state = {
-    items: []
+    items: [],
+    heading: '',
+    subHeading: ''
   }
 
   getAccounts = async (type, platform) => {
@@ -65,7 +83,8 @@ class AccountPicker extends Component {
     const idField = AccountSourceId[type]
     let accounts = (this.props[stateField] || []).filter(a=>a.platform===platform)
     if (type === 'wallet') {
-      accounts = await asyncFilter(accounts, async acc=>await hasWallet(acc.platform, acc.id))
+      const mappers = accounts.map((acc)=>populateOnDisk(acc))
+      accounts = await Promise.all(mappers)
     }
     return accounts
   }
@@ -84,6 +103,7 @@ class AccountPicker extends Component {
 
   componentDidMount = () => {
     this.updateMenu(this.props)
+    this.updateHeader()
   }
 
   componentWillReceiveProps = (nextProps) => {
@@ -126,10 +146,13 @@ class AccountPicker extends Component {
         }
         if (type === 'exchange_account') {
           const exchange = exchangeMap[acc.platform]
-          item.image =  getExchangeImage(exchange.name)
+          item.image = getExchangeImage(exchange.name)
           item.params.exchangeName = exchange.name
           item.params.exchangeImage = exchange.image
         } else {
+          if (type === 'wallet') {
+            item.color = acc.onDisk ? brandColor : '#555'
+          }
           item.icon = Icons[type]
           item.Component = SimpleLineIcons
         }
@@ -143,7 +166,7 @@ class AccountPicker extends Component {
     }
   }
 
-  render() {
+  updateHeader = () => {
     const { navigation } = this.props
     const {
       name,
@@ -153,56 +176,69 @@ class AccountPicker extends Component {
     } =  navigation.state.params
     const isTransaction = action === 'send' || action === 'recieve'
     const isTrade = action === 'buy' || action === 'sell'
-    const { items } = this.state
+
+    let heading, subHeading
+    if (type === 'address') {
+      heading = 'Select Address'
+      subHeading = `Choose an address to view its price and balance history. If you want to make transactions, add the full wallet using the "import wallet" button below.`
+    } else if (type === 'wallet') {
+      heading = 'Select Wallet'
+      subHeading = `Wallets with a blue icon are stored on this device and can be used to make transactions.`
+    } else if (isTrade) {
+      heading = 'Select Exchange'
+      subHeading = `Choose one of your linked ${name} exchange accounts for this trade.`
+    }
+    this.setState({ heading, subHeading })
+  }
+
+  render() {
+    const { navigation } = this.props
+    const { type } = navigation.state.params
+    const { heading, subHeading, items } = this.state
 
     return (
-      <ScrollView style={{flex:1}}>
-       {isTransaction && 
-          <View style={styles.header}>
-            <Text style={styles.heading}>Select Wallet</Text>
-            <Text style={styles.subHeading}>Choose one of your {platform} wallets for this transaction.</Text>
-          </View>
-       }
-      {isTrade && 
-          <View style={styles.header}>
-            <Text style={styles.heading}>Select Exchange</Text>
-            <Text style={styles.subHeading}>Choose one of your linked {name} exchange accounts for this trade.</Text>
-
-          </View>
-       }
-        <Menu
-          navigation={navigation}
-          items={items}
-          baseColor={baseColor}
-          brandColor={brandColor}
-          baseAccent={baseAccent}
-          style={{flex: 1}}
-          listMargin={20}
-        />
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-          <TouchableHighlight
-            style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}
-            onPress={()=>this.navigateToAddScreen()}
-          >
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-              <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
-              <Text style={{ color: brandColor }}>new {type.replace('_', ' ')}</Text>
-            </View>
-          </TouchableHighlight>
-      {
-        (type !== 'exchange_account') &&
-          <TouchableHighlight
-             style={{flex: 1, flexDirection: 'row', justifyContent: 'center', paddingTop: 20}}
-             onPress={()=>this.navigateToRestoreWalletScreen()}
-          >
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-              <SimpleLineIcons style={{paddingRight: 10}} name={'cloud-upload'} color={brandColor} size={14} />
-              <Text style={{ color: brandColor}}>import {type.replace('_', ' ')}</Text>
-            </View>
-          </TouchableHighlight>
-      }
+      <View style={{flex: 1}}>
+      { (heading || subHeading) && 
+        <View style={styles.header}>
+          <Text style={styles.heading}>{heading}</Text>
+          <Text style={styles.subHeading}>{subHeading}</Text>
         </View>
-      </ScrollView>
+      }
+        <ScrollView style={{flex:1}}>
+          <Menu
+            navigation={navigation}
+            items={items}
+            baseColor={baseColor}
+            brandColor={brandColor}
+            baseAccent={baseAccent}
+            style={{flex: 1}}
+            listMargin={20}
+          />
+        </ScrollView>
+        <View style={{flex: .2, flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableHighlight
+              style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}
+              onPress={()=>this.navigateToAddScreen()}
+            >
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                <SimpleLineIcons style={{paddingRight: 10}} name={'plus'} color={brandColor} size={14} />
+                <Text style={{ color: brandColor }}>new {type.replace('_', ' ')}</Text>
+              </View>
+            </TouchableHighlight>
+        {
+          (type !== 'exchange_account') &&
+            <TouchableHighlight
+               style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}
+               onPress={()=>this.navigateToRestoreWalletScreen()}
+            >
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                <SimpleLineIcons style={{paddingRight: 10}} name={'cloud-upload'} color={brandColor} size={14} />
+                <Text style={{ color: brandColor}}>import wallet</Text>
+              </View>
+            </TouchableHighlight>
+        }
+          </View>
+      </View>
     )
   }
 

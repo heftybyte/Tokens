@@ -54,7 +54,7 @@ const customStyles = StyleSheet.create({
   },
   input: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     borderColor: baseAccent,
     borderBottomWidth: 1,
     paddingLeft: 10
@@ -66,7 +66,6 @@ class RestoreWallet extends Component {
   static headerText = 'Import Wallet'
 
   state = {
-    showScanner: false,
     name: null,
     secret: ''
   }

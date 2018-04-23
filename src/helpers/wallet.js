@@ -12,7 +12,7 @@ export const storeWallet = async(type, privKey, pubKey) => {
     return result
 }
 
-export const hasWallet = async (type, pubKey) => {
+export const hasWalletOnDisk = async (type, pubKey) => {
     const address = utils.getAddress(pubKey)
     const currentWallet = JSON.parse(await SecureStore.getItemAsync(WALLET_KEY) ||  '{}')
     return !!(currentWallet[type] && currentWallet[type][address])

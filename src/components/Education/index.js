@@ -12,14 +12,14 @@ import Swiper from 'react-native-swiper'
 
 import { registerForPushNotificationsAsync } from '../../helpers/functions'
 import { withDrawer } from '../../helpers/drawer'
-import { lossColor, brandColor } from '../../config'
+import { lossColor, brandColor, baseColor } from '../../config'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000'
+    backgroundColor: baseColor
   },
   title: {
     color: '#fff',
@@ -76,6 +76,8 @@ const Dot = (color) => (
 
 class Education extends Component {
 
+  static headerText = 'Scanning Blockchain'
+
   messageFor(pushEnabled) {
     const intro = "We're scanning the blockchain for your tokens."
     const pushEnabledMsg = `${intro} You'll receive a push notification when its complete.`
@@ -102,18 +104,6 @@ class Education extends Component {
       <View
         style={styles.container}
       >
-        <Swiper
-          loop={false}
-          paginationStyle={{
-              backgroundColor: "transparent"
-          }}
-          dot={Dot('#333')}
-          activeDot={Dot('#fff')}
-          containerStyle={styles.container}
-         >
-          { slides }
-        </Swiper>
-
         <View style={styles.container}>
           <Text style={styles.title}>
             {message}

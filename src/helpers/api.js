@@ -73,8 +73,8 @@ export const removeFromAccountWatchlist = async (id, symbol) => {
 	return res.data
 }
 
-export const addAccountAddress = async (id, address) => {
-  const res = await instance.post(`/accounts/${id}/address`, { address })
+export const addAccountAddress = async (id, address, platform, name) => {
+  const res = await instance.post(`/accounts/${id}/address`, { address, platform, name })
   return res.data
 }
 

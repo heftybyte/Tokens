@@ -303,15 +303,15 @@ export const removeFromWatchList = (symbol, token) => async (dispatch, getState)
 	)
 }
 
-export const addAddress = (address) => async (dispatch, getState) => {
+export const addAddress = (address, platform, name) => async (dispatch, getState) => {
     let err = null
     const { id } = getState().account
     dispatch(setLoading(true, 'Saving Address'))
-    const account = await addAccountAddress(id, address).catch(e=>err=e)
+    const account = await addAccountAddress(id, address, platform, name).catch(e=>err=e)
     dispatch(setLoading(false))
     if (err) {
         dispatch(showToast(getErrorMsg(err)))
-        throw err
+        return
     }
     dispatch(showToast('Address Added'))
     dispatch(addAddressAction(account.addresses))
@@ -319,7 +319,13 @@ export const addAddress = (address) => async (dispatch, getState) => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
     const pushEnabled = status === 'granted'
     const params = { type: 'ADD_ADDRESS', meta: { pushEnabled } }
-    dispatch(NavigationActions.navigate({ routeName: 'Education', params }))
+    dispatch(NavigationActions.reset({
+      index: 1,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Profile' }),
+        NavigationActions.navigate({ routeName: 'Education', params })
+      ]
+    }))
 }
 
 export const refreshAddress = (address, type) => async (dispatch, getState) => {

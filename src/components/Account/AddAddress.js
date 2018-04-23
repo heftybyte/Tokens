@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, AsyncStorage, Alert } from 'react-native';
+import { Text, StyleSheet, View, AsyncStorage, Alert } from 'react-native';
 import { utils } from 'ethers';
-import { Permissions } from 'expo';
 import { NavigationActions } from 'react-navigation';
+import { Button, Container, Content, Form, Item, Input, StyleProvider } from 'native-base';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
-import QRScanner from './QRScanner';
-import AccountInput from './AccountInput';
+import QRButton from '../Common/QRButton'
 import { addAddress } from '../../reducers/account';
 import { withDrawer } from '../../helpers/drawer';
-import { baseColor } from '../../config'
 import { trackAddress } from '../../helpers/analytics'
 import { getErrorMsg } from '../../helpers/functions'
 import { showToast } from '../../reducers/ui'
+import { baseAccent, baseColor, brandColor } from '../../config'
+import getTheme from '../../../native-base-theme/components';
+import platform from '../../../native-base-theme/variables/platform';
 
 const styles = StyleSheet.create({
   scrollContainer: {
@@ -30,75 +31,105 @@ const styles = StyleSheet.create({
     borderColor: '#f00'
   },
   header: {
-    backgroundColor: '#000'
+    borderColor: baseAccent,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 10
   },
+  heading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: brandColor
+  },
+  subHeading: {
+    color: '#999',
+    fontSize: 12,
+    paddingVertical: 10
+  },
+  inputRow: {
+    flex: 1,
+    marginBottom: 20
+  },
+  input: {
+    color: '#fff',
+    fontSize: 14,
+    borderColor: baseAccent,
+    borderBottomWidth: 1,
+    paddingLeft: 10
+  }
 });
 
 class AddAddress extends Component {
 
   state = {
-    hasCameraPermission: null,
-    scannerOpen: false,
-    inputValue: ''
+    address: '',
+    name: ''
   }
 
-  async componentWillMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({hasCameraPermission: status === 'granted'});
-  }
-
-  toggleQRScanner = () => {
-    this.setState({ scannerOpen: !this.state.scannerOpen });
-  }
-
-  handleBarCodeRead = ({type, data}) => {
-    this.toggleQRScanner();
-    let processedAddress = data.substr(data.search("0x"), 42);
-    this.setState({inputValue: processedAddress});
-    trackAddress('Save', 'QRScanner')
-    this.saveAddress(processedAddress)
-  }
-
-  onChangeText = (text) => {
-    this.setState({ inputValue: text });
-  }
-
-  saveAddress = async (data) => {
-    const text = (typeof data === 'string') && data || this.state.inputValue;
-    const { addAddress, navigate, showToast } = this.props
-    if(!text || !text.length) {
-      Alert.alert('Enter an address to save');
-      return;
-    }
+  trackAddress = async (platform='ethereum') => {
+    const { addAddress, navigate, showToast, navigation } = this.props
+    const { address, name } = this.state
     try {
-      const address = utils.getAddress(text)
-      await addAddress(text);
+      if(!address || !address.length) {
+        throw new Error('Enter an address to track');
+      }
+      const formattedAddress = utils.getAddress(address)
+      await addAddress(formattedAddress, platform, name, navigation.state.params);
     } catch (err) {
       console.error(err)
       showToast(getErrorMsg(err))
     }
-    // Alert.alert('Allow up to 2 minutes for your address data to appear');
   }
-
+  
   render(){
-    return (
-      <View style={styles.scrollContainer} containerStyleContent={styles.container}>
-        <AccountInput 
-          toggleQRScanner={this.toggleQRScanner}
-          scannerOpen={this.state.scannerOpen}
-          inputValue={this.state.inputValue}
-          hasCameraPermission={this.state.hasCameraPermission}
-          onChangeText={this.onChangeText}
-          saveAddress={this.saveAddress}
-          children={
-            <QRScanner 
-              style={styles.scanner}
-              scannerOpen={this.state.scannerOpen}
-              handleBarCodeRead={this.handleBarCodeRead}
-            />
-          }
-        />
-      </View>
+      const { address, name } = this.state
+      return (
+        <StyleProvider style={getTheme(platform)}>
+          <Container>
+            <Content>
+              <View style={styles.header}>
+                <Text style={styles.heading}>Add New Address</Text>
+                <Text style={styles.subHeading}>
+                    You can scan or enter an existing address to track its price and balance history. If you want to make transactions, import the wallet instead.
+                </Text>
+              </View>
+              <View style={styles.scrollContainer} containerStyleContent={styles.container}>
+                  <View style={styles.inputRow}>
+                    <Input
+                         style={styles.input}
+                         placeholder="Enter or Scan Address"
+                         value={address}
+                         bordered
+                         onChangeText={address=>this.setState({ address })}
+                     />
+                    <QRButton
+                        style={{alignSelf: 'flex-end'}}
+                        onScan={address=>this.setState({ address })}
+                    />
+                  </View>
+                  <View style={styles.inputRow}>
+                    <Input
+                         style={styles.input}
+                         placeholder="Optional Name"
+                         value={name}
+                         bordered
+                         onChangeText={name=>this.setState({ name })}
+                     />
+                  </View>
+                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+                      <Button
+                          style={{flex: .8}}
+                          primary
+                          title={"track"}
+                          block
+                          onPress={() => { this.trackAddress() }}>
+                          <Text style={{color: '#000'}}>Track Address</Text>
+                      </Button>
+                  </View>
+              </View>
+            </Content>
+        </Container>
+      </StyleProvider>
     );
   }
 }
@@ -110,7 +141,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addAddress: (address) => dispatch(addAddress(address)),
+    addAddress: (address, platform, name, navParams) => dispatch(addAddress(address, platform, name, navParams)),
     navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params })),
     showToast: (params) => dispatch(_showToast(params))
   }
