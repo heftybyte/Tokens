@@ -38,11 +38,12 @@ class AccountType extends Component {
         ({
           ...b,
           route: 'Select Account',
+          disabled: !b.enabled,
           params: {
             image: b.image,
             name: b.name,
             type: 'wallet',
-            platform: b.id
+            platform: b.id,
           }
         })
       ),
@@ -50,11 +51,12 @@ class AccountType extends Component {
         ({
           ...b,
           route: 'Select Account',
+          disabled: !b.enabled,
           params: {
             image: b.image,
             name: b.name,
             type: 'address',
-            platform: b.id
+            platform: b.id,
           }
         })
       ),
