@@ -1,7 +1,7 @@
 import { ENVIRONMENT } from 'react-native-dotenv';
 import { Constants } from 'expo'
 
-const devUrl = Constants.isDevice ? 'https://api.tokens.express' : 'http://dev.local:8888'
+const devUrl = Constants.isDevice ? 'http://192.168.86.215:22000' : 'http://dev.local:8888'
 console.log({ENVIRONMENT})
 
 export const baseURL = ENVIRONMENT !== 'development' ? 'https://api.tokens.express' : devUrl

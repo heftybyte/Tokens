@@ -44,7 +44,7 @@ export const ListItem = (navigation, brandColor, baseAccent, margin, globalOnPre
   </TouchableWithoutFeedback>
 )
 
-export const Menu = ({ onPress, navigation, items, baseColor, brandColor, baseAccent, showStatusBar, hideBorder, listMargin, style }) => (
+export const Menu = ({ onPress, navigation, items=[], baseColor, brandColor, baseAccent, showStatusBar, hideBorder, listMargin, style }) => (
   <Animated.View
     style={style || {
       flex: 1,

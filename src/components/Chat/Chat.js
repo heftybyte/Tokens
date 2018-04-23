@@ -25,28 +25,25 @@ class Chat extends Component {
 	static getHeader = (navState) => {
 		let { token } = navState.params || {}
 		token = token || defaultToken
-		const fontSize = (token.name || token.symbol).length >= 14 ?
-			13 : 16
 		return (
 		  <View style={{
 			  flexDirection: 'row',
 			  alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
 			  alignItems: 'center',
-			  flex:1,
-			  paddingTop: 10
+			  flex:1
 		  }}>
 			<Image
 				key={token.symbol}
 				source={{ uri: getTokenImage(token.id) }}
-				style={{width: 25, height: 22 }}
+				style={{width: 20, height: 20, borderRadius: 5 }}
 			/>
-			 <Text style={{color: '#fff', paddingHorizontal: 10, fontSize}}>
+			 <Text style={{color: '#fff', paddingHorizontal: 10, fontSize: 16}}>
 				{token.name||token.symbol}
 			 </Text>
 			 {/*<SimpleLineIcons name={'arrow-down'} color={'#fff'} />*/}
 		  </View>
 		)
-	 }
+	}
 
 	state = {
 		messages: [],
@@ -62,8 +59,6 @@ class Chat extends Component {
 		token = token || defaultToken
 		const { menuOpen } = this.state
 		const image = getTokenImage(token.id)
-		const fontSize = (token.name || token.symbol).length >= 14 ?
-			13 : 16
 
 		this.menuItems = [
 		  {
@@ -103,15 +98,14 @@ class Chat extends Component {
 				  flexDirection: 'row',
 				  alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
 				  alignItems: 'center',
-				  flex:1,
-				  paddingTop: 10
+				  flex:1
 			  }}>
 				  <Image
 					key={token.symbol}
 					source={{ uri: image }}
-					style={{width: 25, height: 22 }}
+					style={{width: 20, height: 20, borderRadius: 5 }}
 				  />
-				  <Text style={{color: '#fff', paddingHorizontal: 10, fontSize}}>
+				  <Text style={{color: '#fff', paddingHorizontal: 10, fontSize: 16 }}>
 					  {token.name||token.symbol}
 				  </Text>
 				  {/*<SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />*/}
@@ -137,10 +131,15 @@ class Chat extends Component {
 	}
 
 	componentWillMount = async () => {
-		const { token, userId } = this.props
-		Backend.setRef(token && token.symbol || 'TKE')
-		await Backend.authenticate(userId)
-		this.updateHeader()
+		try {
+			const { navigation, userId } = this.props
+			const { token } = navigation.state.params
+			Backend.setRef(token.symbol)
+			await Backend.authenticate(userId)
+			this.updateHeader()
+		} catch (err) {
+			console.log(err)
+		}
 	}
 
 	componentDidMount() {

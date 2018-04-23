@@ -150,15 +150,14 @@ class TokenDetails extends Component {
           flexDirection: 'row',
           alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
           alignItems: 'center',
-          flex:1,
-          paddingTop: 10
+          flex:1
       }}>
           <Image
             key={tokenDetails.symbol}
             source={{ uri: getTokenImage(tokenDetails.id) }}
             style={{width: 20, height: 20, borderRadius: 5}}
           />
-          <Text style={{color: '#fff', paddingHorizontal: 10}}>
+          <Text style={{color: '#fff', paddingHorizontal: 10, fontSize: 16 }}>
               {tokenDetails.name||tokenDetails.symbol}
           </Text>
           <SimpleLineIcons name={'arrow-down'} color={'#fff'} />
@@ -215,11 +214,13 @@ class TokenDetails extends Component {
       token: { symbol },
       addToWatchlist,
       removeFromWatchList,
+      chatEnabled
     } = props || this.props
     const { id } = navigation.state.params
     const { menuOpen } = this.state
     const tokenDetails = navigation.state.params && navigation.state.params.token || {} 
     const image = getTokenImage(tokenDetails.id)
+
     if (props && props.isWatching === this.props.isWatching) {
       return
     }
@@ -285,6 +286,16 @@ class TokenDetails extends Component {
         route: "Select Account"
       },
       {
+        name: "Chat",
+        icon: "bubbles",
+        route: "Chat",
+        Component: SimpleLineIcons,
+        enabled: this.props.chatEnabled,
+        params: {
+          token
+        }
+      },
+      {
         name: isWatching ? "Unwatch" : "Watch",
         params: { platform: "ethereum", image },
         icon: 'eye',
@@ -299,15 +310,14 @@ class TokenDetails extends Component {
               flexDirection: 'row',
               alignSelf: Platform.OS === 'ios' ? 'center' : 'flex-start',
               alignItems: 'center',
-              flex:1,
-              paddingTop: 10
+              flex:1
           }}>
               <Image
                 key={tokenDetails.symbol}
                 source={{ uri: image }}
                 style={{width: 20, height: 20, borderRadius: 5}}
               />
-              <Text style={{color: '#fff', paddingHorizontal: 10}}>
+              <Text style={{color: '#fff', paddingHorizontal: 10, fontSize: 16 }}>
                   {tokenDetails.name||tokenDetails.symbol}
               </Text>
               <SimpleLineIcons name={menuOpen ? 'arrow-up' : 'arrow-down'} color={'#fff'} />
@@ -594,7 +604,8 @@ const mapStateToProps = (state, props) => {
     isWatching,
     priceData,
     chartLoading: state.ticker.historicalPrices.loading.chart,
-    period: state.ticker.period
+    period: state.ticker.period,
+    chatEnabled: state.account.chatEnabled
   }
 }
 

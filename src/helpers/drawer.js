@@ -24,13 +24,6 @@ const Items = [
         enabled: true
     },
     {
-        name: "Chat",
-        icon: "bubbles",
-        route: "Chat",
-        Component: SimpleLineIcons,
-        enabled: false
-    },
-    {
         name: "Wallets",
         icon: "wallet",
         route: "AccountType",
@@ -128,7 +121,7 @@ export const withDrawer = (WrappedComponent) => {
                 case 'Token Details':
                 case 'Price Alert':
                 default:
-                    let headerText, fontSize = 16
+                    let headerText
                     if (navState.params && navState.params.overrideHeaderText) {
                         headerText = navState.params.overrideHeaderText
                     } else if (WrappedComponent.getHeader) {
@@ -140,16 +133,12 @@ export const withDrawer = (WrappedComponent) => {
                     }else {
                         headerText = navState.routeName
                     }
-                    if (headerText.length >= 14) {
-                        fontSize = 13
-                    } else if (headerText.length >= 10) {
-                        fontSize = 14
-                    }
+
                     return (
                         <Text
                             style={{
                                 color: '#fff',
-                                fontSize: fontSize,
+                                fontSize: 16,
                                 fontFamily: 'Nunito-ExtraLight',
                             }}
                         >
@@ -230,9 +219,9 @@ export const withDrawer = (WrappedComponent) => {
                             androidStatusBarColor={baseColor}
                             noShadow
                             >
-                                <Left style={
-                                    Platform.OS === 'ios' ? {} : {flex: .4}
-                                }>
+                                <Left style={{
+                                    flex: .2
+                                }}>
                                     <Button
                                     style={{
                                         justifyContent: "center",
@@ -259,10 +248,14 @@ export const withDrawer = (WrappedComponent) => {
                                                 />}
                                     </Button>
                                 </Left>
-                                <Body>
+                                <Body style={{
+                                    flex: .6
+                                }}>
                                     {headerBody}
                                 </Body>
-                                <Right>
+                                <Right style={{
+                                    flex: .2
+                                }}>
                                 {(false && isTokenDetails) ?
                                     <TouchableWithoutFeedback
                                         style={{ justifyContent: "center", alignItems: "center", width: 60 }}

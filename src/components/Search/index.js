@@ -56,8 +56,6 @@ class SearchPage extends Component {
 
     render(){
       const { tokens, query } = this.state
-	    const { watchList, watchListMap } = this.props
-
       return (
         <View style={styles.wrapper}>
           <TextInput
@@ -74,7 +72,6 @@ class SearchPage extends Component {
             <TokenList
               style={styles.list}
               tokens={tokens.filter(token=>token.symbol.indexOf(query) > -1)}
-              watchList={watchListMap}
               type="search"
             />
           </ScrollView>
@@ -91,8 +88,6 @@ const mapStateToProps = (state) => ({
     tokens: state.search.tokens,
     fetched: state.search.fetchedFromStorage,
     portfolio: state.account.portfolio,
-    watchList: state.account.watchList,
-    watchListMap: state.account.watchListMap
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(SearchPage));

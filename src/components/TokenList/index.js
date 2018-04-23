@@ -103,8 +103,7 @@ const TokenItem = ({ item, index, onPress, showTokenInfo, showChange, priceConta
   )
 };
 
-const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
-  let itemOnWatchlist = !!watchList[item.symbol]
+const SearchItem = ({ item, onPress, showTokenInfo, index, chatEnabled }) => {
   return (
     <TouchableHighlight onPress={showTokenInfo}> 
       <View style={[styles.listItem, index == 0 ? styles.noBorderTop : {}]}>
@@ -116,18 +115,14 @@ const SearchItem = ({ item, onPress, showTokenInfo, index, watchList }) => {
           <Text style={styles.symbol}>{item.symbol}</Text>
         </View>
         <TouchableHighlight
-          onPress={() => onPress(itemOnWatchlist, item.symbol) }
+          onPress={() => onPress(item) }
           style={[
               styles.priceContainer,
-              styles.noPrice,
-              itemOnWatchlist ? styles.unwatchContainer : {}
+              styles.noPrice
           ]}
         >
-          {
-            itemOnWatchlist ?
-            <Text style={[styles.unwatchText]}>UNWATCH</Text>
-              :
-            <Text style={[styles.watchText]}>WATCH</Text>
+          {chatEnabled &&
+            <Text style={[styles.watchText]}>CHAT</Text>
           }
 
         </TouchableHighlight>
@@ -221,19 +216,13 @@ class TokenList extends Component {
     <SearchItem
       item={item}
       index={index}
-      watchList={this.props.watchList}
+      chatEnabled={this.props.chatEnabled}
       showTokenInfo={() => {
         trackTap('TokenInfo:SearchItem')
         this.props.goToTokenDetailsPage(item);
       }}
-      onPress={(setWatch, symbol)=>{
-        if(setWatch){
-          //Alert.alert('Watch list coming soon delete')
-          this.props.removeFromWatchList(symbol, item)
-        } else {
-          //Alert.alert('Watch list coming soon add' + symbol)
-          this.props.addToWatchlist(symbol, item)
-        }
+      onPress={(item)=>{
+        this.props.navigate('Chat', { token: item })
       }}
     />
   )
@@ -273,9 +262,14 @@ class TokenList extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  chatEnabled: state.account.chatEnabled
+})
+
 const mapDispatchToProps = (dispatch) => ({
     addToWatchlist: (symbol, token) => dispatch(addToWatchlist(symbol, token)),
     removeFromWatchList: (symbol, token) => dispatch(removeFromWatchList(symbol, token)),
+    navigate: (routeName, params) => dispatch(NavigationActions.navigate({ routeName, params })),
     goToTokenDetailsPage: (token) => dispatch(NavigationActions.navigate({ routeName: 'Token Details', params: {token} })),
     showToast: (msg, props, duration) => dispatch(showToast(msg, props, duration))
 })
@@ -323,9 +317,8 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: brandColor
   },
-  unwatchContainer: {
-    borderColor: brandColor,
-    paddingHorizontal: 8
+  chatButtonContainer: {
+    borderColor: brandColor
   },
   longerPriceContainer: {
     paddingLeft: 30,
@@ -394,4 +387,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(()=>({}), mapDispatchToProps)(TokenList);
+export default connect(mapStateToProps, mapDispatchToProps)(TokenList);

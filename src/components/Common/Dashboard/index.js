@@ -197,7 +197,7 @@ class Dashboard extends Component {
             tokens={portfolio.watchList}
             type="watchList"
           />}
-            {!!!watchListSymbols && <TouchableHighlight
+            {!watchListSymbols && <TouchableHighlight
               style={{marginBottom: 20, marginTop: -20}}
               onPress={()=>{trackTap('Search');goToSearchPage()}}
             >
