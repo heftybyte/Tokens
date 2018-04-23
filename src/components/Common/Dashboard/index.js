@@ -212,10 +212,10 @@ class Dashboard extends Component {
               </View>
             </TouchableHighlight>}
         </View>
-        { !!portfolio.top.length &&
+        { !!(portfolio.featured && portfolio.featured.length) &&
         <TokenList
-          title="Top 100 Tokens By Market Cap"
-          tokens={portfolio.top}
+          title="Featured"
+          tokens={portfolio.featured}
           type="watchList"
         />}
       </ScrollView>

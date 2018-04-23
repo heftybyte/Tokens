@@ -570,6 +570,7 @@ const initialState = {
         totalValue: 0,
         tokens: [],
         top: [],
+        featured: [],
         watchList: []
     },
     preference: {
