@@ -150,8 +150,8 @@ class AccountPicker extends Component {
           item.params.exchangeName = exchange.name
           item.params.exchangeImage = exchange.image
         } else {
-          if (type === 'wallet') {
-            item.color = acc.onDisk ? brandColor : '#555'
+          if (type === 'wallet' && action === 'send') {
+            item.disabled = !acc.onDisk
           }
           item.icon = Icons[type]
           item.Component = SimpleLineIcons
@@ -198,7 +198,7 @@ class AccountPicker extends Component {
 
     return (
       <View style={{flex: 1}}>
-      { (heading || subHeading) && 
+      { !!(heading || subHeading) &&
         <View style={styles.header}>
           <Text style={styles.heading}>{heading}</Text>
           <Text style={styles.subHeading}>{subHeading}</Text>
@@ -233,7 +233,7 @@ class AccountPicker extends Component {
             >
               <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
                 <SimpleLineIcons style={{paddingRight: 10}} name={'cloud-upload'} color={brandColor} size={14} />
-                <Text style={{ color: brandColor}}>import wallet</Text>
+                <Text style={{ color: brandColor }}>import wallet</Text>
               </View>
             </TouchableHighlight>
         }

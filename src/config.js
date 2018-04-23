@@ -4,7 +4,7 @@ import { Constants } from 'expo'
 const devUrl = Constants.isDevice ? 'http://192.168.86.215:22000' : 'http://dev.local:8888'
 console.log({ENVIRONMENT})
 
-export const baseURL = ENVIRONMENT !== 'development' ? 'https://api.tokens.express' : devUrl
+export const baseURL = 'https://api.tokens.express'// ENVIRONMENT !== 'development' ? 'https://api.tokens.express' : devUrl
 export const baseColor = '#0f1110'
 export const baseAccent = '#13181b'
 export const gainColor = '#27A459'

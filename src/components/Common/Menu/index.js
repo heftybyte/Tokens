@@ -3,10 +3,14 @@ import { Animated, Image, StatusBar, Text, TouchableWithoutFeedback, View } from
 import Icon from "@expo/vector-icons/MaterialIcons"
 import { SimpleLineIcons } from '@expo/vector-icons';
 
-export const ListItem = (navigation, brandColor, baseAccent, margin, globalOnPress) => ({ name, route, icon, image, Component, color, params, onPress }) => (
+export const ListItem = (navigation, brandColor, baseAccent, margin, globalOnPress) => 
+  ({ disabled, name, route, icon, image, Component, color, params, onPress }) => (
   <TouchableWithoutFeedback
       key={name}
       onPress={() =>{
+        if (disabled) {
+          return
+        }
         onPress ? onPress() : navigation.navigate(route, params)
         globalOnPress && globalOnPress()
       }}
@@ -28,17 +32,17 @@ export const ListItem = (navigation, brandColor, baseAccent, margin, globalOnPre
             <View style={{ width: 60 }}>
             {
               Component ? (
-                <Component name={icon} size={20} color={color || brandColor} />
+                <Component name={icon} size={20} color={disabled ? '#555' : color || brandColor} />
               ) : image ? (
                 <Image source={{ uri: image}} style={{width: 30, height: 30}} />
-              ) : <Icon name={icon} size={20} color={color || brandColor} />
+              ) : <Icon name={icon} size={20} color={disabled ? '#555' : color || brandColor} />
             }
           </View>}
           <View style={{ flex: .9 }}>
-              <Text style={{ color: "#fff" }}>{name}</Text>
+              <Text style={{ color: disabled ? "#555" : "#fff" }}>{name}</Text>
           </View>
           <View style={{ flex: .1 }}>
-              <SimpleLineIcons name={'arrow-right'} color="#fff" size={14} />
+              <SimpleLineIcons name={'arrow-right'} color={disabled ? "#555": "#fff"} size={14} />
           </View>
       </View>
   </TouchableWithoutFeedback>
