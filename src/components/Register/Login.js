@@ -57,7 +57,7 @@ class Login extends Component {
             Alert.alert('Password is required')
             return
         }
-        login({ username, password })
+        login({ username, password }, { failureRedirect: false })
     }
 
     render() {
@@ -114,7 +114,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        login: (params) => dispatch(_login(params)),
+        login: (params, options) => dispatch(_login(params, options)),
         navigate: (routeName, params={}) => dispatch(NavigationActions.navigate({ routeName, params }))
     }
 }

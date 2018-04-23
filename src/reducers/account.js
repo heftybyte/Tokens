@@ -219,13 +219,10 @@ export const login = (params, options={}) => async (dispatch, getState) => {
         await configureSession(token, id, account, dispatch)
         return true
     } catch(err) {
-        console.log('login catch', {err})
         dispatch(setLoading(false))
         const error = getError(err)
-        logger.error('user login', { id,token,params,err })
-        if(error && error.statusCode === 401) {
-            error.message = 'Invalid cedentials';
-        } else if(failureRedirect) {
+        logger.error('user login', { id, token, params, error })
+        if(error && error.statusCode === 401 && failureRedirect) {
             dispatch(NavigationActions.navigate({ routeName: 'Register' }))
         }
         !suppressToast && dispatch(showToast(getErrorMsg(err)))
