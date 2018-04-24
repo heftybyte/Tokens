@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import getTheme from '../../../../native-base-theme/components';
 import platform from '../../../../native-base-theme/variables/platform';
 import styles from '../styles'
+const webBridge = require("../../../resources/index.html")
 
 const customStyles = {
     warningText: {
@@ -47,7 +48,7 @@ class NewWallet extends Component {
                     <Content>
                         <WebView
                             ref={webview => { this.webView = webview; }}
-                            source={require("../../../resources/index.html")}
+                            source={webBridge}
                             javaScriptEnabled={true}
                             style={{}}
                             onMessage={(event) => {this.onWebViewMessage(event)} }
