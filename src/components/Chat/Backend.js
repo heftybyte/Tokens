@@ -62,6 +62,7 @@ class Backend {
         user: {
           _id: message.user._id,
           name: message.user.name,
+          avatar: message.user.avatar
         },
       });
     };

@@ -7,11 +7,10 @@ import {
   getPortfolio,
   getPortfolioChart
 } from '../../reducers/account';
-import md5 from 'crypto-js/md5'
-import Identicon from 'identicon.js/identicon'
 import { baseAccent, brandColor } from '../../config'
 import { trackRefresh } from '../../helpers/analytics'
 import { logger } from '../../helpers/api'
+import { identicon } from '../../helpers/functions'
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -99,12 +98,6 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 })
-
-const identicon = (str) => {
-  const strHash = md5(str).toString();
-  const data = new Identicon(strHash, {size: 150,margin:.3, background: [51,51,51,100]}).toString()
-  return `data:image/png;base64,${data}`;
-}
 
 const ProfileHeader = ({username, description, reputation, followers, following, style}) => (
     <View>

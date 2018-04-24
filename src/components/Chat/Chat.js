@@ -1,7 +1,3 @@
-/*
-  Created By Seun LanLege
-  1:53 PM 15 Thu Mar 2018
-*/
 import React, { Component } from "react"
 import { connect } from 'react-redux'
 import { Animated, Easing, Image, Platform, View, Text, TouchableHighlight, TouchableWithoutFeedback } from "react-native"
@@ -13,6 +9,8 @@ import { baseAccent, baseColor, brandColor } from '../../config'
 import { withDrawer } from '../../helpers/drawer'
 import { getTokenImage } from '../../helpers/functions'
 import Backend from './Backend'
+import Message from './Message'
+import emojiUtils from 'emoji-utils';
 
 const defaultToken = {
 	symbol: 'TKE',
@@ -160,7 +158,35 @@ class Chat extends Component {
 		Backend.sendMessage(messages)
 	}
 
+	renderMessage(props) {
+		const { currentMessage: { text: currText } } = props;
+
+		let messageTextStyle;
+
+		// Make "pure emoji" messages much bigger than plain text.
+		if (currText && emojiUtils.isPureEmojiString(currText)) {
+			messageTextStyle = {
+				fontSize: 28,
+				// Emoji get clipped if lineHeight isn't increased; make it consistent across platforms.
+				lineHeight: Platform.OS === 'android' ? 34 : 30,
+			};
+		}
+
+		return (
+			<Message {...props} messageTextStyle={messageTextStyle} />
+		);
+	}
+
+
 	render() {
+		const { username, avatar } = this.props
+		const user = {
+			_id: Backend.getUid(),
+			name: username
+		}
+		if (avatar) {
+			user.avatar = avatar
+		}
 		return (
 			<View
 				style={{
@@ -192,10 +218,9 @@ class Chat extends Component {
 				<GiftedChat
 					messages={this.state.messages}
 					onSend={this.onSend}
-					user={{
-						_id: Backend.getUid(),
-						name: this.props.username
-					}}
+					user={user}
+					showUserAvatar={true}
+					renderMessage={this.renderMessage}
 				/>
 				<KeyboardSpacer />
 			</View>
@@ -204,10 +229,11 @@ class Chat extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  username: state.account.username,
-  userId: state.account.id,
-  isBountyHunter: state.account.bountyHunter,
-  ...state.ui
+	avatar: state.account.avatar,
+	username: state.account.username,
+	userId: state.account.id,
+	isBountyHunter: state.account.bountyHunter,
+	...state.ui
 })
 
 const mapDispatchToProps = (dispatch) => ({

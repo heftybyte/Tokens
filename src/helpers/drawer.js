@@ -279,6 +279,7 @@ export const withDrawer = (WrappedComponent) => {
                             </NBHeader>
                         }
                         <Spinner
+                            style={{flex: 1}}
                             visible={this.props.isLoading}
                             textContent={this.props.loadText||''}
                             textStyle={{color: '#FFF', fontSize: 16}}

@@ -45,14 +45,14 @@ class NewWallet extends Component {
             <StyleProvider style={getTheme(platform)}>
                 <Container>
                     <Content>
-                            <WebView
-                                ref={webview => { this.webView = webview; }}
-                                source={require("../../../resources/index.html")}
-                                javaScriptEnabled={true}
-                                style={{}}
-                                onMessage={(event) => {this.onWebViewMessage(event)} }
-                            />
-                        
+                        <WebView
+                            ref={webview => { this.webView = webview; }}
+                            source={require("../../../resources/index.html")}
+                            javaScriptEnabled={true}
+                            style={{}}
+                            onMessage={(event) => {this.onWebViewMessage(event)} }
+                        />
+
                         <View style={styles.header}>
                             <Text style={styles.heading}>Backup Phrase</Text>
                             

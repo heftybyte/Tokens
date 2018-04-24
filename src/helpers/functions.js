@@ -10,6 +10,8 @@ import {
 import { setLoading } from '../reducers/ui'
 import { baseURL } from '../config'
 import store from '../store/index';
+import md5 from 'crypto-js/md5'
+import Identicon from 'identicon.js/identicon'
 
 export const mapAxis = (points, value, dimension) => {
     let start = 0
@@ -197,3 +199,10 @@ export const visitDeepLink = (url) => {
     //         }))
     // }
 }
+
+export const identicon = (str, {size=150, margin=.3, background=[51,51,51,100]}={}) => {
+  const strHash = md5(str).toString();
+  const data = new Identicon(strHash, { size ,margin, background }).toString()
+  return `data:image/png;base64,${data}`;
+}
+
