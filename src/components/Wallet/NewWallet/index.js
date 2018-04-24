@@ -47,7 +47,7 @@ class NewWallet extends Component {
                     <Content>
                             <WebView
                                 ref={webview => { this.webView = webview; }}
-                                source={require("./../../../resources/index.html")}
+                                source={require("../../../resources/index.html")}
                                 javaScriptEnabled={true}
                                 style={{}}
                                 onMessage={(event) => {this.onWebViewMessage(event)} }
