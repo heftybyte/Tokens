@@ -5,8 +5,9 @@ import { NavigationActions } from 'react-navigation';
 import {
     setAuthHeader,
     registerUserForPushNotifications,
-    verifyTwoFactorAuth
+    verifyTwoFactorAuth,
 } from './api';
+import { isPinCorrect } from './security';
 import { setLoading } from '../reducers/ui'
 import { baseURL } from '../config'
 import store from '../store/index';
@@ -148,6 +149,27 @@ export const get2FA = async function (id, dispatch) {
                 callback: async (token, cb) => {
                     try {
                         const res = await verifyTwoFactorAuth({ id, token, login: true })
+                        resolve(res)
+                    } catch (err) {
+                        cb ? cb(false) : reject(err)
+                    }
+                },
+                cancel: () => {
+                    reject(null)
+                }
+            }
+        }))
+    }) 
+}
+
+export const getPinVerification = async function (id, dispatch) {
+    return new Promise((resolve, reject)=>{
+        dispatch(NavigationActions.navigate({
+            routeName: 'Verify Pin',
+            params: {
+                callback: async (pin, cb) => {
+                    try {
+                        const res = await isPinCorrect(pin)
                         resolve(res)
                     } catch (err) {
                         cb ? cb(false) : reject(err)
