@@ -5,7 +5,7 @@ import { NavigationActions } from 'react-navigation';
 import {
     setAuthHeader,
     registerUserForPushNotifications,
-    verifyTwoFactorAuth,
+    verifyTwoFactorAuth
 } from './api';
 import { isPinCorrect } from './security';
 import { setLoading } from '../reducers/ui'
