@@ -16,17 +16,18 @@ import styles from '../styles'
 
 class VerifyPin extends Component {
     state = {
-        code: '',
-        invalid: false
+        pin: '',
+        invalid: false,
+        pinLength: 6
     }
 
     submit = () => {
         const { navigation } = this.props
-        const { code } = this.state
+        const { pin } = this.state
         const { callback } = navigation.state.params
-        if (code) {
-            console.log('submit', code)
-            callback(code, this.onValidate)
+        if (pin) {
+            console.log('submit', pin)
+            callback(pin, this.onValidate)
         } else {
             Alert.alert('Code must not be empty')
         }
@@ -39,7 +40,7 @@ class VerifyPin extends Component {
     }
 
     render () {
-        const { code, invalid } = this.state
+        const { pin, invalid, pinLength } = this.state
         return (
             <StyleProvider style={getTheme(platform)}>
                 <Container>
@@ -47,12 +48,13 @@ class VerifyPin extends Component {
                         <Text style={styles.heading}>Verify Pin</Text>
                         <Text style={styles.subHeading}>Please enter Pin</Text>
                         <Item style={{marginTop: 10}}>
-                            <Label style={styles.subHeading}>Code:</Label>
+                            <Label style={styles.subHeading}>Pin:</Label>
                             <Input
                                 style={styles.subHeading}
                                 bordered
-                                value={code}
-                                onChangeText={(code)=>this.setState({ code })}
+                                value={pin}
+                                maxLength={pinLength}
+                                onChangeText={(code)=>this.setState({ pin })}
                             />
                             <Button
                                 primary
