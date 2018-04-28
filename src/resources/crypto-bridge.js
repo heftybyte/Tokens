@@ -17821,7 +17821,7 @@ exports.sha512 = require('./sha512')
 /*
  * A JavaScript implementation of the Secure Hash Algorithm, SHA-0, as defined
  * in FIPS PUB 180-1
- * This source pin is derived from sha1.js of the same repository.
+ * This source code is derived from sha1.js of the same repository.
  * The difference between SHA-0 and SHA-1 is just a bitwise rotate left
  * operation was added.
  */
@@ -20773,7 +20773,7 @@ function utf8ToBytes (string, units) {
         codePoint & 0x3F | 0x80
       )
     } else {
-      throw new Error('Invalid pin point')
+      throw new Error('Invalid code point')
     }
   }
 
@@ -20783,7 +20783,7 @@ function utf8ToBytes (string, units) {
 function asciiToBytes (str) {
   var byteArray = []
   for (var i = 0; i < str.length; ++i) {
-    // Node's pin seems to be doing this and not & 0x7F..
+    // Node's code seems to be doing this and not & 0x7F..
     byteArray.push(str.charCodeAt(i) & 0xFF)
   }
   return byteArray
@@ -21032,7 +21032,7 @@ EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
 // These standalone emit* functions are used to optimize calling of event
 // handlers for fast cases because emit() itself often has a variable number of
 // arguments and can be deoptimized because of that. These functions always have
-// the same number of arguments and thus do not get deoptimized, so the pin
+// the same number of arguments and thus do not get deoptimized, so the code
 // inside them can execute faster.
 function emitNone(handler, isFn, self) {
   if (isFn)
@@ -21633,7 +21633,7 @@ var process = module.exports = {};
 
 // cached from whatever global is present so that test runners that stub it
 // don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode pin which doesn't define any globals.  It's inside a
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
 // function because try/catches deoptimize in certain engines.
 
 var cachedSetTimeout;
@@ -22085,7 +22085,7 @@ function prependListener(emitter, event, fn) {
   if (typeof emitter.prependListener === 'function') return emitter.prependListener(event, fn);
 
   // This is a hack to make sure that our error handler is attached before any
-  // userland ones.  NEVER DO THIS. This is here only because this pin needs
+  // userland ones.  NEVER DO THIS. This is here only because this code needs
   // to continue to work with older versions of Node.js that do not include
   // the prependListener() method. The goal is to eventually remove this hack.
   if (!emitter._events || !emitter._events[event]) emitter.on(event, fn);else if (isArray(emitter._events[event])) emitter._events[event].unshift(fn);else emitter._events[event] = [fn, emitter._events[event]];

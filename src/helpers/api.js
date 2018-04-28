@@ -18,7 +18,7 @@ const instance = axios.create({
 //     err && err.response && err.response.status === 401 &&
 //     (
 //       err.response.data && err.response.data.error &&
-//       err.response.data.error.pin !== 'LOGIN_FAILED'
+//       err.response.data.error.code !== 'LOGIN_FAILED'
 //     )
 //   )
 
