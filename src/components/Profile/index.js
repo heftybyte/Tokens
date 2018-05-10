@@ -99,11 +99,11 @@ const styles = StyleSheet.create({
   }
 })
 
-const ProfileHeader = ({username, description, reputation, followers, following, style}) => (
+const ProfileHeader = ({username, profileImage, description, reputation, followers, following, style}) => (
     <View>
       <View style={[styles.mainContainer, style||{}]}>
         <View style={styles.imageContainer}>
-          <Image source={{uri: identicon(username)}} style={styles.image} />
+          <Image source={{uri: profileImage || identicon(username)}} style={styles.image} />
         </View>
 
         <View style={styles.userMetadata}>
@@ -195,6 +195,7 @@ class Profile extends Component {
       portfolio,
       portfolioChart,
       username,
+      profileImage,
       description,
       reputation,
       following,
@@ -217,6 +218,7 @@ class Profile extends Component {
             style={{flex: .1}}
             reputation={reputation}
             username={username}
+            profileImage={profileImage}
             description={description}
             followers={followers}
             following={following}
@@ -239,6 +241,7 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => ({
   username: state.account.username,
+  profileImage: state.account.profileImage,
   description: state.account.description,
   reputation: state.account.reputation,
   followers: state.account.followers,
