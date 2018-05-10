@@ -26,7 +26,9 @@ import {
     removeFromAccountWatchlist,
     logger,
     setCurrency,
-    verifyTwoFactorAuth
+    verifyTwoFactorAuth,
+    uploadImage as _uploadImage,
+    changeEmail as _changeEmail
 } from '../helpers/api'
 import {
     genericError,
@@ -57,6 +59,8 @@ export const REMOVE_BOOKMARK = 'account/REMOVE_BOOKMARK'
 export const GET_PORTFOLIO_CHART = 'account/GET_PORTFOLIO_CHART'
 export const LOADING_CHART = 'account/LOADING_CHART'
 export const SET_DEFAULT_CURRENCY = 'accounts/SET_DEFAULT_CURRENCY'
+export const UPLOAD_IMAGE = 'accounts/UPLOAD_IMAGE'
+export const CHANGE_EMAIL = 'accounts/CHANGE_EMAIL'
 // wallet
 export const ADD_WALLET_ADDRESS = 'account/WALLET/ADD_ADDRESS'
 export const ADD_EXCHANGE_ACCOUNT = 'account/ADD_EXCHANGE_ACCOUNT'
@@ -140,6 +144,16 @@ const setCurrencyAction = (currency) => ({
   data: { currency }
 })
 
+const uploadImageAction = (profileImage) => ({
+  type: UPLOAD_IMAGE,
+  data: { profileImage }
+})
+
+const changeEmailAction = (email, description) => ({
+  type: CHANGE_EMAIL,
+  data: { email, description }
+})
+
 // wallet
 const addWalletAddressAction = (wallets) => ({
     type: ADD_WALLET_ADDRESS,
@@ -163,6 +177,30 @@ export const registerAccount = (params) => async (dispatch, getState) => {
     const pseudonymType = 'username'
     await AsyncStorage.setItem('pseudonym', JSON.stringify({ type: pseudonymType, value: params[pseudonymType] }))
     dispatch(registerAction(newAccount.id))
+}
+
+export const uploadImage = (userId, body) => async (dispatch) => {
+  let err = null
+  const result = await _uploadImage(userId, body).catch(e=>err=e)
+  if (err) {
+      console.log('uploadImage', err)
+      dispatch(showToast(getErrorMsg(err)))
+      return
+  }
+
+  dispatch(uploadImageAction(result.image_url))
+}
+
+export const changeEmail = (id, email, desc) => async (dispatch) => {
+  let err = null
+  const result = await _changeEmail(id, email, desc)
+  if (err) {
+    console.log('uploadImage', err)
+    dispatch(showToast(getErrorMsg(err)))
+    return
+  }
+
+  dispatch(changeEmailAction(result.email, result.description))
 }
 
 async function configureSession(accessToken, userId, account, dispatch) {
@@ -386,13 +424,13 @@ export const addWalletAddress = ({address, name, platform}, navParams) => async 
     }
     dispatch(showToast('Wallet created'))
     dispatch(addWalletAddressAction(account.wallets))
-    dispatch(NavigationActions.navigate({ 
+    dispatch(NavigationActions.navigate({
         routeName: 'Select Account',
         params: {
             type: 'wallet',
             platform,
             ...navParams
-        } 
+        }
     }))
 }
 
@@ -408,13 +446,13 @@ export const addExchangeAccount = ({ key, secret, name, passphrase, platform }, 
     }
     dispatch(showToast('Exchange Account Linked'))
     dispatch(addExchangeAccountAction(account.exchangeAccounts))
-    dispatch(NavigationActions.navigate({ 
+    dispatch(NavigationActions.navigate({
         routeName: 'Select Account',
         params: {
             type: 'exchange_account',
             platform,
             ...navParams
-        } 
+        }
     }))
 }
 
@@ -553,6 +591,7 @@ export const updateAccount = (account) => async (dispatch, getState) => {
 const initialState = {
     username: 'escobyte',
     description: '',
+    profileImage: '',
     bountyHunter: false,
     two_factor_enabled: false,
     reputation: 0,
@@ -618,10 +657,18 @@ export default (state = initialState, action) => {
         case LOADING_CHART:
         case ADD_WALLET_ADDRESS:
         case ADD_EXCHANGE_ACCOUNT:
+        case UPLOAD_IMAGE:
             return {
                 ...state,
                 ...action.data
             }
+        case CHANGE_EMAIL:
+          return {
+            ...state,
+            ...action.data,
+            email: action.data.email,
+            description: action.data.description
+          }
         case SET_DEFAULT_CURRENCY:
             return {
               ...state,
@@ -637,6 +684,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data,
+                profileImage: action.data.image_url,
                 watchListMap
             }
         }
