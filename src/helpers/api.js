@@ -128,8 +128,8 @@ export const getAccountPortfolio = async (id,{type,accountId}) => {
 
 export const getAccountPortfolioChart = async (id, period, {type,accountId}) => {
   const res = await instance.get(
-    `/accounts/${id}/portfolio-chart` + 
-    (accountId ? `/${type}/${accountId}` : '') + 
+    `/accounts/${id}/portfolio-chart` +
+    (accountId ? `/${type}/${accountId}` : '') +
     `?period=${period}`
   )
   return res.data
@@ -214,6 +214,24 @@ export const verifyTwoFactorAuth = async ({id, token, confirm,login}) => {
 
 export const disableTwoFactorAuth = async (id) => {
   const res = await instance.post(`/accounts/${id}/two-factor/disable`);
+  return res.data
+}
+
+export const uploadImage = async (id, data) => {
+  const config = {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "multipart/form-data"
+    }
+  }
+  const res = await instance.post(`accounts/${id}/image/upload`, data, config)
+  return res.data
+}
+
+export const changeEmail = async (id, email, description) => {
+  const res = await instance.post(`accounts/${id}/change-email`, {
+    email, description
+  })
   return res.data
 }
 
