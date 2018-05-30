@@ -164,7 +164,7 @@ const ProfileHeader = ({username, description, reputation, followers, following,
 
 class Profile extends Component {
 
-  static headerText = 'Portfolio'
+  static headerText = 'Home'
 
   state = {
     refreshing: false

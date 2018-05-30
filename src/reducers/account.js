@@ -182,7 +182,7 @@ async function configureSession(accessToken, userId, account, dispatch) {
     dispatch(NavigationActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Profile' })
+        NavigationActions.navigate({ routeName: 'Home' })
       ]
     }))
 }
@@ -321,7 +321,7 @@ export const addAddress = (address, platform, name) => async (dispatch, getState
     dispatch(NavigationActions.reset({
       index: 1,
       actions: [
-        NavigationActions.navigate({ routeName: 'Profile' }),
+        NavigationActions.navigate({ routeName: 'Home' }),
         NavigationActions.navigate({ routeName: 'Education', params })
       ]
     }))
@@ -355,7 +355,7 @@ export const deleteAddress = (address) => async (dispatch, getState) => {
         }
         dispatch(showToast('Address Removed'))
         dispatch(deleteAddressAction(account.addresses))
-        dispatch(NavigationActions.navigate({ routeName: 'Profile' }))
+        dispatch(NavigationActions.navigate({ routeName: 'Home' }))
     }
 
     safeAlert(

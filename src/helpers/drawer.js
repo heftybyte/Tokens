@@ -17,9 +17,9 @@ import { Menu } from '../components/Common/Menu'
 
 const Items = [
     {
-        name: "Portfolio",
+        name: "Home",
         icon: "pie-chart",
-        route: "Profile",
+        route: "Home",
         Component: SimpleLineIcons,
         enabled: true
     },

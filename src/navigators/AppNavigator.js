@@ -73,7 +73,7 @@ export const Routes = {
   'NewExchangeAccount': { screen: NewExchangeAccount },
   'NewExchangeOrder': { screen: NewExchangeOrder },
   'Price Alert': { screen: PriceAlert },
-  'Profile': Profile,
+  'Home': Profile,
   'Settings': {screen: Settings},
   'SecuritySettings': {screen: SecuritySettings},
   'SetPin': {screen: SetPin},
