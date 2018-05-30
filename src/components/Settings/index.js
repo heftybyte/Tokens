@@ -68,7 +68,7 @@ class Settings extends Component {
                         <ListItem onPress={()=>{this.onChange('profile')}} noBorder>
                             <Body>
                                 <Text style={styles.white}>Update Profile Info</Text>
-                                <Text style={styles.optionDescription}>Image, Username, Password, Email..etc</Text>
+                                <Text style={styles.optionDescription}>Username, Password, Email..etc</Text>
                             </Body>
                         </ListItem>
                         <ListItem onPress={()=>{this.onChange('currency')}} noBorder>

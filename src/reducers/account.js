@@ -26,6 +26,7 @@ import {
     removeFromAccountWatchlist,
     logger,
     setCurrency,
+    updateProfile as updateProfileApi,
     verifyTwoFactorAuth
 } from '../helpers/api'
 import {
@@ -56,7 +57,8 @@ export const SAVE_BOOKMARK = 'account/SAVE_BOOKMARK'
 export const REMOVE_BOOKMARK = 'account/REMOVE_BOOKMARK'
 export const GET_PORTFOLIO_CHART = 'account/GET_PORTFOLIO_CHART'
 export const LOADING_CHART = 'account/LOADING_CHART'
-export const SET_DEFAULT_CURRENCY = 'accounts/SET_DEFAULT_CURRENCY'
+export const SET_DEFAULT_CURRENCY = 'account/SET_DEFAULT_CURRENCY'
+export const UPDATE_PROFILE = 'account/UPDATE_PROFILE'
 // wallet
 export const ADD_WALLET_ADDRESS = 'account/WALLET/ADD_ADDRESS'
 export const ADD_EXCHANGE_ACCOUNT = 'account/ADD_EXCHANGE_ACCOUNT'
@@ -140,6 +142,10 @@ const setCurrencyAction = (currency) => ({
   data: { currency }
 })
 
+const updateProfileAction = (profile) => ({
+    type: UPDATE_PROFILE,
+    data: { profile }
+})
 // wallet
 const addWalletAddressAction = (wallets) => ({
     type: ADD_WALLET_ADDRESS,
@@ -461,6 +467,24 @@ export const setDefaultCurrency = (currency) => async (dispatch, getState) => {
   dispatch(setCurrencyAction(account.preference.currency))
 }
 
+export const updateProfile = (profile) => async (dispatch, getState) => {
+    try {
+        const { id } = getState().account
+        dispatch(setLoading(true, 'Updating Account'))
+        const account = await updateProfileApi(id, profile)
+        console.log('updated', {account})
+        dispatch(updateAction(account))
+        dispatch(NavigationActions.navigate({ 
+            routeName: 'Settings'
+        }))
+        dispatch(showToast('Profile Updated'))
+    } catch (err) {
+        console.log('error updating profile', err)
+        dispatch(showToast(getErrorMsg(err)))
+    }
+    dispatch(setLoading(false))
+}
+
 export const getPortfolio = ({accountId, type, showUILoader=true, msg}={}) => async (dispatch, getState) => {
     try {
         const { id } = getState().account
@@ -607,7 +631,8 @@ export default (state = initialState, action) => {
                 ...state,
                 two_factor_enabled: action.data.account.two_factor_enabled,
                 username: action.data.account.username,
-                email: action.data.account.email
+                email: action.data.account.email,
+                description: action.data.account.description
             }
         case REGISTER:
         case GET_PORTFOLIO:

@@ -93,6 +93,11 @@ export const setCurrency = async (id, currency) => {
   return res.data
 }
 
+export const updateProfile = async (id, profile) => {
+  const res = await instance.post(`/accounts/${id}/update`, { ...profile })
+  return res.data
+}
+
 export const addExchangeAccount = async ({ id, key, secret, name, passphrase, platform }) => {
   const res = await instance.post(`/accounts/${id}/exchangeAccounts`, { key, secret, name, passphrase, platform })
   return res.data

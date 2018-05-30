@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-nativ
 import { connect } from 'react-redux';
 import { withDrawer } from '../../helpers/drawer';
 import { brandColor } from '../../config'
+import { updateProfile } from '../../reducers/account';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -46,7 +47,19 @@ const styles = StyleSheet.create({
 class EditProfile extends React.Component {
   state = {
     username: '',
+    password: '',
+    email: '',
     description: ''
+  }
+
+  save = () => {
+    const { username, password, email, description } = this.state
+    this.props.updateProfile({
+      username,
+      password,
+      email,
+      description
+    })
   }
 
   render() {
@@ -58,6 +71,25 @@ class EditProfile extends React.Component {
             style={styles.input}
             onChangeText={(username) => this.setState({username})}
             value={this.state.username}
+          />
+        </View>
+
+        <Text style={styles.labelText}>Password:</Text>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(password) => this.setState({password})}
+            value={this.state.password}
+            password={true}
+          />
+        </View>
+
+        <Text style={styles.labelText}>Email:</Text>
+        <View style={styles.inputWrapper}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(email) => this.setState({email})}
+            value={this.state.email}
           />
         </View>
 
@@ -74,7 +106,7 @@ class EditProfile extends React.Component {
         </View>
 
         <TouchableOpacity
-         onPress={()=>{console.log('User profile update should happen here')}}
+         onPress={()=>this.save()}
          style={styles.saveBtn}
         >
           <Text style={styles.btnText}>SAVE</Text>
@@ -88,4 +120,8 @@ const mapStateToProps = (state) => ({
   portfolio: state.account.portfolio
 })
 
-export default connect(mapStateToProps)(withDrawer(EditProfile));
+const mapDispatchToProps = (dispatch) => ({
+  updateProfile: (profile) => dispatch(updateProfile(profile))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withDrawer(EditProfile));
