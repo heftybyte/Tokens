@@ -9,10 +9,15 @@ import { trackTap } from '../../helpers/analytics'
 import { logout as _logout } from '../../reducers/account';
 
 const styles = StyleSheet.create({
+    header: {
+        color: '#fff',
+        fontSize: 14
+    },
     white: {
         color: '#fff',
     },
-    grey: {
+    optionDescription: {
+        marginTop: 10,
         color: '#4c4c4c'
     }
 })
@@ -58,12 +63,12 @@ class Settings extends Component {
                 <Content>
                     <List>
                         <ListItem itemHeader first>
-                            <Text style={styles.white}>Profile Settings</Text>
+                            <Text style={styles.header}>Profile Settings</Text>
                         </ListItem>
                         <ListItem onPress={()=>{this.onChange('profile')}} noBorder>
                             <Body>
                                 <Text style={styles.white}>Update Profile Info</Text>
-                                <Text style={styles.grey}>Image, Username, Password, Email..etc</Text>
+                                <Text style={styles.optionDescription}>Image, Username, Password, Email..etc</Text>
                             </Body>
                         </ListItem>
                         <ListItem onPress={()=>{this.onChange('currency')}} noBorder>
@@ -71,7 +76,7 @@ class Settings extends Component {
                             <Text style={styles.white}>
                               Set Currency
                             </Text>
-                            <Text style={styles.grey}>
+                            <Text style={styles.optionDescription}>
                               {preference.currency}
                             </Text>
                           </Body>
@@ -79,19 +84,19 @@ class Settings extends Component {
                     </List>
                     <List>
                         <ListItem itemHeader first>
-                            <Text style={styles.white}>Device settings</Text>
+                            <Text style={styles.header}>Device settings</Text>
                         </ListItem>
                         <ListItem onPress={()=>{this.onChange('security')}} noBorder>
                             <Body>
                                 <Text style={styles.white}>Security Settings</Text>
                                 {
                                     (hasPinEnabled)?
-                                        <Text style={styles.grey}>Pin</Text>
+                                        <Text style={styles.optionDescription}>Pin</Text>
                                         :
                                         (hasFingerprintEnabled) ?
-                                            <Text style={styles.grey}>Fingerprint</Text>
+                                            <Text style={styles.optionDescription}>Fingerprint</Text>
                                             :
-                                            <Text style={styles.grey}>None</Text>
+                                            <Text style={styles.optionDescription}>None</Text>
                                 }
                             </Body>
                         </ListItem>
@@ -100,9 +105,9 @@ class Settings extends Component {
                                 <Text style={styles.white}>Two-Factor Authentication</Text>
                                 {
                                     (!hasTwoFactorAuthEnabled) ?
-                                    <Text style={styles.grey}>Disabled</Text>
+                                    <Text style={styles.optionDescription}>Disabled</Text>
                                     :
-                                    <Text style={styles.grey}>Enabled</Text>
+                                    <Text style={styles.optionDescription}>Enabled</Text>
                                 }
                             </Body>
                         </ListItem>
