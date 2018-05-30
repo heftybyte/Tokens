@@ -188,7 +188,7 @@ export const getGasPrices = async () => {
 }
 
 export const getBlockchains = async () => {
-    const res = await instance.get(`/Blockchains`)
+    const res = await instance.get(`/Blockchains?filter[order]=order ASC`)
     return res.data;
 }
 
