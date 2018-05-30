@@ -15,6 +15,7 @@ import { baseColor } from './src/config'
 import './src/helpers/notifications'
 
 const ENVIRONMENT = Constants.isDevice ? 'production' : 'development'
+const DEFAULT_SPLASH_DELAY = 3000
 
 Sentry.enableInExpoDevelopment = true;
 const publicDSN = process.env.SENTRY_PUBLIC_DSN || 'https://af6c590a432d4ef49746f9d2fc8a4b8e@sentry.io/242835'
@@ -37,18 +38,21 @@ class Tokens extends React.Component {
             SecureStore.setItemAsync('postfirstRun', JSON.stringify(true))
             Util.reload()
         }
-        await Font.loadAsync({
-            'Raleway': require('./assets/fonts/Raleway-Regular.ttf'),
-            'Raleway-Light': require('./assets/fonts/Raleway-Light.ttf'),
-            'Dosis': require('./assets/fonts/Dosis-Regular.ttf'),
-            'Dosis-Light': require('./assets/fonts/Dosis-Light.ttf'),
-            'Dosis-Bold': require('./assets/fonts/Dosis-Bold.ttf'),
-            'Khula': require('./assets/fonts/Khula-Regular.ttf'),
-            'Khula-Light': require('./assets/fonts/Khula-Light.ttf'),
-            'Nunito': require('./assets/fonts/Nunito-Regular.ttf'),
-            'Nunito-Light': require('./assets/fonts/Nunito-Light.ttf'),
-            'Nunito-ExtraLight': require('./assets/fonts/Nunito-ExtraLight.ttf'),
-        })
+        await Promise.all([
+            Font.loadAsync({
+                'Raleway': require('./assets/fonts/Raleway-Regular.ttf'),
+                'Raleway-Light': require('./assets/fonts/Raleway-Light.ttf'),
+                'Dosis': require('./assets/fonts/Dosis-Regular.ttf'),
+                'Dosis-Light': require('./assets/fonts/Dosis-Light.ttf'),
+                'Dosis-Bold': require('./assets/fonts/Dosis-Bold.ttf'),
+                'Khula': require('./assets/fonts/Khula-Regular.ttf'),
+                'Khula-Light': require('./assets/fonts/Khula-Light.ttf'),
+                'Nunito': require('./assets/fonts/Nunito-Regular.ttf'),
+                'Nunito-Light': require('./assets/fonts/Nunito-Light.ttf'),
+                'Nunito-ExtraLight': require('./assets/fonts/Nunito-ExtraLight.ttf'),
+            }),
+            this.defaultDealy()
+        ])
 
         this.setState({
             isReady: true
@@ -86,6 +90,14 @@ class Tokens extends React.Component {
         return false;
     }
 
+    defaultDealy = () => {
+        return new Promise((resolve)=>{
+            setTimeout(()=>{
+                resolve()
+            }, DEFAULT_SPLASH_DELAY)
+        })
+    }
+
     componentWillUnmount() {
         BackHandler.removeEventListener("onBackPress", this.goBack);
         Linking.removeEventListener('url', this.handleDeepLink);
@@ -94,11 +106,13 @@ class Tokens extends React.Component {
     render() {
         const { isReady, reload } = this.state
 
-        return isReady && (
+
+        return isReady ? (
                 <Provider style={{backgroundColor: baseColor}} store={store}>
                     { <AppWithNavigationState /> }
                 </Provider>
-            )
+            ) :
+            <AppLoading />
     }
 }
 
