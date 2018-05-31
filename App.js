@@ -15,7 +15,7 @@ import { baseColor } from './src/config'
 import './src/helpers/notifications'
 
 const ENVIRONMENT = Constants.isDevice ? 'production' : 'development'
-const DEFAULT_SPLASH_DELAY = 3000
+const DEFAULT_SPLASH_DELAY = 5000
 
 Sentry.enableInExpoDevelopment = true;
 const publicDSN = process.env.SENTRY_PUBLIC_DSN || 'https://af6c590a432d4ef49746f9d2fc8a4b8e@sentry.io/242835'
