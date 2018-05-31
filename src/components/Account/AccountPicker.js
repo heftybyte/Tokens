@@ -157,7 +157,7 @@ class AccountPicker extends Component {
           item.Component = SimpleLineIcons
         }
         return item
-      })
+      }).sort((a, b)=>a.disabled ? 1 : -1)
       this.setState({
         items
       })
