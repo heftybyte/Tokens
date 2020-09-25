@@ -2,6 +2,8 @@
 
 Community driven crypto portfolio manager
 
+![Screenshot](https://i.imgur.com/ujPnH3F.png)
+
 # Development
 
 ### Test Build
