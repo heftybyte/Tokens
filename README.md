@@ -56,7 +56,7 @@ This requires an `app.json` file in your project's root directory. Below is a te
           "config": {
             "organization": "tokens",
             "project": "tokens-mobile-xb",
-            "authToken": "f51bd1bdf1854f7d8a9f7e91b3547207a3eda468ca83464fa5055e466bed2a3a"
+            "authToken": "[auth token]"
           }
         }
       ]
@@ -98,7 +98,7 @@ This requires an `app.json` file in your project's root directory. Below is a te
           "config": {
             "organization": "tokens",
             "project": "tokens-mobile-xb",
-            "authToken": "f51bd1bdf1854f7d8a9f7e91b3547207a3eda468ca83464fa5055e466bed2a3a"
+            "authToken": "[auth token]"
           }
         }
       ]
