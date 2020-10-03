@@ -19,5 +19,8 @@ export const FIREBASE_DATABASE_URL = 'https://tokens-express-200615.firebaseio.c
 export const FIREBASE_PROJECT_ID = 'tokens-express-200615'
 export const FIREBASE_STORAGE_BUCKET = 'tokens-express-200615.appspot.com'
 export const FIREBASE_MESSAGING_SENDER_ID = '947782058234'
+export const COINBASE_CLIENT_ID = '030e132992e00eb796fcbf4eb1de09860ebd4fd865d462ff78265497dfef4842'
+export const COINBASE_CLIENT_SECRET = '5f160e92f4c3f5b45238eadecdb0a4e1b12150cce3283f38d84d45e3c15263d6'
+export const COINBASE_REDIRECT_URI = `${baseURL}/api/accounts/oauth/coinbase`
 
 console.log({ baseURL })

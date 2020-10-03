@@ -5,7 +5,10 @@ import { NavigationActions } from 'react-navigation';
 import {
     setAuthHeader,
     registerUserForPushNotifications,
-    verifyTwoFactorAuth
+    verifyTwoFactorAuth,
+    fetchCoinbaseCredentials,
+    googleLogin,
+    coinbaseLogin
 } from './api';
 import { isPinCorrect } from './security';
 import { setLoading } from '../reducers/ui'
@@ -159,7 +162,7 @@ export const get2FA = async function (id, dispatch) {
                 }
             }
         }))
-    }) 
+    })
 }
 
 export const getPinVerification = async function (id, dispatch) {
@@ -228,3 +231,16 @@ export const identicon = (str, {size=150, margin=.3, background=[51,51,51,100]}=
   return `data:image/png;base64,${data}`;
 }
 
+export const exchangeCoinbaseCodeForCredentials = async (code) => {
+  const credentials = await fetchCoinbaseCredentials(code)
+  return credentials
+}
+
+export const oauthLogin = (provider) => {
+  switch(provider.toLowerCase()) {
+    case 'google':
+      return googleLogin;
+    case 'coinbase':
+      return coinbaseLogin;
+  }
+}

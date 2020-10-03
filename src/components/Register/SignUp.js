@@ -14,7 +14,7 @@ import _platform from '../../../native-base-theme/variables/platform';
 import styles from './styles'
 import { login as _login, registerAccount as _registerAccount } from '../../reducers/account'
 import { setLoading as _setLoading, showToast as _showToast } from '../../reducers/ui'
-import { getErrorMsg } from '../../helpers/functions'
+import { getErrorMsg, exchangeCoinbaseCodeForCredentials } from '../../helpers/functions'
 
 const customStyles = {
     header: {
@@ -85,50 +85,38 @@ class SignUp extends Component {
     }
 
     componentWillMount = async () => {
-        const { navigation, showToast, setLoading, login } = this.props
-        const { withGoogle } = navigation.state.params
+        const { navigation } = this.props
+        const { oauth } = navigation.state.params
 
-        if (!withGoogle) {
+        if (!oauth) {
             this.setState({
                 showForm: true
             })
         } else {
-            this.attemptGoogleLogin()
+            this.attemptOauthLogin()
         }
     }
 
-    attemptGoogleLogin = async () => {
+    attemptOauthLogin = async () => {
         const { login, navigate, navigation, showToast, setLoading } = this.props
+        const { oauth, oauthProvider, code } = navigation.state.params
         try {
-            const {
-                accessToken,
-                refreshToken,
-                serverAuthCode,
-                user: { email, photoUrl }
-            } = await this.signInWithGoogle()
-            setLoading(true, 'Connecting To Google')
-            const success = await login(
-                { accessToken, withGoogle: true },
-                { failureRedirect: false, suppressToast: true }
-            )
-            setLoading(false)
-            if (success) {
-                console.log('logged in with Google')
-                return
+          switch(oauthProvider.toLowerCase()) {
+              case 'google':
+                this.useGoogleAuth(setLoading, login, oauth, oauthProvider)
+                break;
+              case 'coinbase':
+                setLoading(true, 'Connecting To Coinbase')
+                setTimeout(() => {
+                  this.useCoinbaseAuth(setLoading, login, oauth, oauthProvider, code)
+                }, 3000)
+                break;
             }
-            this.setState({
-                showForm: true,
-                email,
-                photo: photoUrl, // TODO Render and ask if we should use this
-                accessToken,
-                refreshToken,
-                serverAuthCode
-            })
         } catch (err) {
             setLoading(false)
             logger.error('signInWithGoogle', err)
             switch(err.message) {
-                case 'Google sign in error': 
+                case 'Google sign in error':
                     navigate('Register')
                     break;
                 case 'Account not found':
@@ -140,9 +128,60 @@ class SignUp extends Component {
         }
     }
 
+    async useGoogleAuth(indicateLoading, loginFn, oauth, oauthProvider) {
+      const {
+          accessToken,
+          refreshToken,
+          serverAuthCode,
+          user: { email, photoUrl }
+      } = await this.signInWithGoogle()
+      indicateLoading(true, 'Connecting To Google')
+      const success = await loginFn(
+          { accessToken, oauth, oauthProvider },
+          { failureRedirect: false, suppressToast: true }
+      )
+      indicateLoading(false)
+      if (success) {
+          console.log('logged in with Google')
+          return
+      }
+      this.setState({
+          showForm: true,
+          email,
+          photo: photoUrl, // TODO Render and ask if we should use this
+          accessToken,
+          refreshToken,
+          serverAuthCode
+      })
+    }
+
+    async useCoinbaseAuth(indicateLoading, loginFn, oauth, oauthProvider, code) {
+      const {
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        email
+      } = await exchangeCoinbaseCodeForCredentials(code)
+      indicateLoading(true, 'Connecting To Coinbase')
+      const success = await loginFn(
+        { email, oauth, oauthProvider },
+        { failureRedirect: false, suppressToast: true }
+      )
+      indicateLoading(false)
+      if (success) {
+          console.log('logged in with Coinbase')
+          return
+      }
+      this.setState({
+          showForm: true,
+          email,
+          accessToken,
+          refreshToken
+      })
+    }
+
     submit = async () => {
         const { registerAccount, navigate, navigation, login, showToast } = this.props
-        const { withGoogle } = navigation.state.params
+        const { oauth, oauthProvider } = navigation.state.params
         const {
             username,
             email,
@@ -158,10 +197,10 @@ class SignUp extends Component {
         } else if (!email) {
             Alert.alert('Email is required')
             return
-        } else if (!withGoogle && !password) {
+        } else if (!oauth && !password) {
             Alert.alert('Password is required')
             return
-        } else if (!withGoogle && password.length < 6) {
+        } else if (!oauth && password.length < 6) {
             Alert.alert('Password must be 6 char min')
             return
         }
@@ -173,7 +212,8 @@ class SignUp extends Component {
                 accessToken,
                 refreshToken,
                 serverAuthCode,
-                withGoogle,
+                oauth,
+                oauth_provider: oauthProvider,
                 invite_code: inviteCode
             })
             showToast('Account Created')
@@ -181,11 +221,11 @@ class SignUp extends Component {
             logger.error('submit, registerAccount', err)
             showToast(getErrorMsg(err))
         }
-        if (withGoogle) {
+        if (oauth) {
             try {
-                await login({ username, accessToken, withGoogle })
+                await login({ email, username, accessToken, oauth, oauthProvider })
             } catch (err) {
-                logger.error('SignUp withGoogle', err)
+                logger.error(`SignUp with oauth provider: ${oauthProvider}`, err)
                 showToast(getErrorMsg(err))
             }
         } else {
@@ -203,7 +243,7 @@ class SignUp extends Component {
 
     render() {
         const { navigation } = this.props
-        const { withGoogle } = navigation.state.params
+        const { oauth } = navigation.state.params
         const { email, username, showForm } = this.state
 
         return (
@@ -212,10 +252,10 @@ class SignUp extends Component {
                     {showForm && <Content>
                         <View style={styles.header}>
                             <Text style={styles.heading}>Enter Profile Info</Text>
-                            
+
                             <Text style={styles.subHeading}>
-                                { withGoogle && 'Create a username. Next time you sign in with Google it will be automatic. ' }
-                                Your information will not be shared with third parties. 
+                                { oauth && 'Create a username. Next time you sign in using one of the oauth providers, it will be automatic. ' }
+                                Your information will not be shared with third parties.
                             </Text>
                         </View>
                         <View style={customStyles.header}>
@@ -228,19 +268,19 @@ class SignUp extends Component {
                                 autoCapitalize='none'
                              />
                         </View>
-                        {!!(!withGoogle || email) &&
+                        {!!(!oauth || email) &&
                             <View style={[customStyles.header, {flex: 1}]}>
                             <Text style={[styles.heading, customStyles.heading, { paddingBottom: 0 }]}>Email</Text>
                             <Input
                                 value={email}
-                                editable={!withGoogle}
+                                editable={!oauth}
                                 style={customStyles.input}
                                 placeholder="trader@ethereum.org"
                                 onChangeText={email=>{this.setState({ email })}}
                                 autoCapitalize='none'
                              />
                         </View>}
-                        {!withGoogle && 
+                        {!oauth &&
                         <View style={[customStyles.header, {flex: 1, borderBottomWidth: 0}]}>
                             <Text style={[styles.heading, customStyles.heading, { paddingBottom: 0 }]}>Password</Text>
                             <Input

@@ -5,7 +5,6 @@ import firebase from 'firebase'
 import { Linking } from 'react-native'
 import {
     loginAccount,
-    googleLogin,
     registerAccount as _registerAccount,
     setAuthHeader,
     getAccountPortfolio,
@@ -36,7 +35,8 @@ import {
     registerForPushNotificationsAsync,
     safeAlert,
     removeArrItem,
-    get2FA
+    get2FA,
+    oauthLogin
 } from '../helpers/functions'
 import { removeWallet } from '../helpers/wallet'
 import { getBlockchains } from './blockchains'
@@ -195,14 +195,14 @@ async function configureSession(accessToken, userId, account, dispatch) {
 
 export const login = (params, options={}) => async (dispatch, getState) => {
     const { suppressToast, failureRedirect=true } = options
-    const withGoogle = params && params.withGoogle
     let id = null
     let token = null
-    let account = null
+    const usingOauth = params && params.oauth
     try {
         id = await SecureStore.getItemAsync('id')
         token = await SecureStore.getItemAsync('token')
-        const loginFn = withGoogle ? googleLogin : loginAccount
+        let account = null
+        const loginFn = usingOauth ? oauthLogin(params.oauthProvider) : loginAccount
         if (params) {
             dispatch(setLoading(true, 'Authorizing'))
             let res = await loginFn(params)
@@ -392,13 +392,13 @@ export const addWalletAddress = ({address, name, platform}, navParams) => async 
     }
     dispatch(showToast('Wallet created'))
     dispatch(addWalletAddressAction(account.wallets))
-    dispatch(NavigationActions.navigate({ 
+    dispatch(NavigationActions.navigate({
         routeName: 'Select Account',
         params: {
             type: 'wallet',
             platform,
             ...navParams
-        } 
+        }
     }))
 }
 
@@ -414,13 +414,13 @@ export const addExchangeAccount = ({ key, secret, name, passphrase, platform }, 
     }
     dispatch(showToast('Exchange Account Linked'))
     dispatch(addExchangeAccountAction(account.exchangeAccounts))
-    dispatch(NavigationActions.navigate({ 
+    dispatch(NavigationActions.navigate({
         routeName: 'Select Account',
         params: {
             type: 'exchange_account',
             platform,
             ...navParams
-        } 
+        }
     }))
 }
 
