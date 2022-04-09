@@ -44,7 +44,7 @@
     "lodash": "^4.17.4",
     "mobx": "^3.3.1",
     "mobx-react": "^4.3.3",
-    "moment": "^2.19.4",
+    "moment": "^2.29.2",
     "native-base": "^2.3.3",
     "number-to-locale-string": "^1.0.1",
     "object-hash": "^1.2.0",
